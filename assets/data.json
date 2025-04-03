@@ -319,6 +319,8 @@
   "education": [
     {
       "school": "Athens University of Economics and Business",
+      "schoolLogo": "https://raw.githubusercontent.com/psavidis/resume/refs/heads/master/assets/school-logo_aueb.jpeg",
+      "schoolLink": "https://www.aueb.gr/en",
       "degree": "Bachelor of Science (BSc)",
       "fieldOfStudy": "Computer Science",
       "startYear": "2006",
