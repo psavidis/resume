@@ -212,6 +212,7 @@
 
         function populateWorkExperience(data) {
             const experienceList = document.getElementById('experience-list');
+            experienceList.innerHTML = ''; // Clear existing content
 
             if (!Array.isArray(data.workExperience)) {
                 experienceList.innerHTML = '<li>No experience data available</li>';
@@ -222,7 +223,24 @@
 
             data.workExperience.forEach(item => {
                 const li = document.createElement('li');
-                li.textContent = `${item.title || 'Position not provided'} at ${item.company || 'Company not provided'} (${item.startDate || ''} - ${item.endDate || 'Present'})`;
+
+                // Create company logo image
+                const logo = document.createElement('img');
+                logo.src = item.companyLogo || 'default-logo.png'; // Fallback image
+                logo.alt = `${item.company} Logo`;
+                logo.style.width = '40px';
+                logo.style.height = '40px';
+                logo.style.borderRadius = '50%';
+                logo.style.marginRight = '10px';
+                logo.style.verticalAlign = 'middle';
+
+                // Create text span for job details
+                const textSpan = document.createElement('span');
+                textSpan.textContent = `${item.title || 'Position not provided'} at ${item.company || 'Company not provided'} (${item.startDate || ''} - ${item.endDate || 'Present'})`;
+
+                // Append logo and text
+                li.appendChild(logo);
+                li.appendChild(textSpan);
                 experienceList.appendChild(li);
             });
         }
