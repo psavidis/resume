@@ -195,7 +195,7 @@
 
                 const data = await response.json();
 
-                populateTopHeader(data);
+                populateHeader(data);
                 populateWorkExperience(data);
                 populateProjects(data);
                 populateEducation(data);
@@ -205,14 +205,14 @@
             }
         }
 
-        function populateTopHeader(data) {
+        function populateHeader(data) {
             document.getElementById('name').textContent = data.name || 'Name not provided';
             document.getElementById('summary').textContent = data.summary || 'Summary not provided';
         }
 
         function populateWorkExperience(data) {
             const experienceList = document.getElementById('experience-list');
-            experienceList.innerHTML = ''; // Clear existing content
+            experienceList.innerHTML = '';
 
             if (!Array.isArray(data.workExperience)) {
                 experienceList.innerHTML = '<li>No experience data available</li>';
@@ -247,6 +247,7 @@
 
         function populateProjects(data) {
             const projectsList = document.getElementById('projects-list');
+            projectsList.innerHTML = '';
 
             if (!Array.isArray(data.project)) {
                 projectsList.innerHTML = '<li>No projects data available</li>';
@@ -255,21 +256,26 @@
 
             data.project = sortByField(data.project, 'startDate', 'desc');
 
-            data.project.forEach(proj => {
+            data.project.forEach(project => {
                 const li = document.createElement('li');
-                const projectName = document.createElement('span');
 
-                projectName.textContent = proj.name || 'Project not provided';
-                projectName.style.cursor = 'pointer';  // Indicate it's clickable
+                li.style.cursor = 'pointer';  // Make it clear that the whole item is clickable
+                li.style.padding = '10px';  // Add some padding for better clickability
+                li.style.border = '1px solid #ccc';  // Optional: add a border to make items distinct
+                li.style.marginBottom = '5px';  // Optional: spacing between items
+
+                const projectName = document.createElement('span');
+                projectName.textContent = project.name || 'Project not provided';
                 projectName.style.color = '#1e3c72';  // Make the text stand out a bit
 
                 // Create the project description, initially hidden
                 const projectDescription = document.createElement('p');
-                projectDescription.textContent = proj.description || 'No description provided';
+                projectDescription.textContent = project.description || 'No description provided';
                 projectDescription.style.display = 'none';  // Hide description initially
+                projectDescription.style.marginTop = '5px';  // Add spacing
 
-                // Add click event to toggle description visibility
-                projectName.addEventListener('click', () => {
+                // Add click event to toggle description visibility (on the entire <li>)
+                li.addEventListener('click', () => {
                     if (projectDescription.style.display === 'none') {
                         projectDescription.style.display = 'block';  // Show the description
                     } else {
@@ -281,6 +287,7 @@
                 li.appendChild(projectName);
                 li.appendChild(projectDescription);
                 projectsList.appendChild(li);
+
             });
         }
 
