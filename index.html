@@ -313,20 +313,81 @@
                     });
                 }
 
+                const showProjectButtons = createShowProjectButtons(project);
+
+                const hasProjectButtons = showProjectButtons.length > 0;
+
                 // Add click event to toggle description visibility (on the entire <li>)
                 li.addEventListener('click', () => {
                     const isHidden = projectDescription.style.display === 'none';
+
                     projectDescription.style.display = isHidden ? 'block' : 'none';
                     pointsList.style.display = isHidden ? 'block' : 'none';
+
+                    if (hasProjectButtons) {
+                        showProjectButtons.forEach(button => {
+                            button.style.display = isHidden ? 'inline-block' : 'none';
+                        });
+                    }
                 });
 
                 // Append the name and description to the list item
                 li.appendChild(projectName);
                 li.appendChild(projectDescription);
                 li.appendChild(pointsList);
+
+                if (hasProjectButtons) {
+                    showProjectButtons.forEach(button => {
+                        li.appendChild(button);
+                    });
+                }
+
                 projectsList.appendChild(li);
 
             });
+        }
+
+        function createShowProjectButtons(project) {
+            const projectLinks = project.links;
+
+            if (!Array.isArray(projectLinks)) {
+                return []; // No references to show
+            }
+
+            let result = [];
+
+            projectLinks.forEach(link => {
+                const showProjectButton = document.createElement('a');
+
+                showProjectButton.textContent = 'Show Project';
+                showProjectButton.href = link || '#'; // Default to "#" if no URL provided
+                showProjectButton.target = '_blank'; // Open in new tab
+                showProjectButton.style.display = 'none';
+                showProjectButton.style.marginTop = '10px';
+                showProjectButton.style.marginRight = '10px'; // Add margin between buttons
+                showProjectButton.style.padding = '8px 12px';
+                showProjectButton.style.background = '#007BFF';
+                showProjectButton.style.color = 'white';
+                showProjectButton.style.textDecoration = 'none';
+                showProjectButton.style.borderRadius = '5px';
+                showProjectButton.style.fontSize = '14px';
+                showProjectButton.style.fontWeight = 'bold';
+                showProjectButton.style.textAlign = 'center';
+                showProjectButton.style.width = 'fit-content';
+                showProjectButton.style.transition = 'background 0.3s';
+
+                // Button hover effect
+                showProjectButton.addEventListener('mouseover', () => {
+                    showProjectButton.style.background = '#0056b3';
+                });
+                showProjectButton.addEventListener('mouseout', () => {
+                    showProjectButton.style.background = '#007BFF';
+                });
+
+                result.push(showProjectButton);
+            });
+
+            return result;
         }
 
         function populateEducation(data) {
