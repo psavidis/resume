@@ -5,9 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Petros Savvidis Resume</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
     <style>
         body {
-            font-family: 'Arial', sans-serif;
+            font-family: 'Roboto', sans-serif;
             margin: 0;
             padding: 0;
             background: linear-gradient(to right, #1e3c72, #2a5298);
@@ -162,6 +163,7 @@
         </div>
 
         <p id="summary">Your professional summary goes here...</p>
+        <p id="summary-free">In my free time, I want to travel, play music, explore philosophy and swim</p>
 
         <div class="section" id="experience">
             <h2>Experience</h2>
@@ -208,9 +210,16 @@
         function populateHeader(data) {
             document.getElementById('name').textContent = data.name || 'Name not provided';
 
+            let fontSize = '15px';
+
             let summary = document.getElementById('summary');
             summary.textContent = data.summary || 'Summary not provided';
             summary.style.textAlign = 'left';
+            summary.style.fontSize = fontSize;
+
+            let summaryFree = document.getElementById('summary-free');
+            summaryFree.style.textAlign = 'left';
+            summaryFree.style.fontSize = fontSize;
         }
 
         function populateWorkExperience(data) {
