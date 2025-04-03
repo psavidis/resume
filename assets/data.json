@@ -1,7 +1,7 @@
 {
-  "imageURL": "https://media.licdn.com/dms/image/C4E03AQFqYis0ASUvgg/profile-displayphoto-shrink_800_800/0/1654605900562?e=1679529600&v=beta&t=2GOvbA9u4auUeQekLU6xp7OVajoapDWsw6TUWbzOCNA",
+  "imageURL": "https://raw.githubusercontent.com/psavidis/resume/refs/heads/master/assets/profile_picture.jpeg",
   "linkedInURL": "https://www.linkedin.com/in/peter-savidis-8994b857/",
-  "name": "Peter Savidis",
+  "name": "Petros Savvidis",
   "addressStreet": "17 Notou Str, Agia Paraskevi, 15342",
   "addressLocation": "Athens, Greece",
   "email": "peter.savidis1@gmail.com",
@@ -15,6 +15,7 @@
     {
       "title": "Senior Software Engineer",
       "company": "Cortical.io",
+      "companyLogo": "https://raw.githubusercontent.com/psavidis/resume/refs/heads/master/assets/company-logo_cortical.jpeg",
       "startDate": "August 2020",
       "endDate": "Present",
       "employmentType": "Full-time",
@@ -23,6 +24,7 @@
     {
       "title": "Software Engineer",
       "company": "Upstream",
+      "companyLogo": "https://raw.githubusercontent.com/psavidis/resume/refs/heads/master/assets/company-logo_upstream.jpeg",
       "startDate": "March 2016",
       "endDate": "June 2020",
       "employmentType": "Full-time",
@@ -31,6 +33,7 @@
     {
       "title": "Software Engineer",
       "company": "European Dynamics",
+      "companyLogo": "https://raw.githubusercontent.com/psavidis/resume/refs/heads/master/assets/company-logo_european_dynamics.jpeg",
       "startDate": "December 2012",
       "endDate": "December 2015",
       "employmentType": "Full-time",
@@ -39,6 +42,7 @@
     {
       "title": "Army Duties",
       "company": "Hellenic Army",
+      "companyLogo": "https://raw.githubusercontent.com/psavidis/resume/refs/heads/master/assets/company-logo_greek_army.png",
       "startDate": "October 2011",
       "endDate": "July 2012",
       "employmentType": "Voluntary",
@@ -47,6 +51,7 @@
     {
       "title": "Android Developer",
       "company": "Intracom Telecom",
+      "companyLogo": "https://raw.githubusercontent.com/psavidis/resume/refs/heads/master/assets/company-logo_intracom.jpeg",
       "startDate": "March 2011",
       "endDate": "October 2011",
       "employmentType": "Internship",
