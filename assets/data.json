@@ -81,6 +81,9 @@
         "Eclipse",
         "Android",
         "SVN"
+      ],
+      "links": [
+        "https://www.pamap.org/"
       ]
     },
     {
@@ -163,6 +166,11 @@
         "Git",
         "Jenkins",
         "Sonar"
+      ],
+      "links": [
+        "https://bpp.economie.fgov.be/bpp-portal/",
+        "https://mijnoctrooi.rvo.nl/bpp-portal/",
+        "https://patent.public.lu/bpp-portal/"
       ]
     },
     {
@@ -185,6 +193,9 @@
         "Web Logic",
         "Hibernate",
         "Struts 1"
+      ],
+      "links": [
+        "https://www.etenders.gov.mt/epps/home.do"
       ]
     },
     {
@@ -258,6 +269,9 @@
         "Spring Tests",
         "JIRA",
         "Canban board"
+      ],
+      "links": [
+        "https://www.secure-d.io/?utm_source=upstreamwebsite"
       ]
     },
     {
@@ -272,7 +286,20 @@
         "Mentoring & Coaching"
       ],
       "techUsed": []
+    },
+    {
+      "name": "Camunda Platform 7 - The Open Source BPMN platform",
+      "company": "Camunda",
+      "startDate": "04-2023",
+      "endDate": "04-2025",
+      "points": [
+      ],
+      "techUsed": [],
+      "links": [
+        "https://github.com/camunda/camunda-bpm-platform"
+      ]
     }
+
   ],
   "education": [
     {
