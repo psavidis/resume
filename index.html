@@ -225,21 +225,14 @@
                 const li = document.createElement('li');
 
                 // Create company logo image
-                const logo = document.createElement('img');
-                logo.src = item.companyLogo || 'default-logo.png'; // Fallback image
-                logo.alt = `${item.company} Logo`;
-                logo.style.width = '40px';
-                logo.style.height = '40px';
-                logo.style.borderRadius = '50%';
-                logo.style.marginRight = '10px';
-                logo.style.verticalAlign = 'middle';
+                const companyImg = createCompanyImg(item);
 
                 // Create text span for job details
                 const textSpan = document.createElement('span');
                 textSpan.textContent = `${item.title || 'Position not provided'} at ${item.company || 'Company not provided'} (${item.startDate || ''} - ${item.endDate || 'Present'})`;
 
                 // Append logo and text
-                li.appendChild(logo);
+                li.appendChild(companyImg);
                 li.appendChild(textSpan);
                 experienceList.appendChild(li);
             });
@@ -345,6 +338,24 @@
                 projectsList.appendChild(li);
 
             });
+        }
+
+        function createCompanyImg(item) {
+            const img = document.createElement('img');
+
+            img.src = item.companyLogo;
+            img.style.width = '40px';
+            img.style.height = '40px';
+            img.style.borderRadius = '50%';
+            img.style.marginRight = '10px';
+            img.style.verticalAlign = 'middle';
+
+            const link = document.createElement('a');
+            link.href = item.companyLink || '#'; // Default to "#" if no URL provided
+
+            link.appendChild(img);
+
+            return link;
         }
 
         function createShowProjectButtons(project) {
