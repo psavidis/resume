@@ -370,6 +370,24 @@
             return link;
         }
 
+        function createSchoolImg(item) {
+            const img = document.createElement('img');
+
+            img.src = item.schoolLogo;
+            img.style.width = '40px';
+            img.style.height = '40px';
+            img.style.borderRadius = '50%';
+            img.style.marginRight = '10px';
+            img.style.verticalAlign = 'middle';
+
+            const link = document.createElement('a');
+            link.href = item.schoolLink || '#'; // Default to "#" if no URL provided
+
+            link.appendChild(img);
+
+            return link;
+        }
+
         function createShowProjectButtons(project) {
             const projectLinks = project.links;
 
@@ -415,15 +433,25 @@
 
         function populateEducation(data) {
             const educationList = document.getElementById('education-list');
-            if (Array.isArray(data.education)) {
-                data.education.forEach(item => {
-                    const li = document.createElement('li');
-                    li.textContent = `${item.school || 'Institution not provided'}, ${item.degree || 'Field of study not provided'} (${item.startYear || ''} - ${item.endYear || 'Present'})`;
-                    educationList.appendChild(li);
-                });
-            } else {
+
+            if (!Array.isArray(data.education)) {
                 educationList.innerHTML = '<li>No education data available</li>';
+                return;
             }
+
+            data.education.forEach(item => {
+                const li = document.createElement('li');
+
+                const textSpan = document.createElement('span');
+                textSpan.textContent = `${item.school || 'Institution not provided'}, ${item.degree || 'Field of study not provided'} (${item.startYear || ''} - ${item.endYear || 'Present'})`;
+
+                const schoolImg = createSchoolImg(item);
+
+                li.appendChild(schoolImg);
+                li.appendChild(textSpan);
+
+                educationList.appendChild(li);
+            });
         }
 
         function downloadPDF() {
