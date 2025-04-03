@@ -259,28 +259,39 @@
             data.project.forEach(project => {
                 const li = document.createElement('li');
 
-                li.style.cursor = 'pointer';  // Make it clear that the whole item is clickable
-                li.style.padding = '10px';  // Add some padding for better clickability
-                li.style.border = '1px solid #ccc';  // Optional: add a border to make items distinct
-                li.style.marginBottom = '5px';  // Optional: spacing between items
+                li.style.cursor = 'pointer'; // Make it clear that the whole item is clickable
+                li.style.padding = '12px';
+                li.style.border = '1px solid #ccc';
+                li.style.borderRadius = '8px'; // Rounded corners for a modern look
+                li.style.marginBottom = '8px';
+                li.style.backgroundColor = '#f9f9f9'; // Light background
+                li.style.transition = 'background-color 0.2s ease-in-out';
+
+                // Hover effect
+                li.addEventListener('mouseenter', () => {
+                    li.style.backgroundColor = '#e3eafc';
+                });
+                li.addEventListener('mouseleave', () => {
+                    li.style.backgroundColor = '#f9f9f9';
+                });
 
                 const projectName = document.createElement('span');
                 projectName.textContent = project.name || 'Project not provided';
-                projectName.style.color = '#1e3c72';  // Make the text stand out a bit
+                projectName.style.color = '#1e3c72';
+                projectName.style.fontSize = '18px'; // Make the title larger
+                projectName.style.fontWeight = 'bold'; // Make it stand out
 
                 // Create the project description, initially hidden
                 const projectDescription = document.createElement('p');
                 projectDescription.textContent = project.description || 'No description provided';
-                projectDescription.style.display = 'none';  // Hide description initially
-                projectDescription.style.marginTop = '5px';  // Add spacing
+                projectDescription.style.display = 'none';
+                projectDescription.style.fontSize = '14px'; // Smaller than title
+                projectDescription.style.color = '#444';
+                projectDescription.style.marginTop = '5px';
 
                 // Add click event to toggle description visibility (on the entire <li>)
                 li.addEventListener('click', () => {
-                    if (projectDescription.style.display === 'none') {
-                        projectDescription.style.display = 'block';  // Show the description
-                    } else {
-                        projectDescription.style.display = 'none';  // Hide the description
-                    }
+                    projectDescription.style.display = projectDescription.style.display === 'none' ? 'block' : 'none';
                 });
 
                 // Append the name and description to the list item
