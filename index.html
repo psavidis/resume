@@ -207,7 +207,10 @@
 
         function populateHeader(data) {
             document.getElementById('name').textContent = data.name || 'Name not provided';
-            document.getElementById('summary').textContent = data.summary || 'Summary not provided';
+
+            let summary = document.getElementById('summary');
+            summary.textContent = data.summary || 'Summary not provided';
+            summary.style.textAlign = 'left';
         }
 
         function populateWorkExperience(data) {
@@ -417,22 +420,22 @@
         function downloadPDF() {
             const container = document.querySelector('.container');
 
-            // Clone the container to exclude the button from the PDF
-            const clonedContainer = container.cloneNode(true);
-
-            console.log(clonedContainer);
-            const pdfButton = clonedContainer.querySelector('#pdf-btn'); // If your button has an ID
-
-            console.log(pdfButton);
-
+            // Temporarily remove the PDF button before generating the PDF
+            const pdfButton = document.querySelector('#pdf-btn');
             if (pdfButton) {
-                pdfButton.remove(); // Remove the PDF button from the cloned content
+                pdfButton.style.display = 'none'; // Hide the button temporarily
             }
 
-            // Use html2pdf.js to convert the cloned content to a PDF
+            // Use html2pdf.js to convert the content to a PDF
             html2pdf()
-                .from(container)
-                .save('resume.pdf'); // Save as resume.pdf
+                .from(container) // Pass the container without the button
+                .save('resume.pdf') // Save as resume.pdf
+                .finally(() => {
+                    // Show the PDF button again after the PDF generation is complete
+                    if (pdfButton) {
+                        pdfButton.style.display = 'block';
+                    }
+                });
         }
 
         // Function to parse and compare dates
