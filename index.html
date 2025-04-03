@@ -113,7 +113,7 @@
             justify-content: space-between;
             position: relative; /* To allow absolute positioning if needed */
             padding: 0 20px; /* Optional: Add padding for spacing */
-        }     
+        }
 
         @keyframes fadeIn {
             from {
@@ -290,14 +290,40 @@
                 projectDescription.style.marginTop = '10px';
                 projectDescription.style.textAlign = 'left';
 
+                // Create the list for project points
+                const pointsList = document.createElement('ul');
+                pointsList.style.display = 'none';
+                pointsList.style.paddingLeft = '20px';
+                pointsList.style.listStyleType = 'disc';  // Ensure it uses bullet points
+                pointsList.style.marginTop = '5px';
+                pointsList.style.fontSize = '13px';  // Slightly smaller text
+
+                // Add points to the list
+                if (project.points && Array.isArray(project.points)) {
+                    project.points.forEach(point => {
+                        const pointItem = document.createElement('li');
+                        pointItem.textContent = point.toString();
+                        pointItem.style.marginBottom = '3px';
+                        pointItem.style.listStyleType = 'circle';
+                        pointItem.style.background = 'none';  // Ensure no button-like styling
+                        pointItem.style.padding = '2px 0';
+                        pointItem.style.border = 'none'; // Remove any borders
+
+                        pointsList.appendChild(pointItem);
+                    });
+                }
+
                 // Add click event to toggle description visibility (on the entire <li>)
                 li.addEventListener('click', () => {
-                    projectDescription.style.display = projectDescription.style.display === 'none' ? 'block' : 'none';
+                    const isHidden = projectDescription.style.display === 'none';
+                    projectDescription.style.display = isHidden ? 'block' : 'none';
+                    pointsList.style.display = isHidden ? 'block' : 'none';
                 });
 
                 // Append the name and description to the list item
                 li.appendChild(projectName);
                 li.appendChild(projectDescription);
+                li.appendChild(pointsList);
                 projectsList.appendChild(li);
 
             });
@@ -343,7 +369,7 @@
                 // Extract the date components (e.g., "MM-YYYY")
                 const [monthA, yearA] = a[field].split('-');
                 const [monthB, yearB] = b[field].split('-');
-                
+
                 // Create Date objects from the extracted month and year
                 const dateA = new Date(yearA, monthA - 1);  // monthA - 1 because months are 0-indexed
                 const dateB = new Date(yearB, monthB - 1);  // monthB - 1 for the same reason
