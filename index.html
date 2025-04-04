@@ -284,15 +284,14 @@
             data.project.forEach(project => {
                 const li = document.createElement('li');
 
-                li.style.cursor = 'pointer'; // Make it clear that the whole item is clickable
+                li.style.cursor = 'pointer';
                 li.style.padding = '12px';
                 li.style.border = '1px solid #ccc';
-                li.style.borderRadius = '8px'; // Rounded corners for a modern look
+                li.style.borderRadius = '8px';
                 li.style.marginBottom = '8px';
-                li.style.backgroundColor = '#f9f9f9'; // Light background
+                li.style.backgroundColor = '#f9f9f9';
                 li.style.transition = 'background-color 0.2s ease-in-out';
 
-                // Hover effect
                 li.addEventListener('mouseenter', () => {
                     li.style.backgroundColor = '#e3eafc';
                 });
@@ -300,80 +299,78 @@
                     li.style.backgroundColor = '#f9f9f9';
                 });
 
+                // Project name
                 const projectName = document.createElement('span');
                 projectName.textContent = project.name || 'Project not provided';
                 projectName.style.color = '#1e3c72';
-                projectName.style.fontSize = '18px'; // Make the title larger
-                projectName.style.fontWeight = 'bold'; // Make it stand out
+                projectName.style.fontSize = '18px';
+                projectName.style.fontWeight = 'bold';
 
-                // Create the project description, initially hidden
+                // Description
                 const projectDescription = document.createElement('p');
                 projectDescription.textContent = project.description || 'No description provided';
                 projectDescription.style.display = 'none';
-                projectDescription.style.fontSize = '14px'; // Smaller than title
+                projectDescription.style.fontSize = '14px';
                 projectDescription.style.color = '#444';
                 projectDescription.style.marginTop = '10px';
                 projectDescription.style.textAlign = 'left';
 
-                // Create the list for project points
+                // Technologies Used
+                const techUsed = document.createElement('p');
+                techUsed.textContent = project.techUsed ? `Technologies: ${project.techUsed.join(', ')}` : '';
+                techUsed.style.display = 'none';
+                techUsed.style.fontSize = '13px';
+                techUsed.style.fontStyle = 'italic';
+                techUsed.style.color = '#666';
+                techUsed.style.marginTop = '5px';
+                techUsed.style.textAlign = 'left';
+
+                // Points (bullet list)
                 const pointsList = document.createElement('ul');
                 pointsList.style.display = 'none';
                 pointsList.style.paddingLeft = '20px';
-                pointsList.style.listStyleType = 'disc';  // Ensure it uses bullet points
+                pointsList.style.listStyleType = 'disc';
                 pointsList.style.marginTop = '5px';
-                pointsList.style.fontSize = '13px';  // Slightly smaller text
+                pointsList.style.fontSize = '13px';
 
-                // Add points to the list
                 if (project.points && Array.isArray(project.points)) {
                     project.points.forEach(point => {
                         const pointItem = document.createElement('li');
                         pointItem.textContent = point.toString();
                         pointItem.style.marginBottom = '3px';
                         pointItem.style.listStyleType = 'circle';
-                        pointItem.style.background = 'none';  // Ensure no button-like styling
+                        pointItem.style.background = 'none';
                         pointItem.style.padding = '2px 0';
-                        pointItem.style.border = 'none'; // Remove any borders
                         pointItem.style.backgroundColor = 'transparent';
                         pointItem.style.border = 'none';
                         pointItem.style.boxShadow = 'none';
-
                         pointsList.appendChild(pointItem);
                     });
                 }
 
-                const showProjectButtons = createShowProjectButtons(project);
-
-                const hasProjectButtons = showProjectButtons.length > 0;
-
-                // Add click event to toggle description visibility (on the entire <li>)
+                // Toggle description/tech/points on click
                 li.addEventListener('click', () => {
-                    const isHidden = projectDescription.style.display === 'none';
-
-                    projectDescription.style.display = isHidden ? 'block' : 'none';
-                    pointsList.style.display = isHidden ? 'block' : 'none';
-
-                    if (hasProjectButtons) {
-                        showProjectButtons.forEach(button => {
-                            button.style.display = isHidden ? 'inline-block' : 'none';
-                        });
-                    }
+                    const isVisible = projectDescription.style.display === 'block';
+                    projectDescription.style.display = isVisible ? 'none' : 'block';
+                    pointsList.style.display = isVisible ? 'none' : 'block';
+                    techUsed.style.display = isVisible ? 'none' : 'block';
                 });
 
-                // Append the name and description to the list item
                 li.appendChild(projectName);
                 li.appendChild(projectDescription);
                 li.appendChild(pointsList);
+                li.appendChild(document.createElement('br'));
 
-                if (hasProjectButtons) {
-                    showProjectButtons.forEach(button => {
-                        li.appendChild(button);
-                    });
+                let hasTechUsed = techUsed && techUsed.textContent.trim() !== "Technologies:";
+
+                if (hasTechUsed) {
+                    li.appendChild(techUsed);
                 }
 
                 projectsList.appendChild(li);
-
             });
         }
+
 
         function createCompanyImg(item) {
             const img = document.createElement('img');
