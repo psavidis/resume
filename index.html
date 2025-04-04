@@ -23,6 +23,9 @@
             border-radius: 12px;
             box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
             animation: fadeIn 1s ease-in-out;
+            display: block !important;
+            visibility: visible !important;
+            opacity: 1 !important;
         }
         h1 {
             text-align: center;
@@ -116,6 +119,23 @@
             padding: 0 20px; /* Optional: Add padding for spacing */
         }
 
+        .pdf-mode * {
+            animation: none !important;
+            transition: none !important;
+            transform: none !important;
+            filter: none !important;
+            opacity: 1 !important;
+            box-shadow: none !important;
+            contain: none !important;
+            will-change: auto !important;
+        }
+
+        .pdf-mode {
+            background: white !important;
+            color: black !important;
+        }
+
+
         @keyframes fadeIn {
             from {
                 opacity: 0;
@@ -186,7 +206,7 @@
         <button class="btn" onclick="window.location.href='https://www.facebook.com'"><i class="fab fa-facebook-f"></i></button>
         <button class="btn" onclick="window.location.href='mailto:peter.savidis1@gmail.com'"><i class="fas fa-envelope"></i></button>
         <!-- <button class="btn" onclick="window.location.href='tel:+1234567890'"><i class="fas fa-phone-alt"></i></button> -->
-        <button class="btn" id="pdf-btn" onclick="downloadPDF()"><i class="fas fa-file-pdf"></i></button> <!-- PDF Button -->
+        <button class="btn" id="pdf-btn"><i class="fas fa-file-pdf"></i></button> <!-- PDF Button -->
     </div>
 
     <script>
@@ -457,25 +477,43 @@
             });
         }
 
-        function downloadPDF() {
-            const container = document.querySelector('.container');
+        function downloadPage() {
+            const resume = document.querySelector('.container');
 
-            // Temporarily remove the PDF button before generating the PDF
-            const pdfButton = document.querySelector('#pdf-btn');
-            if (pdfButton) {
-                pdfButton.style.display = 'none'; // Hide the button temporarily
+            if (!resume) {
+                console.error("Resume container not found!");
+                return;
             }
 
-            // Use html2pdf.js to convert the content to a PDF
-            html2pdf()
-                .from(container) // Pass the container without the button
-                .save('resume.pdf') // Save as resume.pdf
-                .finally(() => {
-                    // Show the PDF button again after the PDF generation is complete
-                    if (pdfButton) {
-                        pdfButton.style.display = 'block';
-                    }
-                });
+            // Add class to disable transforms, animations, etc.
+            resume.classList.add('pdf-mode');
+
+            // Give the browser time to apply styles
+            setTimeout(() => {
+                html2pdf()
+                    .set({
+                        margin: 0,
+                        filename: 'resume.pdf',
+                        image: { type: 'jpeg', quality: 0.98 },
+                        html2canvas: {
+                            scale: 2,
+                            useCORS: true,
+                            logging: true,
+                            backgroundColor: '#ffffff',
+                            scrollY: 0
+                        },
+                        jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' }
+                    })
+                    .from(resume)
+                    .save()
+                    .then(() => {
+                        resume.classList.remove('pdf-mode');
+                    })
+                    .catch(err => {
+                        console.error("PDF generation failed:", err);
+                        resume.classList.remove('pdf-mode');
+                    });
+            }, 300); // give time for the style to apply
         }
 
         // Function to parse and compare dates
@@ -499,6 +537,8 @@
         }
 
         loadResumeData();
+
+        document.getElementById('pdf-btn').addEventListener('click', downloadPage);
     </script>
 </body>
 </html>
