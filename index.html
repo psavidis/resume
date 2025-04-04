@@ -26,6 +26,7 @@
             display: block !important;
             visibility: visible !important;
             opacity: 1 !important;
+            position: relative;
         }
         h1 {
             text-align: center;
@@ -119,20 +120,17 @@
             padding: 0 20px; /* Optional: Add padding for spacing */
         }
 
-        .pdf-mode * {
-            animation: none !important;
-            transition: none !important;
-            transform: none !important;
-            filter: none !important;
-            opacity: 1 !important;
-            box-shadow: none !important;
-            contain: none !important;
-            will-change: auto !important;
+        .flags {
+            position: absolute;
+            top: 2px; /* Place flags higher on the top-right corner */
+            right: 20px; /* Align them to the right */
+            display: flex;
+            gap: 10px;
+            font-size: 48px; /* Increase emoji size */
         }
 
-        .pdf-mode {
-            background: white !important;
-            color: black !important;
+        .flag {
+            font-size: 40px; /* Ensure flags are large */
         }
 
 
@@ -171,6 +169,11 @@
 </head>
 <body>
     <div class="container">
+
+        <div class="flags">
+            <span class="flag">🇬🇷</span> <!-- Greek flag -->
+            <span class="flag">🇦🇺</span> <!-- Australian flag -->
+        </div>
 
         <div class="header">
 
