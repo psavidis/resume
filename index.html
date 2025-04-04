@@ -238,11 +238,13 @@
 
         </div>
 
-        <p id="summary">Your professional summary goes here...</p>
-        <p id="summary-free">In my free time, I like to travel, play music, explore philosophy and swim</p>
+        <div>
+            <p id="summary">Your professional summary goes here...</p>
+            <p id="summary-free">In my free time, I like to travel, play music, explore philosophy and swim</p>
+        </div>
 
         <div class="section" id="experience">
-            <h2>Experience</h2>
+            <h2 id="experienceTitle">Experience</h2>
             <ul id="experience-list"></ul>
         </div>
 
@@ -339,6 +341,25 @@
                 li.appendChild(div);
                 experienceList.appendChild(li);
             });
+
+            const totalXP = getTotalExperience(data.workExperience);
+            const formattedXP = formatTotalExperienceIntoYears(totalXP);
+
+            document.getElementById('experienceTitle').textContent = 'Experience (' + formattedXP + ')';
+        }
+
+        function formatTotalExperienceIntoYears(totalExperience) {
+            const years = totalExperience.years;
+            const months = totalExperience.months;
+            console.log(years);
+            console.log(months);
+
+            // Format the output
+            if (months > 0) {
+                return `${years}+ years`; // If there are months, show a +
+            } else {
+                return `${years} years`; // If no months, show only years with a "+"
+            }
         }
 
         function populateProjects(data) {
@@ -620,6 +641,33 @@
                     return dateB - dateA; // descending order
                 }
             });
+        }
+
+        function calculateExperience(startDate, endDate) {
+            const start = new Date(startDate);
+            const end = (endDate === 'Present') ? new Date() : new Date(endDate);  // Handle 'Present' as current date
+
+            return (end.getFullYear() - start.getFullYear()) * 12 + (end.getMonth() - start.getMonth());
+        }
+
+        // Function to calculate the total experience
+        function getTotalExperience(workExperience) {
+            let totalExperienceMonths = 0;
+
+            workExperience.forEach(job => {
+
+                if (job.company === 'Hellenic Army') {
+                    return;
+                }
+
+                totalExperienceMonths += calculateExperience(job.startDate, job.endDate);
+            });
+
+            // Convert the total experience to years and months
+            const years = Math.floor(totalExperienceMonths / 12);
+            const months = totalExperienceMonths % 12;
+
+            return { years, months };
         }
 
         loadResumeData();
