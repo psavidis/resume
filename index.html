@@ -354,12 +354,22 @@
                     });
                 }
 
+                const showProjectButtons = createShowProjectButtons(project);
+
+                const hasProjectButtons = showProjectButtons.length > 0;
+
                 // Toggle description/tech/points on click
                 li.addEventListener('click', () => {
                     const isVisible = projectDescription.style.display === 'block';
                     projectDescription.style.display = isVisible ? 'none' : 'block';
                     pointsList.style.display = isVisible ? 'none' : 'block';
                     techUsed.style.display = isVisible ? 'none' : 'block';
+
+                    if (hasProjectButtons) {
+                        showProjectButtons.forEach(button => {
+                            button.style.display = isVisible ? 'none' : 'inline-block';
+                        });
+                    }
                 });
 
                 li.appendChild(projectName);
@@ -371,6 +381,12 @@
 
                 if (hasTechUsed) {
                     li.appendChild(techUsed);
+                }
+
+                if (hasProjectButtons) {
+                    showProjectButtons.forEach(button => {
+                        li.appendChild(button);
+                    });
                 }
 
                 projectsList.appendChild(li);
