@@ -187,6 +187,24 @@
             margin-right: 5px; /* Space between icon and location text */
         }
 
+        /* Avoid breaking inside these elements */
+        .avoid-break {
+            page-break-inside: avoid;
+            break-inside: avoid;
+        }
+
+        /* Force a page break before this element */
+        .page-break {
+            page-break-before: always;
+            break-before: page;
+        }
+
+        /* Optional: Force after */
+        .page-break-after {
+            page-break-after: always;
+            break-after: page;
+        }
+
         @keyframes fadeIn {
             from {
                 opacity: 0;
@@ -248,12 +266,12 @@
             <ul id="experience-list"></ul>
         </div>
 
-        <div class="section" id="Projects">
+        <div class="section avoid-break" id="Projects">
             <h2>Projects</h2>
             <ul id="projects-list"></ul>
         </div>
 
-        <div class="section" id="education">
+        <div class="section avoid-break" id="education">
             <h2>Education</h2>
             <ul id="education-list"></ul>
         </div>
@@ -339,6 +357,7 @@
                 // Append logo and text
                 li.appendChild(workTitleAndImg);
                 li.appendChild(div);
+
                 experienceList.appendChild(li);
             });
 
@@ -351,8 +370,6 @@
         function formatTotalExperienceIntoYears(totalExperience) {
             const years = totalExperience.years;
             const months = totalExperience.months;
-            console.log(years);
-            console.log(months);
 
             // Format the output
             if (months > 0) {
