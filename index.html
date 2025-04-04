@@ -163,6 +163,29 @@
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Add shadow for depth */
         }
 
+        .work-title {
+            display: flex;
+            align-items: center;
+        }
+
+        .work-experience {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .location-badge {
+            display: inline-flex;
+            align-items: center;
+            font-size: 14px;
+            color: #777;
+        }
+
+        .location-badge span {
+            font-size: 16px; /* Icon size */
+            margin-right: 5px; /* Space between icon and location text */
+        }
 
         @keyframes fadeIn {
             from {
@@ -289,6 +312,10 @@
 
             data.workExperience.forEach(item => {
                 const li = document.createElement('li');
+                li.classList.add('work-experience');
+
+                const workTitleAndImg = document.createElement('div');
+                workTitleAndImg.classList.add('work-title');
 
                 // Create company logo image
                 const companyImg = createCompanyImg(item);
@@ -297,9 +324,19 @@
                 const textSpan = document.createElement('span');
                 textSpan.textContent = `${item.title || 'Position not provided'} at ${item.company || 'Company not provided'} (${item.startDate || ''} - ${item.endDate || 'Present'})`;
 
+                workTitleAndImg.appendChild(companyImg);
+                workTitleAndImg.appendChild(textSpan);
+
+                const div = document.createElement('div');
+                div.classList.add('location-badge');
+
+                const span = document.createElement('span');
+                div.appendChild(span);
+                div.textContent = '📍' + item.location;
+
                 // Append logo and text
-                li.appendChild(companyImg);
-                li.appendChild(textSpan);
+                li.appendChild(workTitleAndImg);
+                li.appendChild(div);
                 experienceList.appendChild(li);
             });
         }
@@ -523,16 +560,6 @@
                 li.appendChild(textSpan);
 
                 educationList.appendChild(li);
-            });
-        }
-
-        function clickAllLists() {
-            // Find all the "Show Project" buttons
-            const showProjectButtons = document.querySelectorAll('li');
-
-            // Loop through each button and trigger a click to uncollapse
-            showProjectButtons.forEach(button => {
-                button.click();
             });
         }
 
