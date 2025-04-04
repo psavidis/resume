@@ -151,6 +151,18 @@
             font-size: 40px; /* Ensure flags are large */
         }
 
+        /* Initial styles for images */
+        .project-image, .university-image {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer; /* Ensures the pointer cursor appears when hovering */
+        }
+
+        /* On hover, scale the image and add a shadow for emphasis */
+        .project-image:hover, .university-image:hover {
+            transform: scale(1.05); /* Slightly increase the size */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Add shadow for depth */
+        }
+
 
         @keyframes fadeIn {
             from {
@@ -414,6 +426,7 @@
             const img = document.createElement('img');
 
             img.src = item.companyLogo;
+            img.classList.add('project-image');
             img.style.width = '40px';
             img.style.height = '40px';
             img.style.borderRadius = '50%';
@@ -432,6 +445,7 @@
             const img = document.createElement('img');
 
             img.src = item.schoolLogo;
+            img.classList.add('university-image');
             img.style.width = '40px';
             img.style.height = '40px';
             img.style.borderRadius = '50%';
