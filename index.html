@@ -661,8 +661,8 @@
         }
 
         function calculateExperience(startDate, endDate) {
-            const start = new Date(startDate);
-            const end = (endDate === 'Present') ? new Date() : new Date(endDate);  // Handle 'Present' as current date
+            const start = parseMonthYearString(startDate);
+            const end = (endDate === 'Present') ? new Date() : new parseMonthYearString(endDate);  // Handle 'Present' as current date
 
             return (end.getFullYear() - start.getFullYear()) * 12 + (end.getMonth() - start.getMonth());
         }
@@ -685,6 +685,24 @@
             const months = totalExperienceMonths % 12;
 
             return { years, months };
+        }
+
+        function parseMonthYearString(monthYearString) {
+            const [monthName, yearString] = monthYearString.split(' ');
+            const year = parseInt(yearString, 10);
+
+            const monthNames = [
+                "January", "February", "March", "April", "May", "June",
+                "July", "August", "September", "October", "November", "December"
+            ];
+
+            const monthIndex = monthNames.indexOf(monthName);
+
+            if (monthIndex === -1 || isNaN(year)) {
+                throw new Error(`Invalid date string: ${monthYearString}`);
+            }
+
+            return new Date(Date.UTC(year, monthIndex, 1)); // Always safe
         }
 
         loadResumeData();
