@@ -205,6 +205,17 @@
             break-after: page;
         }
 
+        #search-bar {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+        }
+
+        .highlight {
+            background-color: yellow;
+            font-weight: bold;
+        }
+
         @keyframes fadeIn {
             from {
                 opacity: 0;
@@ -239,6 +250,8 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.2/html2pdf.bundle.js"></script>
 </head>
 <body>
+    <input type="text" id="search-bar" placeholder="Search in Resume" oninput="searchResume()">
+
     <div class="container">
 
         <div class="flags">
@@ -746,6 +759,93 @@
             projectItems[4].style.marginTop = '50mm'; // ePPS
             projectItems[7].style.marginTop = '50mm'; // PAMAP
         }
+
+        function searchResume() {
+            let input = document.getElementById('search-bar').value.toLowerCase();
+            let sections = document.querySelectorAll('.container'); // Assuming sections are in the 'container' class
+
+            // Add a class to disable animations during search
+            document.body.classList.add('searching');
+
+            sections.forEach(section => {
+                // Reset previous highlights and ensure animation is not triggered
+                removeHighlights(section);
+
+                // Only proceed if there is search input
+                if (input === '') {
+                    section.style.display = 'block'; // Show the section if search input is empty
+                    return;
+                }
+
+                let textContent = section.textContent || section.innerText;
+                if (textContent.toLowerCase().includes(input)) {
+                    section.style.display = 'block'; // Show the section if it contains the search term
+                    highlightText(section, input); // Highlight the matching text
+                } else {
+                    section.style.display = 'none'; // Hide the section if it does not contain the search term
+                }
+            });
+
+            // Remove the class to re-enable animations after a short delay
+            setTimeout(() => {
+                document.body.classList.remove('searching');
+            }, 1000); // Timeout to allow changes to take place before animations are re-enabled
+        }
+
+        function highlightText(section, input) {
+            const words = input.split(/\s+/); // Split the input into multiple words separated by spaces
+            words.forEach(word => {
+                const escapedWord = escapeRegExp(word); // Escape the word for safe regex use
+                const regex = new RegExp(`\\b(${escapedWord})\\b`, 'gi'); // Case-insensitive matching for whole words
+                const nodes = getTextNodes(section);
+
+                nodes.forEach(node => {
+                    const text = node.nodeValue;
+                    const parts = text.replace(regex, (match) => {
+                        // Wrap matched words in a span
+                        return `<span class="highlight">${match}</span>`;
+                    });
+
+                    if (parts !== text) { // Only replace if something was highlighted
+                        const fragment = document.createDocumentFragment();
+                        const tempDiv = document.createElement('div');
+                        tempDiv.innerHTML = parts; // Use innerHTML to insert the replaced content
+                        while (tempDiv.firstChild) {
+                            fragment.appendChild(tempDiv.firstChild); // Append all child nodes (including the span)
+                        }
+                        node.replaceWith(fragment); // Replace original node with the new fragment
+                    }
+                });
+            });
+        }
+
+        // Function to remove previous highlights
+        function removeHighlights(section) {
+            const highlightedText = section.querySelectorAll('.highlight');
+            highlightedText.forEach(span => {
+                const parentNode = span.parentNode;
+                parentNode.replaceChild(document.createTextNode(span.innerText), span); // Replace span with plain text
+            });
+        }
+
+        // Function to get all text nodes within a section
+        function getTextNodes(element) {
+            let textNodes = [];
+            for (let node of element.childNodes) {
+                if (node.nodeType === 3) { // Text node
+                    textNodes.push(node);
+                } else if (node.nodeType === 1) { // Element node, recurse into child elements
+                    textNodes = textNodes.concat(getTextNodes(node));
+                }
+            }
+            return textNodes;
+        }
+
+        // Function to escape special characters for regex
+        function escapeRegExp(string) {
+            return string.replace(/[.*+?^=!:${}()|\[\]\/\\]/g, '\\$&');
+        }
+
 
         loadResumeData();
 
