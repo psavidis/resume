@@ -266,12 +266,12 @@
             <ul id="experience-list"></ul>
         </div>
 
-        <div class="section avoid-break" id="Projects">
+        <div class="section page-break" id="Projects">
             <h2>Projects</h2>
             <ul id="projects-list"></ul>
         </div>
 
-        <div class="section avoid-break" id="education">
+        <div class="section" id="education">
             <h2>Education</h2>
             <ul id="education-list"></ul>
         </div>
@@ -393,6 +393,7 @@
             data.project.forEach(project => {
                 const li = document.createElement('li');
 
+                li.classList.add('project-li');
                 li.style.cursor = 'pointer';
                 li.style.padding = '12px';
                 li.style.border = '1px solid #ccc';
@@ -417,6 +418,7 @@
 
                 // Description
                 const projectDescription = document.createElement('p');
+                projectDescription.classList.add('project-description');
                 projectDescription.textContent = project.description || 'No description provided';
                 projectDescription.style.display = 'none';
                 projectDescription.style.fontSize = '14px';
@@ -426,6 +428,7 @@
 
                 // Tools Used
                 const techUsed = document.createElement('p');
+                techUsed.classList.add('project-tech');
                 techUsed.textContent = project.techUsed ? `Tools: ${project.techUsed.join(', ')}` : '';
                 techUsed.style.display = 'none';
                 techUsed.style.fontSize = '13px';
@@ -436,6 +439,8 @@
 
                 // Points (bullet list)
                 const pointsList = document.createElement('ul');
+
+                pointsList.classList.add('project-points');
                 pointsList.style.display = 'none';
                 pointsList.style.paddingLeft = '20px';
                 pointsList.style.listStyleType = 'disc';
@@ -547,6 +552,7 @@
             projectLinks.forEach(link => {
                 const showProjectButton = document.createElement('a');
 
+                showProjectButton.classList.add('project-button');
                 showProjectButton.textContent = 'Show Project';
                 showProjectButton.href = link || '#'; // Default to "#" if no URL provided
                 showProjectButton.target = '_blank'; // Open in new tab
@@ -612,12 +618,31 @@
             // Add class to disable transforms, animations, etc.
             resume.classList.add('pdf-mode');
 
+            const projectItems = document.querySelectorAll('.project-li');
+
+            customizePageBreaks(projectItems);
+
+            const techUsed = document.querySelectorAll('.project-tech');
+            const projectDescriptions = document.querySelectorAll('.project-description');
+            const projectPoints = document.querySelectorAll('.project-points');
+            const projectButtons = document.querySelectorAll('.project-button');
+
+            open(projectItems);
+            open(techUsed);
+            open(projectDescriptions);
+            open(projectPoints);
+            open(projectButtons);
+
             // Give the browser time to apply styles
             setTimeout(() => {
                 html2pdf()
                     .set({
                         margin: 0,
                         filename: 'resume.pdf',
+                        pagebreak: {
+                            mode: ['css', 'legacy']  // must include 'css' so page-break styles are respected
+                            // after: '.page-break'
+                        },
                         image: { type: 'jpeg', quality: 0.98 },
                         html2canvas: {
                             scale: 2,
@@ -631,7 +656,8 @@
                     .from(resume)
                     .save()
                     .then(() => {
-                        resume.classList.remove('pdf-mode');
+                        // resume.classList.remove('pdf-mode');
+                        location.reload();
                     })
                     .catch(err => {
                         console.error("PDF generation failed:", err);
@@ -703,6 +729,22 @@
             }
 
             return new Date(Date.UTC(year, monthIndex, 1)); // Always safe
+        }
+
+        function open(elements) {
+            elements.forEach(item => {
+                // Directly manipulate the height and visibility to ensure they expand
+                item.style.height = 'auto';  // Ensure the items expand to their full height
+                item.style.display = 'block';  // Make sure the item is displayed (not hidden)
+                item.style.overflow = 'visible';  // Ensure the content is visible
+                item.style.transition = 'none';  // Disable any transitions that could cause issues
+            });
+        }
+
+        // Customize this function with page breaks per project if they don't fit HERE
+        function customizePageBreaks(projectItems) {
+            projectItems[4].style.marginTop = '50mm'; // ePPS
+            projectItems[7].style.marginTop = '50mm'; // PAMAP
         }
 
         loadResumeData();
