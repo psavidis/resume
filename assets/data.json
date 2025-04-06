@@ -307,11 +307,48 @@
       "company": "Camunda",
       "startDate": "04-2023",
       "endDate": "04-2025",
+      "description": "Camunda Platform 7 is a flexible framework for workflow and process automation. Its core is a native BPMN 2.0 process engine that runs inside the Java Virtual Machine. It can be embedded inside any Java application and any Runtime Container. It integrates with Java EE 6 and is a perfect match for the Spring Framework. On top of the process engine, you can choose from a stack of tools for human workflow management, operations and monitoring.",
       "points": [
+        "Individual Contributor to the Camunda 7 Project between April 2023 and April 2025",
+        "My contributions can be found between 7.20.0 and 7.23.0 Releases",
+        "Feature Development for Open Source / Enterprise Edition",
+        "Community Worker - Worked on Reviewing community contributions, security vulnerabilities, CI improvements",
+        "Alpha and Minor Release Management",
+        "Worked on C7 to C8 Data Migrator PoC"
       ],
-      "techUsed": [],
+      "techUsed": [
+        "Java 11",
+        "Java 17",
+        "Java 21",
+        "Spring Boot",
+        "Quarkus",
+        "BPMN 2.0",
+        "Java EE 6",
+        "CDI",
+        "Arquillian",
+        "Tomcat 9",
+        "Tomcat 10",
+        "JBoss EAP 7.4",
+        "JBoss EAP 8",
+        "WildFly Application Server 23.0 / 26.0 / 33.0",
+        "IBM WebSphere Liberty 22",
+        "Oracle WebLogic",
+        "MySQL 8.0",
+        "Oracle 19c / 23ai",
+        "IBM DB2 11.5",
+        "PostgreSQL 14",
+        "PostgreSQL 15",
+        "PostgreSQL 16",
+        "PostgreSQL 17",
+        "Amazon Aurora PostgreSQL",
+        "Microsoft SQL Server 2017",
+        "Microsoft SQL Server 2019",
+        "Microsoft Azure SQL",
+        "H2 2.3"
+      ],
       "links": [
-        "https://github.com/camunda/camunda-bpm-platform"
+        "https://github.com/camunda/camunda-bpm-platform",
+        "https://github.com/camunda/camunda-bpm-platform/issues?q=is%3Aissue%20state%3Aclosed%20assignee%3Apsavidis&page=6"
       ]
     }
 
