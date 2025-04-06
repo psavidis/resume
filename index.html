@@ -304,7 +304,7 @@
 <body>
 
     <div class="search-container">
-        <input type="text" id="search-bar" class="search-bar" placeholder="Search..." oninput="searchResume()" />
+        <input type="text" id="search-bar" class="search-bar" placeholder="Simple Search in Projects..." oninput="searchResume()" />
     </div>
 
     <div class="container">
@@ -817,7 +817,7 @@
 
         function searchResume() {
             let input = document.getElementById('search-bar').value.toLowerCase();
-            let sections = document.querySelectorAll('.container'); // Assuming sections are in the 'container' class
+            let sections = document.querySelectorAll('#Projects'); // Assuming sections are in the 'container' class
 
             // Add a class to disable animations during search
             document.body.classList.add('searching');
@@ -834,10 +834,10 @@
 
                 let textContent = section.textContent || section.innerText;
                 if (textContent.toLowerCase().includes(input)) {
-                    section.style.display = 'block'; // Show the section if it contains the search term
+                    // section.style.display = 'block'; // Show the section if it contains the search term
                     highlightText(section, input); // Highlight the matching text
                 } else {
-                    section.style.display = 'none'; // Hide the section if it does not contain the search term
+                    // section.style.display = 'none'; // Hide the section if it does not contain the search term
                 }
             });
 
