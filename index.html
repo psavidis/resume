@@ -959,6 +959,12 @@
             searchBar.style.display = 'none';
         }
 
+        function makeHidden(elements) {
+            elements.forEach(item => {
+                item.style.display = 'none';  // Make sure the item is displayed (not hidden)
+            });
+        }
+
         function initializeSearchToggle() {
             const searchToggle = document.getElementById('toggle-search');
             searchToggle.addEventListener('click', function() {
@@ -967,6 +973,8 @@
                 if (searchBar.style.display === 'block') {
                     searchBar.style.display = 'none';
 
+                    hideProjects();
+
                     // init search bar and remove highlights
                     if (searchBar) {
                         searchBar.value = '';
@@ -974,9 +982,39 @@
                     }
 
                 } else {
+                    showProjects();
+
                     searchBar.style.display = 'block';
                 }
             });
+        }
+
+        function showProjects() {
+            const projectItems = document.querySelectorAll('.project-li');
+
+            const techUsed = document.querySelectorAll('.project-tech');
+            const projectDescriptions = document.querySelectorAll('.project-description');
+            const projectPoints = document.querySelectorAll('.project-points');
+            const projectButtons = document.querySelectorAll('.project-button');
+
+            makeVisible(projectItems);
+            makeVisible(techUsed);
+            makeVisible(projectDescriptions);
+            makeVisible(projectPoints);
+            makeVisible(projectButtons);
+        }
+
+        function hideProjects() {
+
+            const techUsed = document.querySelectorAll('.project-tech');
+            const projectDescriptions = document.querySelectorAll('.project-description');
+            const projectPoints = document.querySelectorAll('.project-points');
+            const projectButtons = document.querySelectorAll('.project-button');
+
+            makeHidden(techUsed);
+            makeHidden(projectDescriptions);
+            makeHidden(projectPoints);
+            makeHidden(projectButtons);
         }
 
         function initializePdfButton() {
