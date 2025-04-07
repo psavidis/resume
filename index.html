@@ -423,8 +423,10 @@
             <div id="summary-instructions">
                 <ul>
                     <li>Feel free to <b>Connect</b> with me via email, LinkedIn, or phone to explore potential business opportunities</li>
-                    <li><b>Download</b> my resume in PDF format</li>
-                    <li><b>Search</b> through my projects using simple keywords</li>
+                    <li><b>Download</b> my resume in PDF format (<b>⌘ + S </b>)
+                    </li>
+                    <li><b>Search</b> through my projects using simple keywords (<b>⌘ + F </b>)
+                    </li>
                 </ul>
             </div>
             <p id="summary-free">Outside of work, I’m passionate about traveling, making music, diving into philosophy, and swimming <span class="emoji">✈️🎵📖🏊‍ </span> ️</p>
@@ -1080,9 +1082,7 @@
             document.getElementById("Projects").scrollIntoView({
                 behavior: "smooth"
             });
-
-            const searchBar = document.querySelector('#search-bar');
-            searchBar.style.position = 'sticky'; // Keep it fixed at the bottom
+            window.dispatchEvent(new Event('scroll'));
         }
 
         function scrollToTop() {
@@ -1195,6 +1195,33 @@
             console.log('🐇🐰🥚If you see this little easter egg, you are a either developer or a curious recruiter with dev skills! Keep up the good work! 🎉');
         }
 
+        function registerSearchKeyShortcut() {
+            document.addEventListener('keydown', function(event) {
+                // Check if Control (Windows) or Command (Mac) + F is pressed
+                if ((event.ctrlKey || event.metaKey) && event.key === 'f') {
+                    event.preventDefault(); // Prevent the browser's default find behavior
+                    document.getElementById('toggle-search').click(); // Replace with your button's ID
+                }
+            });
+        }
+
+        function registerSavePdfShortcut() {
+            document.addEventListener('keydown', function(event) {
+                if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 's') {
+                    event.preventDefault(); // Stop the browser's "Save Page As" behavior
+                    document.getElementById('pdf-btn').click();
+                }
+            });
+        }
+
+        function disableScroll() {
+            document.body.style.overflow = 'hidden';
+        }
+
+        function enableScroll() {
+            document.body.style.overflow = '';
+        }
+
         loadResumeData();
 
         initializePdfButton();
@@ -1203,6 +1230,10 @@
         initializeSearchToggle();
         configureSearchBarPositioning();
         configurePhoneButton();
+
+        // Register shortcuts
+        registerSearchKeyShortcut();
+        registerSavePdfShortcut();
 
         showEasterEgg();
     </script>
