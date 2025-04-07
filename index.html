@@ -1029,6 +1029,24 @@
             document.getElementById('pdf-btn').addEventListener('click', downloadPage);
         }
 
+        function configureSearchBarPositioning() {
+            window.addEventListener('scroll', function() {
+                const searchBar = document.querySelector('#search-bar');
+                const bottomOfPage = document.documentElement.scrollHeight - window.innerHeight;
+
+                // Check if the page is near the bottom
+                if (window.scrollY >= bottomOfPage - searchBar.offsetHeight) {
+                    searchBar.style.position = 'fixed'; // Keep it fixed at the bottom
+                    searchBar.style.top = 'auto'; // Remove the top property
+                    searchBar.style.bottom = '0'; // Fix it at the bottom of the page
+                } else {
+                    searchBar.style.position = 'sticky';
+                    searchBar.style.top = '0'; // Keep it at the top
+                    searchBar.style.bottom = ''; // Reset the bottom property
+                }
+            });
+        }
+
         function showEasterEgg() {
             console.log('🐇🐰🥚If you see this little easter egg, you are a either developer or a curious recruiter with dev skills! Keep up the good work! 🎉');
         }
@@ -1037,24 +1055,11 @@
 
         initializePdfButton();
         hideSearchBar();
+
         initializeSearchToggle();
+        configureSearchBarPositioning();
+
         showEasterEgg();
-
-        window.addEventListener('scroll', function() {
-            const searchBar = document.querySelector('#search-bar');
-            const bottomOfPage = document.documentElement.scrollHeight - window.innerHeight;
-
-            // Check if the page is near the bottom
-            if (window.scrollY >= bottomOfPage - searchBar.offsetHeight) {
-                searchBar.style.position = 'fixed'; // Keep it fixed at the bottom
-                searchBar.style.top = 'auto'; // Remove the top property
-                searchBar.style.bottom = '0'; // Fix it at the bottom of the page
-            } else {
-                searchBar.style.position = 'sticky';
-                searchBar.style.top = '0'; // Keep it at the top
-                searchBar.style.bottom = ''; // Reset the bottom property
-            }
-        });
     </script>
 </body>
 </html>
