@@ -97,9 +97,9 @@
         "Android",
         "SVN"
       ],
-      "links": [
-        "https://www.pamap.org/"
-      ]
+      "links": {
+        "Project" : "https://www.pamap.org/"
+      }
     },
     {
       "name": "Eleura Platform",
@@ -182,11 +182,11 @@
         "Jenkins",
         "Sonar"
       ],
-      "links": [
-        "https://bpp.economie.fgov.be/bpp-portal/",
-        "https://mijnoctrooi.rvo.nl/bpp-portal/",
-        "https://patent.public.lu/bpp-portal/"
-      ]
+      "links": {
+        "Belgium" : "https://bpp.economie.fgov.be/bpp-portal/",
+        "Netherland" : "https://mijnoctrooi.rvo.nl/bpp-portal/",
+        "Luxembourg" : "https://patent.public.lu/bpp-portal/"
+      }
     },
     {
       "name": "e-PPS",
@@ -209,9 +209,9 @@
         "Hibernate",
         "Struts 1"
       ],
-      "links": [
-        "https://www.etenders.gov.mt/epps/home.do"
-      ]
+      "links": {
+        "Project": "https://www.etenders.gov.mt/epps/home.do"
+      }
     },
     {
       "name": "Dryad & Medusa",
@@ -285,9 +285,9 @@
         "JIRA",
         "Canban board"
       ],
-      "links": [
-        "https://www.secure-d.io/?utm_source=upstreamwebsite"
-      ]
+      "links": {
+        "Product Website": "https://www.secure-d.io/?utm_source=upstreamwebsite"
+      }
     },
     {
       "name": "Contract Intelligence & Services",
@@ -316,9 +316,9 @@
         "Microservices",
         "Docker"
       ],
-      "links": [
-        "https://www.cortical.io/semanticpro/"
-      ]
+      "links": {
+        "Product Website": "https://www.cortical.io/semanticpro/"
+      }
     },
     {
       "name": "Camunda Platform 7 - The Open Source BPMN platform",
@@ -375,10 +375,10 @@
         "JUnit 4",
         "Mockito"
       ],
-      "links": [
-        "https://github.com/camunda/camunda-bpm-platform",
-        "https://github.com/camunda/camunda-bpm-platform/issues?q=is%3Aissue%20state%3Aclosed%20assignee%3Apsavidis&page=1"
-      ]
+      "links": {
+        "GitHub": "https://github.com/camunda/camunda-bpm-platform",
+        "My Commits": "https://github.com/camunda/camunda-bpm-platform/issues?q=is%3Aissue%20state%3Aclosed%20assignee%3Apsavidis&page=1"
+      }
     }
 
   ],
