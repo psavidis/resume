@@ -427,6 +427,7 @@
             }
         }
 
+        /* Do not display keyboard shortcuts for smaller screens such as phones / tables */
         @media (max-width: 768px) {
             #shortcuts {
                 display: none;
@@ -924,7 +925,6 @@
             shortcuts.style.display = 'none';
         }
 
-        // Function to parse and compare dates
         function sortByField(data, field, order = 'desc') {
             return data.sort((a, b) => {
                 // Extract the date components (e.g., "MM-YYYY")
@@ -951,7 +951,6 @@
             return (end.getFullYear() - start.getFullYear()) * 12 + (end.getMonth() - start.getMonth());
         }
 
-        // Function to calculate the total experience
         function getTotalExperience(workExperience) {
             let totalExperienceMonths = 0;
 
@@ -1009,7 +1008,7 @@
             });
         }
 
-        // Customize this function with page breaks per project if they don't fit HERE
+        // Customize page breaks HERE
         function customizePageBreaks(projectItems) {
             projectItems[3].style.marginTop = '15mm';
             projectItems[6].style.marginTop = '55mm'; // Eleura
@@ -1074,7 +1073,6 @@
             });
         }
 
-        // Function to remove previous highlights
         function removeHighlights(section) {
             const highlightedText = section.querySelectorAll('.highlight');
             highlightedText.forEach(span => {
@@ -1083,7 +1081,6 @@
             });
         }
 
-        // Function to get all text nodes within a section
         function getTextNodes(element) {
             let textNodes = [];
             for (let node of element.childNodes) {
@@ -1096,7 +1093,6 @@
             return textNodes;
         }
 
-        // Function to escape special characters for regex
         function escapeRegExp(string) {
             return string.replace(/[.*+?^=!:${}()|\[\]\/\\]/g, '\\$&');
         }
@@ -1196,18 +1192,6 @@
             });
         }
 
-        function fixSearchBarAtTheBottom(searchBar) {
-            searchBar.style.position = 'fixed'; // Keep it fixed at the bottom
-            searchBar.style.top = 'auto'; // Remove the top property
-            searchBar.style.bottom = '0'; // Fix it at the bottom of the page
-        }
-
-        function fixSearchBarAtTheTop(searchBar) {
-            searchBar.style.position = 'sticky';
-            searchBar.style.top = '0'; // Keep it at the top
-            searchBar.style.bottom = ''; // Reset the bottom property
-        }
-
         function configurePhoneButton() {
             const phoneButton = document.getElementById('phoneButton');
             const overlay = document.getElementById('overlay');
@@ -1291,14 +1275,6 @@
                     document.getElementById('maps-btn').click();
                 }
             });
-        }
-
-        function disableScroll() {
-            document.body.style.overflow = 'hidden';
-        }
-
-        function enableScroll() {
-            document.body.style.overflow = '';
         }
 
         loadResumeData();
