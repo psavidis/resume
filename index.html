@@ -1142,6 +1142,9 @@
                 behavior: "smooth"
             });
             window.dispatchEvent(new Event('scroll'));
+
+            const searchBar = document.querySelector('#search-bar');
+            searchBar.style.position = 'sticky'; // Keep it fixed at the bottom
         }
 
         function scrollToTop() {
