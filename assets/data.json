@@ -300,7 +300,21 @@
         "Lead Developer for Refactoring the Main Product of the company using a DDD inspired approach",
         "Mentoring & Coaching"
       ],
-      "techUsed": []
+      "techUsed": [
+        "Java",
+        "Spring Boot",
+        "Spring Boot Cloud Stream",
+        "Postgres",
+        "OCR",
+        "Cucumber",
+        "JUnit 5",
+        "Mockito",
+        "JPA",
+        "Hibernate",
+        "Domain Driven Design",
+        "Microservices",
+        "Docker"
+      ]
     },
     {
       "name": "Camunda Platform 7 - The Open Source BPMN platform",
