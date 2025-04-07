@@ -643,7 +643,7 @@
                     });
                 }
 
-                const showProjectButtons = createShowProjectButtons(project);
+                const showProjectButtons = createProjectButtons(project);
 
                 const hasProjectButtons = showProjectButtons.length > 0;
 
@@ -720,45 +720,46 @@
             return link;
         }
 
-        function createShowProjectButtons(project) {
+        function createProjectButtons(project) {
             const projectLinks = project.links;
 
-            if (!Array.isArray(projectLinks)) {
+            if (!projectLinks) {
                 return []; // No references to show
             }
 
             let result = [];
 
-            projectLinks.forEach(link => {
-                const showProjectButton = document.createElement('a');
+            Object.entries(projectLinks).forEach(([key, link]) => {
+                console.log(`${key}: ${link}`);
+                const projectButton = document.createElement('a');
 
-                showProjectButton.classList.add('project-button');
-                showProjectButton.textContent = 'Show Project';
-                showProjectButton.href = link || '#'; // Default to "#" if no URL provided
-                showProjectButton.target = '_blank'; // Open in new tab
-                showProjectButton.style.display = 'none';
-                showProjectButton.style.marginTop = '10px';
-                showProjectButton.style.marginRight = '10px'; // Add margin between buttons
-                showProjectButton.style.padding = '8px 12px';
-                showProjectButton.style.background = '#007BFF';
-                showProjectButton.style.color = 'white';
-                showProjectButton.style.textDecoration = 'none';
-                showProjectButton.style.borderRadius = '5px';
-                showProjectButton.style.fontSize = '11px';
-                showProjectButton.style.fontWeight = 'bold';
-                showProjectButton.style.textAlign = 'center';
-                showProjectButton.style.width = 'fit-content';
-                showProjectButton.style.transition = 'background 0.3s';
+                projectButton.classList.add('project-button');
+                projectButton.textContent = key;
+                projectButton.href = link || '#'; // Default to "#" if no URL provided
+                projectButton.target = '_blank'; // Open in new tab
+                projectButton.style.display = 'none';
+                projectButton.style.marginTop = '10px';
+                projectButton.style.marginRight = '10px'; // Add margin between buttons
+                projectButton.style.padding = '8px 12px';
+                projectButton.style.background = '#007BFF';
+                projectButton.style.color = 'white';
+                projectButton.style.textDecoration = 'none';
+                projectButton.style.borderRadius = '5px';
+                projectButton.style.fontSize = '11px';
+                projectButton.style.fontWeight = 'bold';
+                projectButton.style.textAlign = 'center';
+                projectButton.style.width = 'fit-content';
+                projectButton.style.transition = 'background 0.3s';
 
                 // Button hover effect
-                showProjectButton.addEventListener('mouseover', () => {
-                    showProjectButton.style.background = '#0056b3';
+                projectButton.addEventListener('mouseover', () => {
+                    projectButton.style.background = '#0056b3';
                 });
-                showProjectButton.addEventListener('mouseout', () => {
-                    showProjectButton.style.background = '#007BFF';
+                projectButton.addEventListener('mouseout', () => {
+                    projectButton.style.background = '#007BFF';
                 });
 
-                result.push(showProjectButton);
+                result.push(projectButton);
             });
 
             return result;
