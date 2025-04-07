@@ -326,6 +326,7 @@
 
         <div>
             <p id="summary">Your professional summary goes here...</p>
+            <p id="summary-intro">Welcome to my Dynamic | Git | Code-Driven Resume! 🤘</p>
             <p id="summary-free">In my free time, I like to travel, play music, explore philosophy and swim</p>
         </div>
 
@@ -381,6 +382,10 @@
             summary.textContent = data.summary || 'Summary not provided';
             summary.style.textAlign = 'left';
             summary.style.fontSize = fontSize;
+
+            let summaryIntro = document.getElementById('summary-intro');
+            summaryIntro.style.textAlign = 'left';
+            summaryIntro.style.fontSize = fontSize;
 
             let summaryFree = document.getElementById('summary-free');
             summaryFree.style.textAlign = 'left';
