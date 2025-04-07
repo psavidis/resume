@@ -730,7 +730,6 @@
             let result = [];
 
             Object.entries(projectLinks).forEach(([key, link]) => {
-                console.log(`${key}: ${link}`);
                 const projectButton = document.createElement('a');
 
                 projectButton.classList.add('project-button');
@@ -1059,6 +1058,7 @@
                 if (searchBar.style.display === 'block') {
                     searchBar.style.display = 'none';
 
+                    scrollToTop();
                     hideProjects();
 
                     // init search bar and remove highlights
@@ -1068,10 +1068,24 @@
                     }
 
                 } else {
+                    scrollToProjects();
                     showProjects();
 
                     searchBar.style.display = 'block';
                 }
+            });
+        }
+
+        function scrollToProjects() {
+            document.getElementById("Projects").scrollIntoView({
+                behavior: "smooth"
+            });
+        }
+
+        function scrollToTop() {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
             });
         }
 
