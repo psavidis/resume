@@ -1082,7 +1082,7 @@
             });
 
             const searchBar = document.querySelector('#search-bar');
-            fixSearchBarAtTheTop(searchBar);
+            searchBar.style.position = 'sticky'; // Keep it fixed at the bottom
         }
 
         function scrollToTop() {
