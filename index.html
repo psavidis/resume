@@ -6,6 +6,7 @@
     <title>Petros Savvidis Resume</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
     <style>
         body {
             font-family: 'Roboto', sans-serif;
@@ -94,6 +95,13 @@
         }
         .btn i {
             font-size: 1.2em;
+        }
+
+        .profile-title {
+            font-family: 'Poppins', sans-serif; /* or Poppins, Raleway, etc */
+            font-size: 1.5em; /* slightly bigger */
+            letter-spacing: 0.5px; /* optional: a bit wider spacing for style */
+            color: #222; /* optional: a little darker if you want it to pop more */
         }
 
         .profile-picture-container {
@@ -325,9 +333,10 @@
         </div>
 
         <div>
-            <p id="summary">Your professional summary goes here...</p>
-            <p id="summary-intro">Welcome to my Dynamic | Git | Code-Driven Resume! 🤘</p>
-            <p id="summary-free">In my free time, I like to travel, play music, explore philosophy and swim</p>
+            <p id="summary" class="profile-title">Your professional summary goes here...</p>
+            <p id="summary-intro">Welcome to my Dynamic | Git-powered | Code-driven Resume! 🤘</p>
+            <p id="summary-instructions">Feel free to connect with me via email, LinkedIn, or phone to explore potential opportunities. You can also download my resume as a PDF and easily search through my projects using simple keywords.</p>
+            <p id="summary-free">Outside of work, I’m passionate about traveling, making music, diving into philosophy, and swimming.</p>
         </div>
 
         <div class="section" id="experience">
@@ -390,6 +399,10 @@
             let summaryFree = document.getElementById('summary-free');
             summaryFree.style.textAlign = 'left';
             summaryFree.style.fontSize = fontSize;
+
+            let summaryInstructions = document.getElementById('summary-instructions');
+            summaryInstructions.style.textAlign = 'left';
+            summaryInstructions.style.fontSize = fontSize;
         }
 
         function populateWorkExperience(data) {
