@@ -377,7 +377,7 @@
       ],
       "links": [
         "https://github.com/camunda/camunda-bpm-platform",
-        "https://github.com/camunda/camunda-bpm-platform/issues?q=is%3Aissue%20state%3Aclosed%20assignee%3Apsavidis&page=6"
+        "https://github.com/camunda/camunda-bpm-platform/issues?q=is%3Aissue%20state%3Aclosed%20assignee%3Apsavidis&page=1"
       ]
     }
 
