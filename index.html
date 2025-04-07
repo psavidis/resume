@@ -294,6 +294,47 @@
             vertical-align: middle; /* Keeps them aligned nicely with the text */
         }
 
+        #phoneButton {
+            font-size: 24px;
+            cursor: pointer;
+            position: relative;
+            z-index: 10;
+        }
+
+        #overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.7);
+            display: none; /* Initially hidden */
+            justify-content: center;
+            align-items: center;
+            z-index: 5;
+            flex-direction: column;
+            text-align: center;
+            color: white;
+            font-size: 24px;
+            transition: opacity 0.5s ease;
+        }
+
+        #circle {
+            position: absolute;
+            background-color: #3498db;
+            border-radius: 50%;
+            width: 0;
+            height: 0;
+            transition: all 1s ease-in-out;
+            z-index: -1;
+        }
+
+        #message {
+            opacity: 0;
+            font-size: 30px;
+            transition: opacity 1s ease;
+        }
+
         /* Responsive design for smaller screens */
         @media (max-width: 600px) {
             .search-bar {
@@ -397,7 +438,11 @@
 
     <div class="button-container">
         <button class="btn" onclick="window.location.href='mailto:peter.savidis1@gmail.com'"><i class="fas fa-envelope"></i></button>
-        <button class="btn" onclick="window.location.href='tel:+306975064122'"><i class="fas fa-phone-alt"></i></button>
+        <button id="phoneButton" class="btn"><i class="fas fa-phone-alt"></i></button>
+        <div id="overlay">
+            <div id="circle"></div>
+            <div id="message">Would you like to have a chat? Feel free to send me an email, and we can schedule a convenient time for a phone call. Looking forward to connecting!</div>
+        </div>
         <button class="btn" onclick="window.open('https://www.google.com.au/maps/place/Melbourne+VIC/@-37.9648869,143.8048508,9z/data=!3m1!4b1!4m6!3m5!1s0x6ad646b5d2ba4df7:0x4045675218ccd90!8m2!3d-37.8136276!4d144.9630576!16zL20vMGNoZ3pt?entry=ttu&g_ep=EgoyMDI1MDQwMS4wIKXMDSoASAFQAw%3D%3D', '_blank')"><i class="fas fa-map-marker-alt"></i></button>
         <button class="btn" onclick="window.location.href='https://www.linkedin.com/in/petros-savvidis-8994b857/'"><i class="fab fa-linkedin-in"></i></button>
         <button class="btn" id="pdf-btn"><i class="fas fa-file-pdf"></i></button>
@@ -1043,6 +1088,48 @@
             });
         }
 
+        function configurePhoneButton() {
+            const phoneButton = document.getElementById('phoneButton');
+            const overlay = document.getElementById('overlay');
+            const circle = document.getElementById('circle');
+            const message = document.getElementById('message');
+
+            phoneButton.addEventListener('click', () => {
+                // Show the overlay
+                overlay.style.display = 'flex';
+
+                // Position the circle over the button and animate it
+                const buttonRect = phoneButton.getBoundingClientRect();
+                const circleSize = Math.max(window.innerWidth, window.innerHeight);
+
+                // Start the circle animation
+                circle.style.left = `${buttonRect.left + buttonRect.width / 2 - circleSize / 2}px`;
+                circle.style.top = `${buttonRect.top + buttonRect.height / 2 - circleSize / 2}px`;
+                circle.style.width = `${circleSize}px`;
+                circle.style.height = `${circleSize}px`;
+
+                // Show the message after the circle animation ends
+                setTimeout(() => {
+                    message.style.opacity = 1;
+                }, 1000); // Delay the text appearance until after the circle animation
+
+                setTimeout(() => {
+                    message.style.opacity = 0;
+                    circle.style.width = '0';
+                    circle.style.height = '0';
+                }, 8000);
+
+                // Reset everything and hide the overlay after 6 seconds
+                setTimeout(() => {
+                    overlay.style.display = 'none'; // Hide overlay
+                    circle.style.left = '0'; // Reset circle position
+                    circle.style.top = '0'; // Reset circle position
+                    circle.style.width = '0'; // Reset circle size
+                    circle.style.height = '0'; // Reset circle size
+                }, 9000); // Hide overlay and reset circle after the entire animation completes
+            });
+        }
+
         function showEasterEgg() {
             console.log('🐇🐰🥚If you see this little easter egg, you are a either developer or a curious recruiter with dev skills! Keep up the good work! 🎉');
         }
@@ -1054,7 +1141,7 @@
 
         initializeSearchToggle();
         configureSearchBarPositioning();
-
+        configurePhoneButton()
         showEasterEgg();
     </script>
 </body>
