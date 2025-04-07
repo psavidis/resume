@@ -294,6 +294,7 @@
       "company": "Cortical.io",
       "startDate": "08-2020",
       "endDate": "12-2022",
+      "description": "Contract Intelligence and its platform services offer an IDP solution for extracting data from documents and classifying them with different algorithms (proprietary, open source).",
       "points": [
         "Redesigned & implemented Platform Services to be configurable (turned it into microservice).",
         "Designed, Implemented & Tested Connectors, a flexible, scalable, fault tolerant microservices system to connect the Products to documents of various Cloud storage solutions Sharepoint, Box, Dropbox etc.)",
