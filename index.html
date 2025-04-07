@@ -345,6 +345,40 @@
             transition: opacity 1s ease;
         }
 
+        #shortcuts {
+            margin-top: 50px;
+            padding: 20px;
+            background-color: #f0f0f0; /* Lighter background */
+            border-radius: 8px;
+            font-family: 'Courier New', monospace; /* Gives it a keyboard/coding feel */
+        }
+
+        #shortcuts h2 {
+            font-size: 1.2em;
+            margin-bottom: 10px;
+            color: #555; /* Slightly dark gray */
+            font-weight: normal; /* Lighter heading */
+        }
+
+        #shortcuts ul {
+            list-style-type: none;
+            padding-left: 0;
+        }
+
+        #shortcuts ul li {
+            font-size: 0.9em; /* Smaller font */
+            margin-bottom: 5px;
+            color: #777; /* Greyed text */
+        }
+
+        #shortcuts ul li strong {
+            color: #333; /* Darker text for shortcuts */
+            background-color: #e0e0e0; /* Light gray background to resemble a key */
+            padding: 3px 6px;
+            border-radius: 5px;
+            font-family: 'Courier New', monospace; /* Keep consistent keyboard look */
+        }
+
         /* Responsive design for smaller screens */
         @media (max-width: 600px) {
             .search-bar {
@@ -423,9 +457,9 @@
             <div id="summary-instructions">
                 <ul>
                     <li>Feel free to <b>Connect</b> with me via email, LinkedIn, or phone to explore potential business opportunities</li>
-                    <li><b>Download</b> my resume in PDF format (<b>⌘ + S </b>)
+                    <li><b>Download</b> my resume in PDF format
                     </li>
-                    <li><b>Search</b> through my projects using simple keywords (<b>⌘ + F </b>)
+                    <li><b>Search</b> through my projects using simple keywords
                     </li>
                 </ul>
             </div>
@@ -446,6 +480,17 @@
             <h2>Education</h2>
             <ul id="education-list"></ul>
         </div>
+
+        <div id="shortcuts">
+            <h2>Keyboard Shortcuts</h2>
+            <ul>
+                <li><strong>⌘ + F</strong>: Open the Search Bar</li>
+                <li><strong>⌘ + S</strong>: Download My Resume</li>
+                <li><strong>⌘ + E</strong>: Open Email</li>
+                <li><strong>⌘ + Shift + L</strong>: Open LinkedIn</li>
+                <li><strong>⌘ + Shift + M</strong>: Open Google Maps with Location</li>
+            </ul>
+        </div>
     </div>
 
     <div class="button-container">
@@ -455,8 +500,8 @@
             <div id="circle"></div>
             <div id="message">Would you like to have a chat? Feel free to send me an email, and we can schedule a convenient time for a phone call. Looking forward to connecting!</div>
         </div>
-        <button class="btn" onclick="window.open('https://www.google.com.au/maps/place/Melbourne+VIC/@-37.9648869,143.8048508,9z/data=!3m1!4b1!4m6!3m5!1s0x6ad646b5d2ba4df7:0x4045675218ccd90!8m2!3d-37.8136276!4d144.9630576!16zL20vMGNoZ3pt?entry=ttu&g_ep=EgoyMDI1MDQwMS4wIKXMDSoASAFQAw%3D%3D', '_blank')"><i class="fas fa-map-marker-alt"></i></button>
-        <button class="btn" onclick="window.location.href='https://www.linkedin.com/in/petros-savvidis-8994b857/'"><i class="fab fa-linkedin-in"></i></button>
+        <button class="btn" id="maps-btn" onclick="window.open('https://www.google.com.au/maps/place/Melbourne+VIC/@-37.9648869,143.8048508,9z/data=!3m1!4b1!4m6!3m5!1s0x6ad646b5d2ba4df7:0x4045675218ccd90!8m2!3d-37.8136276!4d144.9630576!16zL20vMGNoZ3pt?entry=ttu&g_ep=EgoyMDI1MDQwMS4wIKXMDSoASAFQAw%3D%3D', '_blank')"><i class="fas fa-map-marker-alt"></i></button>
+        <button class="btn" id="linkedin-btn" onclick="window.open('https://www.linkedin.com/in/petros-savvidis-8994b857/', '_blank')"><i class="fab fa-linkedin-in"></i></button>
         <button class="btn" id="pdf-btn"><i class="fas fa-file-pdf"></i></button>
         <button class="toggle-button" id="toggle-search"><i class="fas fa-search"></i></button>
     </div>
@@ -815,6 +860,9 @@
             makeVisible(projectPoints);
             makeButtonsVisible(projectButtons);
 
+            hideShortcuts();
+
+
             // Save the original styles
             const container = document.querySelector('.container');
             const originalHeight = container.style.height;
@@ -862,6 +910,11 @@
                         resume.classList.remove('pdf-mode');
                     });
             }, 300); // give time for the style to apply
+        }
+
+        function hideShortcuts() {
+            const shortcuts = document.querySelector('#shortcuts')
+            shortcuts.style.display = 'none';
         }
 
         // Function to parse and compare dates
@@ -1214,6 +1267,26 @@
             });
         }
 
+        function registerLinkedShortCut() {
+            document.addEventListener('keydown', function(event) {
+                // LinkedIn shortcut: Ctrl/Cmd + Shift + L
+                if ((event.ctrlKey || event.metaKey) && event.shiftKey && event.key.toLowerCase() === 'l') {
+                    event.preventDefault(); // Prevent default action
+                    document.getElementById('linkedin-btn').click();
+                }
+            });
+        }
+
+        function registerMapsShortCut() {
+            document.addEventListener('keydown', function(event) {
+                // Location shortcut: Ctrl/Cmd + Shift + M
+                if ((event.ctrlKey || event.metaKey) && event.shiftKey && event.key.toLowerCase() === 'm') {
+                    event.preventDefault(); // Prevent default action
+                    document.getElementById('maps-btn').click();
+                }
+            });
+        }
+
         function disableScroll() {
             document.body.style.overflow = 'hidden';
         }
@@ -1234,6 +1307,8 @@
         // Register shortcuts
         registerSearchKeyShortcut();
         registerSavePdfShortcut();
+        registerLinkedShortCut();
+        registerMapsShortCut();
 
         showEasterEgg();
     </script>
