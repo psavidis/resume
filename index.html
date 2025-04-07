@@ -28,6 +28,10 @@
             visibility: visible !important;
             opacity: 1 !important;
             position: relative;
+
+            height: 100vh; /* or a specific height for the scrollable area */
+            max-height: 100%;
+            overflow: auto; /* Ensure the content is scrollable */
         }
         h1 {
             text-align: center;
@@ -217,6 +221,12 @@
             width: 100%;
             padding: 10px;
             margin-bottom: 20px;
+            position: sticky;
+            top: 0;
+            z-index: 9999;
+            background-color: white; /* Optional: make sure the background is solid */
+            padding: 10px; /* Adjust padding as needed */
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
         }
 
         .highlight {
@@ -1029,6 +1039,22 @@
         hideSearchBar();
         initializeSearchToggle();
         showEasterEgg();
+
+        window.addEventListener('scroll', function() {
+            const searchBar = document.querySelector('.search-bar');
+            const bottomOfPage = document.documentElement.scrollHeight - window.innerHeight;
+
+            // Check if the page is near the bottom
+            if (window.scrollY >= bottomOfPage - searchBar.offsetHeight) {
+                searchBar.style.position = 'fixed'; // Keep it fixed at the bottom
+                searchBar.style.top = 'auto'; // Remove the top property
+                searchBar.style.bottom = '0'; // Fix it at the bottom of the page
+            } else {
+                searchBar.style.position = 'sticky';
+                searchBar.style.top = '0'; // Keep it at the top
+                searchBar.style.bottom = ''; // Reset the bottom property
+            }
+        });
     </script>
 </body>
 </html>
