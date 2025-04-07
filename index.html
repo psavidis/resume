@@ -694,11 +694,11 @@
             const projectPoints = document.querySelectorAll('.project-points');
             const projectButtons = document.querySelectorAll('.project-button');
 
-            open(projectItems);
-            open(techUsed);
-            open(projectDescriptions);
-            open(projectPoints);
-            open(projectButtons);
+            makeVisible(projectItems);
+            makeVisible(techUsed);
+            makeVisible(projectDescriptions);
+            makeVisible(projectPoints);
+            makeVisible(projectButtons);
 
             // Give the browser time to apply styles
             setTimeout(() => {
@@ -798,7 +798,7 @@
             return new Date(Date.UTC(year, monthIndex, 1)); // Always safe
         }
 
-        function open(elements) {
+        function makeVisible(elements) {
             elements.forEach(item => {
                 // Directly manipulate the height and visibility to ensure they expand
                 item.style.height = 'auto';  // Ensure the items expand to their full height
