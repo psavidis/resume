@@ -812,7 +812,7 @@
             makeVisible(techUsed);
             makeVisible(projectDescriptions);
             makeVisible(projectPoints);
-            makeVisible(projectButtons);
+            makeButtonsVisible(projectButtons);
 
             // Save the original styles
             const container = document.querySelector('.container');
@@ -926,6 +926,16 @@
             }
 
             return new Date(Date.UTC(year, monthIndex, 1)); // Always safe
+        }
+
+        function makeButtonsVisible(projectButtons) {
+            projectButtons.forEach(button => {
+                // Ensure they expand to full height, and maintain a row layout when printing
+                button.style.height = 'auto';
+                button.style.display = 'inline-block';  // Or 'flex' if you prefer a flex container
+                button.style.overflow = 'visible';
+                button.style.transition = 'none';
+            });
         }
 
         function makeVisible(elements) {
