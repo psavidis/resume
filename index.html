@@ -900,25 +900,40 @@
             return string.replace(/[.*+?^=!:${}()|\[\]\/\\]/g, '\\$&');
         }
 
+        function hideSearchBar() {
+            const searchBar = document.getElementById('search-bar');
+            searchBar.style.display = 'none';
+        }
+
+        function initializeSearchToggle() {
+            const searchToggle = document.getElementById('toggle-search');
+            searchToggle.addEventListener('click', function() {
+                const searchBar = document.getElementById('search-bar');
+
+                if (searchBar.style.display === 'block') {
+                    searchBar.style.display = 'none';
+
+                    // init search bar and remove highlights
+                    if (searchBar) {
+                        searchBar.value = '';
+                        searchResume();
+                    }
+
+                } else {
+                    searchBar.style.display = 'block';
+                }
+            });
+        }
+
+        function initializePdfButton() {
+            document.getElementById('pdf-btn').addEventListener('click', downloadPage);
+        }
+
         loadResumeData();
 
-        document.getElementById('pdf-btn').addEventListener('click', downloadPage);
-
-        const searchToggle = document.getElementById('toggle-search');
-        const searchBar = document.getElementById('search-bar');
-
-        searchBar.style.display = 'none'; // hide the search bar by default
-
-        searchToggle.addEventListener('click', function() {
-            const searchBar = document.getElementById('search-bar');
-
-            if (searchBar.style.display === 'block') {
-                searchBar.style.display = 'none';
-            } else {
-                searchBar.style.display = 'block';
-            }
-        });
-
+        initializePdfButton();
+        hideSearchBar();
+        initializeSearchToggle();
     </script>
 </body>
 </html>
