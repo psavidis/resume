@@ -1080,6 +1080,9 @@
             document.getElementById("Projects").scrollIntoView({
                 behavior: "smooth"
             });
+
+            const searchBar = document.querySelector('#search-bar');
+            fixSearchBarAtTheTop(searchBar);
         }
 
         function scrollToTop() {
@@ -1127,15 +1130,23 @@
 
                 // Check if the page is near the bottom
                 if (window.scrollY >= bottomOfPage - searchBar.offsetHeight) {
-                    searchBar.style.position = 'fixed'; // Keep it fixed at the bottom
-                    searchBar.style.top = 'auto'; // Remove the top property
-                    searchBar.style.bottom = '0'; // Fix it at the bottom of the page
+                    fixSearchBarAtTheBottom(searchBar);
                 } else {
-                    searchBar.style.position = 'sticky';
-                    searchBar.style.top = '0'; // Keep it at the top
-                    searchBar.style.bottom = ''; // Reset the bottom property
+                    fixSearchBarAtTheTop(searchBar);
                 }
             });
+        }
+
+        function fixSearchBarAtTheBottom(searchBar) {
+            searchBar.style.position = 'fixed'; // Keep it fixed at the bottom
+            searchBar.style.top = 'auto'; // Remove the top property
+            searchBar.style.bottom = '0'; // Fix it at the bottom of the page
+        }
+
+        function fixSearchBarAtTheTop(searchBar) {
+            searchBar.style.position = 'sticky';
+            searchBar.style.top = '0'; // Keep it at the top
+            searchBar.style.bottom = ''; // Reset the bottom property
         }
 
         function configurePhoneButton() {
