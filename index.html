@@ -28,6 +28,10 @@
             visibility: visible !important;
             opacity: 1 !important;
             position: relative;
+
+            height: 100vh; /* or a specific height for the scrollable area */
+            max-height: 100%;
+            overflow: auto; /* Ensure the content is scrollable */
         }
         h1 {
             text-align: center;
@@ -264,6 +268,12 @@
         .toggle-button.locked:hover {
             background-color: #f1c40f; /* Maintain yellow background when hover is locked */
             color: #fff; /* Icon color stays white */
+        }
+
+        .disable-scroll {
+            height: auto !important;
+            max-height: none !important;
+            overflow: visible !important;
         }
 
         #summary-instructions ul {
@@ -803,6 +813,16 @@
             makeVisible(projectPoints);
             makeVisible(projectButtons);
 
+            // Save the original styles
+            const container = document.querySelector('.container');
+            const originalHeight = container.style.height;
+            const originalMaxHeight = container.style.maxHeight;
+            const originalOverflow = container.style.overflow;
+
+            container.style.height = 'auto';
+            container.style.maxHeight = 'none';
+            container.style.overflow = 'visible';
+
             // Give the browser time to apply styles
             setTimeout(() => {
                 html2pdf()
@@ -825,6 +845,12 @@
                     })
                     .from(resume)
                     .save()
+                    .then(() =>{
+                        // Disable scroll and height properties temporarily when the PDF button is clicked
+                        container.style.height = originalHeight;
+                        container.style.maxHeight = originalMaxHeight;
+                        container.style.overflow = originalOverflow;
+                    })
                     .then(() => {
                         // resume.classList.remove('pdf-mode');
                         location.reload();
@@ -1142,6 +1168,7 @@
         initializeSearchToggle();
         configureSearchBarPositioning();
         configurePhoneButton()
+
         showEasterEgg();
     </script>
 </body>
