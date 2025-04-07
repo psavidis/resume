@@ -1,11 +1,9 @@
 {
   "imageURL": "https://raw.githubusercontent.com/psavidis/resume/refs/heads/master/assets/profile_picture.jpeg",
   "linkedInURL": "https://www.linkedin.com/in/peter-savidis-8994b857/",
-  "name": "Petros Savvidis",
-  "addressStreet": "17 Notou Str, Agia Paraskevi, 15342",
+  "name": "Petros Savidis",
   "addressLocation": "Athens, Greece",
   "email": "peter.savidis1@gmail.com",
-  "phone": "+30-6975064122",
   "summary": "Software Engineer | Java Specialist | Architecture & Design | Remote Worker",
   "languages": [
     "Greek",
