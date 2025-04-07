@@ -502,7 +502,7 @@
     </div>
 
     <div class="button-container">
-        <button class="btn" onclick="window.location.href='mailto:peter.savidis1@gmail.com'"><i class="fas fa-envelope"></i></button>
+        <button id="email-btn" class="btn" onclick="window.location.href='mailto:peter.savidis1@gmail.com'"><i class="fas fa-envelope"></i></button>
         <button id="phoneButton" class="btn"><i class="fas fa-phone-alt"></i></button>
         <div id="overlay">
             <div id="circle"></div>
@@ -1257,6 +1257,15 @@
             });
         }
 
+        function registerEmailShortcut() {
+            document.addEventListener('keydown', function(event) {
+                if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 'e') {
+                    event.preventDefault();
+                    document.getElementById('email-btn').click();
+                }
+            });
+        }
+
         function registerLinkedShortCut() {
             document.addEventListener('keydown', function(event) {
                 // LinkedIn shortcut: Ctrl/Cmd + Shift + L
@@ -1289,6 +1298,7 @@
         // Register shortcuts
         registerSearchKeyShortcut();
         registerSavePdfShortcut();
+        registerEmailShortcut();
         registerLinkedShortCut();
         registerMapsShortCut();
 
