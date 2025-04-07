@@ -402,7 +402,7 @@
 
     <div class="container">
 
-        <div class="flags">
+        <div id="flags" class="flags">
             <span class="flag">🇬🇷</span> <!-- Greek flag -->
             <span class="flag">🇦🇺</span> <!-- Australian flag -->
         </div>
@@ -1083,9 +1083,8 @@
         }
 
         function scrollToTop() {
-            window.scrollTo({
-                top: 0,
-                behavior: 'smooth'
+            document.getElementById("flags").scrollIntoView({
+                behavior: "smooth"
             });
         }
 
