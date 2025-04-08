@@ -15,8 +15,8 @@ This is the Github repository for my official resume. The code is used by a Gith
 
 But the best reasons of all are
 
-- Because I _can_ and 
-- Why not 🤘
+- Because I _can_ 😎 
+- Why not 🙃
 
 The above reasons made me contemplate of requirements for my project.
 
