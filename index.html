@@ -16,871 +16,910 @@
 </head>
 <body>
 
-    <div class="search-container">
-        <input type="text" id="search-bar" class="search-bar" placeholder="Simple Search in Projects..." oninput="searchResume()" />
+<div class="search-container">
+    <input type="text" id="search-bar" class="search-bar" placeholder="Simple Search in Projects..."
+           oninput="searchResume()"/>
+</div>
+
+<div class="container">
+
+    <div id="flags" class="flags">
+        <span class="flag">🇬🇷</span> <!-- Greek flag -->
+        <span class="flag">🇦🇺</span> <!-- Australian flag -->
     </div>
 
-    <div class="container">
+    <div class="header">
 
-        <div id="flags" class="flags">
-            <span class="flag">🇬🇷</span> <!-- Greek flag -->
-            <span class="flag">🇦🇺</span> <!-- Australian flag -->
+        <div class="profile-picture-container">
+            <img src="/resume/img/profile_picture.jpeg" alt="Profile Picture" class="profile-picture">
         </div>
 
-        <div class="header">
+        <h1 id="name"></h1>
 
-            <div class="profile-picture-container">
-                <img src="/resume/img/profile_picture.jpeg" alt="Profile Picture" class="profile-picture">
-            </div>
+    </div>
 
-            <h1 id="name"></h1>
-
-        </div>
-
-        <div>
-            <p id="summary" class="profile-title"></p>
-            <p id="summary-intro">Welcome to my Dynamic | Git-powered | Code-driven Resume! <span class="emoji">🤘</span></p>
-            <div id="summary-instructions">
-                <ul>
-                    <li>Feel free to <b>Connect</b> with me via email or LinkedIn to explore potential business opportunities</li>
-                    <li><b>Download</b> my resume in PDF format
-                    </li>
-                    <li><b>Search</b> through my projects using simple keywords
-                    </li>
-                </ul>
-            </div>
-            <p id="summary-free">Outside of work, I’m passionate about traveling, making music, diving into philosophy, and swimming <span class="emoji">✈️🎵📖🏊‍ </span> ️</p>
-        </div>
-
-        <div class="section" id="experience">
-            <h2 id="experienceTitle">Experience</h2>
-            <ul id="experience-list"></ul>
-        </div>
-
-        <div class="section page-break" id="Projects">
-            <h2>Projects</h2>
-            <ul id="projects-list"></ul>
-        </div>
-
-        <div class="section" id="education">
-            <h2>Education</h2>
-            <ul id="education-list"></ul>
-        </div>
-
-        <div id="shortcuts">
-            <h2>Keyboard Shortcuts</h2>
+    <div>
+        <p id="summary" class="profile-title"></p>
+        <p id="summary-intro">Welcome to my Dynamic | Git-powered | Code-driven Resume! <span class="emoji">🤘</span></p>
+        <div id="summary-instructions">
             <ul>
-                <li><strong>⌘ + F</strong>: Open the Search Bar</li>
-                <li><strong>⌘ + S</strong>: Download My Resume</li>
-                <li><strong>⌘ + E</strong>: Open Email</li>
-                <li><strong>⌘ + Shift + L</strong>: Open LinkedIn</li>
-                <li><strong>⌘ + Shift + M</strong>: Open Maps with Location</li>
+                <li>Feel free to <b>Connect</b> with me via email or LinkedIn to explore potential business
+                    opportunities
+                </li>
+                <li><b>Download</b> my resume in PDF format
+                </li>
+                <li><b>Search</b> through my projects using simple keywords
+                </li>
             </ul>
         </div>
+        <p id="summary-free">Outside of work, I’m passionate about traveling, making music, diving into philosophy, and
+            swimming <span class="emoji">✈️🎵📖🏊‍ </span> ️</p>
     </div>
 
-    <div class="button-container">
-        <button id="email-btn" class="btn" onclick="window.location.href='mailto:peter.savidis1@gmail.com'"><i class="fas fa-envelope"></i></button>
-        <button id="phoneButton" class="btn"><i class="fas fa-phone-alt"></i></button>
-        <div id="overlay">
-            <div id="circle"></div>
-            <div id="message">Would you like to have a chat? Feel free to send me an email, and we can schedule a convenient time for a phone call. Looking forward to connecting!</div>
+    <div class="section" id="experience">
+        <h2 id="experienceTitle">Experience</h2>
+        <ul id="experience-list"></ul>
+    </div>
+
+    <div class="section page-break" id="Projects">
+        <h2>Projects</h2>
+        <ul id="projects-list"></ul>
+    </div>
+
+    <div class="section" id="education">
+        <h2>Education</h2>
+        <ul id="education-list"></ul>
+    </div>
+
+    <div id="shortcuts">
+        <h2>Keyboard Shortcuts</h2>
+        <ul>
+            <li><strong>⌘ + F</strong>: Open the Search Bar</li>
+            <li><strong>⌘ + S</strong>: Download My Resume</li>
+            <li><strong>⌘ + E</strong>: Open Email</li>
+            <li><strong>⌘ + Shift + L</strong>: Open LinkedIn</li>
+            <li><strong>⌘ + Shift + M</strong>: Open Maps with Location</li>
+        </ul>
+    </div>
+</div>
+
+<div class="button-container">
+    <button id="email-btn" class="btn" onclick="window.location.href='mailto:peter.savidis1@gmail.com'"><i
+            class="fas fa-envelope"></i></button>
+    <button id="phoneButton" class="btn"><i class="fas fa-phone-alt"></i></button>
+    <div id="overlay">
+        <div id="circle"></div>
+        <div id="message">Would you like to have a chat? Feel free to send me an email, and we can schedule a convenient
+            time for a phone call. Looking forward to connecting!
         </div>
-        <button class="btn" id="maps-btn" onclick="window.open('https://www.google.com.au/maps/place/Melbourne+VIC/@-37.9648869,143.8048508,9z/data=!3m1!4b1!4m6!3m5!1s0x6ad646b5d2ba4df7:0x4045675218ccd90!8m2!3d-37.8136276!4d144.9630576!16zL20vMGNoZ3pt?entry=ttu&g_ep=EgoyMDI1MDQwMS4wIKXMDSoASAFQAw%3D%3D', '_blank')"><i class="fas fa-map-marker-alt"></i></button>
-        <button class="btn" id="linkedin-btn" onclick="window.open('https://www.linkedin.com/in/petros-savvidis-8994b857/', '_blank')"><i class="fab fa-linkedin-in"></i></button>
-        <button class="btn" id="pdf-btn"><i class="fas fa-file-pdf"></i></button>
-        <button class="toggle-button" id="toggle-search"><i class="fas fa-search"></i></button>
     </div>
+    <button class="btn" id="maps-btn"
+            onclick="window.open('https://www.google.com.au/maps/place/Melbourne+VIC/@-37.9648869,143.8048508,9z/data=!3m1!4b1!4m6!3m5!1s0x6ad646b5d2ba4df7:0x4045675218ccd90!8m2!3d-37.8136276!4d144.9630576!16zL20vMGNoZ3pt?entry=ttu&g_ep=EgoyMDI1MDQwMS4wIKXMDSoASAFQAw%3D%3D', '_blank')">
+        <i class="fas fa-map-marker-alt"></i></button>
+    <button class="btn" id="linkedin-btn"
+            onclick="window.open('https://www.linkedin.com/in/petros-savvidis-8994b857/', '_blank')"><i
+            class="fab fa-linkedin-in"></i></button>
+    <button class="btn" id="pdf-btn"><i class="fas fa-file-pdf"></i></button>
+    <button class="toggle-button" id="toggle-search"><i class="fas fa-search"></i></button>
+</div>
 
-    <script>
-        async function loadResumeData() {
-            try {
-                const response = await fetch('data.json');
-                if (!response.ok) throw new Error('Failed to fetch data');
+<script>
 
-                const data = await response.json();
+    // Functions: Main Features
 
-                populateHeader(data);
-                populateWorkExperience(data);
-                populateProjects(data);
-                populateEducation(data);
+    function downloadPage() {
+        const resume = document.querySelector('.container');
 
-            } catch (error) {
-                console.error('Error loading resume data:', error);
-            }
+        if (!resume) {
+            console.error("Resume container not found!");
+            return;
         }
 
-        function populateHeader(data) {
-            document.getElementById('name').textContent = data.name || 'Name not provided';
+        // Add class to disable transforms, animations, etc.
+        resume.classList.add('pdf-mode');
 
-            let fontSize = '13px';
+        const projectItems = document.querySelectorAll('.project-li');
 
-            let summary = document.getElementById('summary');
-            summary.textContent = data.summary || 'Summary not provided';
-            summary.style.textAlign = 'left';
-            summary.style.fontSize = fontSize;
+        customizePageBreaks(projectItems);
 
-            let summaryIntro = document.getElementById('summary-intro');
-            summaryIntro.style.textAlign = 'left';
-            summaryIntro.style.fontSize = fontSize;
+        const techUsed = document.querySelectorAll('.project-tech');
+        const projectDescriptions = document.querySelectorAll('.project-description');
+        const projectPoints = document.querySelectorAll('.project-points');
+        const projectButtons = document.querySelectorAll('.project-button');
 
-            let summaryFree = document.getElementById('summary-free');
-            summaryFree.style.textAlign = 'left';
-            summaryFree.style.fontSize = fontSize;
+        makeVisible(projectItems);
+        makeVisible(techUsed);
+        makeVisible(projectDescriptions);
+        makeVisible(projectPoints);
+        makeButtonsVisible(projectButtons);
 
-            let summaryInstructions = document.getElementById('summary-instructions');
-            summaryInstructions.style.textAlign = 'left';
-            summaryInstructions.style.fontSize = fontSize;
-        }
+        hideShortcuts();
 
-        function populateWorkExperience(data) {
-            const experienceList = document.getElementById('experience-list');
-            experienceList.innerHTML = '';
+        // Save the original styles
+        const container = document.querySelector('.container');
+        const originalHeight = container.style.height;
+        const originalMaxHeight = container.style.maxHeight;
+        const originalOverflow = container.style.overflow;
 
-            if (!Array.isArray(data.workExperience)) {
-                experienceList.innerHTML = '<li>No experience data available</li>';
+        container.style.height = 'auto';
+        container.style.maxHeight = 'none';
+        container.style.overflow = 'visible';
+
+        // Give the browser time to apply styles
+        setTimeout(() => {
+            html2pdf()
+                .set({
+                    margin: 0,
+                    filename: 'resume.pdf',
+                    pagebreak: {
+                        mode: ['css', 'legacy']  // must include 'css' so page-break styles are respected
+                        // after: '.page-break'
+                    },
+                    image: {type: 'jpeg', quality: 0.98},
+                    html2canvas: {
+                        scale: 2,
+                        useCORS: true,
+                        logging: true,
+                        backgroundColor: '#ffffff',
+                        scrollY: 0
+                    },
+                    jsPDF: {unit: 'in', format: 'a4', orientation: 'portrait'}
+                })
+                .from(resume)
+                .save()
+                .then(() => {
+                    // Disable scroll and height properties temporarily when the PDF button is clicked
+                    container.style.height = originalHeight;
+                    container.style.maxHeight = originalMaxHeight;
+                    container.style.overflow = originalOverflow;
+                })
+                .then(() => {
+                    // resume.classList.remove('pdf-mode');
+                    location.reload();
+                })
+                .catch(err => {
+                    console.error("PDF generation failed:", err);
+                    resume.classList.remove('pdf-mode');
+                });
+        }, 300); // give time for the style to apply
+    }
+
+    function searchResume() {
+        let input = document.getElementById('search-bar').value.toLowerCase();
+        let sections = document.querySelectorAll('#Projects'); // Assuming sections are in the 'container' class
+
+        // Add a class to disable animations during search
+        document.body.classList.add('searching');
+
+        sections.forEach(section => {
+            // Reset previous highlights and ensure animation is not triggered
+            removeHighlights(section);
+
+            // Only proceed if there is search input
+            if (input === '') {
+                section.style.display = 'block'; // Show the section if search input is empty
                 return;
             }
 
-            data.workExperience = sortByField(data.workExperience, 'startDate', 'asc');
+            let textContent = section.textContent || section.innerText;
+            if (textContent.toLowerCase().includes(input)) {
+                // section.style.display = 'block'; // Show the section if it contains the search term
+                highlightText(section, input); // Highlight the matching text
+            } else {
+                // section.style.display = 'none'; // Hide the section if it does not contain the search term
+            }
+        });
 
-            data.workExperience.forEach(item => {
-                const li = document.createElement('li');
-                li.classList.add('work-experience');
+        // Remove the class to re-enable animations after a short delay
+        setTimeout(() => {
+            document.body.classList.remove('searching');
+        }, 1000); // Timeout to allow changes to take place before animations are re-enabled
+    }
 
-                const workTitleAndImg = document.createElement('div');
-                workTitleAndImg.classList.add('work-title');
+    // Functions: Create elements
 
-                // Create company logo image
-                const companyImg = createCompanyImg(item);
+    function createCompanyImg(item) {
+        const img = document.createElement('img');
 
-                // Create text span for job details
-                const textSpan = document.createElement('span');
-                textSpan.textContent = `${item.title || 'Position not provided'} at ${item.company || 'Company not provided'} (${item.startDate || ''} - ${item.endDate || 'Present'})`;
+        img.src = item.companyLogo;
+        img.classList.add('project-image');
+        img.style.width = '40px';
+        img.style.height = '40px';
+        img.style.borderRadius = '50%';
+        img.style.marginRight = '10px';
+        img.style.verticalAlign = 'middle';
 
-                workTitleAndImg.appendChild(companyImg);
-                workTitleAndImg.appendChild(textSpan);
+        const link = document.createElement('a');
+        link.href = item.companyLink || '#'; // Default to "#" if no URL provided
 
-                const div = document.createElement('div');
-                div.classList.add('location-badge');
+        link.appendChild(img);
 
-                const span = document.createElement('span');
-                div.appendChild(span);
-                div.textContent = '📍' + item.location;
+        return link;
+    }
 
-                // Append logo and text
-                li.appendChild(workTitleAndImg);
-                li.appendChild(div);
+    function createSchoolImg(item) {
+        const img = document.createElement('img');
 
-                experienceList.appendChild(li);
+        img.src = item.schoolLogo;
+        img.classList.add('university-image');
+        img.style.width = '40px';
+        img.style.height = '40px';
+        img.style.borderRadius = '50%';
+        img.style.marginRight = '10px';
+        img.style.verticalAlign = 'middle';
+
+        const link = document.createElement('a');
+        link.href = item.schoolLink || '#'; // Default to "#" if no URL provided
+
+        link.appendChild(img);
+
+        return link;
+    }
+
+    function createProjectButtons(project) {
+        const projectLinks = project.links;
+
+        if (!projectLinks) {
+            return []; // No references to show
+        }
+
+        let result = [];
+
+        Object.entries(projectLinks).forEach(([key, link]) => {
+            const projectButton = document.createElement('a');
+
+            projectButton.classList.add('project-button');
+            projectButton.textContent = key;
+            projectButton.href = link || '#'; // Default to "#" if no URL provided
+            projectButton.target = '_blank'; // Open in new tab
+            projectButton.style.display = 'none';
+            projectButton.style.marginTop = '10px';
+            projectButton.style.marginRight = '10px'; // Add margin between buttons
+            projectButton.style.padding = '8px 12px';
+            projectButton.style.background = '#007BFF';
+            projectButton.style.color = 'white';
+            projectButton.style.textDecoration = 'none';
+            projectButton.style.borderRadius = '5px';
+            projectButton.style.fontSize = '11px';
+            projectButton.style.fontWeight = 'bold';
+            projectButton.style.textAlign = 'center';
+            projectButton.style.width = 'fit-content';
+            projectButton.style.transition = 'background 0.3s';
+
+            // Button hover effect
+            projectButton.addEventListener('mouseover', () => {
+                projectButton.style.background = '#0056b3';
+            });
+            projectButton.addEventListener('mouseout', () => {
+                projectButton.style.background = '#007BFF';
             });
 
-            const totalXP = getTotalExperience(data.workExperience);
-            const formattedXP = formatTotalExperienceIntoYears(totalXP);
+            result.push(projectButton);
+        });
 
-            document.getElementById('experienceTitle').textContent = 'Experience (' + formattedXP + ')';
+        return result;
+    }
+
+    // Functions: Load Data / Populate
+
+    async function loadResumeData() {
+        try {
+            const response = await fetch('data.json');
+            if (!response.ok) throw new Error('Failed to fetch data');
+
+            const data = await response.json();
+
+            populateHeader(data);
+            populateWorkExperience(data);
+            populateProjects(data);
+            populateEducation(data);
+
+        } catch (error) {
+            console.error('Error loading resume data:', error);
+        }
+    }
+
+    function populateHeader(data) {
+        document.getElementById('name').textContent = data.name || 'Name not provided';
+
+        let fontSize = '13px';
+
+        let summary = document.getElementById('summary');
+        summary.textContent = data.summary || 'Summary not provided';
+        summary.style.textAlign = 'left';
+        summary.style.fontSize = fontSize;
+
+        let summaryIntro = document.getElementById('summary-intro');
+        summaryIntro.style.textAlign = 'left';
+        summaryIntro.style.fontSize = fontSize;
+
+        let summaryFree = document.getElementById('summary-free');
+        summaryFree.style.textAlign = 'left';
+        summaryFree.style.fontSize = fontSize;
+
+        let summaryInstructions = document.getElementById('summary-instructions');
+        summaryInstructions.style.textAlign = 'left';
+        summaryInstructions.style.fontSize = fontSize;
+    }
+
+    function populateWorkExperience(data) {
+        const experienceList = document.getElementById('experience-list');
+        experienceList.innerHTML = '';
+
+        if (!Array.isArray(data.workExperience)) {
+            experienceList.innerHTML = '<li>No experience data available</li>';
+            return;
         }
 
-        function formatTotalExperienceIntoYears(totalExperience) {
-            const years = totalExperience.years;
-            const months = totalExperience.months;
+        data.workExperience = sortByField(data.workExperience, 'startDate', 'asc');
 
-            // Format the output
-            if (months > 0) {
-                return `${years}+ years`; // If there are months, show a +
-            } else {
-                return `${years} years`; // If no months, show only years with a "+"
-            }
+        data.workExperience.forEach(item => {
+            const li = document.createElement('li');
+            li.classList.add('work-experience');
+
+            const workTitleAndImg = document.createElement('div');
+            workTitleAndImg.classList.add('work-title');
+
+            // Create company logo image
+            const companyImg = createCompanyImg(item);
+
+            // Create text span for job details
+            const textSpan = document.createElement('span');
+            textSpan.textContent = `${item.title || 'Position not provided'} at ${item.company || 'Company not provided'} (${item.startDate || ''} - ${item.endDate || 'Present'})`;
+
+            workTitleAndImg.appendChild(companyImg);
+            workTitleAndImg.appendChild(textSpan);
+
+            const div = document.createElement('div');
+            div.classList.add('location-badge');
+
+            const span = document.createElement('span');
+            div.appendChild(span);
+            div.textContent = '📍' + item.location;
+
+            // Append logo and text
+            li.appendChild(workTitleAndImg);
+            li.appendChild(div);
+
+            experienceList.appendChild(li);
+        });
+
+        const totalXP = getTotalExperience(data.workExperience);
+        const formattedXP = formatTotalExperienceIntoYears(totalXP);
+
+        document.getElementById('experienceTitle').textContent = 'Experience (' + formattedXP + ')';
+    }
+
+    function populateProjects(data) {
+        const projectsList = document.getElementById('projects-list');
+        projectsList.innerHTML = '';
+
+        if (!Array.isArray(data.project)) {
+            projectsList.innerHTML = '<li>No projects data available</li>';
+            return;
         }
 
-        function populateProjects(data) {
-            const projectsList = document.getElementById('projects-list');
-            projectsList.innerHTML = '';
+        data.project = sortByField(data.project, 'startDate', 'desc');
 
-            if (!Array.isArray(data.project)) {
-                projectsList.innerHTML = '<li>No projects data available</li>';
-                return;
-            }
+        data.project.forEach(project => {
+            const li = document.createElement('li');
 
-            data.project = sortByField(data.project, 'startDate', 'desc');
+            li.classList.add('project-li');
+            li.style.cursor = 'pointer';
+            li.style.padding = '12px';
+            li.style.border = '1px solid #ccc';
+            li.style.borderRadius = '8px';
+            li.style.marginBottom = '8px';
+            li.style.backgroundColor = '#f9f9f9';
+            li.style.transition = 'background-color 0.2s ease-in-out';
 
-            data.project.forEach(project => {
-                const li = document.createElement('li');
-
-                li.classList.add('project-li');
-                li.style.cursor = 'pointer';
-                li.style.padding = '12px';
-                li.style.border = '1px solid #ccc';
-                li.style.borderRadius = '8px';
-                li.style.marginBottom = '8px';
+            li.addEventListener('mouseenter', () => {
+                li.style.backgroundColor = '#e3eafc';
+            });
+            li.addEventListener('mouseleave', () => {
                 li.style.backgroundColor = '#f9f9f9';
-                li.style.transition = 'background-color 0.2s ease-in-out';
+            });
 
-                li.addEventListener('mouseenter', () => {
-                    li.style.backgroundColor = '#e3eafc';
+            // Project name
+            const projectName = document.createElement('span');
+            projectName.textContent = project.name || 'Project not provided';
+            projectName.style.color = '#1e3c72';
+            projectName.style.fontSize = '18px';
+            projectName.style.fontWeight = 'bold';
+
+            // Description
+            const projectDescription = document.createElement('p');
+            projectDescription.classList.add('project-description');
+            projectDescription.textContent = project.description || 'No description provided';
+            projectDescription.style.display = 'none';
+            projectDescription.style.fontSize = '14px';
+            projectDescription.style.color = '#444';
+            projectDescription.style.marginTop = '10px';
+            projectDescription.style.textAlign = 'left';
+
+            // Tools Used
+            const techUsed = document.createElement('p');
+            techUsed.classList.add('project-tech');
+            techUsed.textContent = project.techUsed ? `Tools: ${project.techUsed.join(', ')}` : '';
+            techUsed.style.display = 'none';
+            techUsed.style.fontSize = '13px';
+            techUsed.style.fontStyle = 'italic';
+            techUsed.style.color = '#666';
+            techUsed.style.marginTop = '5px';
+            techUsed.style.textAlign = 'left';
+
+            // Points (bullet list)
+            const pointsList = document.createElement('ul');
+
+            pointsList.classList.add('project-points');
+            pointsList.style.display = 'none';
+            pointsList.style.paddingLeft = '20px';
+            pointsList.style.listStyleType = 'disc';
+            pointsList.style.marginTop = '5px';
+            pointsList.style.fontSize = '13px';
+
+            if (project.points && Array.isArray(project.points)) {
+                project.points.forEach(point => {
+                    const pointItem = document.createElement('li');
+                    pointItem.textContent = point.toString();
+                    pointItem.style.marginBottom = '3px';
+                    pointItem.style.listStyleType = 'circle';
+                    pointItem.style.background = 'none';
+                    pointItem.style.padding = '2px 0';
+                    pointItem.style.backgroundColor = 'transparent';
+                    pointItem.style.border = 'none';
+                    pointItem.style.boxShadow = 'none';
+                    pointsList.appendChild(pointItem);
                 });
-                li.addEventListener('mouseleave', () => {
-                    li.style.backgroundColor = '#f9f9f9';
-                });
+            }
 
-                // Project name
-                const projectName = document.createElement('span');
-                projectName.textContent = project.name || 'Project not provided';
-                projectName.style.color = '#1e3c72';
-                projectName.style.fontSize = '18px';
-                projectName.style.fontWeight = 'bold';
+            const showProjectButtons = createProjectButtons(project);
 
-                // Description
-                const projectDescription = document.createElement('p');
-                projectDescription.classList.add('project-description');
-                projectDescription.textContent = project.description || 'No description provided';
-                projectDescription.style.display = 'none';
-                projectDescription.style.fontSize = '14px';
-                projectDescription.style.color = '#444';
-                projectDescription.style.marginTop = '10px';
-                projectDescription.style.textAlign = 'left';
+            const hasProjectButtons = showProjectButtons.length > 0;
 
-                // Tools Used
-                const techUsed = document.createElement('p');
-                techUsed.classList.add('project-tech');
-                techUsed.textContent = project.techUsed ? `Tools: ${project.techUsed.join(', ')}` : '';
-                techUsed.style.display = 'none';
-                techUsed.style.fontSize = '13px';
-                techUsed.style.fontStyle = 'italic';
-                techUsed.style.color = '#666';
-                techUsed.style.marginTop = '5px';
-                techUsed.style.textAlign = 'left';
-
-                // Points (bullet list)
-                const pointsList = document.createElement('ul');
-
-                pointsList.classList.add('project-points');
-                pointsList.style.display = 'none';
-                pointsList.style.paddingLeft = '20px';
-                pointsList.style.listStyleType = 'disc';
-                pointsList.style.marginTop = '5px';
-                pointsList.style.fontSize = '13px';
-
-                if (project.points && Array.isArray(project.points)) {
-                    project.points.forEach(point => {
-                        const pointItem = document.createElement('li');
-                        pointItem.textContent = point.toString();
-                        pointItem.style.marginBottom = '3px';
-                        pointItem.style.listStyleType = 'circle';
-                        pointItem.style.background = 'none';
-                        pointItem.style.padding = '2px 0';
-                        pointItem.style.backgroundColor = 'transparent';
-                        pointItem.style.border = 'none';
-                        pointItem.style.boxShadow = 'none';
-                        pointsList.appendChild(pointItem);
-                    });
-                }
-
-                const showProjectButtons = createProjectButtons(project);
-
-                const hasProjectButtons = showProjectButtons.length > 0;
-
-                // Toggle description/tech/points on click
-                li.addEventListener('click', () => {
-                    const isVisible = projectDescription.style.display === 'block';
-                    projectDescription.style.display = isVisible ? 'none' : 'block';
-                    pointsList.style.display = isVisible ? 'none' : 'block';
-                    techUsed.style.display = isVisible ? 'none' : 'block';
-
-                    if (hasProjectButtons) {
-                        showProjectButtons.forEach(button => {
-                            button.style.display = isVisible ? 'none' : 'inline-block';
-                        });
-                    }
-                });
-
-                li.appendChild(projectName);
-                li.appendChild(projectDescription);
-                li.appendChild(pointsList);
-                li.appendChild(document.createElement('br'));
-
-                let hasTechUsed = techUsed && techUsed.textContent.trim() !== "Tools:";
-
-                if (hasTechUsed) {
-                    li.appendChild(techUsed);
-                }
+            // Toggle description/tech/points on click
+            li.addEventListener('click', () => {
+                const isVisible = projectDescription.style.display === 'block';
+                projectDescription.style.display = isVisible ? 'none' : 'block';
+                pointsList.style.display = isVisible ? 'none' : 'block';
+                techUsed.style.display = isVisible ? 'none' : 'block';
 
                 if (hasProjectButtons) {
                     showProjectButtons.forEach(button => {
-                        li.appendChild(button);
+                        button.style.display = isVisible ? 'none' : 'inline-block';
                     });
                 }
-
-                projectsList.appendChild(li);
             });
-        }
 
-        function createCompanyImg(item) {
-            const img = document.createElement('img');
+            li.appendChild(projectName);
+            li.appendChild(projectDescription);
+            li.appendChild(pointsList);
+            li.appendChild(document.createElement('br'));
 
-            img.src = item.companyLogo;
-            img.classList.add('project-image');
-            img.style.width = '40px';
-            img.style.height = '40px';
-            img.style.borderRadius = '50%';
-            img.style.marginRight = '10px';
-            img.style.verticalAlign = 'middle';
+            let hasTechUsed = techUsed && techUsed.textContent.trim() !== "Tools:";
 
-            const link = document.createElement('a');
-            link.href = item.companyLink || '#'; // Default to "#" if no URL provided
-
-            link.appendChild(img);
-
-            return link;
-        }
-
-        function createSchoolImg(item) {
-            const img = document.createElement('img');
-
-            img.src = item.schoolLogo;
-            img.classList.add('university-image');
-            img.style.width = '40px';
-            img.style.height = '40px';
-            img.style.borderRadius = '50%';
-            img.style.marginRight = '10px';
-            img.style.verticalAlign = 'middle';
-
-            const link = document.createElement('a');
-            link.href = item.schoolLink || '#'; // Default to "#" if no URL provided
-
-            link.appendChild(img);
-
-            return link;
-        }
-
-        function createProjectButtons(project) {
-            const projectLinks = project.links;
-
-            if (!projectLinks) {
-                return []; // No references to show
+            if (hasTechUsed) {
+                li.appendChild(techUsed);
             }
 
-            let result = [];
-
-            Object.entries(projectLinks).forEach(([key, link]) => {
-                const projectButton = document.createElement('a');
-
-                projectButton.classList.add('project-button');
-                projectButton.textContent = key;
-                projectButton.href = link || '#'; // Default to "#" if no URL provided
-                projectButton.target = '_blank'; // Open in new tab
-                projectButton.style.display = 'none';
-                projectButton.style.marginTop = '10px';
-                projectButton.style.marginRight = '10px'; // Add margin between buttons
-                projectButton.style.padding = '8px 12px';
-                projectButton.style.background = '#007BFF';
-                projectButton.style.color = 'white';
-                projectButton.style.textDecoration = 'none';
-                projectButton.style.borderRadius = '5px';
-                projectButton.style.fontSize = '11px';
-                projectButton.style.fontWeight = 'bold';
-                projectButton.style.textAlign = 'center';
-                projectButton.style.width = 'fit-content';
-                projectButton.style.transition = 'background 0.3s';
-
-                // Button hover effect
-                projectButton.addEventListener('mouseover', () => {
-                    projectButton.style.background = '#0056b3';
+            if (hasProjectButtons) {
+                showProjectButtons.forEach(button => {
+                    li.appendChild(button);
                 });
-                projectButton.addEventListener('mouseout', () => {
-                    projectButton.style.background = '#007BFF';
-                });
+            }
 
-                result.push(projectButton);
-            });
+            projectsList.appendChild(li);
+        });
+    }
 
-            return result;
+    function populateEducation(data) {
+        const educationList = document.getElementById('education-list');
+
+        if (!Array.isArray(data.education)) {
+            educationList.innerHTML = '<li>No education data available</li>';
+            return;
         }
 
-        function populateEducation(data) {
-            const educationList = document.getElementById('education-list');
+        data.education.forEach(item => {
+            const li = document.createElement('li');
 
-            if (!Array.isArray(data.education)) {
-                educationList.innerHTML = '<li>No education data available</li>';
+            const textSpan = document.createElement('span');
+            textSpan.textContent = `${item.school || 'Institution not provided'}, ${item.degree || 'Field of study not provided'} (${item.startYear || ''} - ${item.endYear || 'Present'})`;
+
+            const schoolImg = createSchoolImg(item);
+
+            li.appendChild(schoolImg);
+            li.appendChild(textSpan);
+
+            educationList.appendChild(li);
+        });
+    }
+
+    function sortByField(data, field, order = 'desc') {
+        return data.sort((a, b) => {
+            // Extract the date components (e.g., "MM-YYYY")
+            const [monthA, yearA] = a[field].split('-');
+            const [monthB, yearB] = b[field].split('-');
+
+            // Create Date objects from the extracted month and year
+            const dateA = new Date(yearA, monthA - 1);  // monthA - 1 because months are 0-indexed
+            const dateB = new Date(yearB, monthB - 1);  // monthB - 1 for the same reason
+
+            // Return based on the order: ascending or descending
+            if (order === 'asc') {
+                return dateA - dateB; // ascending order
+            } else {
+                return dateB - dateA; // descending order
+            }
+        });
+    }
+
+    // Functions: Calculate Experience
+
+    function calculateExperience(startDate, endDate) {
+        const start = parseMonthYearString(startDate);
+        const end = (endDate === 'Present') ? new Date() : new parseMonthYearString(endDate);  // Handle 'Present' as current date
+
+        return (end.getFullYear() - start.getFullYear()) * 12 + (end.getMonth() - start.getMonth());
+    }
+
+    function formatTotalExperienceIntoYears(totalExperience) {
+        const years = totalExperience.years;
+        const months = totalExperience.months;
+
+        // Format the output
+        if (months > 0) {
+            return `${years}+ years`; // If there are months, show a +
+        } else {
+            return `${years} years`; // If no months, show only years with a "+"
+        }
+    }
+
+    function getTotalExperience(workExperience) {
+        let totalExperienceMonths = 0;
+
+        workExperience.forEach(job => {
+
+            if (job.company === 'Hellenic Army') {
                 return;
             }
 
-            data.education.forEach(item => {
-                const li = document.createElement('li');
+            totalExperienceMonths += calculateExperience(job.startDate, job.endDate);
+        });
 
-                const textSpan = document.createElement('span');
-                textSpan.textContent = `${item.school || 'Institution not provided'}, ${item.degree || 'Field of study not provided'} (${item.startYear || ''} - ${item.endYear || 'Present'})`;
+        // Convert the total experience to years and months
+        const years = Math.floor(totalExperienceMonths / 12);
+        const months = totalExperienceMonths % 12;
 
-                const schoolImg = createSchoolImg(item);
+        return {years, months};
+    }
 
-                li.appendChild(schoolImg);
-                li.appendChild(textSpan);
+    function parseMonthYearString(monthYearString) {
+        const [monthName, yearString] = monthYearString.split(' ');
+        const year = parseInt(yearString, 10);
 
-                educationList.appendChild(li);
-            });
+        const monthNames = [
+            "January", "February", "March", "April", "May", "June",
+            "July", "August", "September", "October", "November", "December"
+        ];
+
+        const monthIndex = monthNames.indexOf(monthName);
+
+        if (monthIndex === -1 || isNaN(year)) {
+            throw new Error(`Invalid date string: ${monthYearString}`);
         }
 
-        function downloadPage() {
-            const resume = document.querySelector('.container');
+        return new Date(Date.UTC(year, monthIndex, 1)); // Always safe
+    }
 
-            if (!resume) {
-                console.error("Resume container not found!");
-                return;
-            }
+    // Functions: Show/Hide Elements
 
-            // Add class to disable transforms, animations, etc.
-            resume.classList.add('pdf-mode');
+    function makeButtonsVisible(projectButtons) {
+        projectButtons.forEach(button => {
+            // Ensure they expand to full height, and maintain a row layout when printing
+            button.style.height = 'auto';
+            button.style.display = 'inline-block';  // Or 'flex' if you prefer a flex container
+            button.style.overflow = 'visible';
+            button.style.transition = 'none';
+        });
+    }
 
-            const projectItems = document.querySelectorAll('.project-li');
+    function makeVisible(elements) {
+        elements.forEach(item => {
+            // Directly manipulate the height and visibility to ensure they expand
+            item.style.height = 'auto';  // Ensure the items expand to their full height
+            item.style.display = 'block';  // Make sure the item is displayed (not hidden)
+            item.style.overflow = 'visible';  // Ensure the content is visible
+            item.style.transition = 'none';  // Disable any transitions that could cause issues
+        });
+    }
 
-            customizePageBreaks(projectItems);
+    function makeHidden(elements) {
+        elements.forEach(item => {
+            item.style.display = 'none';  // Make sure the item is displayed (not hidden)
+        });
+    }
 
-            const techUsed = document.querySelectorAll('.project-tech');
-            const projectDescriptions = document.querySelectorAll('.project-description');
-            const projectPoints = document.querySelectorAll('.project-points');
-            const projectButtons = document.querySelectorAll('.project-button');
+    function hideShortcuts() {
+        const shortcuts = document.querySelector('#shortcuts')
+        shortcuts.style.display = 'none';
+    }
 
-            makeVisible(projectItems);
-            makeVisible(techUsed);
-            makeVisible(projectDescriptions);
-            makeVisible(projectPoints);
-            makeButtonsVisible(projectButtons);
+    function hideSearchBar() {
+        const searchBar = document.getElementById('search-bar');
+        searchBar.style.display = 'none';
+    }
 
-            hideShortcuts();
+    function showProjects() {
+        const projectItems = document.querySelectorAll('.project-li');
 
+        const techUsed = document.querySelectorAll('.project-tech');
+        const projectDescriptions = document.querySelectorAll('.project-description');
+        const projectPoints = document.querySelectorAll('.project-points');
+        const projectButtons = document.querySelectorAll('.project-button');
 
-            // Save the original styles
-            const container = document.querySelector('.container');
-            const originalHeight = container.style.height;
-            const originalMaxHeight = container.style.maxHeight;
-            const originalOverflow = container.style.overflow;
+        makeVisible(projectItems);
+        makeVisible(techUsed);
+        makeVisible(projectDescriptions);
+        makeVisible(projectPoints);
+        makeButtonsVisible(projectButtons);
+    }
 
-            container.style.height = 'auto';
-            container.style.maxHeight = 'none';
-            container.style.overflow = 'visible';
+    function hideProjects() {
 
-            // Give the browser time to apply styles
-            setTimeout(() => {
-                html2pdf()
-                    .set({
-                        margin: 0,
-                        filename: 'resume.pdf',
-                        pagebreak: {
-                            mode: ['css', 'legacy']  // must include 'css' so page-break styles are respected
-                            // after: '.page-break'
-                        },
-                        image: { type: 'jpeg', quality: 0.98 },
-                        html2canvas: {
-                            scale: 2,
-                            useCORS: true,
-                            logging: true,
-                            backgroundColor: '#ffffff',
-                            scrollY: 0
-                        },
-                        jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' }
-                    })
-                    .from(resume)
-                    .save()
-                    .then(() =>{
-                        // Disable scroll and height properties temporarily when the PDF button is clicked
-                        container.style.height = originalHeight;
-                        container.style.maxHeight = originalMaxHeight;
-                        container.style.overflow = originalOverflow;
-                    })
-                    .then(() => {
-                        // resume.classList.remove('pdf-mode');
-                        location.reload();
-                    })
-                    .catch(err => {
-                        console.error("PDF generation failed:", err);
-                        resume.classList.remove('pdf-mode');
-                    });
-            }, 300); // give time for the style to apply
-        }
+        const techUsed = document.querySelectorAll('.project-tech');
+        const projectDescriptions = document.querySelectorAll('.project-description');
+        const projectPoints = document.querySelectorAll('.project-points');
+        const projectButtons = document.querySelectorAll('.project-button');
 
-        function hideShortcuts() {
-            const shortcuts = document.querySelector('#shortcuts')
-            shortcuts.style.display = 'none';
-        }
+        makeHidden(techUsed);
+        makeHidden(projectDescriptions);
+        makeHidden(projectPoints);
+        makeHidden(projectButtons);
+    }
 
-        function sortByField(data, field, order = 'desc') {
-            return data.sort((a, b) => {
-                // Extract the date components (e.g., "MM-YYYY")
-                const [monthA, yearA] = a[field].split('-');
-                const [monthB, yearB] = b[field].split('-');
+    // Functions: Customize Page Breaks (PDF)
 
-                // Create Date objects from the extracted month and year
-                const dateA = new Date(yearA, monthA - 1);  // monthA - 1 because months are 0-indexed
-                const dateB = new Date(yearB, monthB - 1);  // monthB - 1 for the same reason
+    function customizePageBreaks(projectItems) {
+        projectItems[3].style.marginTop = '15mm';
+        projectItems[6].style.marginTop = '55mm'; // Eleura
+    }
 
-                // Return based on the order: ascending or descending
-                if (order === 'asc') {
-                    return dateA - dateB; // ascending order
-                } else {
-                    return dateB - dateA; // descending order
-                }
-            });
-        }
+    // Functions: Highlighting Text
 
-        function calculateExperience(startDate, endDate) {
-            const start = parseMonthYearString(startDate);
-            const end = (endDate === 'Present') ? new Date() : new parseMonthYearString(endDate);  // Handle 'Present' as current date
+    function highlightText(section, input) {
+        const words = input.split(/\s+/); // Split the input into multiple words separated by spaces
+        words.forEach(word => {
+            const escapedWord = escapeRegExp(word); // Escape the word for safe regex use
+            const regex = new RegExp(`\\b(${escapedWord})\\b`, 'gi'); // Case-insensitive matching for whole words
+            const nodes = getTextNodes(section);
 
-            return (end.getFullYear() - start.getFullYear()) * 12 + (end.getMonth() - start.getMonth());
-        }
+            nodes.forEach(node => {
+                const text = node.nodeValue;
+                const parts = text.replace(regex, (match) => {
+                    // Wrap matched words in a span
+                    return `<span class="highlight">${match}</span>`;
+                });
 
-        function getTotalExperience(workExperience) {
-            let totalExperienceMonths = 0;
-
-            workExperience.forEach(job => {
-
-                if (job.company === 'Hellenic Army') {
-                    return;
-                }
-
-                totalExperienceMonths += calculateExperience(job.startDate, job.endDate);
-            });
-
-            // Convert the total experience to years and months
-            const years = Math.floor(totalExperienceMonths / 12);
-            const months = totalExperienceMonths % 12;
-
-            return { years, months };
-        }
-
-        function parseMonthYearString(monthYearString) {
-            const [monthName, yearString] = monthYearString.split(' ');
-            const year = parseInt(yearString, 10);
-
-            const monthNames = [
-                "January", "February", "March", "April", "May", "June",
-                "July", "August", "September", "October", "November", "December"
-            ];
-
-            const monthIndex = monthNames.indexOf(monthName);
-
-            if (monthIndex === -1 || isNaN(year)) {
-                throw new Error(`Invalid date string: ${monthYearString}`);
-            }
-
-            return new Date(Date.UTC(year, monthIndex, 1)); // Always safe
-        }
-
-        function makeButtonsVisible(projectButtons) {
-            projectButtons.forEach(button => {
-                // Ensure they expand to full height, and maintain a row layout when printing
-                button.style.height = 'auto';
-                button.style.display = 'inline-block';  // Or 'flex' if you prefer a flex container
-                button.style.overflow = 'visible';
-                button.style.transition = 'none';
-            });
-        }
-
-        function makeVisible(elements) {
-            elements.forEach(item => {
-                // Directly manipulate the height and visibility to ensure they expand
-                item.style.height = 'auto';  // Ensure the items expand to their full height
-                item.style.display = 'block';  // Make sure the item is displayed (not hidden)
-                item.style.overflow = 'visible';  // Ensure the content is visible
-                item.style.transition = 'none';  // Disable any transitions that could cause issues
-            });
-        }
-
-        // Customize page breaks HERE
-        function customizePageBreaks(projectItems) {
-            projectItems[3].style.marginTop = '15mm';
-            projectItems[6].style.marginTop = '55mm'; // Eleura
-        }
-
-        function searchResume() {
-            let input = document.getElementById('search-bar').value.toLowerCase();
-            let sections = document.querySelectorAll('#Projects'); // Assuming sections are in the 'container' class
-
-            // Add a class to disable animations during search
-            document.body.classList.add('searching');
-
-            sections.forEach(section => {
-                // Reset previous highlights and ensure animation is not triggered
-                removeHighlights(section);
-
-                // Only proceed if there is search input
-                if (input === '') {
-                    section.style.display = 'block'; // Show the section if search input is empty
-                    return;
-                }
-
-                let textContent = section.textContent || section.innerText;
-                if (textContent.toLowerCase().includes(input)) {
-                    // section.style.display = 'block'; // Show the section if it contains the search term
-                    highlightText(section, input); // Highlight the matching text
-                } else {
-                    // section.style.display = 'none'; // Hide the section if it does not contain the search term
-                }
-            });
-
-            // Remove the class to re-enable animations after a short delay
-            setTimeout(() => {
-                document.body.classList.remove('searching');
-            }, 1000); // Timeout to allow changes to take place before animations are re-enabled
-        }
-
-        function highlightText(section, input) {
-            const words = input.split(/\s+/); // Split the input into multiple words separated by spaces
-            words.forEach(word => {
-                const escapedWord = escapeRegExp(word); // Escape the word for safe regex use
-                const regex = new RegExp(`\\b(${escapedWord})\\b`, 'gi'); // Case-insensitive matching for whole words
-                const nodes = getTextNodes(section);
-
-                nodes.forEach(node => {
-                    const text = node.nodeValue;
-                    const parts = text.replace(regex, (match) => {
-                        // Wrap matched words in a span
-                        return `<span class="highlight">${match}</span>`;
-                    });
-
-                    if (parts !== text) { // Only replace if something was highlighted
-                        const fragment = document.createDocumentFragment();
-                        const tempDiv = document.createElement('div');
-                        tempDiv.innerHTML = parts; // Use innerHTML to insert the replaced content
-                        while (tempDiv.firstChild) {
-                            fragment.appendChild(tempDiv.firstChild); // Append all child nodes (including the span)
-                        }
-                        node.replaceWith(fragment); // Replace original node with the new fragment
+                if (parts !== text) { // Only replace if something was highlighted
+                    const fragment = document.createDocumentFragment();
+                    const tempDiv = document.createElement('div');
+                    tempDiv.innerHTML = parts; // Use innerHTML to insert the replaced content
+                    while (tempDiv.firstChild) {
+                        fragment.appendChild(tempDiv.firstChild); // Append all child nodes (including the span)
                     }
-                });
-            });
-        }
-
-        function removeHighlights(section) {
-            const highlightedText = section.querySelectorAll('.highlight');
-            highlightedText.forEach(span => {
-                const parentNode = span.parentNode;
-                parentNode.replaceChild(document.createTextNode(span.innerText), span); // Replace span with plain text
-            });
-        }
-
-        function getTextNodes(element) {
-            let textNodes = [];
-            for (let node of element.childNodes) {
-                if (node.nodeType === 3) { // Text node
-                    textNodes.push(node);
-                } else if (node.nodeType === 1) { // Element node, recurse into child elements
-                    textNodes = textNodes.concat(getTextNodes(node));
+                    node.replaceWith(fragment); // Replace original node with the new fragment
                 }
+            });
+        });
+    }
+
+    function removeHighlights(section) {
+        const highlightedText = section.querySelectorAll('.highlight');
+        highlightedText.forEach(span => {
+            const parentNode = span.parentNode;
+            parentNode.replaceChild(document.createTextNode(span.innerText), span); // Replace span with plain text
+        });
+    }
+
+    function getTextNodes(element) {
+        let textNodes = [];
+        for (let node of element.childNodes) {
+            if (node.nodeType === 3) { // Text node
+                textNodes.push(node);
+            } else if (node.nodeType === 1) { // Element node, recurse into child elements
+                textNodes = textNodes.concat(getTextNodes(node));
             }
-            return textNodes;
         }
+        return textNodes;
+    }
 
-        function escapeRegExp(string) {
-            return string.replace(/[.*+?^=!:${}()|\[\]\/\\]/g, '\\$&');
-        }
+    function escapeRegExp(string) {
+        return string.replace(/[.*+?^=!:${}()|\[\]\/\\]/g, '\\$&');
+    }
 
-        function hideSearchBar() {
+    // Functions: Scrolling
+
+    function scrollToProjects() {
+        document.getElementById("Projects").scrollIntoView({
+            behavior: "smooth"
+        });
+        window.dispatchEvent(new Event('scroll'));
+
+        const searchBar = document.querySelector('#search-bar');
+        searchBar.style.position = 'sticky'; // Keep it fixed at the bottom
+    }
+
+    function scrollToTop() {
+        document.getElementById("flags").scrollIntoView({
+            behavior: "smooth"
+        });
+    }
+
+    // Functions: Configure Buttons / Bars
+
+    function configurePdfButton() {
+        document.getElementById('pdf-btn').addEventListener('click', downloadPage);
+    }
+
+    function configureSearchToggle() {
+        const searchToggle = document.getElementById('toggle-search');
+        searchToggle.addEventListener('click', function () {
             const searchBar = document.getElementById('search-bar');
-            searchBar.style.display = 'none';
-        }
 
-        function makeHidden(elements) {
-            elements.forEach(item => {
-                item.style.display = 'none';  // Make sure the item is displayed (not hidden)
-            });
-        }
+            if (searchBar.style.display === 'block') {
+                searchBar.style.display = 'none';
 
-        function initializeSearchToggle() {
-            const searchToggle = document.getElementById('toggle-search');
-            searchToggle.addEventListener('click', function() {
-                const searchBar = document.getElementById('search-bar');
+                scrollToTop();
+                hideProjects();
 
-                if (searchBar.style.display === 'block') {
-                    searchBar.style.display = 'none';
-
-                    scrollToTop();
-                    hideProjects();
-
-                    // init search bar and remove highlights
-                    if (searchBar) {
-                        searchBar.value = '';
-                        searchResume();
-                    }
-
-                } else {
-                    scrollToProjects();
-                    showProjects();
-
-                    searchBar.style.display = 'block';
+                // init search bar and remove highlights
+                if (searchBar) {
+                    searchBar.value = '';
+                    searchResume();
                 }
-            });
-        }
 
-        function scrollToProjects() {
-            document.getElementById("Projects").scrollIntoView({
-                behavior: "smooth"
-            });
-            window.dispatchEvent(new Event('scroll'));
+            } else {
+                scrollToProjects();
+                showProjects();
 
-            const searchBar = document.querySelector('#search-bar');
-            searchBar.style.position = 'sticky'; // Keep it fixed at the bottom
-        }
+                searchBar.style.display = 'block';
+            }
+        });
+    }
 
-        function scrollToTop() {
-            document.getElementById("flags").scrollIntoView({
-                behavior: "smooth"
-            });
-        }
+    function configureSearchBar() {
+        // Configures the search bar to always remain at the top during scrolling
+        window.addEventListener('scroll', function () {
+            let searchBar = document.getElementById('search-bar');
 
-        function showProjects() {
-            const projectItems = document.querySelectorAll('.project-li');
+            // Trigger a reflow and adjust positioning if necessary
+            searchBar.style.position = 'absolute';  // temporarily change position
+            searchBar.offsetHeight;  // Trigger reflow (forces layout update)
+            searchBar.style.position = 'fixed';  // Reset position to fixed after reflow
+        });
+    }
 
-            const techUsed = document.querySelectorAll('.project-tech');
-            const projectDescriptions = document.querySelectorAll('.project-description');
-            const projectPoints = document.querySelectorAll('.project-points');
-            const projectButtons = document.querySelectorAll('.project-button');
+    function configurePhoneButton() {
+        const phoneButton = document.getElementById('phoneButton');
+        const overlay = document.getElementById('overlay');
+        const circle = document.getElementById('circle');
+        const message = document.getElementById('message');
 
-            makeVisible(projectItems);
-            makeVisible(techUsed);
-            makeVisible(projectDescriptions);
-            makeVisible(projectPoints);
-            makeButtonsVisible(projectButtons);
-        }
+        phoneButton.addEventListener('click', () => {
+            // Show the overlay
+            overlay.style.display = 'flex';
 
-        function hideProjects() {
+            // Position the circle over the button and animate it
+            const buttonRect = phoneButton.getBoundingClientRect();
+            const circleSize = Math.max(window.innerWidth, window.innerHeight);
 
-            const techUsed = document.querySelectorAll('.project-tech');
-            const projectDescriptions = document.querySelectorAll('.project-description');
-            const projectPoints = document.querySelectorAll('.project-points');
-            const projectButtons = document.querySelectorAll('.project-button');
+            // Start the circle animation
+            circle.style.left = `${buttonRect.left + buttonRect.width / 2 - circleSize / 2}px`;
+            circle.style.top = `${buttonRect.top + buttonRect.height / 2 - circleSize / 2}px`;
+            circle.style.width = `${circleSize}px`;
+            circle.style.height = `${circleSize}px`;
 
-            makeHidden(techUsed);
-            makeHidden(projectDescriptions);
-            makeHidden(projectPoints);
-            makeHidden(projectButtons);
-        }
+            // Show the message after the circle animation ends
+            setTimeout(() => {
+                message.style.opacity = 1;
+            }, 1000); // Delay the text appearance until after the circle animation
 
-        function initializePdfButton() {
-            document.getElementById('pdf-btn').addEventListener('click', downloadPage);
-        }
+            setTimeout(() => {
+                message.style.opacity = 0;
+                circle.style.width = '0';
+                circle.style.height = '0';
+            }, 8000);
 
-        function configureSearchBarPositioning() {
-            window.addEventListener('scroll', function() {
-                let searchBar = document.getElementById('search-bar');
-                // Trigger a reflow and adjust positioning if necessary
-                searchBar.style.position = 'absolute';  // temporarily change position
-                searchBar.offsetHeight;  // Trigger reflow (forces layout update)
-                searchBar.style.position = 'fixed';  // Reset position to fixed after reflow
-            });
-        }
+            // Reset everything and hide the overlay after 6 seconds
+            setTimeout(() => {
+                overlay.style.display = 'none'; // Hide overlay
+                circle.style.left = '0'; // Reset circle position
+                circle.style.top = '0'; // Reset circle position
+                circle.style.width = '0'; // Reset circle size
+                circle.style.height = '0'; // Reset circle size
+            }, 9000); // Hide overlay and reset circle after the entire animation completes
+        });
+    }
 
-        function configurePhoneButton() {
-            const phoneButton = document.getElementById('phoneButton');
-            const overlay = document.getElementById('overlay');
-            const circle = document.getElementById('circle');
-            const message = document.getElementById('message');
+    // Functions: Register Keyboard Shortcut
 
-            phoneButton.addEventListener('click', () => {
-                // Show the overlay
-                overlay.style.display = 'flex';
-
-                // Position the circle over the button and animate it
-                const buttonRect = phoneButton.getBoundingClientRect();
-                const circleSize = Math.max(window.innerWidth, window.innerHeight);
-
-                // Start the circle animation
-                circle.style.left = `${buttonRect.left + buttonRect.width / 2 - circleSize / 2}px`;
-                circle.style.top = `${buttonRect.top + buttonRect.height / 2 - circleSize / 2}px`;
-                circle.style.width = `${circleSize}px`;
-                circle.style.height = `${circleSize}px`;
-
-                // Show the message after the circle animation ends
-                setTimeout(() => {
-                    message.style.opacity = 1;
-                }, 1000); // Delay the text appearance until after the circle animation
-
-                setTimeout(() => {
-                    message.style.opacity = 0;
-                    circle.style.width = '0';
-                    circle.style.height = '0';
-                }, 8000);
-
-                // Reset everything and hide the overlay after 6 seconds
-                setTimeout(() => {
-                    overlay.style.display = 'none'; // Hide overlay
-                    circle.style.left = '0'; // Reset circle position
-                    circle.style.top = '0'; // Reset circle position
-                    circle.style.width = '0'; // Reset circle size
-                    circle.style.height = '0'; // Reset circle size
-                }, 9000); // Hide overlay and reset circle after the entire animation completes
-            });
-        }
-
-        function showEasterEgg() {
-            console.log('🐇🐰🥚If you see this little easter egg, you are a either developer or a curious recruiter with dev skills! Keep up the good work! 🎉');
-        }
-
-        function registerSearchKeyShortcut() {
-            document.addEventListener('keydown', function(event) {
-                // Check if Control (Windows) or Command (Mac) + F is pressed
-                if ((event.ctrlKey || event.metaKey) && event.key === 'f') {
-                    event.preventDefault(); // Prevent the browser's default find behavior
-                    document.getElementById('toggle-search').click(); // Replace with your button's ID
-                }
-            });
-        }
-
-        function registerSavePdfShortcut() {
-            document.addEventListener('keydown', function(event) {
-                if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 's') {
-                    event.preventDefault(); // Stop the browser's "Save Page As" behavior
-                    document.getElementById('pdf-btn').click();
-                }
-            });
-        }
-
-        function registerEmailShortcut() {
-            document.addEventListener('keydown', function(event) {
-                if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 'e') {
-                    event.preventDefault();
-                    document.getElementById('email-btn').click();
-                }
-            });
-        }
-
-        function registerLinkedShortCut() {
-            document.addEventListener('keydown', function(event) {
-                // LinkedIn shortcut: Ctrl/Cmd + Shift + L
-                if ((event.ctrlKey || event.metaKey) && event.shiftKey && event.key.toLowerCase() === 'l') {
-                    event.preventDefault(); // Prevent default action
-                    document.getElementById('linkedin-btn').click();
-                }
-            });
-        }
-
-        function registerMapsShortCut() {
-            document.addEventListener('keydown', function(event) {
-                // Location shortcut: Ctrl/Cmd + Shift + M
-                if ((event.ctrlKey || event.metaKey) && event.shiftKey && event.key.toLowerCase() === 'm') {
-                    event.preventDefault(); // Prevent default action
-                    document.getElementById('maps-btn').click();
-                }
-            });
-        }
-
-        loadResumeData();
-
-        initializePdfButton();
-        hideSearchBar();
-
-        initializeSearchToggle();
-        configureSearchBarPositioning();
-        configurePhoneButton();
-
-        // Register shortcuts
-        registerSearchKeyShortcut();
+    function registerKeyboardShortcuts() {
+        registerSearchShortcut();
         registerSavePdfShortcut();
         registerEmailShortcut();
         registerLinkedShortCut();
         registerMapsShortCut();
+    }
 
-        showEasterEgg();
-    </script>
+    function registerSearchShortcut() {
+        document.addEventListener('keydown', function (event) {
+            // Check if Control (Windows) or Command (Mac) + F is pressed
+            if ((event.ctrlKey || event.metaKey) && event.key === 'f') {
+                event.preventDefault(); // Prevent the browser's default find behavior
+                document.getElementById('toggle-search').click(); // Replace with your button's ID
+            }
+        });
+    }
+
+    function registerSavePdfShortcut() {
+        document.addEventListener('keydown', function (event) {
+            if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 's') {
+                event.preventDefault(); // Stop the browser's "Save Page As" behavior
+                document.getElementById('pdf-btn').click();
+            }
+        });
+    }
+
+    function registerEmailShortcut() {
+        document.addEventListener('keydown', function (event) {
+            if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 'e') {
+                event.preventDefault();
+                document.getElementById('email-btn').click();
+            }
+        });
+    }
+
+    function registerLinkedShortCut() {
+        document.addEventListener('keydown', function (event) {
+            // LinkedIn shortcut: Ctrl/Cmd + Shift + L
+            if ((event.ctrlKey || event.metaKey) && event.shiftKey && event.key.toLowerCase() === 'l') {
+                event.preventDefault(); // Prevent default action
+                document.getElementById('linkedin-btn').click();
+            }
+        });
+    }
+
+    function registerMapsShortCut() {
+        document.addEventListener('keydown', function (event) {
+            // Location shortcut: Ctrl/Cmd + Shift + M
+            if ((event.ctrlKey || event.metaKey) && event.shiftKey && event.key.toLowerCase() === 'm') {
+                event.preventDefault(); // Prevent default action
+                document.getElementById('maps-btn').click();
+            }
+        });
+    }
+
+    // Functions: Easter Egg
+
+    function showEasterEgg() {
+        console.log('🐇🐰🥚If you see this little easter egg, you are a either developer or a curious recruiter with dev skills! Keep up the good work! 🎉');
+    }
+
+    // Call functions to load data and initialize the page components
+
+    loadResumeData();
+
+    hideSearchBar();
+
+    configurePdfButton();
+    configureSearchToggle();
+    configureSearchBar();
+    configurePhoneButton();
+
+    registerKeyboardShortcuts();
+
+    showEasterEgg();
+</script>
 </body>
 </html>
