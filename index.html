@@ -110,6 +110,14 @@
     // Functions: Main Features
 
     function downloadPage() {
+
+        // Fallback to static pdf for Apple Devices
+        if (agentIsAppleDevice()) {
+            console.log("Apple device detected. Using fallback PDF link.");
+            window.open('resume-petros_savidis.pdf', '_blank');
+            return;
+        }
+
         const resume = document.querySelector('.container');
 
         if (!resume) {
@@ -940,6 +948,12 @@
                 document.getElementById('location-btn').click();
             }
         });
+    }
+
+    // Functions: Device Detection
+
+    function agentIsAppleDevice() {
+        return /iphone|ipod|ipad/i.test(navigator.userAgent);
     }
 
     // Functions: Easter Egg
