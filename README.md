@@ -11,7 +11,7 @@ This is the Github repository for my official resume. The code is used by a Gith
 - **Format complexity**: I've used different templates each time I've been after a new business opportunity and it was a pain to keep them up to date.
 - **Template limitations**: Free resume templates have content restrictions which didn't work well as my resume grew in size.
 - **Lack of Version control**: Repetitive copy-pasting of content across multiple templates and versions of my resume has been a big pain.
-- **Format dependency**: I have always been dependent on different tools to generate my resume. I wanted to have a single source of truth for my resume. 
+- **Format dependency**: I have always been dependent on different tools to generate my resume. I wanted to have a single source of truth which i can maintain autonomously. 
 
 But the best reasons of all are
 
