@@ -84,19 +84,19 @@
 </div>
 
 <div class="button-container">
-    <button id="email-btn" class="btn" onclick="window.location.href='mailto:peter.savidis1@gmail.com'"><i
-            class="fas fa-envelope"></i></button>
+    <button id="email-btn" class="btn"><i class="fas fa-envelope"></i></button>
     <button id="phoneButton" class="btn"><i class="fas fa-phone-alt"></i></button>
+    <button id="location-btn" class="btn"><i class="fas fa-map-marker-alt"></i></button>
+    <button id="linkedin-btn" class="btn"><i class="fab fa-linkedin-in"></i></button>
+    <button id="pdf-btn" class="btn"><i class="fas fa-file-pdf"></i></button>
+    <button id="toggle-search" class="toggle-button"><i class="fas fa-search"></i></button>
+
     <div id="overlay">
         <div id="circle"></div>
         <div id="message">Would you like to have a chat? Feel free to send me an email, and we can schedule a convenient
             time for a phone call. Looking forward to connecting!
         </div>
     </div>
-    <button class="btn" id="location-btn"><i class="fas fa-map-marker-alt"></i></button>
-    <button class="btn" id="linkedin-btn"><i class="fab fa-linkedin-in"></i></button>
-    <button class="btn" id="pdf-btn"><i class="fas fa-file-pdf"></i></button>
-    <button class="toggle-button" id="toggle-search"><i class="fas fa-search"></i></button>
 </div>
 
 <script>
@@ -309,9 +309,10 @@
             populateProjects(data);
             populateEducation(data);
 
+            // buttons
             configureLocationButton(data);
             configureLinkedinButton(data);
-
+            configureEmailButton(data);
         } catch (error) {
             console.error('Error loading resume data:', error);
         }
@@ -764,6 +765,13 @@
         document.getElementById('linkedin-btn').onclick = function() {
             let profileUrl = data.linkedInURL;
             window.open(profileUrl, '_blank');
+        };
+    }
+
+    function configureEmailButton(data) {
+        document.getElementById('email-btn').onclick = function() {
+            let email = "mailto:" + data.email;
+            window.open(email, '_blank');
         };
     }
 
