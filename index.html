@@ -94,6 +94,7 @@
     <button id="phoneButton" class="btn"><i class="fas fa-phone-alt"></i></button>
     <button id="location-btn" class="btn"><i class="fas fa-map-marker-alt"></i></button>
     <button id="linkedin-btn" class="btn"><i class="fab fa-linkedin-in"></i></button>
+    <button id="github-btn" class="btn"><i class="fab fa-github"></i></button>
     <button id="pdf-btn" class="btn"><i class="fas fa-file-pdf"></i></button>
     <button id="toggle-search" class="toggle-button"><i class="fas fa-search"></i></button>
 
@@ -321,6 +322,7 @@
             configureLocationButton(data);
             configureLinkedinButton(data);
             configureEmailButton(data);
+            configureGithubButton();
         } catch (error) {
             console.error('Error loading resume data:', error);
         }
@@ -792,6 +794,12 @@
             let location = data.addressLocation;
             let encodedLocation = encodeURIComponent(location);  // Encode the location
             window.open(`https://www.google.com/maps?q=${encodedLocation}`, '_blank');
+        };
+    }
+
+    function configureGithubButton() {
+        document.getElementById("github-btn").onclick = function () {
+            window.open(`https://github.com/psavidis/resume`, '_blank');
         };
     }
 
