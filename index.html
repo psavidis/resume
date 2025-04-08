@@ -107,13 +107,15 @@
 </div>
 
 <script>
+
+    // For production, always serve the static PDF file to avoid devices issues.
+    const productionMode = true;
+
     // Functions: Main Features
 
     function downloadPage() {
 
-        // Fallback to static pdf for Apple Devices
-        if (agentIsAppleDevice()) {
-            console.log("Apple device detected. Downloading fallback PDF.");
+        if (productionMode) {
             downloadStaticPDF();
             location.reload();
         }
