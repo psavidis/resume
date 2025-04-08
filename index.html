@@ -93,10 +93,8 @@
             time for a phone call. Looking forward to connecting!
         </div>
     </div>
-    <button class="btn" id="maps-btn"><i class="fas fa-map-marker-alt"></i></button>
-    <button class="btn" id="linkedin-btn"
-            onclick="window.open('https://www.linkedin.com/in/petros-savvidis-8994b857/', '_blank')"><i
-            class="fab fa-linkedin-in"></i></button>
+    <button class="btn" id="location-btn"><i class="fas fa-map-marker-alt"></i></button>
+    <button class="btn" id="linkedin-btn"><i class="fab fa-linkedin-in"></i></button>
     <button class="btn" id="pdf-btn"><i class="fas fa-file-pdf"></i></button>
     <button class="toggle-button" id="toggle-search"><i class="fas fa-search"></i></button>
 </div>
@@ -312,6 +310,7 @@
             populateEducation(data);
 
             configureLocationButton(data);
+            configureLinkedinButton(data);
 
         } catch (error) {
             console.error('Error loading resume data:', error);
@@ -761,8 +760,15 @@
         document.getElementById('pdf-btn').addEventListener('click', downloadPage);
     }
 
+    function configureLinkedinButton(data) {
+        document.getElementById('linkedin-btn').onclick = function() {
+            let profileUrl = data.linkedInURL;
+            window.open(profileUrl, '_blank');
+        };
+    }
+
     function configureLocationButton(data) {
-        document.getElementById("maps-btn").onclick = function() {
+        document.getElementById("location-btn").onclick = function() {
             let location = data.addressLocation;
             let encodedLocation = encodeURIComponent(location);  // Encode the location
             window.open(`https://www.google.com/maps?q=${encodedLocation}`, '_blank');
@@ -902,7 +908,7 @@
             // Location shortcut: Ctrl/Cmd + Shift + M
             if ((event.ctrlKey || event.metaKey) && event.shiftKey && event.key.toLowerCase() === 'm') {
                 event.preventDefault(); // Prevent default action
-                document.getElementById('maps-btn').click();
+                document.getElementById('location-btn').click();
             }
         });
     }
