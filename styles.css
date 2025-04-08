@@ -140,9 +140,9 @@ p {
     color: black !important;
 }
 
-.flags {
+.topRightCorner {
     position: absolute;
-    top: 2px; /* Place flags higher on the top-right corner */
+    top: 2px; /* Place topRightCorner higher on the top-right corner */
     right: 20px; /* Align them to the right */
     display: flex;
     gap: 10px;
@@ -150,7 +150,7 @@ p {
 }
 
 .flag {
-    font-size: 40px; /* Ensure flags are large */
+    font-size: 40px; /* Ensure topRightCorner are large */
 }
 
 /* Initial styles for images */
@@ -293,6 +293,25 @@ p {
 .emoji {
     font-size: 1.5em; /* Makes emojis 1.5x bigger */
     vertical-align: middle; /* Keeps them aligned nicely with the text */
+}
+
+.emoji-flags {
+    font-size: 2.0em;
+    vertical-align: middle; /* Keeps them aligned nicely with the text */
+}
+
+.fun-fact {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 600;
+    font-size: 13px;
+    color: #708090; /* Soft professional blue */
+}
+
+.fun-fact-text {
+    font-family: 'Open Sans', sans-serif;
+    font-weight: 400;
+    font-size: 13px;
+    color: #222222; /* Dark gray for readability */
 }
 
 #phoneButton {

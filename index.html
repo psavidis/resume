@@ -23,10 +23,7 @@
 
 <div class="container">
 
-    <div id="flags" class="flags">
-        <span class="flag">🇬🇷</span> <!-- Greek flag -->
-        <span class="flag">🇦🇺</span> <!-- Australian flag -->
-    </div>
+    <div id="topRightCorner" class="topRightCorner"></div>
 
     <div class="header">
 
@@ -53,7 +50,12 @@
             </ul>
         </div>
         <p id="summary-free">Outside of work, I’m passionate about traveling, making music, diving into philosophy, and
-            swimming <span class="emoji">✈️🎵📖🏊‍ </span> ️</p>
+            swimming.
+            <br>
+
+            <span class="fun-fact">Fun Fact:</span>
+            <span class="fun-fact-text">I've got dual citizenship <span class="emoji-flags">🇬🇷🇦🇺‍</span> ️
+        </p>
     </div>
 
     <div class="section" id="experience">
@@ -750,7 +752,7 @@
     }
 
     function scrollToTop() {
-        document.getElementById("flags").scrollIntoView({
+        document.getElementById("topRightCorner").scrollIntoView({
             behavior: "smooth"
         });
     }
