@@ -650,6 +650,19 @@
         searchBar.style.display = 'none';
     }
 
+    function hideProjects() {
+
+        const techUsed = document.querySelectorAll('.project-tech');
+        const projectDescriptions = document.querySelectorAll('.project-description');
+        const projectPoints = document.querySelectorAll('.project-points');
+        const projectButtons = document.querySelectorAll('.project-button');
+
+        makeHidden(techUsed);
+        makeHidden(projectDescriptions);
+        makeHidden(projectPoints);
+        makeHidden(projectButtons);
+    }
+
     function showProjects() {
         const projectItems = document.querySelectorAll('.project-li');
 
@@ -663,19 +676,6 @@
         makeVisible(projectDescriptions);
         makeVisible(projectPoints);
         makeButtonsVisible(projectButtons);
-    }
-
-    function hideProjects() {
-
-        const techUsed = document.querySelectorAll('.project-tech');
-        const projectDescriptions = document.querySelectorAll('.project-description');
-        const projectPoints = document.querySelectorAll('.project-points');
-        const projectButtons = document.querySelectorAll('.project-button');
-
-        makeHidden(techUsed);
-        makeHidden(projectDescriptions);
-        makeHidden(projectPoints);
-        makeHidden(projectButtons);
     }
 
     // Functions: Customize Page Breaks (PDF)
