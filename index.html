@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Petros Savidis Resume</title>
+    <title></title>
 
     <!-- Icon -->
     <link rel="icon" href="/resume/img/icon.png" type="image/png">
@@ -313,6 +313,8 @@
 
             const data = await response.json();
 
+            populateTitle(data);
+
             populateHeader(data);
             populateWorkExperience(data);
             populateProjects(data);
@@ -325,6 +327,10 @@
         } catch (error) {
             console.error('Error loading resume data:', error);
         }
+    }
+
+    function populateTitle(data) {
+        document.title = data.name + " Resume";
     }
 
     function populateHeader(data) {
