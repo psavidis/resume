@@ -54,3 +54,10 @@ My resume should support:
 - [html2pdf](https://ekoopmans.github.io/html2pdf.js/)
 - [Google Fonts](https://fonts.google.com/)
 - [Font Awesome](https://fontawesome.com/)
+
+### PDF Rendering Issues
+
+My official resume cannot afford to malfunction. Thus, the download PDF function for production always points to the latest
+static PDF rendered. If `productionMode` is set to `false`, the resume renders the PDF on the fly.
+
+**Note**: This was identified not be problematic for Apple devices and thus a static PDF is used for production.
