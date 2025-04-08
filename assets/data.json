@@ -1,5 +1,5 @@
 {
-  "imageURL": "https://raw.githubusercontent.com/psavidis/resume/refs/heads/master/assets/profile_picture.jpeg",
+  "imageURL": "https://raw.githubusercontent.com/psavidis/resume/refs/heads/master/assets/img/profile_picture.jpeg",
   "linkedInURL": "https://www.linkedin.com/in/peter-savidis-8994b857/",
   "name": "Petros Savidis",
   "addressLocation": "Athens, Greece",
@@ -13,7 +13,7 @@
     {
       "title": "Software Engineer",
       "company": "Camunda",
-      "companyLogo": "https://raw.githubusercontent.com/psavidis/resume/refs/heads/master/assets/company-logo_camunda.jpeg",
+      "companyLogo": "https://raw.githubusercontent.com/psavidis/resume/refs/heads/master/assets/img/company-logo_camunda.jpeg",
       "companyLink": "https://camunda.com/",
       "startDate": "April 2023",
       "endDate": "Present",
@@ -23,7 +23,7 @@
     {
       "title": "Senior Software Engineer",
       "company": "Cortical.io",
-      "companyLogo": "https://raw.githubusercontent.com/psavidis/resume/refs/heads/master/assets/company-logo_cortical.jpeg",
+      "companyLogo": "https://raw.githubusercontent.com/psavidis/resume/refs/heads/master/assets/img/company-logo_cortical.jpeg",
       "companyLink": "https://www.cortical.io/",
       "startDate": "August 2020",
       "endDate": "December 2022",
@@ -33,7 +33,7 @@
     {
       "title": "Software Engineer",
       "company": "Upstream",
-      "companyLogo": "https://raw.githubusercontent.com/psavidis/resume/refs/heads/master/assets/company-logo_upstream.jpeg",
+      "companyLogo": "https://raw.githubusercontent.com/psavidis/resume/refs/heads/master/assets/img/company-logo_upstream.jpeg",
       "companyLink": "https://www.upstreamsystems.com/",
       "startDate": "March 2016",
       "endDate": "June 2020",
@@ -43,7 +43,7 @@
     {
       "title": "Software Engineer",
       "company": "European Dynamics",
-      "companyLogo": "https://raw.githubusercontent.com/psavidis/resume/refs/heads/master/assets/company-logo_european_dynamics.jpeg",
+      "companyLogo": "https://raw.githubusercontent.com/psavidis/resume/refs/heads/master/assets/img/company-logo_european_dynamics.jpeg",
       "companyLink": "https://www.eurodyn.com/",
       "startDate": "December 2012",
       "endDate": "December 2015",
@@ -53,7 +53,7 @@
     {
       "title": "Army Duties",
       "company": "Hellenic Army",
-      "companyLogo": "https://raw.githubusercontent.com/psavidis/resume/refs/heads/master/assets/company-logo_greek_army.png",
+      "companyLogo": "https://raw.githubusercontent.com/psavidis/resume/refs/heads/master/assets/img/company-logo_greek_army.png",
       "companyLink": "https://en.wikipedia.org/wiki/Hellenic_Armed_Forces",
       "startDate": "October 2011",
       "endDate": "July 2012",
@@ -63,7 +63,7 @@
     {
       "title": "Android Developer",
       "company": "Intracom Telecom",
-      "companyLogo": "https://raw.githubusercontent.com/psavidis/resume/refs/heads/master/assets/company-logo_intracom.jpeg",
+      "companyLogo": "https://raw.githubusercontent.com/psavidis/resume/refs/heads/master/assets/img/company-logo_intracom.jpeg",
       "companyLink": "https://www.intracom-telecom.com/",
       "startDate": "March 2011",
       "endDate": "October 2011",
@@ -383,7 +383,7 @@
   "education": [
     {
       "school": "Athens University of Economics and Business",
-      "schoolLogo": "https://raw.githubusercontent.com/psavidis/resume/refs/heads/master/assets/school-logo_aueb.jpeg",
+      "schoolLogo": "https://raw.githubusercontent.com/psavidis/resume/refs/heads/master/assets/img/school-logo_aueb.jpeg",
       "schoolLink": "https://www.aueb.gr/en",
       "degree": "Bachelor of Science (BSc)",
       "fieldOfStudy": "Computer Science",
