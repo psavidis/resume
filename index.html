@@ -30,7 +30,7 @@
         <div class="header">
 
             <div class="profile-picture-container">
-                <img src="https://raw.githubusercontent.com/psavidis/resume/refs/heads/master/assets/img/profile_picture.jpeg" alt="Profile Picture" class="profile-picture">
+                <img src="/img/profile_picture.jpeg" alt="Profile Picture" class="profile-picture">
             </div>
 
             <h1 id="name"></h1>
@@ -95,7 +95,7 @@
     <script>
         async function loadResumeData() {
             try {
-                const response = await fetch('https://raw.githubusercontent.com/psavidis/resume/refs/heads/master/assets/data.json');
+                const response = await fetch('data.json');
                 if (!response.ok) throw new Error('Failed to fetch data');
 
                 const data = await response.json();
