@@ -41,9 +41,9 @@ My resume should support:
 - **Responsive Design**: The resume can be loaded on any device
   - For smaller screens, there is a little compromise with the buttons appearing at the top of the screen. This is an acceptable trait for my project.
 - **Search Mode**: The resume can search simple keywords in my projects and highlight them
-  - The search mode is not perfect. It uses a simple regex to find the keywords and highlight them. 
-  - It doesn't support complex queries like "find all projects that contain the word 'python' and 'javascript'". 
-  - The limitation of the current implementation works is acceptable for my project.
+  - It works with single keywords or some of them separated with space.
+  - A simple regex is used to find the keywords and highlight them.
+  - The limitation of the current implementation is acceptable for the needs of my project.
 - **Download PDF**: The resume can be downloaded as a PDF file
 - **Keyboard Shortcuts**: For big screens, the user can use keyboard shortcuts to trigger the buttons.
   - The keyboard shortcuts can be found at the end of the resume only for big screens. For smaller screens, the shortcuts are not visible.
