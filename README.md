@@ -1,5 +1,9 @@
 # Petros Savidis Resume
 
+## Live Resume
+
+You can find my live resume [here](https://psavidis.github.io/resume/).
+
 ## What's this ?
 This is the github repository for my official resume. The code is used by a Github page which hosts my resume online.
 
