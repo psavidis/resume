@@ -17,7 +17,7 @@
 <body>
 
 <div class="search-container">
-    <input type="text" id="search-bar" class="search-bar" placeholder="Simple Search in Projects..."
+    <input type="text" id="search-bar" class="search-bar" placeholder="Search Keyword in Projects..."
            oninput="searchResume()"/>
 </div>
 
@@ -762,21 +762,21 @@
     }
 
     function configureLinkedinButton(data) {
-        document.getElementById('linkedin-btn').onclick = function() {
+        document.getElementById('linkedin-btn').onclick = function () {
             let profileUrl = data.linkedInURL;
             window.open(profileUrl, '_blank');
         };
     }
 
     function configureEmailButton(data) {
-        document.getElementById('email-btn').onclick = function() {
+        document.getElementById('email-btn').onclick = function () {
             let email = "mailto:" + data.email;
             window.open(email, '_blank');
         };
     }
 
     function configureLocationButton(data) {
-        document.getElementById("location-btn").onclick = function() {
+        document.getElementById("location-btn").onclick = function () {
             let location = data.addressLocation;
             let encodedLocation = encodeURIComponent(location);  // Encode the location
             window.open(`https://www.google.com/maps?q=${encodedLocation}`, '_blank');
