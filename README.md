@@ -46,7 +46,8 @@ My resume should support:
   - The limitation of the current implementation is acceptable for the needs of my project.
 - **Download PDF**: The resume can be downloaded as a PDF file
 - **Keyboard Shortcuts**: For big screens, the user can use keyboard shortcuts to trigger the buttons.
-  - The keyboard shortcuts can be found at the end of the resume only for big screens. For smaller screens, the shortcuts are not visible.
+  - The keyboard shortcuts can be found at the end of the resume only for big screens.
+  - For smaller screens, the shortcuts are not visible.
 
 ### Libraries
 
