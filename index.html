@@ -158,6 +158,7 @@
         // Give the browser time to apply styles
         setTimeout(() => {
             html2pdf()
+                .from(resume)
                 .set({
                     margin: 0,
                     filename: 'resume.pdf',
@@ -175,7 +176,6 @@
                     },
                     jsPDF: {unit: 'in', format: 'a4', orientation: 'portrait'}
                 })
-                .from(resume)
                 .save()
                 .then(() => {
                     // Disable scroll and height properties temporarily when the PDF button is clicked
