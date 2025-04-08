@@ -43,7 +43,7 @@ My resume should support:
 - **Search Mode**: The resume can search simple keywords in my projects and highlight them
   - It works with single keywords or some of them separated with space.
   - A simple regex is used to find the keywords and highlight them.
-  - The limitation of the current implementation is acceptable for the needs of my project.
+  - The limitation of the current implementation is acceptable for the needs of my project as the user can fallback to single keyword search to assist him in browsing through my projects.
 - **Download PDF**: The resume can be downloaded as a PDF file
 - **Keyboard Shortcuts**: For big screens, the user can use keyboard shortcuts to trigger the buttons.
   - The keyboard shortcuts can be found at the end of the resume only for big screens.
