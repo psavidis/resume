@@ -4,7 +4,7 @@
 
 You can find my live resume [here](https://psavidis.github.io/resume/).
 
-## What's this ?
+## What's This ?
 This is the Github repository for my official resume. The code is used by a Github page which hosts my resume online.
 
 ## Why the Heck You Coded Your Resume ?
