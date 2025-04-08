@@ -13,7 +13,7 @@
     {
       "title": "Software Engineer",
       "company": "Camunda",
-      "companyLogo": "/resume/img/company-logo_camunda.jpeg",
+      "companyLogo": "img/company-logo_camunda.jpeg",
       "companyLink": "https://camunda.com/",
       "startDate": "April 2023",
       "endDate": "Present",
@@ -33,7 +33,7 @@
     {
       "title": "Software Engineer",
       "company": "Upstream",
-      "companyLogo": "/resume/img/company-logo_upstream.jpeg",
+      "companyLogo": "img/company-logo_upstream.jpeg",
       "companyLink": "https://www.upstreamsystems.com/",
       "startDate": "March 2016",
       "endDate": "June 2020",
@@ -43,7 +43,7 @@
     {
       "title": "Software Engineer",
       "company": "European Dynamics",
-      "companyLogo": "/resume/img/company-logo_european_dynamics.jpeg",
+      "companyLogo": "img/company-logo_european_dynamics.jpeg",
       "companyLink": "https://www.eurodyn.com/",
       "startDate": "December 2012",
       "endDate": "December 2015",
@@ -53,7 +53,7 @@
     {
       "title": "Army Duties",
       "company": "Hellenic Army",
-      "companyLogo": "/resume/img/company-logo_greek_army.png",
+      "companyLogo": "img/company-logo_greek_army.png",
       "companyLink": "https://en.wikipedia.org/wiki/Hellenic_Armed_Forces",
       "startDate": "October 2011",
       "endDate": "July 2012",
@@ -63,7 +63,7 @@
     {
       "title": "Android Developer",
       "company": "Intracom Telecom",
-      "companyLogo": "/resume/img/company-logo_intracom.jpeg",
+      "companyLogo": "img/company-logo_intracom.jpeg",
       "companyLink": "https://www.intracom-telecom.com/",
       "startDate": "March 2011",
       "endDate": "October 2011",
