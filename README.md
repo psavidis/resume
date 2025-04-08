@@ -1,4 +1,4 @@
-# Petros Savidis Resume
+# Petros Savidis' Resume
 
 ## Live Resume
 
@@ -7,7 +7,7 @@ You can find my live resume [here](https://psavidis.github.io/resume/).
 ## What's this ?
 This is the Github repository for my official resume. The code is used by a Github page which hosts my resume online.
 
-## Why the heck you coded your resume ?
+## Why the Heck You Coded Your Resume ?
 - **Format complexity**: I've used different templates each time I've been after a new business opportunity and it was a pain to keep them up to date.
 - **Template limitations**: Free resume templates have content restrictions which didn't work well as my resume grew in size.
 - **Lack of Version control**: Repetitive copy-pasting of content across multiple templates and versions of my resume has been a big pain.
