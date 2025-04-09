@@ -86,6 +86,13 @@
     <!-- Hidden contact form with animation -->
     <div id="contact-form-container" style="display: none;">
         <form id="contact-form" autocomplete="on">
+
+            <div class="email-display">
+                <label for="yourEmail"><b>To:</b></label>
+                <input id="yourEmail" type="text" value="peter.savidis1@gmail.com" readonly /> <!-- Greyed-out input -->
+                <button id="copyButton" type="button" onclick="copyEmail()">Copy</button>
+            </div>
+
             <div class="form-group">
                 <label id="form-name">Your Name:
                     <input type="text" id="name" name="name" required autocomplete="name">
@@ -164,6 +171,8 @@
             location.reload();
             return;
         }
+
+        hideFormContainer();
 
         showPdfSummary();
 
@@ -1049,14 +1058,35 @@
             hideThankYou();
             errorMessage.style.display = 'none';
 
-            const formData = new FormData(form);
+            const data = getFormDataAsObject(form);
+            const apiKey = "EMAIL_API_KEY";  // Placeholder to be replaced by GitHub Actions
+            console.log(apiKey);
+
+            const headers = {
+                "Content-Type": "application/json",
+                "api-key": apiKey
+            };
+
+            console.log(data.name);
+            console.log(data.email);
+
+            // Replace newline characters with <br> to preserve line breaks in HTML email
+            const formattedMessage = data.message.replace(/\n/g, "<br>");
+
+            const emailData = {
+                sender: { email: 'peter.savidis1@gmail.com' },
+                to: [{ email: 'peter.savidis1@gmail.com' }],
+                subject: "New Resume Message from " + data.name,
+                htmlContent: `<p><b>Sender's Email:</b> ${data.email}</p><p><b>Message</b><br><br>${formattedMessage}</p>`,
+                replyTo: { email: data.email }
+            };
 
             try {
                 loadingMessage.style.display = 'block';
-                const response = await fetch('https://formsubmit.co/1820b47e3b2aa2fe6c6d336360404fde', {
+                const response = await fetch('https://api.sendinblue.com/v3/smtp/email', {
                     method: 'POST',
-                    body: formData,
-                    headers: {'Accept': 'application/json'},
+                    body: JSON.stringify(emailData),
+                    headers: headers
                 });
 
                 // Handle successful submission
@@ -1079,6 +1109,16 @@
             }
         });
 
+    }
+
+    function getFormDataAsObject(form) {
+        const formData = new FormData(form);
+        const data = {};
+        formData.forEach((value, key) => {
+            data[key] = value;
+        });
+
+        return data;
     }
 
     function hideEverythingAfterSeconds(seconds) {
@@ -1116,6 +1156,12 @@
         const formContainer = document.getElementById('contact-form-container');
         formContainer.classList.add('show');
         formContainer.style.display = 'block';
+    }
+
+    function copyEmail() {
+        const emailField = document.getElementById("yourEmail");
+        emailField.select();  // Select the content in the input field
+        document.execCommand("copy");  // Copy the selected content to clipboard
     }
 
     // Functions: Easter Egg

@@ -1,0 +1,27 @@
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches:
+      - main  # Trigger the action on push to the main branch
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Checkout the repository code
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      # Replace the API key placeholder in the index.html file
+      - name: Replace API Key Placeholder
+        run: |
+          sed -i 's|EMAIL_API_KEY|${{ secrets.EMAIL_API_KEY }}|g' index.html
+
+      # Deploy to GitHub Pages
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          publish_dir: .  # The directory where index.html is located
+          github_token: ${{ secrets.GITHUB_TOKEN }}

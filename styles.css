@@ -399,7 +399,7 @@ p {
     bottom: 20px;
     left: 80%;
     transform: translateX(-50%);
-    width: 400px;  /* Fix the width */
+    width: 500px;  /* Fix the width */
     height: auto;  /* Let it grow naturally with content */
     padding: 20px;
     box-sizing: border-box;
@@ -462,6 +462,38 @@ p {
 
 .submit-button:hover {
     background-color: #0056b3;
+}
+
+.email-display {
+    display: flex;
+    align-items: center;
+    gap: 10px; /* Space between the email input and the copy button */
+    width: 100%;
+}
+
+#yourEmail {
+    background-color: #f0f0f0;
+    color: #777;
+    border: 1px solid #ccc;
+    padding: 10px;
+    width: calc(100% - 100px); /* Adjust width so it doesn't overflow */
+    cursor: not-allowed;
+    pointer-events: none; /* Prevent selection or editing */
+}
+
+/* Style the copy button by ID */
+#copyButton {
+    padding: 5px 10px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+/* Change background color when hovering */
+#copyButton:hover {
+    background-color: #45a049;
 }
 
 #loading-message {
