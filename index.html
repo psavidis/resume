@@ -41,7 +41,13 @@
 
     <div>
         <p id="summary" class="profile-title"></p>
-        <p id="summary-intro">Welcome to my Dynamic | Git-powered | Code-driven Resume! <span class="emoji">🤘</span></p>
+        <p id="summary-intro">
+            Welcome to my
+            <span class="liveSummary">Dynamic | Git-powered | Code-driven</span>
+            <span class="pdfSummary hidden">PDF</span> Resume!
+            <span class ="pdfSummary hidden">For the Live version of my resume, click <a href="https://psavidis.github.io/resume/">here</a></span>
+            <span class="emoji">🤘</span>
+        </p>
         <div id="summary-instructions">
             <ul>
                 <li>Feel free to <b>Connect</b> with me via email or LinkedIn to explore potential business
@@ -109,7 +115,7 @@
 <script>
 
     // For production, always serve the static PDF file to avoid devices issues.
-    const productionMode = true;
+    const productionMode = false;
 
     // Functions: Main Features
 
@@ -119,6 +125,8 @@
             downloadStaticPDF();
             location.reload();
         }
+
+        showPdfSummary();
 
         const resume = document.querySelector('.container');
 
@@ -194,6 +202,14 @@
                     resume.classList.remove('pdf-mode');
                 });
         }, 300); // give time for the style to apply
+    }
+
+    function showPdfSummary() {
+        document.querySelectorAll('.liveSummary')
+            .forEach(element => element.classList.add('hidden'));
+
+        document.querySelectorAll('.pdfSummary')
+            .forEach(element => element.classList.remove('hidden'));
     }
 
     function downloadStaticPDF() {
@@ -959,12 +975,6 @@
                 document.getElementById('location-btn').click();
             }
         });
-    }
-
-    // Functions: Device Detection
-
-    function agentIsAppleDevice() {
-        return /iphone|ipod|ipad/i.test(navigator.userAgent);
     }
 
     // Functions: Easter Egg

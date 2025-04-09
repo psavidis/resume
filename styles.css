@@ -267,6 +267,11 @@ p {
     overflow: visible !important;
 }
 
+.hidden {
+    display: none;
+}
+
+
 #summary-instructions ul {
     list-style: none;
     padding-left: 0;
