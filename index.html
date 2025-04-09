@@ -35,7 +35,10 @@
             <img src="/resume/img/profile_picture.jpeg" alt="Profile Picture" class="profile-picture">
         </div>
 
-        <h1 id="name"></h1>
+        <div>
+            <h1>Petros Savvidis</h1>
+            <p id="pdfEmailHeader" class="email"></p> <!-- Your email here -->
+        </div>
 
     </div>
 
@@ -45,7 +48,7 @@
             Welcome to my
             <span class="liveSummary">Dynamic | Git-powered | Code-driven</span>
             <span class="pdfSummary hidden">PDF</span> Resume!
-            <span class ="pdfSummary hidden">For the Live version, click <a href="https://psavidis.github.io/resume/">here</a></span>
+            <span class="pdfSummary hidden">For the Live version, click <a href="https://psavidis.github.io/resume/">here</a></span>
             <span class="emoji">🤘</span>
         </p>
         <div id="summary-instructions">
@@ -83,6 +86,57 @@
         <ul id="education-list"></ul>
     </div>
 
+    <!-- Hidden contact form with animation -->
+    <div id="contact-form-container" style="display: none;">
+        <form id="contact-form" action="https://api.web3forms.com/submit" method="POST" autocomplete="on">
+
+            <!-- REQUIRED: Web3Forms access key -->
+            <input type="hidden" name="access_key" value="fb378ea5-c240-451b-bc68-52b3ce5696f0">
+
+            <!-- Optional: Redirect URL after success -->
+            <input type="hidden" name="redirect" value="https://web3forms.com/success">
+
+            <div class="email-display">
+                <label for="yourEmail"><b>To:</b></label>
+                <input id="yourEmail" type="text" value="peter.savidis1@gmail.com" readonly/> <!-- Greyed-out input -->
+                <button id="copyButton" type="button" onclick="copyEmail()">Copy</button>
+            </div>
+
+            <div class="form-group">
+                <label id="form-name">Your Name:
+                    <input type="text" id="name" name="name" required autocomplete="name">
+                </label>
+            </div>
+
+            <div class="form-group">
+                <label id="form-email">Your Email:
+                    <input type="email" id="email" name="email" required autocomplete="email">
+                </label>
+            </div>
+
+            <div class="form-group">
+                <label id="form-message">Your Message:
+                    <textarea id="message" name="message" required></textarea>
+                </label>
+            </div>
+
+            <button type="submit" class="submit-button">Send Message</button>
+
+        </form>
+
+        <div id="loading-message" style="display: none;">
+            <p>Sending your message...</p>
+        </div>
+
+        <div id="error-message" style="display: none;">
+            <p>Oops! Something went wrong. Please try again.</p>
+        </div>
+
+        <div id="thank-you-message">
+            <h2>🎉 Thank you!</h2>
+            <p>Your message has been sent. I'll get back to you soon!</p>
+        </div>
+    </div>
     <div id="shortcuts">
         <h2>Keyboard Shortcuts</h2>
         <ul>
@@ -106,7 +160,8 @@
 
     <div id="overlay">
         <div id="circle"></div>
-        <div id="message">Would you like to have a chat? Feel free to send me an email, and we can schedule a convenient
+        <div id="phone-message">Would you like to have a chat? Feel free to send me an email, and we can schedule a
+            convenient
             time for a phone call. Looking forward to connecting!
         </div>
     </div>
@@ -126,6 +181,9 @@
             location.reload();
             return;
         }
+
+        showPdfHeader();
+        hideFormContainer();
 
         showPdfSummary();
 
@@ -203,14 +261,6 @@
                     resume.classList.remove('pdf-mode');
                 });
         }, 300); // give time for the style to apply
-    }
-
-    function showPdfSummary() {
-        document.querySelectorAll('.liveSummary')
-            .forEach(element => element.classList.add('hidden'));
-
-        document.querySelectorAll('.pdfSummary')
-            .forEach(element => element.classList.remove('hidden'));
     }
 
     function downloadStaticPDF() {
@@ -357,7 +407,7 @@
             // buttons
             configureLocationButton(data);
             configureLinkedinButton(data);
-            configureEmailButton(data);
+            configureEmail(data);
             configureGithubButton();
         } catch (error) {
             console.error('Error loading resume data:', error);
@@ -712,6 +762,31 @@
         makeHidden(projectButtons);
     }
 
+    function hideEverythingAfterSeconds(seconds) {
+        setTimeout(() => {
+            hideErrorMessage();
+            hideThankYou();
+            hideFormContainer();
+        }, seconds * 1000);
+    }
+
+    function hideErrorMessage() {
+        const errorMessage = document.getElementById('error-message');
+        errorMessage.style.display = 'none';
+    }
+
+    function hideThankYou() {
+        const thankYouMessage = document.getElementById('thank-you-message');
+        thankYouMessage.style.display = 'none';
+        thankYouMessage.classList.remove('show');
+    }
+
+    function hideFormContainer() {
+        const formContainer = document.getElementById('contact-form-container');
+        formContainer.classList.remove('show');
+        formContainer.style.display = 'none';
+    }
+
     function showProjects() {
         const projectItems = document.querySelectorAll('.project-li');
 
@@ -725,6 +800,31 @@
         makeVisible(projectDescriptions);
         makeVisible(projectPoints);
         makeButtonsVisible(projectButtons);
+    }
+
+    function showPdfHeader() {
+        const emailHeader = document.getElementById('pdfEmailHeader');
+        emailHeader.style.display = 'block';
+    }
+
+    function showPdfSummary() {
+        document.querySelectorAll('.liveSummary')
+            .forEach(element => element.classList.add('hidden'));
+
+        document.querySelectorAll('.pdfSummary')
+            .forEach(element => element.classList.remove('hidden'));
+    }
+
+    function showThankYou() {
+        const thankYouMessage = document.getElementById('thank-you-message');
+        thankYouMessage.style.display = 'block';
+        thankYouMessage.classList.add('show');
+    }
+
+    function showFormContainer() {
+        const formContainer = document.getElementById('contact-form-container');
+        formContainer.classList.add('show');
+        formContainer.style.display = 'block';
     }
 
     // Functions: Customize Page Breaks (PDF)
@@ -818,13 +918,6 @@
         };
     }
 
-    function configureEmailButton(data) {
-        document.getElementById('email-btn').onclick = function () {
-            let email = "mailto:" + data.email;
-            window.open(email, '_blank');
-        };
-    }
-
     function configureLocationButton(data) {
         document.getElementById("location-btn").onclick = function () {
             let location = data.addressLocation;
@@ -882,7 +975,7 @@
         const phoneButton = document.getElementById('phoneButton');
         const overlay = document.getElementById('overlay');
         const circle = document.getElementById('circle');
-        const message = document.getElementById('message');
+        const message = document.getElementById('phone-message');
 
         phoneButton.addEventListener('click', () => {
             // Show the overlay
@@ -976,6 +1069,94 @@
                 document.getElementById('location-btn').click();
             }
         });
+    }
+
+    // Functions: Email
+
+    function configureEmail(data) {
+        const emailHeader = document.getElementById('pdfEmailHeader');
+        emailHeader.textContent = data.email;
+        emailHeader.style.display = 'none';
+
+        const emailBtn = document.getElementById('email-btn');
+
+        const formContainer = document.getElementById('contact-form-container');
+        const formName = document.getElementById('form-name');
+        const form = document.getElementById('contact-form');
+
+        emailBtn.addEventListener('click', function () {
+
+            if (formContainer.style.display === 'block') {
+                hideFormContainer()
+            } else {
+                showFormContainer()
+                formName.focus();
+            }
+        });
+
+        form.addEventListener('submit', async function (e) {
+            e.preventDefault();
+
+            const submitButton = document.querySelector('.submit-button');
+            const loadingMessage = document.getElementById('loading-message');
+            const errorMessage = document.getElementById('error-message');
+
+            submitButton.disabled = true;
+            hideThankYou();
+            errorMessage.style.display = 'none';
+
+            const formData = getFormDataAsObject(form);
+
+            // You must manually append your Web3Forms access_key if it's not already inside the form
+            formData.access_key = 'fb378ea5-c240-451b-bc68-52b3ce5696f0';
+            console.log(formData);
+
+            try {
+                loadingMessage.style.display = 'block';
+
+                const response = await fetch('https://api.web3forms.com/submit', {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify(formData)
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    loadingMessage.style.display = 'none';
+                    showThankYou();
+                    form.reset();
+                } else {
+                    throw new Error(result.message || 'Form submission failed.');
+                }
+            } catch (error) {
+                loadingMessage.style.display = 'none';
+                errorMessage.style.display = 'block';
+                console.error(error);
+            } finally {
+                hideEverythingAfterSeconds(4);
+                submitButton.disabled = false;
+            }
+        });
+
+    }
+
+    function getFormDataAsObject(form) {
+        const formData = new FormData(form);
+        const data = {};
+        formData.forEach((value, key) => {
+            data[key] = value;
+        });
+
+        return data;
+    }
+
+    function copyEmail() {
+        const emailField = document.getElementById("yourEmail");
+        emailField.select();  // Select the content in the input field
+        document.execCommand("copy");  // Copy the selected content to clipboard
     }
 
     // Functions: Easter Egg
