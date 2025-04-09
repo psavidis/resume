@@ -463,6 +463,7 @@ p {
     align-items: center;
     gap: 10px; /* Space between the email input and the copy button */
     width: 100%;
+    margin-bottom: 10px;
 }
 
 #yourEmail {
