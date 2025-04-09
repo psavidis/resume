@@ -1080,6 +1080,20 @@
 
         const emailBtn = document.getElementById('email-btn');
 
+        // Check if the user is on a mobile device
+        if (isMobile()) {
+            // Use mailto for mobile devices
+            emailBtn.setAttribute('href', `mailto:${data.email}`);
+            emailBtn.style.display = 'block';  // Ensure button is visible
+            emailBtn.addEventListener('click', function (e) {
+                // Optional: Prevent any further action, since mailto will open the email client
+                e.preventDefault();
+                window.location.href = `mailto:${data.email}`;
+            });
+
+            return;
+        }
+
         const formContainer = document.getElementById('contact-form-container');
         const formName = document.getElementById('form-name');
         const form = document.getElementById('contact-form');
@@ -1140,7 +1154,6 @@
                 submitButton.disabled = false;
             }
         });
-
     }
 
     function getFormDataAsObject(form) {
@@ -1157,6 +1170,12 @@
         const emailField = document.getElementById("yourEmail");
         emailField.select();  // Select the content in the input field
         document.execCommand("copy");  // Copy the selected content to clipboard
+    }
+
+    // Functions: Device Detection
+
+    function isMobile() {
+        return /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
     }
 
     // Functions: Easter Egg
