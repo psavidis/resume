@@ -48,12 +48,11 @@ My resume should support:
 - **Keyboard Shortcuts**: For big screens, the user can use keyboard shortcuts to trigger the buttons.
   - The keyboard shortcuts can be found at the end of the resume only for big screens.
   - For smaller screens, the shortcuts are not visible.
-- Built-in Messaging
+- **Built-in Messaging**
   - The resume can send email messages to me using the web client for large screens and desktop setups.
-    - Why: The mailto directive prompts the user to open the default email client. 
+    - **Why**: The mailto directive prompts the user to open the default email client. 
     - This is not a good experience in case the user hasn't setup a native email client.
-  - For mobile devices, the resume uses the mailto directive to open the default email client.
-    - Why: The web client is not available on mobile devices
+  - For mobile devices, the resume uses the mailto directive to open the default email client which serves a good user experience.
 
 ### Libraries
 
