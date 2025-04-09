@@ -2,7 +2,7 @@
 <html lang="en">
 
 <script>
-    window.EMAIL_API_KEY = '${{ secrets.EMAIL_API_KEY }}'; // fetch the email api key from the env secrets
+    window.EMAIL_API_KEY = 'EMAIL_API_KEY'; // Placeholder to be replaced by GitHub Actions
 </script>
 
 <head>
@@ -670,9 +670,9 @@
 
         // Format the output
         if (months > 0) {
-            return `${years}+ years`; // If there are months, show a +
+            return `+ years`; // If there are months, show a +
         } else {
-            return `${years} years`; // If no months, show only years with a "+"
+            return ` years`; // If no months, show only years with a "+"
         }
     }
 
@@ -707,7 +707,7 @@
         const monthIndex = monthNames.indexOf(monthName);
 
         if (monthIndex === -1 || isNaN(year)) {
-            throw new Error(`Invalid date string: ${monthYearString}`);
+            throw new Error(`Invalid date string: `);
         }
 
         return new Date(Date.UTC(year, monthIndex, 1)); // Always safe
@@ -792,14 +792,14 @@
         const words = input.split(/\s+/); // Split the input into multiple words separated by spaces
         words.forEach(word => {
             const escapedWord = escapeRegExp(word); // Escape the word for safe regex use
-            const regex = new RegExp(`\\b(${escapedWord})\\b`, 'gi'); // Case-insensitive matching for whole words
+            const regex = new RegExp(`\\b()\\b`, 'gi'); // Case-insensitive matching for whole words
             const nodes = getTextNodes(section);
 
             nodes.forEach(node => {
                 const text = node.nodeValue;
                 const parts = text.replace(regex, (match) => {
                     // Wrap matched words in a span
-                    return `<span class="highlight">${match}</span>`;
+                    return `<span class="highlight"></span>`;
                 });
 
                 if (parts !== text) { // Only replace if something was highlighted
@@ -881,7 +881,7 @@
         document.getElementById("location-btn").onclick = function () {
             let location = data.addressLocation;
             let encodedLocation = encodeURIComponent(location);  // Encode the location
-            window.open(`https://www.google.com/maps?q=${encodedLocation}`, '_blank');
+            window.open(`https://www.google.com/maps?q=`, '_blank');
         };
     }
 
@@ -947,8 +947,8 @@
             // Start the circle animation
             circle.style.left = `${buttonRect.left + buttonRect.width / 2 - circleSize / 2}px`;
             circle.style.top = `${buttonRect.top + buttonRect.height / 2 - circleSize / 2}px`;
-            circle.style.width = `${circleSize}px`;
-            circle.style.height = `${circleSize}px`;
+            circle.style.width = `px`;
+            circle.style.height = `px`;
 
             // Show the message after the circle animation ends
             setTimeout(() => {
@@ -1082,7 +1082,7 @@
                 sender: { email: 'peter.savidis1@gmail.com' },
                 to: [{ email: 'peter.savidis1@gmail.com' }],
                 subject: "New Resume Message from " + data.name,
-                htmlContent: `<p><b>Sender's Email:</b> ${data.email}</p><p><b>Message</b><br><br>${formattedMessage}</p>`,
+                htmlContent: `<p><b>Sender's Email:</b> ${data.email}</p><p><b>Message</b><br><br></p>`,
                 replyTo: { email: data.email }
             };
 
