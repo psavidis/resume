@@ -36,7 +36,7 @@
         </div>
 
         <div>
-            <h1>Petros Savvidis</h1>
+            <h1 id="myNameTitle"></h1>
             <p id="pdfEmailHeader" class="email"></p> <!-- Your email here -->
         </div>
 
@@ -405,6 +405,7 @@
 
             const data = await response.json();
 
+            populateNameTitle(data);
             populateTitle(data);
 
             populateHeader(data);
@@ -420,6 +421,10 @@
         } catch (error) {
             console.error('Error loading resume data:', error);
         }
+    }
+
+    function populateNameTitle(data) {
+        document.getElementById("myNameTitle").textContent = data.name;
     }
 
     function populateTitle(data) {
