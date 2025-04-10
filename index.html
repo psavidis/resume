@@ -178,7 +178,6 @@
 
         if (productionMode) {
             downloadStaticPDF();
-            location.reload();
             return;
         }
 
@@ -263,7 +262,7 @@
         }, 300); // give time for the style to apply
     }
 
-    function downloadStaticPDF(fileUrl) {
+    function downloadStaticPDF() {
         const link = document.createElement('a');
         link.href = 'resume-petros_savidis.pdf';  // Your PDF file
         link.download = 'resume-petros_savidis.pdf'; // Suggested filename
