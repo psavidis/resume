@@ -265,8 +265,8 @@
 
     function downloadStaticPDF(fileUrl) {
         const link = document.createElement('a');
-        link.href = fileUrl;
-        link.download = ''; // you can also specify a filename here
+        link.href = 'resume-petros_savidis.pdf';  // Your PDF file
+        link.download = 'resume-petros_savidis.pdf'; // Suggested filename
         document.body.appendChild(link);
 
         // Simulate a user click to start the download
