@@ -395,6 +395,8 @@ p {
 #shortcuts h2 {
     font-size: 1.2em;
     margin-bottom: 10px;
+    padding-left: unset;
+    border-left: unset;
     color: #555; /* Slightly dark gray */
     font-weight: normal; /* Lighter heading */
 }
