@@ -733,16 +733,6 @@
 
     // Functions: Show/Hide Elements
 
-    function hideProfileInfo() {
-        document.querySelector('#pdfEmailHeader').style.display = 'none';
-        document.querySelector('.live-resume').style.display = 'none';
-    }
-
-    function showProfileInfo() {
-        document.querySelector('#pdfEmailHeader').style.display = 'block';
-        document.querySelector('.live-resume').style.display = 'block';
-    }
-
     function makeButtonsVisible(projectButtons) {
         projectButtons.forEach(button => {
             // Ensure they expand to full height, and maintain a row layout when printing
@@ -767,6 +757,11 @@
         elements.forEach(item => {
             item.style.display = 'none';  // Make sure the item is displayed (not hidden)
         });
+    }
+
+    function hideProfileInfo() {
+        document.querySelector('#pdfEmailHeader').style.display = 'none';
+        document.querySelector('.live-resume').style.display = 'none';
     }
 
     function hideShortcuts() {
@@ -815,6 +810,11 @@
         const formContainer = document.getElementById('contact-form-container');
         formContainer.classList.remove('show');
         formContainer.style.display = 'none';
+    }
+
+    function showProfileInfo() {
+        document.querySelector('#pdfEmailHeader').style.display = 'block';
+        document.querySelector('.live-resume').style.display = 'block';
     }
 
     function showProjects() {
