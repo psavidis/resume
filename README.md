@@ -65,4 +65,9 @@ My resume should support:
 My official resume cannot afford to malfunction. Thus, the download PDF function for production always points to the latest
 static PDF rendered. If `productionMode` is set to `false`, the resume renders the PDF on the fly.
 
-**Note**: This was identified not be problematic for Apple devices and thus a static PDF is used for production.
+**Note**: This was identified to be problematic for Apple devices and thus a static PDF is used for production.
+
+### Business Social Platform Issues
+
+There are platforms which perform link processing for security reasons. This is a problem for my resume as the links are not clickable.
+To mitigate this issue, i've included a QR code for pdf-first user journeys and a clear visible link that can be copy pasted.
