@@ -99,32 +99,62 @@ p {
 }
 
 .profile-picture-container {
-    position: left;
-    top: 20px;
-    left: 20px;
-    width: 100px;
-    height: 100px;
-    border-radius: 50%;
-    overflow: hidden;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
-    z-index: 1000;
+    flex-shrink: 0;
 }
 
 .profile-picture {
-    width: 100%;
-    height: 100%;
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
     object-fit: cover;
 }
 
-.header {
-    display: flex; /* Make children align horizontally */
-    align-items: center; /* Vertically center-align items */
-    justify-content: space-between;
-    position: relative; /* To allow absolute positioning if needed */
-    padding: 0 20px; /* Optional: Add padding for spacing */
+.profile-info {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end; /* <-- THIS aligns everything to the right */
+    justify-content: right;
+    text-align: right; /* <-- Also makes text right aligned */
 }
 
-.header .email {
+.profile-info-name {
+    margin: 0;
+    font-size: em;
+}
+
+.profile-info-email {
+    font-size: 1em;
+    color: #555;
+    margin: 5px 0 10px 0;
+}
+
+.live-resume {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end; /* <-- right aligned inside too */
+}
+
+.live-resume-url {
+    font-size: 0.95em;
+    color: #1e3c72;
+    text-decoration: underline;
+    word-break: break-word;
+    margin-bottom: 10px;
+}
+
+.live-resume-qr {
+    width: 100px;
+    height: 100px;
+    object-fit: contain;
+}
+
+.header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.header .profile-info-email {
     font-size: 14px;
     color: #555;
     margin-top: 5px;
@@ -294,10 +324,10 @@ p {
     vertical-align: middle; /* Keeps them aligned nicely with the text */
 }
 
-.emoji-flags {
-    font-size: 2.0em;
-    vertical-align: middle; /* Keeps them aligned nicely with the text */
+.emoji-flags img {
+    width: 24px;  /* smaller flag size */
 }
+
 
 .fun-fact {
     font-family: 'Montserrat', sans-serif;

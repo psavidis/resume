@@ -30,16 +30,19 @@
     <div id="topRightCorner" class="topRightCorner"></div>
 
     <div class="header">
-
         <div class="profile-picture-container">
             <img src="/resume/img/profile_picture.jpeg" alt="Profile Picture" class="profile-picture">
         </div>
 
-        <div>
-            <h1 id="myNameTitle"></h1>
-            <p id="pdfEmailHeader" class="email"></p> <!-- Your email here -->
-        </div>
+        <div class="profile-info">
+            <h1 class="profile-info-name" id="myNameTitle"></h1>
+            <p class="profile-info-email" id="pdfEmailHeader"></p>
 
+            <div class="live-resume">
+                <div class="live-resume-url">psavidis.github.io/resume/</div>
+                <img src="/resume/img/qr-code.png" alt="QR Code" class="live-resume-qr">
+            </div>
+        </div>
     </div>
 
     <div>
@@ -48,7 +51,7 @@
             Welcome to my
             <span class="liveSummary">Dynamic | Git-powered | Code-driven</span>
             <span class="pdfSummary hidden">PDF</span> Resume!
-            <span class="pdfSummary hidden">For the Live version, click <a href="https://psavidis.github.io/resume/">here</a></span>
+            <span class="pdfSummary hidden">For the Live version, visit or scan!
             <span class="emoji">🤘</span>
         </p>
         <div id="summary-instructions">
@@ -67,7 +70,11 @@
             <br>
 
             <span class="fun-fact">Fun Fact:</span>
-            <span class="fun-fact-text">I've got dual citizenship <span class="emoji-flags">🇬🇷🇦🇺‍</span> ️
+            <span class="fun-fact-text">I've got dual citizenship</span>
+            <span class="emoji-flags">
+                <img src="img/flag_gr.png" alt="Flag 1">
+                <img src="img/flag_au.png" alt="Flag 2">
+            </span> ️
         </p>
     </div>
 
@@ -170,7 +177,7 @@
 <script>
 
     // For production, always serve the static PDF file to avoid devices issues.
-    const productionMode = true;
+    const productionMode = false;
 
     // Functions: Main Features
 
@@ -181,7 +188,7 @@
             return;
         }
 
-        showPdfHeader();
+        showProfileInfo();
         hideFormContainer();
 
         showPdfSummary();
@@ -726,6 +733,16 @@
 
     // Functions: Show/Hide Elements
 
+    function hideProfileInfo() {
+        document.querySelector('#pdfEmailHeader').style.display = 'none';
+        document.querySelector('.live-resume').style.display = 'none';
+    }
+
+    function showProfileInfo() {
+        document.querySelector('#pdfEmailHeader').style.display = 'block';
+        document.querySelector('.live-resume').style.display = 'block';
+    }
+
     function makeButtonsVisible(projectButtons) {
         projectButtons.forEach(button => {
             // Ensure they expand to full height, and maintain a row layout when printing
@@ -813,11 +830,6 @@
         makeVisible(projectDescriptions);
         makeVisible(projectPoints);
         makeButtonsVisible(projectButtons);
-    }
-
-    function showPdfHeader() {
-        const emailHeader = document.getElementById('pdfEmailHeader');
-        emailHeader.style.display = 'block';
     }
 
     function showPdfSummary() {
@@ -1089,7 +1101,8 @@
     function configureEmail(data) {
         const emailHeader = document.getElementById('pdfEmailHeader');
         emailHeader.textContent = data.email;
-        emailHeader.style.display = 'none';
+
+        hideProfileInfo();
 
         const emailBtn = document.getElementById('email-btn');
 
