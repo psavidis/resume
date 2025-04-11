@@ -602,3 +602,293 @@ p {
         flex-wrap: wrap;
     }
 }
+
+/* Dark Mode Styles */
+body.dark-mode .container {
+    background-color: #1e1e1e; /* Dark background for the container */
+    color: white;
+}
+
+body.dark-mode {
+    background-color: #121212;
+    color: white;
+}
+
+.container.dark-mode {
+    background-color: #1e1e1e; /* Darker background for the container */
+}
+
+button.dark-mode {
+    background-color: #333;
+    color: white;
+    border: 1px solid #444;
+}
+
+button.dark-mode:hover {
+    background-color: #444;
+}
+
+button i {
+    transition: transform 0.3s;
+}
+
+button.dark-mode i {
+    transform: rotate(180deg); /* Rotate icon for a fun effect */
+}
+
+/* Base styles for projects */
+#Projects {
+    background-color: white;
+    color: black;
+}
+
+.project-li {
+    background-color: #f9f9f9;
+    padding: 10px;
+    margin: 5px 0;
+    border: 1px solid #ccc;
+}
+
+.project-li:hover {
+    background-color: #e9e9e9;
+}
+
+.project-title {
+    font-weight: bold;
+    font-size: 1.2rem;
+}
+
+.project-description, .project-points, .project-tech {
+    font-size: 1rem;
+    color: #333;
+}
+
+.project-button {
+    background-color: #007bff;
+    color: white;
+    padding: 5px 10px;
+    border: none;
+    cursor: pointer;
+}
+
+/* Base styles for projects */
+#Projects {
+    background-color: white;
+    color: black;
+    padding: 20px;
+}
+
+.project-li {
+    background-color: #f9f9f9;
+    padding: 10px;
+    margin: 5px 0;
+    border: 1px solid #ccc;
+}
+
+.project-li:hover {
+    background-color: #e9e9e9;
+}
+
+.project-title {
+    font-weight: bold;
+    font-size: 1.2rem;
+}
+
+.project-description, .project-points, .project-tech {
+    font-size: 1rem;
+    color: #333;
+}
+
+.project-button {
+    background-color: #007bff;
+    color: white;
+    padding: 5px 10px;
+    border: none;
+    cursor: pointer;
+}
+
+/* Base styles for projects */
+#Projects {
+    background-color: white;
+    color: black;
+    padding: 20px;
+}
+
+.project-li {
+    background-color: #f9f9f9;
+    padding: 10px;
+    margin: 5px 0;
+    border: 1px solid #ccc;
+}
+
+.project-li:hover {
+    background-color: #e9e9e9;
+}
+
+.project-title {
+    font-weight: bold;
+    font-size: 1.2rem;
+}
+
+.project-description, .project-points, .project-tech {
+    font-size: 1rem;
+    color: #333;
+}
+
+.project-button {
+    background-color: #007bff;
+    color: white;
+    padding: 5px 10px;
+    border: none;
+    cursor: pointer;
+}
+
+/* Base styles for projects */
+#Projects {
+    background-color: white;
+    color: black;
+    padding: 20px;
+}
+
+.project-li {
+    background-color: #f9f9f9;
+    padding: 10px;
+    margin: 5px 0;
+    border: 1px solid #ccc;
+}
+
+.project-li:hover {
+    background-color: #e9e9e9;
+}
+
+.project-title {
+    font-weight: bold;
+    font-size: 1.2rem;
+}
+
+.project-description, .project-points, .project-tech {
+    font-size: 1rem;
+    color: #333;
+}
+
+.project-button {
+    background-color: #007bff;
+    color: white;
+    padding: 5px 10px;
+    border: none;
+    cursor: pointer;
+}
+
+/* Dark Mode Styles */
+body.dark-mode #Projects {
+    background: linear-gradient(145deg, #2c2c2c, #1b1b1b);
+    color: #e0e0e0;
+}
+
+body.dark-mode .project-li {
+    background-color: #2a2a2a !important;  /* Force dark mode background */
+    border: 1px solid #444;
+    color: #e0e0e0;
+}
+
+body.dark-mode .project-li:hover {
+    background-color: #333333 !important;  /* Force dark mode hover effect */
+}
+
+body.dark-mode .project-title {
+    color: #29b6f6;
+}
+
+body.dark-mode .project-description,
+body.dark-mode .project-points,
+body.dark-mode .project-tech {
+    color: #b0b0b0;
+}
+
+body.dark-mode .project-button {
+    background: rgb(0, 123, 255);
+    color: #ffffff;
+}
+
+body.dark-mode .project-button:hover {
+    background: rgb(0, 102, 204);
+}
+
+
+
+/* Dark Mode Styles */
+
+body.dark-mode .experience-list {
+    background-color: #121212;  /* Dark background for the list */
+}
+
+body.dark-mode .section ul li {
+    background: #2a2a2a !important; /* Dark background */
+    color: #e0e0e0 !important;     /* Light text color */
+    border: 1px solid #444 !important; /* Darker border */
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2) !important; /* Darker shadow */
+}
+
+body.dark-mode .section ul li:hover {
+    background: #333333 !important; /* Darker hover effect */
+}
+
+body.dark-mode .experience-li:hover {
+    background-color: #333333 !important;  /* Force dark mode hover effect */
+}
+
+body.dark-mode .experience-title {
+    color: #29b6f6;
+}
+
+body.dark-mode .experience-description,
+body.dark-mode .experience-date {
+    color: #b0b0b0;
+}
+
+body.dark-mode .experience-button {
+    background: rgb(0, 123, 255);
+    color: #ffffff;
+}
+
+body.dark-mode .experience-button:hover {
+    background: rgb(0, 102, 204);
+}
+
+body.dark-mode #shortcuts {
+    background-color: #2a2a2a !important; /* Dark background for the entire section */
+    color: #e0e0e0 !important;            /* Light text color */
+}
+
+body.dark-mode #shortcuts h2 {
+    color: #ffffff !important;            /* Light color for the heading */
+}
+
+body.dark-mode #shortcuts ul li {
+    background: #333333 !important;      /* Dark background for list items */
+    color: #e0e0e0 !important;           /* Light text color for list items */
+    border: 1px solid #444 !important;   /* Dark border */
+    padding: 10px;
+    border-radius: 5px;
+    margin-bottom: 10px;
+}
+
+body.dark-mode #shortcuts ul li:hover {
+    background: #444444 !important; /* Darker background on hover */
+}
+
+body.dark-mode h2 {
+    color: #ffffff !important; /* Light color for the heading */
+}
+
+body.dark-mode #Projects #projects-list span {
+    color: #ffffff !important;
+}
+
+body.dark-mode h1 {
+    color: #ffffff !important;
+}
+
+body.dark-mode {
+    background: linear-gradient(145deg, #3a2a6a, #1f4158);
+}
