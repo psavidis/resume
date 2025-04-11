@@ -802,7 +802,7 @@ body.dark-mode .project-title {
 body.dark-mode .project-description,
 body.dark-mode .project-points,
 body.dark-mode .project-tech {
-    color: #b0b0b0;
+    color: #e0e0e0;
 }
 
 body.dark-mode .project-button {
@@ -823,7 +823,7 @@ body.dark-mode .experience-list {
 }
 
 body.dark-mode .section ul li {
-    background: #2a2a2a !important; /* Dark background */
+    background: linear-gradient(145deg, #3e2a47, #1a1a1a);
     color: #e0e0e0 !important;     /* Light text color */
     border: 1px solid #444 !important; /* Darker border */
     box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2) !important; /* Darker shadow */
