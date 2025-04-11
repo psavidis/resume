@@ -93,8 +93,8 @@ p {
 
 .profile-title {
     font-family: 'Poppins', sans-serif; /* or Poppins, Raleway, etc */
-    font-size: 1.5em; /* slightly bigger */
-    letter-spacing: 0.5px; /* optional: a bit wider spacing for style */
+    font-size: 2.0em; /* slightly bigger */
+    letter-spacing:1px; /* optional: a bit wider spacing for style */
     color: #222; /* optional: a little darker if you want it to pop more */
 }
 
@@ -340,7 +340,7 @@ p {
     font-family: 'Open Sans', sans-serif;
     font-weight: 400;
     font-size: 13px;
-    color: #222222; /* Dark gray for readability */
+    color: #555; /* Dark gray for readability */
 }
 
 #phoneButton {
