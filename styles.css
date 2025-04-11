@@ -865,12 +865,7 @@ body.dark-mode #shortcuts h2 {
 }
 
 body.dark-mode #shortcuts ul li {
-    background: #333333 !important;      /* Dark background for list items */
     color: #e0e0e0 !important;           /* Light text color for list items */
-    border: 1px solid #444 !important;   /* Dark border */
-    padding: 10px;
-    border-radius: 5px;
-    margin-bottom: 10px;
 }
 
 body.dark-mode #shortcuts ul li:hover {
@@ -891,4 +886,9 @@ body.dark-mode h1 {
 
 body.dark-mode {
     background: linear-gradient(145deg, #3a2a6a, #1f4158);
+}
+
+body.dark-mode #shortcuts {
+    background: linear-gradient(145deg, #3e2a47, #141414);  /* Darker gradient for shortcuts */
+    color: #e0e0e0;  /* Light text color */
 }
