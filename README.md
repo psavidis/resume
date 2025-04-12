@@ -76,5 +76,5 @@ To mitigate this issue, I've included a QR code for pdf-first user journeys and 
 
 ### For Me
 
-See Analytics [here](See Analytics https://statcounter.com/p13118834/summary/
+See Analytics [here](See Analytics https://statcounter.com/p13118834/summary/)
 )
