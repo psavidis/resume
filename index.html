@@ -45,9 +45,9 @@
         </div>
     </div>
 
-    <div>
-        <p id="summary" class="profile-title"></p>
-        <h2>Summary</h2>
+    <p id="summary" class="profile-title"></p>
+    <h2>Summary</h2>
+    <div class="summary-all">
         <p id="summary-intro">
             Welcome to the
             <span class="liveSummary">Dynamic | Git-powered | Code-driven</span>
@@ -165,6 +165,10 @@
     <button id="github-btn" class="btn"><i class="fab fa-github"></i></button>
     <button id="pdf-btn" class="btn"><i class="fas fa-file-pdf"></i></button>
     <button id="toggle-search" class="btn toggle-button"><i class="fas fa-search"></i></button>
+
+    <button id="dark-mode-toggle" class="btn">
+        <i id="mode-icon" class="fas fa-moon"></i>
+    </button>
 
     <div id="overlay">
         <div id="circle"></div>
@@ -1205,6 +1209,38 @@
         return /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
     }
 
+    function configureDarkModeButton() {
+        const toggleButton = document.getElementById('dark-mode-toggle');
+        const modeIcon = document.getElementById('mode-icon');
+
+        // Check if the user previously selected dark mode and apply it
+        if (localStorage.getItem('dark-mode') === 'true') {
+            document.body.classList.add('dark-mode');
+            toggleButton.classList.add('dark-mode');
+            modeIcon.classList.remove('fa-moon');
+            modeIcon.classList.add('fa-sun');
+        }
+
+        // Toggle dark mode when button is clicked
+        toggleButton.addEventListener('click', () => {
+            document.body.classList.toggle('dark-mode');
+            toggleButton.classList.toggle('dark-mode');
+
+            // Switch icon
+            if (document.body.classList.contains('dark-mode')) {
+                modeIcon.classList.remove('fa-moon');
+                modeIcon.classList.add('fa-sun');
+            } else {
+                modeIcon.classList.remove('fa-sun');
+                modeIcon.classList.add('fa-moon');
+            }
+
+            // Save the user's preference in localStorage
+            const isDarkMode = document.body.classList.contains('dark-mode');
+            localStorage.setItem('dark-mode', isDarkMode);
+        });
+    }
+
     // Functions: Easter Egg
 
     function showEasterEgg() {
@@ -1225,6 +1261,8 @@
     registerKeyboardShortcuts();
 
     showEasterEgg();
+
+    configureDarkModeButton();
 </script>
 </body>
 </html>
