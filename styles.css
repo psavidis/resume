@@ -822,8 +822,6 @@ body.dark-mode .project-button:hover {
     background: rgb(0, 102, 204);
 }
 
-
-
 /* Dark Mode Styles */
 
 body.dark-mode .experience-list {
@@ -958,4 +956,81 @@ body.dark-mode .btn:hover {
     background: linear-gradient(145deg, #3e2a47, #1f1f2a); /* Slightly lighter purple-black on hover */
     color: #ffffff; /* Brighter text on hover */
     transform: translateY(-2px); /* Subtle lift effect */
+}
+
+body.dark-mode .profile-title {
+    color: #ffffff !important;
+}
+
+/* DARK MODE for Contact Form */
+body.dark-mode #contact-form-container {
+    background-color: #1e1e1e; /* dark container */
+    color: #e0e0e0;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.5);
+}
+
+/* Input fields */
+body.dark-mode #contact-form-container input[type="text"],
+body.dark-mode #contact-form-container input[type="email"],
+body.dark-mode #contact-form-container textarea {
+    background-color: #2a2a2a;
+    color: #e0e0e0;
+    border: 1px solid #444;
+}
+
+/* Label styling */
+body.dark-mode #contact-form-container label {
+    color: #c4bfd6;
+}
+
+/* Buttons inside the contact form */
+body.dark-mode #contact-form-container button,
+body.dark-mode #contact-form-container .submit-button {
+    background: linear-gradient(145deg, #46618a, #2f3e55) !important;
+    color: #ffffff;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+/* Button hover */
+body.dark-mode #contact-form-container button:hover,
+body.dark-mode #contact-form-container .submit-button:hover {
+    background: linear-gradient(145deg, #3a4d6f, #263445) !important;
+}
+
+body.dark-mode #copyButton {
+    background: linear-gradient(145deg, #8f5fd0, #6c44a5) !important;
+    color: #ffffff;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+    margin-left: 10px;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+}
+
+body.dark-mode #copyButton:hover {
+    background: linear-gradient(145deg, #337984, #205763) !important;
+}
+
+body.dark-mode #circle {
+    position: absolute;
+    background-color: #8a2be2;  /* Purple background for dark mode */
+    border-radius: 50%;
+    width: 0;
+    height: 0;
+    transition: all 1s ease-in-out;
+    z-index: -1;
+}
+
+body.dark-mode #phoneButton.clicked + #overlay #circle {
+    background-color: #9b4eaf;  /* Slightly lighter purple when clicked */
+    box-shadow: 0 0 15px rgba(143, 95, 208, 0.7); /* Glowing effect */
+    transform: scale(5);  /* Enlarging the circle on click */
 }
