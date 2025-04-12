@@ -53,6 +53,8 @@ My resume should support:
     - **Why**: The mailto directive prompts the user to open the default email client. 
     - This is not a good experience in case the user hasn't setup a native email client.
   - For mobile devices, the resume uses the mailto directive to open the default email client which serves a good user experience.
+- **Dark Mode**
+  - The resume supports a dark theme as well <3 
 
 ### Libraries
 
