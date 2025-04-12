@@ -73,3 +73,8 @@ static PDF rendered. If `productionMode` is set to `false`, the resume renders t
 
 There are platforms which perform link processing for security reasons. This is a problem for my resume as the links are not clickable.
 To mitigate this issue, I've included a QR code for pdf-first user journeys and a clear visible link that can be copy-pasted.
+
+### For Me
+
+See Analytics [here](See Analytics https://statcounter.com/p13118834/summary/
+)
