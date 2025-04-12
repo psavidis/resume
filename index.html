@@ -207,6 +207,9 @@
         </div>
     </div>
 </div>
+<footer>
+    <p id="copyright"></p>
+</footer>
 
 <script>
 
@@ -459,6 +462,9 @@
             configureLinkedinButton(data);
             configureEmail(data);
             configureGithubButton();
+
+            // copyright
+            configureCopyright(data);
         } catch (error) {
             console.error('Error loading resume data:', error);
         }
@@ -1274,6 +1280,16 @@
 
     function showEasterEgg() {
         console.log("%c 🐇🐰🥚If you see this little easter egg, you are either developer or a curious recruiter with dev skills! Keep up the good work! 🎉", "font-size:16px; color: teal; background: black; padding: 4px");
+    }
+
+    // Functions: Copyright
+
+    function configureCopyright(data) {
+        const currentYear = new Date().getFullYear();
+        const copyrightElement = document.getElementById('copyright');
+        const name = data.name;
+
+        copyrightElement.innerHTML = `&copy; ${currentYear} ${name}. All rights reserved.`;
     }
 
     // Call functions to load data and initialize the page components

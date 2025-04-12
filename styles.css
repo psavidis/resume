@@ -1054,3 +1054,7 @@ input:-moz-autofill {
     border: 1px solid #444 !important;    /* Optional: Consistent border */
     box-shadow: 0 0 0 30px #2a2a2a inset !important;  /* Important to override background color */
 }
+
+#copyright {
+    color: white;
+}
