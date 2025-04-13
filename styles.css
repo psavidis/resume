@@ -428,6 +428,19 @@ p {
     color: #333;
 }
 
+#shortcut-hint {
+    position: fixed;
+    bottom: 10px;
+    right: 10px;
+    background: rgba(0,0,0,0.6);
+    color: white;
+    padding: 5px 10px;
+    font-size: 12px;
+    border-radius: 5px;
+    font-family: 'Courier New', monospace;
+    z-index: 9999;
+}
+
 #contact-form-container {
     position: fixed;
     bottom: 20px;
@@ -935,7 +948,6 @@ body.dark-mode .summary-all ul li {
     color: #e0e0e0;
     padding: 10px;
     border-radius: 5px;
-    margin-bottom: 10px;
 }
 
 body.dark-mode .summary-all ul li:hover {

@@ -92,10 +92,8 @@
                 <li>Feel free to <b>Connect</b> with me via email or LinkedIn to explore potential business
                     opportunities
                 </li>
-                <li><b>Download</b> my resume in PDF format
-                </li>
-                <li><b>Search</b> through my projects using simple keywords
-                </li>
+                <li><b>Download</b> my resume in PDF format</li>
+                <li><b>Search</b> through my projects using simple keywords</li>
             </ul>
         </div>
         <p id="summary-free">Outside of work, I’m passionate about traveling, making music, reading philosophy, and
@@ -189,6 +187,7 @@
             <li><strong>⌘ + Shift + D</strong>: Toggle Dark Mode</li>
         </ul>
     </div>
+    <div id="shortcut-hint" style="display: none;"><b>Press</b> ⌘ + / for shortcuts</div>
 </div>
 
 <div class="button-container">
@@ -812,6 +811,9 @@
     function hideShortcuts() {
         const shortcuts = document.querySelector('#shortcuts')
         shortcuts.style.display = 'none';
+
+        const shortcutHint = document.querySelector('#shortcut-hint')
+        shortcutHint.style.display = 'none';
     }
 
     function hideSearchBar() {
@@ -959,11 +961,19 @@
 
     // Functions: Scrolling
 
-    function scrollToProjects() {
-        document.getElementById("Projects").scrollIntoView({
+    function scrollToElement(elementId) {
+        document.getElementById(elementId).scrollIntoView({
             behavior: "smooth"
         });
         window.dispatchEvent(new Event('scroll'));
+    }
+
+    function scrollToShortcuts() {
+        scrollToElement("shortcuts");
+    }
+
+    function scrollToProjects() {
+        scrollToElement("Projects");
 
         const searchBar = document.querySelector('#search-bar');
         searchBar.style.position = 'sticky'; // Keep it fixed at the bottom
@@ -1083,7 +1093,7 @@
         });
     }
 
-    // Functions: Register Keyboard Shortcut
+    // Functions: Keyboard Shortcut
 
     function registerKeyboardShortcuts() {
         registerSearchShortcut();
@@ -1093,6 +1103,18 @@
         registerGithubShortcut();
         registerMapsShortcut();
         registerToggleDarkModeShortcut();
+    }
+
+    function configureKeyboardModal() {
+        toggleShortcutsModal();
+        document.addEventListener('keydown', function(event) {
+            const isMac = navigator.platform.toUpperCase().indexOf('MAC') >= 0;
+
+            if ((isMac && event.metaKey && event.key === '/') || (!isMac && event.ctrlKey && event.key === '/')) {
+                event.preventDefault();
+                toggleShortcutsModal();
+            }
+        });
     }
 
     function registerToggleDarkModeShortcut() {
@@ -1162,6 +1184,18 @@
             }
         });
     }
+
+    function toggleShortcutsModal() {
+        const modal = document.getElementById('shortcuts');
+        if (modal.style.display === 'block' || modal.style.display === '') {
+            modal.style.display = 'none';
+            scrollToTop();
+        } else {
+            modal.style.display = 'block';
+            scrollToShortcuts();
+        }
+    }
+
 
     // Functions: Email
 
@@ -1303,6 +1337,18 @@
         });
     }
 
+    function configureBasedOnClient() {
+        // desktop config
+        if (!isMobile()) {
+            document.getElementById('shortcut-hint').style.display = 'block';
+
+            configureKeyboardModal();
+            registerKeyboardShortcuts();
+        }
+    }
+
+
+
     // Functions: Easter Egg
 
     function showEasterEgg() {
@@ -1330,7 +1376,7 @@
     configureSearchBar();
     configurePhoneButton();
 
-    registerKeyboardShortcuts();
+    configureBasedOnClient();
 
     showEasterEgg();
 
