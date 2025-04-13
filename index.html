@@ -219,7 +219,7 @@
 <script>
 
     // For production, always serve the static PDF file to avoid devices issues.
-    const productionMode = true;
+    const productionMode = false;
 
     // Functions: Main Features
 
@@ -863,6 +863,8 @@
     function showProfileInfo() {
         document.querySelector('#pdfEmailHeader').style.display = 'block';
         document.querySelector('.live-resume').style.display = 'block';
+        document.querySelector('.live-resume-url').style.visibility = 'visible';
+        document.querySelector('.live-resume-qr').style.visibility = 'visible';
     }
 
     function showProjects() {

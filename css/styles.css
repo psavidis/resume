@@ -145,12 +145,14 @@ p {
     text-decoration: underline;
     word-break: break-word;
     margin-bottom: 10px;
+    visibility: hidden;
 }
 
 .live-resume-qr {
     width: 100px;
     height: 100px;
     object-fit: contain;
+    visibility: hidden;
 }
 
 .header {
