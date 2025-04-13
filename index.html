@@ -184,6 +184,7 @@
             <li><strong>⌘ + S</strong>: Download Resume</li>
             <li><strong>⌘ + E</strong>: Send Email</li>
             <li><strong>⌘ + Shift + L</strong>: Open LinkedIn</li>
+            <li><strong>⌘ + Shift + G</strong>: Open Github</li>
             <li><strong>⌘ + Shift + M</strong>: Open Location</li>
             <li><strong>⌘ + Shift + D</strong>: Toggle Dark Mode</li>
         </ul>
@@ -1088,8 +1089,9 @@
         registerSearchShortcut();
         registerSavePdfShortcut();
         registerEmailShortcut();
-        registerLinkedShortCut();
-        registerMapsShortCut();
+        registerLinkedShortcut();
+        registerGithubShortcut();
+        registerMapsShortcut();
         registerToggleDarkModeShortcut();
     }
 
@@ -1131,17 +1133,27 @@
         });
     }
 
-    function registerLinkedShortCut() {
+    function registerLinkedShortcut() {
         document.addEventListener('keydown', function (event) {
             // LinkedIn shortcut: Ctrl/Cmd + Shift + L
             if ((event.ctrlKey || event.metaKey) && event.shiftKey && event.key.toLowerCase() === 'l') {
-                event.preventDefault(); // Prevent default action
+                event.preventDefault();
                 document.getElementById('linkedin-btn').click();
             }
         });
     }
 
-    function registerMapsShortCut() {
+    function registerGithubShortcut() {
+        document.addEventListener('keydown', function (event) {
+            // LinkedIn shortcut: Ctrl/Cmd + Shift + G
+            if ((event.ctrlKey || event.metaKey) && event.shiftKey && event.key.toLowerCase() === 'g') {
+                event.preventDefault();
+                document.getElementById('github-btn').click();
+            }
+        });
+    }
+
+    function registerMapsShortcut() {
         document.addEventListener('keydown', function (event) {
             // Location shortcut: Ctrl/Cmd + Shift + M
             if ((event.ctrlKey || event.metaKey) && event.shiftKey && event.key.toLowerCase() === 'm') {
