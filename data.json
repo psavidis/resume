@@ -144,8 +144,8 @@
       "startDate": "06-2013",
       "endDate": "06-2015",
       "description": "The aim of the platform is to serve as a common system for the National Offices of Intellectual Property of Belgium, Luxembourg and Netherlands.",
-      "points": [
-        "Participated in the development of back-office of the platform from the ground up",
+      "poinets": [
+        "Developed the platform's back-office from the group up",
         "Backend & front-end from scratch",
         "Created the criteria search functionality",
         "In charge of data migration from Lucene to Elastic Search"
@@ -193,10 +193,7 @@
       "endDate": "12-2015",
       "description": "Web-based collaborative system to facilitate the full lifecycle of a tendering process, for both buyers and suppliers.",
       "points": [
-        "Participated in the development of back-office of the platform from the ground up",
-        "Backend & front-end from scratch",
-        "Created the criteria search functionality",
-        "In charge of data migration from Lucene to Elastic Search"
+        "Research and implement customization on top of the existing platform"
       ],
       "techUsed": [
         "Java",
