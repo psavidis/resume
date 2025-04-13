@@ -1104,6 +1104,7 @@
         registerGithubShortcut();
         registerMapsShortcut();
         registerToggleDarkModeShortcut();
+        registerEasterEggShortcut();
     }
 
     function configureKeyboardModal() {
@@ -1120,10 +1121,20 @@
 
     function registerToggleDarkModeShortcut() {
         document.addEventListener('keydown', function (event) {
-            // Dark mode shortcut: Ctrl/Cmd + Shift + D
+            // Ctrl/Cmd + Shift + D
             if ((event.ctrlKey || event.metaKey) && event.shiftKey && event.key.toLowerCase() === 'd') {
                 event.preventDefault();
                 document.getElementById('dark-mode-toggle').click();
+            }
+        });
+    }
+
+    function registerEasterEggShortcut() {
+        document.addEventListener('keydown', function (event) {
+            // Ctrl/Cmd + Shift + E
+            if ((event.ctrlKey || event.metaKey) && event.shiftKey && event.key.toLowerCase() === 'h') {
+                event.preventDefault();
+                window.open("https://psavidis.github.io/resume/tests.html", "_blank");
             }
         });
     }
