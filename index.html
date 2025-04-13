@@ -185,6 +185,7 @@
             <li><strong>⌘ + E</strong>: Send Email</li>
             <li><strong>⌘ + Shift + L</strong>: Open LinkedIn</li>
             <li><strong>⌘ + Shift + M</strong>: Open Location</li>
+            <li><strong>⌘ + Shift + D</strong>: Toggle Dark Mode</li>
         </ul>
     </div>
 </div>
@@ -1089,13 +1090,24 @@
         registerEmailShortcut();
         registerLinkedShortCut();
         registerMapsShortCut();
+        registerToggleDarkModeShortcut();
+    }
+
+    function registerToggleDarkModeShortcut() {
+        document.addEventListener('keydown', function (event) {
+            // Dark mode shortcut: Ctrl/Cmd + Shift + D
+            if ((event.ctrlKey || event.metaKey) && event.shiftKey && event.key.toLowerCase() === 'd') {
+                event.preventDefault();
+                document.getElementById('dark-mode-toggle').click();
+            }
+        });
     }
 
     function registerSearchShortcut() {
         document.addEventListener('keydown', function (event) {
             // Check if Control (Windows) or Command (Mac) + F is pressed
             if ((event.ctrlKey || event.metaKey) && event.key === 'f') {
-                event.preventDefault(); // Prevent the browser's default find behavior
+                event.preventDefault();
                 document.getElementById('toggle-search').click(); // Replace with your button's ID
             }
         });
