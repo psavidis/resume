@@ -849,7 +849,6 @@ body.dark-mode .section ul li {
     background: linear-gradient(145deg, #3e2a47, #1a1a1a);
     color: #e0e0e0 !important;     /* Light text color */
     /*border: 1px solid #444 !important; !* Darker border *!*/
-    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2) !important; /* Darker shadow */
 }
 
 body.dark-mode .section ul li:hover {
