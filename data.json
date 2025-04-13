@@ -144,7 +144,7 @@
       "startDate": "06-2013",
       "endDate": "06-2015",
       "description": "The aim of the platform is to serve as a common system for the National Offices of Intellectual Property of Belgium, Luxembourg and Netherlands.",
-      "poinets": [
+      "points": [
         "Developed the platform's back-office from the group up",
         "Backend & front-end from scratch",
         "Created the criteria search functionality",

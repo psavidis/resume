@@ -684,8 +684,17 @@ button.dark-mode i {
     color: #333;
 }
 
+.project-description {
+  font-size: 0.95em; /* just slightly smaller */
+  color: #777; /* gentle gray */
+  font-weight: 400; /* normal weight, not too bold, not too light */
+  opacity: 0.85; /* slight fade to make it feel less aggressive */
+  margin-bottom: 10px;
+}
+
 .project-button {
-    background-color: #007bff;
+    background-color: #007
+    .bff;
     color: white;
     padding: 5px 10px;
     border: none;
