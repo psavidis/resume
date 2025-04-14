@@ -1386,6 +1386,33 @@
         copyrightElement.innerHTML = `&copy; ${currentYear} ${name}. All rights reserved.`;
     }
 
+    // Functions: Push notification
+    function sendPushNotification() {
+      fetch("https://ntfy.sh/my-resume-page", {
+        method: "POST",
+        body: "📄 New visitor on your resume!",
+        headers: {
+          "Title": "Resume Page View"
+        }
+      })
+      .then(response => {
+        if (!response.ok) {
+          throw new Error("Failed to send push notification");
+        }
+      })
+      .catch(error => {
+        console.error("❌ Push notification failed:", error);
+        // Retry after a short delay
+        setTimeout(sendPushNotification, 3000);
+      });
+    }
+
+    function configurePushNotificationOnLoad() {
+        if (location.hostname !== "localhost") {
+          window.addEventListener('load', sendPushNotification);
+        }
+    }
+
     // Call functions to load data and initialize the page components
 
     loadResumeData();
@@ -1402,6 +1429,7 @@
     showEasterEgg();
 
     configureDarkModeButton();
+    configurePushNotificationOnLoad();
 </script>
 </body>
 </html>
