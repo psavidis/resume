@@ -491,7 +491,7 @@ p {
     position: fixed;
     bottom: 4rem; /* Positioned above the shortcut hint */
     right: 0%; /* Center horizontally */
-    transform: translateX(-10%);
+    transform: translateX(-6%);
     background: rgba(0, 0, 0, 0.6);
     color: white;
     padding: 1rem;

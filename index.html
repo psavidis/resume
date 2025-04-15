@@ -1380,13 +1380,14 @@
 
             // Desktop styling for voice button
             voiceBtn.classList.add('desktop-mic-button');
-            voiceBtn.classList.remove('mobile-mic-button');
+<!--            voiceBtn.classList.remove('mobile-mic-button');-->
         } else {
             // Mobile styling for voice button
             document.getElementById('press-shortcuts').style.visibility = 'hidden';
+            document.getElementById('mic-button').style.visibility = 'hidden';
             document.getElementById('shortcut-hint').style.background = 'none'
-            voiceBtn.classList.add('mobile-mic-button');
-            voiceBtn.classList.remove('desktop-mic-button');
+<!--            voiceBtn.classList.add('mobile-mic-button');-->
+<!--            voiceBtn.classList.remove('desktop-mic-button');-->
         }
 
         // Always show the microphone button
@@ -1523,6 +1524,12 @@
     }
 
     function configureVoice() {
+
+        // Disable voice commands for mobiles
+        if (isMobile()) {
+            return;
+        }
+
         // Check if browser supports the Web Speech API
         window.SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
 
