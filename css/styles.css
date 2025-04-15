@@ -443,6 +443,48 @@ p {
     z-index: 1;
 }
 
+#shortcut-hint button {
+    margin-left: 8px;
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 5px;
+}
+
+#shortcut-hint img {
+    width: 18px;
+    height: 18px;
+}
+
+#mic-button {
+    margin-left: 10px;
+    padding: 0;
+    background: none;
+    border: none;
+    cursor: pointer;
+    z-index: 2;
+}
+
+#voice-command-hint {
+    position: fixed;
+    bottom: 4rem; /* Positioned above the shortcut hint */
+    right: 0%; /* Center horizontally */
+    transform: translateX(-10%);
+    background: rgba(0, 0, 0, 0.6);
+    color: white;
+    padding: 1rem;
+    font-size: 12px;
+    border-radius: 1rem;
+    font-family: 'Courier New', monospace;
+    z-index: 9999;
+    justify-content: center;
+}
+
+
+#voice-command-hint span {
+    margin-right: 10px;
+}
+
 #contact-form-container {
     position: fixed;
     bottom: 20px;

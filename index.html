@@ -189,7 +189,12 @@
     </div>
 </div>
 
-<div id="shortcut-hint" style="display: none;"><b>Press</b> ⌘ + / for shortcuts</div>
+<div id="shortcut-hint">
+    <b>Press</b> ⌘ + / for shortcuts
+    <button id="mic-button" aria-label="Activate voice commands" style="display: inline-block; background-color: transparent; border: none; cursor: pointer;">🎤
+    </button>
+</div>
+
 
 <div class="button-container">
     <button id="email-btn" class="btn"><i class="fas fa-envelope"></i></button>
@@ -212,6 +217,22 @@
         </div>
     </div>
 </div>
+
+<div id="voice-command-hint" style="display:none">
+    <strong>Try saying:</strong><br/>
+    <ul style="margin:0; padding-left: 1rem;">
+        <li>"Open / Close Shortcuts"</li>
+        <li>"Search Java"</li>
+        <li>"Close Search"</li>
+        <li>"Download Resume"</li>
+        <li>"Send Email"</li>
+        <li>"Open LinkedIn"</li>
+        <li>"Open GitHub"</li>
+        <li>"Toggle Dark Mode"</li>
+    </ul>
+</div>
+
+
 <footer>
     <p id="copyright"></p>
 </footer>
@@ -1264,7 +1285,6 @@
 
             // You must manually append your Web3Forms access_key if it's not already inside the form
             formData.access_key = 'fb378ea5-c240-451b-bc68-52b3ce5696f0';
-            formData.access_key = 'fb378ea5-c240-451b-bc68-52b3ce5696f0';
 
             try {
                 loadingMessage.style.display = 'block';
@@ -1361,8 +1381,6 @@
         }
     }
 
-
-
     // Functions: Easter Egg
 
     function showEasterEgg() {
@@ -1413,6 +1431,107 @@
         }
     }
 
+    // Voice Commands
+
+    let recognition;
+    let isListening = false;
+
+    function handleVoiceCommand(command) {
+        console.log("Voice command:", command);
+
+        if (command.startsWith("search ")) {
+            const keyword = command.replace("search ", "").trim();
+
+            const searchBar = document.getElementById('search-bar');
+            const isSearchBarVisible = getComputedStyle(searchBar).display !== 'none';
+
+            if (!isSearchBarVisible) {
+                const searchToggle = document.getElementById('toggle-search');
+                searchToggle.click();
+            }
+
+            searchKeyword(keyword);
+        } else if (command.includes("download resume")) {
+            downloadPage();
+        } else if (command.includes("send email")) {
+            document.getElementById('email-btn').click();
+        } else if (command.includes("open linkedin")) {
+            document.getElementById('linkedin-btn').click();
+        } else if (command.includes("open github")) {
+            document.getElementById("github-btn").click();
+        } else if (command.includes("open location")) {
+            document.getElementById("location-btn").click();
+        } else if (command.includes("toggle dark mode")) {
+            document.getElementById('dark-mode-toggle').click();
+        } else {
+            console.log("Unrecognized command.");
+        }
+    }
+
+    function searchKeyword(keyword) {
+        const input = document.getElementById('search-bar');
+        if (input) {
+            input.value = keyword;
+            input.focus();
+            input.dispatchEvent(new Event('input')); // Optional: if you need to trigger search
+        }
+    }
+
+    function showVoiceGuide() {
+      document.getElementById('voice-command-hint').style.display = 'block';
+    }
+
+    function hideVoiceGuide() {
+      document.getElementById('voice-command-hint').style.display = 'none';
+    }
+
+    function configureVoice() {
+        // Check if browser supports the Web Speech API
+        window.SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+
+        if (!'SpeechRecognition' in window) {
+            return;
+        }
+
+        const recognition = new SpeechRecognition();
+        recognition.continuous = true;
+        recognition.lang = 'en-US';
+
+        // Show the voice command guide when listening
+        recognition.onstart = () => {
+            isListening = true;
+            document.getElementById('voice-command-hint').style.display = 'block';
+            updateMicIcon(true);
+            console.log("Voice recognition started");
+        };
+
+        recognition.onend = () => {
+            isListening = false;
+            document.getElementById('voice-command-hint').style.display = 'none';
+            updateMicIcon(false);
+            console.log("Voice recognition stopped");
+        };
+
+        recognition.onresult = (event) => {
+          const lastResult = event.results[event.results.length - 1];
+          const command = lastResult[0].transcript.toLowerCase().trim();
+          handleVoiceCommand(command);
+        };
+
+        document.getElementById('mic-button').addEventListener('click', () => {
+            if (!isListening) {
+                recognition.start();
+            } else {
+                recognition.stop();
+            }
+        });
+    }
+
+    function updateMicIcon(active) {
+        const micBtn = document.getElementById('mic-button');
+        micBtn.textContent = active ? '🛑' : '🎤';
+    }
+
     // Call functions to load data and initialize the page components
 
     loadResumeData();
@@ -1430,6 +1549,7 @@
 
     configureDarkModeButton();
     configurePushNotificationOnLoad();
+    configureVoice();
 </script>
 </body>
 </html>
