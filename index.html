@@ -1547,6 +1547,7 @@
         recognition.onend = () => {
             isListening = false;
             document.getElementById('voice-command-hint').style.display = 'none';
+            document.getElementById('microphone-btn').classList.remove('recording');
 <!--            console.log("Voice recognition stopped");-->
         };
 
