@@ -221,11 +221,10 @@
 <div id="voice-command-hint" style="display:none">
     <strong>Try saying:</strong><br/>
     <ul style="margin:0; padding-left: 1rem;">
-        <li>"Open / Close Shortcuts"</li>
-        <li>"Search Java"</li>
-        <li>"Close Search"</li>
+        <li>"Open | Close Shortcuts"</li>
+        <li>"Search Java | Close Search"</li>
         <li>"Download Resume"</li>
-        <li>"Send Email"</li>
+        <li>"Send | Close Email"</li>
         <li>"Open LinkedIn"</li>
         <li>"Open GitHub"</li>
         <li>"Toggle Dark Mode"</li>
@@ -1476,6 +1475,12 @@
             downloadPage();
         } else if (command.includes("send email")) {
             document.getElementById('email-btn').click();
+        } else if (command.includes("close email")) {
+            const formContainer = document.getElementById('contact-form-container');
+            const isVisible = formContainer.style.display === 'block'
+            if (isVisible) {
+                document.getElementById('email-btn').click();
+            }
         } else if (command.includes("open linkedin")) {
             document.getElementById('linkedin-btn').click();
         } else if (command.includes("open github")) {
