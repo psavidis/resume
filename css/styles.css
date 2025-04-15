@@ -458,7 +458,7 @@ p {
 
 #microphone-btn {
     position: relative;
-    font-size: 2rem;
+    font-size: 1.5rem;
     background-color: #2c3e50;
     color: white;            /* Icon color */
     border: none;
