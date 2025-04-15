@@ -1460,9 +1460,17 @@
                 searchToggle.click();
             }
         } else if (command.includes("open shortcuts")) {
-
+            const modal = document.getElementById('shortcuts');
+            const isModalOpen = (modal.style.display === 'block' || modal.style.display === '');
+            if (!isModalOpen) {
+                toggleShortcutsModal();
+            }
         } else if (command.includes("close shortcuts")) {
-
+            const modal = document.getElementById('shortcuts');
+            const isModalOpen = (modal.style.display === 'block' || modal.style.display === '');
+            if (isModalOpen) {
+                toggleShortcutsModal();
+            }
         }
         else if (command.includes("download resume")) {
             downloadPage();
