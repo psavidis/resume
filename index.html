@@ -1225,7 +1225,6 @@
         }
     }
 
-
     // Functions: Email
 
     function configureEmail(data) {
@@ -1366,8 +1365,8 @@
     }
 
     // Functions: Easter Egg
+
     function configureBasedOnClient() {
-        const voiceBtn = document.getElementById('microphone-btn');
 
         if (!isMobile()) {
             document.getElementById('shortcut-hint').style.display = 'block';
@@ -1379,7 +1378,6 @@
             document.getElementById('shortcut-hint').style.visibility = 'hidden';
             document.getElementById('microphone-btn').style.visibility = 'hidden';
         }
-
     }
 
     function showEasterEgg() {
@@ -1404,6 +1402,7 @@
     }
 
     // Functions: Push notification
+
     function sendPushNotification() {
         fetch("https://ntfy.sh/my-resume-page", {
             method: "POST",
@@ -1432,7 +1431,6 @@
 
     // Voice Commands
 
-    let recognition;
     let isListening = false;
 
     function handleVoiceCommand(command) {
