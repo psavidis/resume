@@ -191,8 +191,6 @@
 
 <div id="shortcut-hint">
     <span id="press-shortcuts"><b>Press</b> ⌘ + / for shortcuts</span>
-    <button id="mic-button" aria-label="Activate voice commands" style="display: none; background-color: transparent; border: none; cursor: pointer;">🎤
-    </button>
 </div>
 
 <div class="button-container">
@@ -203,10 +201,8 @@
     <button id="github-btn" class="btn"><i class="fab fa-github"></i></button>
     <button id="pdf-btn" class="btn"><i class="fas fa-file-pdf"></i></button>
     <button id="toggle-search" class="btn toggle-button"><i class="fas fa-search"></i></button>
-
-    <button id="dark-mode-toggle" class="btn">
-        <i id="mode-icon" class="fas fa-moon"></i>
-    </button>
+    <button id="dark-mode-toggle" class="btn"><i id="mode-icon" class="fas fa-moon"></i></button>
+    <button id="microphone-btn" class="btn"><i class="fas fa-microphone"></i></button>
 
     <div id="overlay">
         <div id="circle"></div>
@@ -1370,7 +1366,7 @@
 
     // Functions: Easter Egg
     function configureBasedOnClient() {
-        const voiceBtn = document.getElementById('mic-button');
+        const voiceBtn = document.getElementById('microphone-btn');
 
         if (!isMobile()) {
             document.getElementById('shortcut-hint').style.display = 'block';
@@ -1378,20 +1374,12 @@
             configureKeyboardModal();
             registerKeyboardShortcuts();
 
-            // Desktop styling for voice button
-            voiceBtn.classList.add('desktop-mic-button');
-<!--            voiceBtn.classList.remove('mobile-mic-button');-->
         } else {
             // Mobile styling for voice button
             document.getElementById('press-shortcuts').style.visibility = 'hidden';
-            document.getElementById('mic-button').style.visibility = 'hidden';
-            document.getElementById('shortcut-hint').style.background = 'none'
-<!--            voiceBtn.classList.add('mobile-mic-button');-->
-<!--            voiceBtn.classList.remove('desktop-mic-button');-->
+            document.getElementById('microphone-btn').style.visibility = 'hidden';
         }
 
-        // Always show the microphone button
-        voiceBtn.style.display = 'block';
     }
 
     function showEasterEgg() {
@@ -1530,16 +1518,21 @@
             return;
         }
 
+        const micButton = document.getElementById('microphone-btn');
+        micButton.addEventListener('click', () => {
+            micButton.classList.toggle('recording');
+        });
+
         // Check if browser supports the Web Speech API
         window.SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
 
         if (!'SpeechRecognition' in window) {
-            document.getElementById('mic-button').style.display = 'none';
+            document.getElementById('microphone-btn').style.display = 'none';
             document.getElementById('voice-command-hint').style.display = 'none';
             return;
         }
 
-        document.getElementById('mic-button').style.display = 'inline-block';
+        document.getElementById('microphone-btn').style.display = 'inline-block';
 
         const recognition = new SpeechRecognition();
         recognition.continuous = true;
@@ -1549,14 +1542,12 @@
         recognition.onstart = () => {
             isListening = true;
             document.getElementById('voice-command-hint').style.display = 'block';
-            updateMicIcon(true);
 <!--            console.log("Voice recognition started");-->
         };
 
         recognition.onend = () => {
             isListening = false;
             document.getElementById('voice-command-hint').style.display = 'none';
-            updateMicIcon(false);
 <!--            console.log("Voice recognition stopped");-->
         };
 
@@ -1566,18 +1557,13 @@
           handleVoiceCommand(command);
         };
 
-        document.getElementById('mic-button').addEventListener('click', () => {
+        document.getElementById('microphone-btn').addEventListener('click', () => {
             if (!isListening) {
                 recognition.start();
             } else {
                 recognition.stop();
             }
         });
-    }
-
-    function updateMicIcon(active) {
-        const micBtn = document.getElementById('mic-button');
-        micBtn.textContent = active ? '🛑' : '🎤';
     }
 
     // Call functions to load data and initialize the page components
