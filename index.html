@@ -1451,7 +1451,20 @@
             }
 
             searchKeyword(keyword);
-        } else if (command.includes("download resume")) {
+        } else if (command.includes("close search")) {
+            const searchBar = document.getElementById('search-bar');
+            const isSearchBarVisible = getComputedStyle(searchBar).display !== 'none';
+
+            if (isSearchBarVisible) {
+                const searchToggle = document.getElementById('toggle-search');
+                searchToggle.click();
+            }
+        } else if (command.includes("open shortcuts")) {
+
+        } else if (command.includes("close shortcuts")) {
+
+        }
+        else if (command.includes("download resume")) {
             downloadPage();
         } else if (command.includes("send email")) {
             document.getElementById('email-btn').click();
