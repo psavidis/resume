@@ -190,7 +190,7 @@
 </div>
 
 <div id="shortcut-hint">
-    <b>Press</b> ⌘ + / for shortcuts
+    <span id="press-shortcuts"><b>Press</b> ⌘ + / for shortcuts</span>
     <button id="mic-button" aria-label="Activate voice commands" style="display: none; background-color: transparent; border: none; cursor: pointer;">🎤
     </button>
 </div>
@@ -1368,17 +1368,30 @@
         });
     }
 
+    // Functions: Easter Egg
     function configureBasedOnClient() {
-        // desktop config
+        const voiceBtn = document.getElementById('mic-button');
+
         if (!isMobile()) {
             document.getElementById('shortcut-hint').style.display = 'block';
 
             configureKeyboardModal();
             registerKeyboardShortcuts();
-        }
-    }
 
-    // Functions: Easter Egg
+            // Desktop styling for voice button
+            voiceBtn.classList.add('desktop-mic-button');
+            voiceBtn.classList.remove('mobile-mic-button');
+        } else {
+            // Mobile styling for voice button
+            document.getElementById('press-shortcuts').style.visibility = 'hidden';
+            document.getElementById('shortcut-hint').style.background = 'none'
+            voiceBtn.classList.add('mobile-mic-button');
+            voiceBtn.classList.remove('desktop-mic-button');
+        }
+
+        // Always show the microphone button
+        voiceBtn.style.display = 'block';
+    }
 
     function showEasterEgg() {
         console.log("%c 🐇🐰🥚If you see this little easter egg, you are either a developer or a curious recruiter with dev skills! Keep up the good work! 🎉", "font-size:16px; color: teal; background: black; padding: 4px");
