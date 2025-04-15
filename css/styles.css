@@ -436,7 +436,7 @@ p {
     right: 10px;
     background: rgba(0,0,0,0.6);
     color: white;
-    padding: 5px 10px;
+    padding: 5px 5px;
     font-size: 12px;
     border-radius: 5px;
     font-family: 'Courier New', monospace;
@@ -466,32 +466,11 @@ p {
     justify-content: center;
 }
 
-.desktop-mic-button {
-    width: 40px;
-    height: 40px;
-    border-radius: 4px;
-    font-size: 16px;
-}
-
-/* Mobile version */
-.mobile-mic-button {
-    background-color: white !important;
-    width: 60px;
-    height: 60px;
-    border-radius: 50%;
-    font-size: 20px;
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-    z-index: 1000;
-}
-
 #voice-command-hint {
     position: fixed;
     bottom: 4rem; /* Positioned above the shortcut hint */
     right: 0%; /* Center horizontally */
-    transform: translateX(-6%);
+    transform: translateX(-1%);
     background: rgba(0, 0, 0, 0.6);
     color: white;
     padding: 1rem;
