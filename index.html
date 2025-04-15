@@ -21,28 +21,29 @@
     <!-- Default Statcounter code for My Live Resume -->
     <script>
         function shouldTrack() {
-          const urlParams = new URLSearchParams(window.location.search);
-          return urlParams.get('no-track') !== 'true';
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get('no-track') !== 'true';
         }
 
         if (shouldTrack()) {
-          // Define vars before loading script
-          var sc_project = 13118834;
-          var sc_invisible = 1;
-          var sc_security = "69f9f1f5";
+            // Define vars before loading script
+            var sc_project = 13118834;
+            var sc_invisible = 1;
+            var sc_security = "69f9f1f5";
 
-          // Dynamically load the script
-          var sc = document.createElement('script');
-          sc.src = 'https://www.statcounter.com/counter/counter.js';
-          sc.async = true;
-          document.head.appendChild(sc);
+            // Dynamically load the script
+            var sc = document.createElement('script');
+            sc.src = 'https://www.statcounter.com/counter/counter.js';
+            sc.async = true;
+            document.head.appendChild(sc);
         }
     </script>
 
     <noscript>
         <div class="statcounter">
             <a title="Web Analytics" href="https://statcounter.com/" target="_blank">
-                <img class="statcounter" src="https://c.statcounter.com/13118834/0/69f9f1f5/1/" alt="Web Analytics" referrerPolicy="no-referrer-when-downgrade">
+                <img class="statcounter" src="https://c.statcounter.com/13118834/0/69f9f1f5/1/" alt="Web Analytics"
+                     referrerPolicy="no-referrer-when-downgrade">
             </a>
         </div>
     </noscript>
@@ -1125,7 +1126,7 @@
 
     function configureKeyboardModal() {
         toggleShortcutsModal();
-        document.addEventListener('keydown', function(event) {
+        document.addEventListener('keydown', function (event) {
             const isMac = navigator.platform.toUpperCase().indexOf('MAC') >= 0;
 
             if ((isMac && event.metaKey && event.key === '/') || (!isMac && event.ctrlKey && event.key === '/')) {
@@ -1388,8 +1389,8 @@
 
         // Display the clickable link in the console
         console.log(`%cClick here to test the magic: %c${testPageUrl}`,
-                    "font-size: 16px; color: #28a745; background: #000; padding: 4px;",
-                    "font-size: 16px; color: #007bff; text-decoration: underline;");
+            "font-size: 16px; color: #28a745; background: #000; padding: 4px;",
+            "font-size: 16px; color: #007bff; text-decoration: underline;");
     }
 
     // Functions: Copyright
@@ -1404,28 +1405,28 @@
 
     // Functions: Push notification
     function sendPushNotification() {
-      fetch("https://ntfy.sh/my-resume-page", {
-        method: "POST",
-        body: "📄 New visitor on your resume!",
-        headers: {
-          "Title": "Resume Page View"
-        }
-      })
-      .then(response => {
-        if (!response.ok) {
-          throw new Error("Failed to send push notification");
-        }
-      })
-      .catch(error => {
-        console.error("❌ Push notification failed:", error);
-        // Retry after a short delay
-        setTimeout(sendPushNotification, 3000);
-      });
+        fetch("https://ntfy.sh/my-resume-page", {
+            method: "POST",
+            body: "📄 New visitor on your resume!",
+            headers: {
+                "Title": "Resume Page View"
+            }
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error("Failed to send push notification");
+                }
+            })
+            .catch(error => {
+                console.error("❌ Push notification failed:", error);
+                // Retry after a short delay
+                setTimeout(sendPushNotification, 3000);
+            });
     }
 
     function configurePushNotificationOnLoad() {
         if (location.hostname !== "localhost") {
-          window.addEventListener('load', sendPushNotification);
+            window.addEventListener('load', sendPushNotification);
         }
     }
 
@@ -1435,7 +1436,7 @@
     let isListening = false;
 
     function handleVoiceCommand(command) {
-<!--        console.log("Voice command:", command);-->
+        <!--        console.log("Voice command:", command);-->
 
         if (command.startsWith("search ")) {
             const keyword = command.replace("search ", "").trim();
@@ -1469,8 +1470,7 @@
             if (isModalOpen) {
                 toggleShortcutsModal();
             }
-        }
-        else if (command.includes("download resume")) {
+        } else if (command.includes("download resume")) {
             downloadPage();
         } else if (command.includes("send email")) {
             document.getElementById('email-btn').click();
@@ -1489,7 +1489,7 @@
         } else if (command.includes("toggle dark mode")) {
             document.getElementById('dark-mode-toggle').click();
         } else {
-<!--            console.log("Unrecognized command.");-->
+            <!--            console.log("Unrecognized command.");-->
         }
     }
 
@@ -1500,14 +1500,6 @@
             input.focus();
             input.dispatchEvent(new Event('input')); // Optional: if you need to trigger search
         }
-    }
-
-    function showVoiceGuide() {
-      document.getElementById('voice-command-hint').style.display = 'block';
-    }
-
-    function hideVoiceGuide() {
-      document.getElementById('voice-command-hint').style.display = 'none';
     }
 
     function configureVoice() {
@@ -1541,20 +1533,20 @@
         recognition.onstart = () => {
             isListening = true;
             document.getElementById('voice-command-hint').style.display = 'block';
-<!--            console.log("Voice recognition started");-->
+            <!--            console.log("Voice recognition started");-->
         };
 
         recognition.onend = () => {
             isListening = false;
             document.getElementById('voice-command-hint').style.display = 'none';
             document.getElementById('microphone-btn').classList.remove('recording');
-<!--            console.log("Voice recognition stopped");-->
+            <!--            console.log("Voice recognition stopped");-->
         };
 
         recognition.onresult = (event) => {
-          const lastResult = event.results[event.results.length - 1];
-          const command = lastResult[0].transcript.toLowerCase().trim();
-          handleVoiceCommand(command);
+            const lastResult = event.results[event.results.length - 1];
+            const command = lastResult[0].transcript.toLowerCase().trim();
+            handleVoiceCommand(command);
         };
 
         document.getElementById('microphone-btn').addEventListener('click', () => {
