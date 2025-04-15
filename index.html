@@ -191,10 +191,9 @@
 
 <div id="shortcut-hint">
     <b>Press</b> ⌘ + / for shortcuts
-    <button id="mic-button" aria-label="Activate voice commands" style="display: inline-block; background-color: transparent; border: none; cursor: pointer;">🎤
+    <button id="mic-button" aria-label="Activate voice commands" style="display: none; background-color: transparent; border: none; cursor: pointer;">🎤
     </button>
 </div>
-
 
 <div class="button-container">
     <button id="email-btn" class="btn"><i class="fas fa-envelope"></i></button>
@@ -230,7 +229,6 @@
         <li>"Toggle Dark Mode"</li>
     </ul>
 </div>
-
 
 <footer>
     <p id="copyright"></p>
@@ -1516,8 +1514,12 @@
         window.SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
 
         if (!'SpeechRecognition' in window) {
+            document.getElementById('mic-button').style.display = 'none';
+            document.getElementById('voice-command-hint').style.display = 'none';
             return;
         }
+
+        document.getElementById('mic-button').style.display = 'inline-block';
 
         const recognition = new SpeechRecognition();
         recognition.continuous = true;
