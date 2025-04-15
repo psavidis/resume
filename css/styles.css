@@ -443,6 +443,70 @@ p {
     z-index: 1;
 }
 
+#shortcut-hint button {
+    margin-left: 8px;
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 5px;
+}
+
+#shortcut-hint img {
+    width: 18px;
+    height: 18px;
+}
+
+#mic-button {
+    background-color: #333;
+    color: white;
+    border: none;
+    cursor: pointer;
+    display: none; /* Hidden by default until JS enables it */
+    align-items: center;
+    justify-content: center;
+}
+
+.desktop-mic-button {
+    width: 40px;
+    height: 40px;
+    border-radius: 4px;
+    font-size: 16px;
+}
+
+/* Mobile version */
+.mobile-mic-button {
+    background-color: white !important;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    font-size: 20px;
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    z-index: 1000;
+}
+
+#voice-command-hint {
+    position: fixed;
+    bottom: 4rem; /* Positioned above the shortcut hint */
+    right: 0%; /* Center horizontally */
+    transform: translateX(-10%);
+    background: rgba(0, 0, 0, 0.6);
+    color: white;
+    padding: 1rem;
+    font-size: 12px;
+    border-radius: 1rem;
+    font-family: 'Courier New', monospace;
+    z-index: 9999;
+    justify-content: center;
+}
+
+
+#voice-command-hint span {
+    margin-right: 10px;
+}
+
 #contact-form-container {
     position: fixed;
     bottom: 20px;

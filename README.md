@@ -55,12 +55,17 @@ My resume should support:
   - For mobile devices, the resume uses the mailto directive to open the default email client which serves a good user experience.
 - **Dark Mode**
   - The resume supports a dark theme as well ❤️ 
+- **Push Notifications**
+  - I get push notifications for page views on my phone
+- **Voice Commands**
+  - You can interact with the features of my resume with voice commands 🗣️
 
 ### Libraries
 
 - [html2pdf](https://ekoopmans.github.io/html2pdf.js/)
 - [Google Fonts](https://fonts.google.com/)
 - [Font Awesome](https://fontawesome.com/)
+- [Web Speech API](https://developer.mozilla.org/en-US/docs/Web/API/Web_Speech_API)
 
 ### PDF Rendering Issues
 
