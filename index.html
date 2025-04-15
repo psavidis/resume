@@ -1436,7 +1436,7 @@
     let isListening = false;
 
     function handleVoiceCommand(command) {
-        console.log("Voice command:", command);
+<!--        console.log("Voice command:", command);-->
 
         if (command.startsWith("search ")) {
             const keyword = command.replace("search ", "").trim();
@@ -1490,7 +1490,7 @@
         } else if (command.includes("toggle dark mode")) {
             document.getElementById('dark-mode-toggle').click();
         } else {
-            console.log("Unrecognized command.");
+<!--            console.log("Unrecognized command.");-->
         }
     }
 
@@ -1528,14 +1528,14 @@
             isListening = true;
             document.getElementById('voice-command-hint').style.display = 'block';
             updateMicIcon(true);
-            console.log("Voice recognition started");
+<!--            console.log("Voice recognition started");-->
         };
 
         recognition.onend = () => {
             isListening = false;
             document.getElementById('voice-command-hint').style.display = 'none';
             updateMicIcon(false);
-            console.log("Voice recognition stopped");
+<!--            console.log("Voice recognition stopped");-->
         };
 
         recognition.onresult = (event) => {
