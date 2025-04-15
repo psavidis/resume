@@ -96,7 +96,7 @@
         "SVN"
       ],
       "links": {
-        "Project" : "https://www.pamap.org/"
+        "Project": "https://www.pamap.org/"
       }
     },
     {
@@ -181,9 +181,9 @@
         "Sonar"
       ],
       "links": {
-        "Belgium" : "https://bpp.economie.fgov.be/bpp-portal/",
-        "Netherland" : "https://mijnoctrooi.rvo.nl/bpp-portal/",
-        "Luxembourg" : "https://patent.public.lu/bpp-portal/"
+        "Belgium": "https://bpp.economie.fgov.be/bpp-portal/",
+        "Netherland": "https://mijnoctrooi.rvo.nl/bpp-portal/",
+        "Luxembourg": "https://patent.public.lu/bpp-portal/"
       }
     },
     {
@@ -375,7 +375,6 @@
         "My Commits": "https://github.com/camunda/camunda-bpm-platform/issues?q=is%3Aissue%20state%3Aclosed%20assignee%3Apsavidis&page=1"
       }
     }
-
   ],
   "education": [
     {

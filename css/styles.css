@@ -6,6 +6,7 @@ body {
     color: #333;
     overflow-x: hidden;
 }
+
 .container {
     max-width: 800px;
     margin: 50px auto;
@@ -23,6 +24,7 @@ body {
     max-height: 100%;
     overflow: auto; /* Ensure the content is scrollable */
 }
+
 h1 {
     text-align: center;
     color: #2c3e50;
@@ -30,6 +32,7 @@ h1 {
     margin-bottom: 10px;
     animation: slideIn 1s ease-in-out;
 }
+
 h2 {
     text-align: left;
     color: #1e3c72;
@@ -38,14 +41,17 @@ h2 {
     margin-bottom: 15px;
     font-size: 1.5em;
 }
+
 .section {
     margin: 30px 0;
     animation: fadeInUp 1.2s ease-in-out;
 }
+
 .section ul {
     list-style-type: none;
     padding: 0;
 }
+
 .section ul li {
     margin-bottom: 15px;
     padding: 15px;
@@ -55,10 +61,12 @@ h2 {
     box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
     transition: transform 0.3s ease, background 0.3s ease;
 }
+
 .section ul li:hover {
     transform: scale(1.03);
     background: #e9f4ff;
 }
+
 p {
     text-align: center;
     font-size: 1.2em;
@@ -75,6 +83,7 @@ p {
     align-items: center; /* Vertically align the buttons */
     gap: 10px; /* Add some space between the buttons */
 }
+
 .btn {
     background-color: #2c3e50;
     color: white;
@@ -92,6 +101,7 @@ p {
 .btn:hover {
     background-color: #FFC107;
 }
+
 .btn i {
     font-size: 1.2em;
 }
@@ -99,7 +109,7 @@ p {
 .profile-title {
     font-family: 'Poppins', sans-serif; /* or Poppins, Raleway, etc */
     font-size: 2.0em; /* slightly bigger */
-    letter-spacing:1px; /* optional: a bit wider spacing for style */
+    letter-spacing: 1px; /* optional: a bit wider spacing for style */
     color: #222; /* optional: a little darker if you want it to pop more */
 }
 
@@ -332,7 +342,7 @@ p {
 }
 
 .emoji-flags img {
-    width: 24px;  /* smaller flag size */
+    width: 24px; /* smaller flag size */
 }
 
 
@@ -424,7 +434,7 @@ p {
     padding: 2px 6px;
     margin: 0 2px;
     border-radius: 5px;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
     font-weight: bold;
     font-size: 0.85em;
     color: #333;
@@ -434,7 +444,7 @@ p {
     position: fixed;
     bottom: 10px;
     right: 10px;
-    background: rgba(0,0,0,0.6);
+    background: rgba(0, 0, 0, 0.6);
     color: white;
     padding: 5px 5px;
     font-size: 12px;
@@ -460,9 +470,9 @@ p {
     position: relative;
     font-size: 1.5rem;
     background-color: #2c3e50;
-    color: white;            /* Icon color */
+    color: white; /* Icon color */
     border: none;
-    border-radius: 50%;      /* Make it fully round */
+    border-radius: 50%; /* Make it fully round */
     cursor: pointer;
     padding: 10px;
     margin: 5px;
@@ -477,29 +487,29 @@ p {
 
 /* Optional: Hover effect */
 #microphone-btn:hover {
-  background-color: #FFC107;
+    background-color: #FFC107;
 }
 
 /* Icon color */
 #microphone-btn i {
-  color: white;
-  z-index: 1;
+    color: white;
+    z-index: 1;
 }
 
 /* "REC" overlay badge when recording */
 #microphone-btn.recording::after {
-  content: "REC";
-  position: absolute;
-  top: 4px;
-  right: 4px;
-  background-color: red;
-  color: white;
-  padding: 2px 5px;
-  border-radius: 3px;
-  font-size: 0.6rem;
-  font-weight: bold;
-  font-family: sans-serif;
-  z-index: 2;
+    content: "REC";
+    position: absolute;
+    top: 4px;
+    right: 4px;
+    background-color: red;
+    color: white;
+    padding: 2px 5px;
+    border-radius: 3px;
+    font-size: 0.6rem;
+    font-weight: bold;
+    font-family: sans-serif;
+    z-index: 2;
 }
 
 #voice-command-hint {
@@ -630,15 +640,15 @@ p {
 }
 
 #thank-you-message {
-    opacity: 0;             /* Initially hidden */
-    visibility: hidden;     /* Initially hidden */
+    opacity: 0; /* Initially hidden */
+    visibility: hidden; /* Initially hidden */
     transition: opacity 1s ease-in-out, visibility 0s 1s; /* Delay visibility change until opacity finishes */
 }
 
 #thank-you-message.show {
-    opacity: 1;             /* Fade-in effect */
-    visibility: visible;    /* Make it visible */
-    transition: opacity 1s ease-in-out, visibility 0s;  /* Make visibility change instantly after opacity */
+    opacity: 1; /* Fade-in effect */
+    visibility: visible; /* Make it visible */
+    transition: opacity 1s ease-in-out, visibility 0s; /* Make visibility change instantly after opacity */
 }
 
 /* Fade out animation for the form */
@@ -668,6 +678,7 @@ p {
         transform: translateY(0);
     }
 }
+
 @keyframes slideIn {
     from {
         opacity: 0;
@@ -678,6 +689,7 @@ p {
         transform: translateX(0);
     }
 }
+
 @keyframes fadeInUp {
     from {
         opacity: 0;
@@ -764,16 +776,15 @@ button.dark-mode i {
 }
 
 .project-description {
-  font-size: 0.95em; /* just slightly smaller */
-  color: #777; /* gentle gray */
-  font-weight: 400; /* normal weight, not too bold, not too light */
-  opacity: 0.85; /* slight fade to make it feel less aggressive */
-  margin-bottom: 10px;
+    font-size: 0.95em; /* just slightly smaller */
+    color: #777; /* gentle gray */
+    font-weight: 400; /* normal weight, not too bold, not too light */
+    opacity: 0.85; /* slight fade to make it feel less aggressive */
+    margin-bottom: 10px;
 }
 
 .project-button {
-    background-color: #007
-    .bff;
+    background-color: #007.bff;
     color: white;
     padding: 5px 10px;
     border: none;
@@ -895,13 +906,13 @@ body.dark-mode #Projects {
 }
 
 body.dark-mode .project-li {
-    background-color: #2a2a2a !important;  /* Force dark mode background */
+    background-color: #2a2a2a !important; /* Force dark mode background */
     border: 0 !important;
     color: #e0e0e0;
 }
 
 body.dark-mode .project-li:hover {
-    background-color: #333333 !important;  /* Force dark mode hover effect */
+    background-color: #333333 !important; /* Force dark mode hover effect */
 }
 
 body.dark-mode .project-title {
@@ -911,8 +922,8 @@ body.dark-mode .project-title {
 body.dark-mode .project-description {
     color: #ded9e9 !important;
 }
-body.dark-mode .project-points,
 
+body.dark-mode .project-points,
 body.dark-mode .project-tech {
     color: #c4bfd6 !important;
 }
@@ -929,13 +940,13 @@ body.dark-mode .project-button:hover {
 /* Dark Mode Styles */
 
 body.dark-mode .experience-list {
-    background-color: #121212;  /* Dark background for the list */
+    background-color: #121212; /* Dark background for the list */
 }
 
 body.dark-mode .section ul li {
     border: 0px !important;
     background: linear-gradient(145deg, #3e2a47, #1a1a1a);
-    color: #e0e0e0 !important;     /* Light text color */
+    color: #e0e0e0 !important; /* Light text color */
     /*border: 1px solid #444 !important; !* Darker border *!*/
 }
 
@@ -953,7 +964,7 @@ body.dark-mode .project-button {
 }
 
 body.dark-mode .experience-li:hover {
-    background-color: #333333 !important;  /* Force dark mode hover effect */
+    background-color: #333333 !important; /* Force dark mode hover effect */
 }
 
 body.dark-mode .experience-title {
@@ -976,15 +987,15 @@ body.dark-mode .experience-button:hover {
 
 body.dark-mode #shortcuts {
     background-color: #2a2a2a !important; /* Dark background for the entire section */
-    color: #e0e0e0 !important;            /* Light text color */
+    color: #e0e0e0 !important; /* Light text color */
 }
 
 body.dark-mode #shortcuts h2 {
-    color: #ffffff !important;            /* Light color for the heading */
+    color: #ffffff !important; /* Light color for the heading */
 }
 
 body.dark-mode #shortcuts ul li {
-    color: #e0e0e0 !important;           /* Light text color for list items */
+    color: #e0e0e0 !important; /* Light text color for list items */
 }
 
 body.dark-mode #shortcuts ul li:hover {
@@ -1008,25 +1019,25 @@ body.dark-mode {
 }
 
 body.dark-mode #shortcuts {
-    background: linear-gradient(145deg, #3e2a47, #141414);  /* Darker gradient for shortcuts */
-    color: #e0e0e0;  /* Light text color */
+    background: linear-gradient(145deg, #3e2a47, #141414); /* Darker gradient for shortcuts */
+    color: #e0e0e0; /* Light text color */
 }
 
 body.dark-mode .summary-all {
-    background: linear-gradient(145deg, #3e2a47, #141414);  /* Dark gradient background */
-    color: #e0e0e0;  /* Light text color */
+    background: linear-gradient(145deg, #3e2a47, #141414); /* Dark gradient background */
+    color: #e0e0e0; /* Light text color */
     padding: 20px;
     border-radius: 10px;
 }
 
 /* Heading inside .summary-all */
 body.dark-mode .summary-all h2 {
-    color: #ffffff;  /* Light color for the heading */
+    color: #ffffff; /* Light color for the heading */
 }
 
 /* Paragraphs inside .summary-all */
 body.dark-mode .summary-all p {
-    color: #b0b0b0;  /* Slightly lighter text color */
+    color: #b0b0b0; /* Slightly lighter text color */
     line-height: 1.6;
 }
 
@@ -1038,7 +1049,7 @@ body.dark-mode .summary-all ul li {
 }
 
 body.dark-mode .summary-all ul li:hover {
-    background: linear-gradient(145deg, #5b3a6a, #2a2a2a);  /* Dark Purple to Black Gradient Hover */
+    background: linear-gradient(145deg, #5b3a6a, #2a2a2a); /* Dark Purple to Black Gradient Hover */
 }
 
 body.dark-mode .highlight {
@@ -1123,7 +1134,7 @@ body.dark-mode #copyButton:hover {
 
 body.dark-mode #circle {
     position: absolute;
-    background-color: #8a2be2;  /* Purple background for dark mode */
+    background-color: #8a2be2; /* Purple background for dark mode */
     border-radius: 50%;
     width: 0;
     height: 0;
@@ -1132,29 +1143,29 @@ body.dark-mode #circle {
 }
 
 body.dark-mode #phoneButton.clicked + #overlay #circle {
-    background-color: #9b4eaf;  /* Slightly lighter purple when clicked */
+    background-color: #9b4eaf; /* Slightly lighter purple when clicked */
     box-shadow: 0 0 15px rgba(143, 95, 208, 0.7); /* Glowing effect */
-    transform: scale(5);  /* Enlarging the circle on click */
+    transform: scale(5); /* Enlarging the circle on click */
 }
 
 input:-webkit-autofill::first-line {
-    color: #e0e0e0 !important;            /* Ensure the text color is consistent */
+    color: #e0e0e0 !important; /* Ensure the text color is consistent */
 }
 
 /* Webkit-based browsers (Chrome, Safari, etc.) */
 input:-webkit-autofill {
-    background-color: #2a2a2a !important;  /* Dark background */
-    color: #e0e0e0 !important;            /* Light text color */
-    border: 1px solid #444 !important;    /* Optional: Consistent border */
-    box-shadow: 0 0 0 30px #2a2a2a inset !important;  /* Important to override background color */
+    background-color: #2a2a2a !important; /* Dark background */
+    color: #e0e0e0 !important; /* Light text color */
+    border: 1px solid #444 !important; /* Optional: Consistent border */
+    box-shadow: 0 0 0 30px #2a2a2a inset !important; /* Important to override background color */
 }
 
 /* Firefox */
 input:-moz-autofill {
-    background-color: #2a2a2a !important;  /* Dark background */
-    color: #e0e0e0 !important;            /* Light text color */
-    border: 1px solid #444 !important;    /* Optional: Consistent border */
-    box-shadow: 0 0 0 30px #2a2a2a inset !important;  /* Important to override background color */
+    background-color: #2a2a2a !important; /* Dark background */
+    color: #e0e0e0 !important; /* Light text color */
+    border: 1px solid #444 !important; /* Optional: Consistent border */
+    box-shadow: 0 0 0 30px #2a2a2a inset !important; /* Important to override background color */
 }
 
 #copyright {
