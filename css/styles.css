@@ -1065,6 +1065,20 @@ body.dark-mode .btn {
     transition: background 0.3s, transform 0.2s, color 0.3s;
 }
 
+body.dark-mode #microphone-btn {
+    background: linear-gradient(145deg, #2e2a36, #1c1c24);
+    color: #c9b6e4;
+    border: 1px solid #444;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5);
+    transition: background 0.3s, transform 0.2s, color 0.3s;
+}
+
+body.dark-mode #microphone-btn:hover {
+    background: linear-gradient(145deg, #3e2a47, #1f1f2a);
+    color: #ffffff;
+    transform: translateY(-2px);
+}
+
 body.dark-mode .btn:hover {
     background: linear-gradient(145deg, #3e2a47, #1f1f2a); /* Slightly lighter purple-black on hover */
     color: #ffffff; /* Brighter text on hover */
