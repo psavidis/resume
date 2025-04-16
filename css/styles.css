@@ -485,6 +485,14 @@ p {
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Optional: add shadow like other buttons */
 }
 
+#microphone-btn.glowing i {
+    color: #4fc3f7;
+    text-shadow:
+            0 0 6px #4fc3f7,
+            0 0 12px rgba(33, 150, 243, 0.7), /* deeper blue */
+            0 0 20px rgba(33, 150, 243, 0.5); /* outer glow */
+}
+
 /* Optional: Hover effect */
 #microphone-btn:hover {
     background-color: #FFC107;
@@ -499,7 +507,7 @@ p {
 #microphone-btn.recording::after {
     content: "REC";
     position: absolute;
-    top: 4px;
+    top: -8px;
     right: 4px;
     background-color: red;
     color: white;
@@ -1049,6 +1057,14 @@ body.dark-mode #microphone-btn {
     border: 1px solid #444;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5);
     transition: background 0.3s, transform 0.2s, color 0.3s;
+}
+
+body.dark-mode #microphone-btn.glowing i {
+    color: #b388ff;
+    text-shadow:
+            0 0 6px #b388ff,
+            0 0 10px rgba(179, 136, 255, 0.6),
+            0 0 18px rgba(179, 136, 255, 0.4);
 }
 
 body.dark-mode #microphone-btn:hover {

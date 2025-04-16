@@ -1540,6 +1540,7 @@
         recognition.onstart = () => {
             isListening = true;
             document.getElementById('voice-command-hint').style.display = 'block';
+            startMicGlow();
             <!--            console.log("Voice recognition started");-->
         };
 
@@ -1547,6 +1548,7 @@
             isListening = false;
             document.getElementById('voice-command-hint').style.display = 'none';
             document.getElementById('microphone-btn').classList.remove('recording');
+            stopMicGlow();
             <!--            console.log("Voice recognition stopped");-->
         };
 
@@ -1563,6 +1565,46 @@
                 recognition.stop();
             }
         });
+    }
+
+    let audioCtx;
+    let analyser;
+    let micStream;
+    let animationId;
+    const micBtn = document.getElementById('microphone-btn');
+
+    async function startMicGlow() {
+        micStream = await navigator.mediaDevices.getUserMedia({ audio: true });
+        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        const source = audioCtx.createMediaStreamSource(micStream);
+        analyser = audioCtx.createAnalyser();
+        source.connect(analyser);
+        analyser.fftSize = 256;
+        const dataArray = new Uint8Array(analyser.frequencyBinCount);
+
+        function animate() {
+            animationId = requestAnimationFrame(animate);
+            analyser.getByteFrequencyData(dataArray);
+            const average = dataArray.reduce((a, b) => a + b) / dataArray.length;
+            if (average > 10) {
+                micBtn.classList.add('glowing');
+            } else {
+                micBtn.classList.remove('glowing');
+            }
+        }
+
+        animate();
+    }
+
+    function stopMicGlow() {
+        if (animationId) cancelAnimationFrame(animationId);
+        if (micStream) {
+            micStream.getTracks().forEach(track => track.stop());
+        }
+        if (audioCtx) {
+            audioCtx.close();
+        }
+        micBtn.classList.remove('glowing');
     }
 
     // Call functions to load data and initialize the page components
