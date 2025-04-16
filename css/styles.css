@@ -879,7 +879,7 @@ button.dark-mode i {
 
 /* Dark Mode Styles */
 body.dark-mode #Projects {
-    background: linear-gradient(145deg, #2c2c2c, #1b1b1b);
+    background: #1e1e1e;
     color: #e0e0e0;
 }
 
