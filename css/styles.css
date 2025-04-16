@@ -747,12 +747,6 @@ button.dark-mode i {
     transform: rotate(180deg); /* Rotate icon for a fun effect */
 }
 
-/* Base styles for projects */
-#Projects {
-    background-color: white;
-    color: black;
-}
-
 .project-li {
     background-color: #f9f9f9;
     padding: 10px;
@@ -790,11 +784,33 @@ button.dark-mode i {
     cursor: pointer;
 }
 
-/* Base styles for projects */
-#Projects {
-    background-color: white;
-    color: black;
-    padding: 20px;
+.project-li {
+    background-color: #f9f9f9;
+    padding: 10px;
+    margin: 5px 0;
+    border: 1px solid #ccc;
+}
+
+.project-li:hover {
+    background-color: #e9e9e9;
+}
+
+.project-title {
+    font-weight: bold;
+    font-size: 1.2rem;
+}
+
+.project-description, .project-points, .project-tech {
+    font-size: 1rem;
+    color: #333;
+}
+
+.project-button {
+    background-color: #007bff;
+    color: white;
+    padding: 5px 10px;
+    border: none;
+    cursor: pointer;
 }
 
 .project-li {
@@ -830,43 +846,6 @@ button.dark-mode i {
 #Projects {
     background-color: white;
     color: black;
-    padding: 20px;
-}
-
-.project-li {
-    background-color: #f9f9f9;
-    padding: 10px;
-    margin: 5px 0;
-    border: 1px solid #ccc;
-}
-
-.project-li:hover {
-    background-color: #e9e9e9;
-}
-
-.project-title {
-    font-weight: bold;
-    font-size: 1.2rem;
-}
-
-.project-description, .project-points, .project-tech {
-    font-size: 1rem;
-    color: #333;
-}
-
-.project-button {
-    background-color: #007bff;
-    color: white;
-    padding: 5px 10px;
-    border: none;
-    cursor: pointer;
-}
-
-/* Base styles for projects */
-#Projects {
-    background-color: white;
-    color: black;
-    padding: 20px;
 }
 
 .project-li {
