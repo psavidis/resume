@@ -1432,7 +1432,7 @@
     }
 
     function configurePushNotificationOnLoad() {
-        if (location.hostname !== "localhost") {
+        if (location.hostname !== "localhost" && shouldTrack()) {
             window.addEventListener('load', sendPushNotification);
         }
     }
