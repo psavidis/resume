@@ -58,7 +58,7 @@ My resume should support:
 - **Push Notifications**
   - I get push notifications for page views on my phone
 - **Voice Commands**
-  - You can interact with the features of my resume with voice commands 🗣️
+  - You can interact with the features of my resume with voice commands if your browser supports them 🗣️
 
 ### Libraries
 
