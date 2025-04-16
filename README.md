@@ -18,7 +18,7 @@ But the best reasons of all are
 - Because I _can_ 😎 
 - Why not 🙃
 
-The above reasons made me contemplate of requirements for my project.
+The above made me contemplate of requirements for my project.
 
 ### Functional Requirements:
 
@@ -59,6 +59,8 @@ My resume should support:
   - I get push notifications for page views on my phone
 - **Voice Commands**
   - You can interact with the features of my resume with voice commands if your browser supports them 🗣️
+- **QR Code + URL in PDF**
+  - Lets people access the live version even if links are stripped
 
 ### Libraries
 
