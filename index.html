@@ -1513,9 +1513,10 @@
         });
 
         // Check if browser supports the Web Speech API
-        window.SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
 
-        if (!'SpeechRecognition' in window) {
+        if (!SpeechRecognition) {
+            console.log('Browser does not support speech recognition');
             document.getElementById('microphone-btn').style.display = 'none';
             document.getElementById('voice-command-hint').style.display = 'none';
             return;
