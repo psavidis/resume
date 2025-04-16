@@ -20,7 +20,7 @@ But the best reasons of all are
 
 The above made me contemplate of requirements for my project.
 
-### Functional Requirements
+## Functional Requirements
 
 My resume should support:
 
@@ -30,13 +30,13 @@ My resume should support:
 - Data Separation: Data has to be updated individually without affecting the presentation
 - Collapsible Cards for modelling my experience
 
-### Technical Requirements
+## Technical Requirements
 - Git Support
 - Frontend Application using JS without a Backend
 - Github Pages Hosting
 - All Resume Data will be loaded by a JSON file
 
-### Features
+## Features
 
 - **Responsive Design**: The resume can be loaded on any device
   - For smaller screens, there is a little compromise with the buttons appearing at the top of the screen. This is an acceptable trait for my project.
@@ -62,26 +62,26 @@ My resume should support:
 - **QR Code + URL in PDF**
   - Lets people access the live version even if links are stripped
 
-### Libraries
+## Libraries
 
 - [html2pdf](https://ekoopmans.github.io/html2pdf.js/)
 - [Google Fonts](https://fonts.google.com/)
 - [Font Awesome](https://fontawesome.com/)
 - [Web Speech API](https://developer.mozilla.org/en-US/docs/Web/API/Web_Speech_API)
 
-### PDF Rendering Issues
+## PDF Rendering Issues
 
 My official resume cannot afford to malfunction. Thus, the download PDF function for production always points to the latest
 static PDF rendered. If `productionMode` is set to `false`, the resume renders the PDF on the fly.
 
 **Note**: This was identified to be problematic for Apple devices and thus a static PDF is used for production.
 
-### Business Social Platform Issues
+## Business Social Platform Issues
 
 There are platforms which perform link processing for security reasons. This is a problem for my resume as the links are not clickable.
 To mitigate this issue, I've included a QR code for pdf-first user journeys and a clear visible link that can be copy-pasted.
 
-### For Me
+## For Me
 
 - See Analytics [here](https://statcounter.com/p13118834/summary/).
 - [Ntfy.sh](https://ntfy.sh/) is used to push notifications to my phone of page views
