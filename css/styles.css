@@ -1085,6 +1085,17 @@ body.dark-mode .btn:hover {
     transform: translateY(-2px); /* Subtle lift effect */
 }
 
+body.dark-mode #voice-command-hint {
+    background: linear-gradient(145deg, #3e2a47, #1f1f2a); /* Dark gradient */
+    color: #c9b6e4; /* Soft lavender or light color */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5); /* Optional: subtle shadow */
+    border: 1px solid #444;
+}
+
+body.dark-mode #voice-command-hint span {
+    color: #e0e0e0;
+}
+
 body.dark-mode .profile-title {
     color: #ffffff !important;
 }
