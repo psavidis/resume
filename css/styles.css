@@ -523,7 +523,7 @@ p {
     font-size: 12px;
     border-radius: 1rem;
     font-family: 'Courier New', monospace;
-    z-index: 9999;
+    z-index: 1;
     justify-content: center;
 }
 
