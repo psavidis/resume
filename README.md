@@ -20,7 +20,7 @@ But the best reasons of all are
 
 The above made me contemplate of requirements for my project.
 
-### Functional Requirements:
+### Functional Requirements
 
 My resume should support:
 
@@ -30,7 +30,7 @@ My resume should support:
 - Data Separation: Data has to be updated individually without affecting the presentation
 - Collapsible Cards for modelling my experience
 
-### Technical Requirements:
+### Technical Requirements
 - Git Support
 - Frontend Application using JS without a Backend
 - Github Pages Hosting
