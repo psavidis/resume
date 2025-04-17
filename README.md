@@ -9,7 +9,7 @@
 You can find my live resume [here](https://psavidis.github.io/resume/).
 
 ## What's This ?
-This is the Github repository for my official resume. The code is used by a Github page which hosts my resume online.
+This is the Github repository of my official resume. The code is used by a Github page which hosts my resume online.
 
 ## Why the Heck You Coded Your Resume ?
 - **Format Complexity**: I've used different templates each time I've been after a new business opportunity and it was a pain to keep them up to date.
