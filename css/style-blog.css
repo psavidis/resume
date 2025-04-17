@@ -15,17 +15,12 @@ body {
 }
 
 /* 2. Header */
-
 header {
     background: linear-gradient(145deg, #2a2a72 0%, #7d00ff 100%);
     color: white;
     padding: 1.5rem;
     border-bottom: 1px solid rgba(255,255,255,0.1);
 }
-
-
-
-
 .header-container {
     display: flex;
     align-items: center;
@@ -33,7 +28,6 @@ header {
     padding: 1.5rem;
     flex-wrap: wrap;
 }
-
 .profile-pic {
     width: 100px;
     height: 100px;
@@ -41,39 +35,12 @@ header {
     border-radius: 50%;
     flex-shrink: 0;
 }
-
 .header-text {
     flex: 1;
     display: flex;
     flex-direction: column;
     justify-content: center;
 }
-
-.blog-badge {
-    background-color: #ff9800;
-    color: white;
-    font-size: 0.8rem;
-    font-weight: bold;
-    padding: 2px 8px;
-    border-radius: 4px;
-    display: inline-block;
-    margin-bottom: 0.3rem;
-    align-self: flex-start;
-}
-
-.blog-title {
-    font-size: 1.6rem;
-    font-weight: bold;
-    margin: 0;
-    color: #ffffff;
-}
-
-.blog-subtitle {
-    font-size: 1rem;
-    color: #ffffff;
-    margin: 0.3rem 0 0 0;
-}
-
 .blog-badge {
     font-size: 14px;
     font-weight: bold;
@@ -85,7 +52,17 @@ header {
     display: inline-block;
     text-transform: uppercase;
 }
-
+.blog-title {
+    font-size: 1.6rem;
+    font-weight: bold;
+    margin: 0;
+    color: #ffffff;
+}
+.blog-subtitle {
+    font-size: 1rem;
+    color: #ffffff;
+    margin: 0.3rem 0 0 0;
+}
 
 /* 3. Main & Layout */
 main {
@@ -104,8 +81,6 @@ main {
     border-radius: 8px;
     overflow: hidden;
 }
-
-/* Headings */
 #readme-content h1,
 #readme-content h2,
 #readme-content h3,
@@ -119,7 +94,6 @@ main {
 #readme-content h3 { font-size: 1.75rem; }
 #readme-content h4 { font-size: 1.5rem; }
 
-/* Paragraphs & Lists */
 #readme-content p {
     margin-bottom: 1rem;
 }
@@ -131,8 +105,6 @@ main {
 #readme-content li {
     margin-bottom: 0.5rem;
 }
-
-/* Links */
 #readme-content a {
     color: #667eea;
     text-decoration: none;
@@ -140,15 +112,11 @@ main {
 #readme-content a:hover {
     text-decoration: underline;
 }
-
-/* Images */
 #readme-content img {
     max-width: 100%;
     border-radius: 4px;
     margin: 1rem 0;
 }
-
-/* Code & Pre */
 #readme-content pre {
     background: #f4f4f4;
     padding: 1rem;
@@ -163,8 +131,6 @@ main {
     font-family: 'Courier New', monospace;
     color: #d6336c;
 }
-
-/* Blockquote */
 #readme-content blockquote {
     border-left: 4px solid #667eea;
     padding-left: 1rem;
@@ -172,8 +138,6 @@ main {
     margin: 1rem 0;
     background: #f9f9f9;
 }
-
-/* Tables */
 #readme-content table {
     width: 100%;
     border-collapse: collapse;
@@ -260,18 +224,61 @@ footer a:hover {
         padding: 1.5rem;
     }
 }
+
 @media (max-width: 480px) {
     .profile-pic {
-        width: 60px;
-        height: 60px;
+        width: 80px;
+        height: 80px;
     }
+
+    header {
+        padding: 2rem 1rem;
+    }
+
     header .header-container {
         flex-direction: column;
+        align-items: center;
+        text-align: center;
+        gap: 1.2rem;
     }
-    header {
-        padding: 1.5rem;
+
+    .header-text {
+        align-items: center;
     }
+
+    .blog-badge {
+        font-size: 0.9rem;
+        padding: 6px 12px;
+        border-radius: 12px;
+        margin-bottom: 0.5rem;
+    }
+
+    .blog-title {
+        font-size: 2rem;
+        font-weight: 800;
+    }
+
+    .blog-subtitle {
+        font-size: 1.2rem;
+        font-weight: 500;
+        margin-top: 0.3rem;
+    }
+
     #readme-content {
         padding: 1rem;
+        font-size: 0.95rem;
+    }
+
+    #readme-content h1 { font-size: 1.8rem; }
+    #readme-content h2 { font-size: 1.5rem; }
+    #readme-content h3 { font-size: 1.25rem; }
+    #readme-content h4 { font-size: 1.1rem; }
+
+    .feature-category h3 {
+        font-size: 1.2rem;
+    }
+
+    .feature-category ul {
+        font-size: 0.95rem;
     }
 }
