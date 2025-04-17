@@ -5,11 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <!-- Open Graph meta tags -->
-    <meta property="og:title" content="Petros Savidis - Resume" />
-    <meta property="og:description" content="Dynamic, Interactive Resume of Peter Savidis. Crafted with love and passion." />
-    <meta property="og:image" content="https://psavidis.github.io/resume/img/preview.png" />
-    <meta property="og:url" content="https://psavidis.github.io/resume/" />
-    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Petros Savidis - Resume"/>
+    <meta property="og:description"
+          content="Dynamic, Interactive Resume of Peter Savidis. Crafted with love and passion."/>
+    <meta property="og:image" content="https://psavidis.github.io/resume/img/preview.png"/>
+    <meta property="og:url" content="https://psavidis.github.io/resume/"/>
+    <meta property="og:type" content="website"/>
 
     <title></title>
 
@@ -187,19 +188,19 @@
     <div id="shortcuts">
         <h2>Keyboard Shortcuts</h2>
         <ul>
-            <li><strong>⌘ + F</strong>: Search Projects</li>
-            <li><strong>⌘ + S</strong>: Download Resume</li>
-            <li><strong>⌘ + E</strong>: Send Email</li>
-            <li><strong>⌘ + Shift + L</strong>: Open LinkedIn</li>
-            <li><strong>⌘ + Shift + G</strong>: Open Github</li>
-            <li><strong>⌘ + Shift + M</strong>: Open Location</li>
-            <li><strong>⌘ + Shift + D</strong>: Toggle Dark Mode</li>
+            <li id="li-search-projects"></li>
+            <li id="li-download-resume"></li>
+            <li id="li-send-email"></li>
+            <li id="li-open-linkedin"></li>
+            <li id="li-open-github"></li>
+            <li id="li-open-location"></li>
+            <li id="li-toggle-dark-mode"></li>
         </ul>
     </div>
 </div>
 
 <div id="shortcut-hint">
-    <span id="press-shortcuts"><b>Press</b> ⌘ + / for shortcuts</span>
+    <span id="press-shortcuts"></span>
 </div>
 
 <div class="button-container">
@@ -1162,6 +1163,8 @@
         registerMapsShortcut();
         registerToggleDarkModeShortcut();
         registerEasterEggShortcut();
+
+        configureModifierKey();
     }
 
     function configureKeyboardModal() {
@@ -1174,6 +1177,21 @@
                 toggleShortcutsModal();
             }
         });
+    }
+
+    function configureModifierKey() {
+        const modifierKey = isMac() ? '⌘' : 'Ctrl';
+
+        document.getElementById('press-shortcuts').innerHTML = `<b>Press</b> ${modifierKey} + / for shortcuts`;
+
+        <!-- Populate commands list -->
+        document.getElementById('li-search-projects').innerHTML = `<strong>${modifierKey} + F</strong>: Search Projects`;
+        document.getElementById('li-download-resume').innerHTML = `<strong>${modifierKey} + S</strong>: Download Resume`;
+        document.getElementById('li-send-email').innerHTML = `<strong>${modifierKey} + E</strong>: Send Email`;
+        document.getElementById('li-open-linkedin').innerHTML = `<strong>${modifierKey} + Shift + L</strong>: Open LinkedIn`;
+        document.getElementById('li-open-github').innerHTML = `<strong>${modifierKey} + Shift + G</strong>: Open Github`;
+        document.getElementById('li-open-location').innerHTML = `<strong>${modifierKey} + Shift + M</strong>: Open Location`;
+        document.getElementById('li-toggle-dark-mode').innerHTML = `<strong>${modifierKey} + Shift + D</strong>: Toggle Dark Mode`;
     }
 
     function registerToggleDarkModeShortcut() {
@@ -1370,6 +1388,25 @@
 
     function isMobile() {
         return /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+    }
+
+    function isMac() {
+        const os = getOS();
+        return os === 'Mac OS'
+    }
+
+    function getOS() {
+        const userAgent = navigator.userAgent;
+
+        if (/Macintosh|MacIntel|MacPPC|Mac68K/.test(userAgent)) {
+            return 'Mac OS';
+        } else if (/Windows NT/.test(userAgent)) {
+            return 'Windows';
+        } else if (/Linux/.test(userAgent)) {
+            return 'Linux';
+        } else {
+            return 'Unknown OS';
+        }
     }
 
     // Functions: Easter Egg
@@ -1574,7 +1611,7 @@
     const micBtn = document.getElementById('microphone-btn');
 
     async function startMicGlow() {
-        micStream = await navigator.mediaDevices.getUserMedia({ audio: true });
+        micStream = await navigator.mediaDevices.getUserMedia({audio: true});
         audioCtx = new (window.AudioContext || window.webkitAudioContext)();
         const source = audioCtx.createMediaStreamSource(micStream);
         analyser = audioCtx.createAnalyser();
