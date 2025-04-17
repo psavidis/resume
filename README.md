@@ -1,6 +1,8 @@
 # Petros Savidis' Resume
 
-Welcome to the codebase of my resume! The readme can be also read in its corresponding [blog](https://psavidis.github.io/resume/blog.html) format 🙃
+<div id="welcome-text">
+  Welcome to the codebase of my resume! The readme can be also read in its corresponding <a href="https://psavidis.github.io/resume/blog.html">blog</a> format 🙃
+</div>
 
 ## Live Resume
 

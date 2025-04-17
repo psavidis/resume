@@ -41,12 +41,18 @@
 
             const cleanedMarkdown = filteredSections.join('\n\n');
             document.getElementById("readme-content").innerHTML = marked.parse(cleanedMarkdown);
+
+            const welcomeText = document.getElementById('welcome-text');
+            if (welcomeText) {
+                welcomeText.remove(); // Removes the welcome-text div from the content
+            }
         }
 
         loadFilteredReadme().catch(err => {
             console.error("Error loading README:", err);
             document.getElementById("readme-content").innerText = "Failed to load content.";
         });
+
     </script>
     <link rel="stylesheet" href="css/style-blog.css">
 
@@ -55,7 +61,7 @@
 <body>
 <header>
     <div class="header-container">
-        <img src="img/profile_picture_cartoon.jpg" alt="Petros Savidis" class="profile-pic" />
+        <img src="img/profile_picture_cartoon.jpg" alt="Petros Savidis" class="profile-pic"/>
         <div class="header-text">
             <span class="blog-badge">Blog</span>
             <h1 class="blog-title">The Ultimate Interactive Developer Resume</h1>
