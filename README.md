@@ -1,5 +1,7 @@
 # Petros Savidis' Resume
 
+Welcome to the codebase of my resume! The readme can be also read in its corresponding [blog](https://psavidis.github.io/resume/blog.html) format 🙃
+
 ## Live Resume
 
 You can find my live resume [here](https://psavidis.github.io/resume/).
