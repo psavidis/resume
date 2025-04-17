@@ -756,7 +756,7 @@ p {
         display: flex;
         flex-direction: column;
         transform: translateX(100%);
-        gap: 2px;
+        gap: 0px;
         opacity: 0;
         transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
     }
