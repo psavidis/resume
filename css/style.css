@@ -1268,6 +1268,8 @@ input:-moz-autofill {
 /* If the screen height small for phones, hide one button */
 @media screen and (max-height: 667px) {
     #phoneButton {
-        display: none !important;;
+        display: none !important;
+        visibility: hidden !important;
+        opacity: 0 !important;
     }
 }
