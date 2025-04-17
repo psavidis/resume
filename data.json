@@ -80,8 +80,8 @@
       "description": "PAMAP Physical Activity Monitoring for Aging People is a Health Monitoring and Personal Health Record system.",
       "points": [
         "Developed mobile client that used PAMAP's infrastructure to access PAMAP's services",
-        "Research around HL7 protocol to standardize PAMAP's communication so it can easily exchange data with other medical systems",
-        "Create a new web interface for PAMAP using XSLT and CSS"
+        "Conducted Research around HL7 protocol to standardize PAMAP's communication so it can easily exchange data with other medical systems",
+        "Created a new web interface for PAMAP using XSLT and CSS"
       ],
       "techUsed": [
         "Java",
@@ -108,7 +108,7 @@
       "points": [
         "Developed all the search criteria functionality which was the core business of the app",
         "Contributed to the development of the rest of the app",
-        "Create a new web interface for PAMAP using XSLT and CSS"
+        "Created a new web interface for PAMAP using XSLT and CSS"
       ],
       "techUsed": [
         "Java",
@@ -147,7 +147,7 @@
       "points": [
         "Developed the platform's back-office from the group up",
         "Backend & front-end from scratch",
-        "Created the criteria search functionality",
+        "Created the search criteria functionality",
         "In charge of data migration from Lucene to Elastic Search"
       ],
       "techUsed": [
@@ -193,7 +193,7 @@
       "endDate": "12-2015",
       "description": "Web-based collaborative system to facilitate the full lifecycle of a tendering process, for both buyers and suppliers.",
       "points": [
-        "Research and implement customization on top of the existing platform"
+        "Researched & Implemented customization on top of the existing platform"
       ],
       "techUsed": [
         "Java",
@@ -215,10 +215,9 @@
       "endDate": "09-2018",
       "description": "Dryad is Upstream's pioneering mobile commerce platform.",
       "points": [
-        "Developed & maintained Upstream's core products in an Agile team",
-        "Production Support",
-        "Created the criteria search functionality",
-        "In charge of data migration from Lucene to Elastic Search"
+        "Developed & Maintained Upstream's core products in an Agile team",
+        "Implemented feature in an event-driven architecture at scale",
+        "Production Support"
       ],
       "techUsed": [
         "Java 8",
@@ -291,10 +290,11 @@
       "endDate": "12-2022",
       "description": "Contract Intelligence and its platform services offer an IDP solution for extracting data from documents and classifying them with different algorithms (proprietary, open source).",
       "points": [
-        "Redesigned & implemented Platform Services to be configurable (turned it into microservice).",
-        "Designed, Implemented & Tested Connectors, a flexible, scalable, fault tolerant microservices system to connect the Products to documents of various Cloud storage solutions Sharepoint, Box, Dropbox etc.)",
         "Lead Developer for Refactoring the Main Product of the company using a DDD inspired approach",
-        "Mentoring & Coaching"
+        "Redesigned & Implemented Platform Services to be configurable (turned it into microservice).",
+        "Designed, Implemented & Tested Connectors, a flexible, scalable, fault tolerant microservices system to connect the Products to documents of various Cloud storage solutions Sharepoint, Box, Dropbox etc.)",
+        "Mentoring & Coaching",
+        "Played a key role in the recruitment process by conducting interviews and assisting in the selection of qualified developers."
       ],
       "techUsed": [
         "Java",
