@@ -527,11 +527,15 @@ p {
     background: rgba(0, 0, 0, 0.6);
     color: white;
     padding: 1rem;
-    font-size: 13px;
+    font-size: 14px;
     border-radius: 1rem;
     font-family: 'Courier New', monospace;
     z-index: 1;
     justify-content: center;
+}
+
+#voice-command-hint ul {
+    list-style-type: circle; /* Hollow circle for a subtle look */
 }
 
 #voice-command-hint span {
