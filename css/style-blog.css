@@ -42,15 +42,17 @@ header {
     justify-content: center;
 }
 .blog-badge {
-    font-size: 14px;
+    font-size: 0.9rem;
     font-weight: bold;
-    background-color: #FF6347; /* Tomato red color */
+    background-color: #FF6347;
     color: white;
-    padding: 5px 10px;
-    border-radius: 15px;
-    margin-bottom: 10px;
-    display: inline-block;
-    text-transform: uppercase;
+    padding: 6px 12px;
+    border-radius: 12px;
+    margin-bottom: 0.5rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    max-width: max-content;
 }
 .blog-title {
     font-size: 1.6rem;
@@ -280,5 +282,11 @@ footer a:hover {
 
     .feature-category ul {
         font-size: 0.95rem;
+    }
+
+    .header-text {
+        align-items: center;
+        text-align: center;
+        width: 100%;
     }
 }
