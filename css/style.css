@@ -742,9 +742,9 @@ p {
     }
 
     .button-container {
-        bottom: 20px;
+        bottom: 10px;
         top: auto;
-        right: 20px;
+        right: 0px;
         display: flex;
         flex-direction: column-reverse;
         align-items: flex-end;
@@ -755,7 +755,7 @@ p {
         display: flex;
         flex-direction: column;
         transform: translateX(100%);
-        gap: 10px;
+        gap: 2px;
         opacity: 0;
         transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
     }
@@ -1261,5 +1261,13 @@ input:-moz-autofill {
 
     #menu-toggle {
         display: none !important;        /* hide hamburger on desktop */
+    }
+}
+
+/* If the screen height small for phones, hide one button */
+@media (max-height: 668px) {
+
+    #phoneButton {
+        display: none;
     }
 }
