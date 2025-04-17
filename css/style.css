@@ -4,7 +4,10 @@ body {
     padding: 0;
     background: linear-gradient(145deg, #2a2a72, #009ffd);
     color: #333;
-    overflow-x: hidden;
+    /*overflow: hidden;*/
+
+    display: flex;
+    flex-direction: column;
 }
 
 .container {
@@ -20,7 +23,10 @@ body {
     opacity: 1 !important;
     position: relative;
 
-    height: 100vh; /* or a specific height for the scrollable area */
+    flex: 1;
+
+    /*height: 100vh; !* or a specific height for the scrollable area *!*/
+    /*min-height: 100vh;*/
     max-height: 100%;
     overflow: auto; /* Ensure the content is scrollable */
 }
@@ -1192,5 +1198,10 @@ input:-moz-autofill {
 }
 
 #copyright {
+    color: white;
+    font-size: 1em;
+}
+
+.dark-mode #copyright {
     color: white;
 }
