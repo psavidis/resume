@@ -1,4 +1,4 @@
-/* blog-style.css */
+/* style-blog.css */
 
 /* 1. Reset & Base */
 * {
@@ -8,7 +8,7 @@
 }
 body {
     font-family: 'Inter', sans-serif;
-    background: linear-gradient(145deg, #5b5b9a 0%, #b0b0dd 100%);
+    background: linear-gradient(145deg, #5b5b9a 0%, #b0b0dd 100%) fixed;
     color: #333;
     line-height: 1.6;
     font-size: 16px;
