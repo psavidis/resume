@@ -737,6 +737,7 @@ p {
 
 /* Do not display keyboard shortcuts for smaller screens such as phones / tables */
 @media (max-width: 768px) {
+
     #shortcuts {
         display: none;
     }
@@ -1265,8 +1266,7 @@ input:-moz-autofill {
 }
 
 /* If the screen height small for phones, hide one button */
-@media (max-height: 668px) {
-
+@media screen and (max-height: 667px) {
     #phoneButton {
         display: none;
     }
