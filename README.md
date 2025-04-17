@@ -88,6 +88,12 @@ To mitigate this issue, I've included a QR code for pdf-first user journeys and 
 - See Analytics [here](https://statcounter.com/p13118834/summary/).
 - [Ntfy.sh](https://ntfy.sh/) is used to push notifications to my phone of page views
 
+## Final Thoughts
+
+I’m extremely happy with how this project turned out. What started as a common hassle — unmaintainable typical resumes — has evolved into something far more impactful: 
+
+A digital _reflection_ of my professional profile!
+
 ## Copyright
 
 Copyright © 2025 Petros Savidis. All rights reserved.
