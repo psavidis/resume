@@ -105,7 +105,7 @@ I'm thrilled with how this project evolved. What began as a common frustrationâ€
 
 The process of creating this digital profile has been both challenging and rewarding. Each line of code and design choice was made with the intent to showcase not just what I've done, but who I am as a professional.
 
-It's a living document that evolves with me, reflecting my journey in a creative way while at the same time expressing my taste in software.
+It's a living project that evolves with me, reflecting my journey in a creative way while at the same time expressing my taste in software.
 
 ## Copyright
 
