@@ -85,3 +85,11 @@ To mitigate this issue, I've included a QR code for pdf-first user journeys and 
 
 - See Analytics [here](https://statcounter.com/p13118834/summary/).
 - [Ntfy.sh](https://ntfy.sh/) is used to push notifications to my phone of page views
+
+## Copyright
+
+Copyright © 2025 Petros Savidis. All rights reserved.
+
+This repo is public for sharing/viewing only. Not open source. Please don’t copy or reuse without permission.
+
+Thank you for respecting the creative effort behind this project.
