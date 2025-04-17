@@ -215,6 +215,7 @@
     <button id="location-btn" class="btn"><i class="fas fa-map-marker-alt"></i></button>
     <button id="linkedin-btn" class="btn"><i class="fab fa-linkedin-in"></i></button>
     <button id="github-btn" class="btn"><i class="fab fa-github"></i></button>
+    <button id="blog-btn" class="btn"><i class="fas fa-blog"></i></button>
     <button id="pdf-btn" class="btn"><i class="fas fa-file-pdf"></i></button>
     <button id="toggle-search" class="btn toggle-button"><i class="fas fa-search"></i></button>
     <button id="dark-mode-toggle" class="btn"><i id="mode-icon" class="fas fa-moon"></i></button>
@@ -496,6 +497,7 @@
             // buttons
             configureLocationButton(data);
             configureLinkedinButton(data);
+            configureBlogButton();
             configureEmail(data);
             configureGithubButton();
 
@@ -1649,6 +1651,14 @@
             audioCtx.close();
         }
         micBtn.classList.remove('glowing');
+    }
+
+    // functions: blog
+
+    function configureBlogButton() {
+        document.getElementById('blog-btn').addEventListener('click', function() {
+            window.open("https://psavidis.github.io/resume/blog.html", "_blank"); // Open the blog in a new tab
+        });
     }
 
     // Call functions to load data and initialize the page components
