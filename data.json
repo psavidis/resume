@@ -145,10 +145,9 @@
       "endDate": "06-2015",
       "description": "The aim of the platform is to serve as a common system for the National Offices of Intellectual Property of Belgium, Luxembourg and Netherlands.",
       "points": [
-        "Developed the platform's back-office from the group up",
-        "Backend & front-end from scratch",
+        "Developed the platform's back-office from the group up (Backend + Frontend)",
         "Created the search criteria functionality",
-        "In charge of data migration from Lucene to Elastic Search"
+        "Led the data migration from Lucene to Elasticsearch"
       ],
       "techUsed": [
         "Java",
@@ -293,8 +292,8 @@
         "Lead Developer for Refactoring the Main Product of the company using a DDD inspired approach",
         "Redesigned & Implemented Platform Services to be configurable (turned it into microservice).",
         "Designed, Implemented & Tested Connectors, a flexible, scalable, fault tolerant microservices system to connect the Products to documents of various Cloud storage solutions Sharepoint, Box, Dropbox etc.)",
-        "Mentoring & Coaching",
-        "Played a key role in the recruitment process by conducting interviews and assisting in the selection of qualified developers."
+        "Played a key role in the recruitment process by conducting interviews and assisting in the selection of qualified developers.",
+        "Mentoring & Coaching"
       ],
       "techUsed": [
         "Java",
