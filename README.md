@@ -45,7 +45,7 @@ My resume should support:
 ### For My Users
 
 - **Responsive Design**: The resume can be loaded on any device
-  - For smaller screens, there is a little compromise with the buttons appearing at the top of the screen. This is an acceptable trait for my project.
+  - For smaller screens, there is a toggle button which can be clicked to unfold all buttons to save space.
 - **Search Mode**: The resume can search simple keywords in my projects and highlight them
   - It works with single keywords or some of them separated with space.
   - A simple regex is used to find the keywords and highlight them.
