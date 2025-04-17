@@ -1,0 +1,70 @@
+<head>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script>
+        async function loadFilteredReadme() {
+            const res = await fetch("https://raw.githubusercontent.com/psavidis/resume/HEAD/README.md");
+            let markdown = await res.text();
+
+            // Remove the top-level # title
+            markdown = markdown.replace(/^#\s+.*\n+/, '');
+
+            // Split into sections by ## heading
+            const sections = markdown.split(/^##\s+/gm);
+            const filteredSections = [];
+            let liveResumeSection = '';
+
+            sections.forEach((section, i) => {
+                // Skip the first part if it's before the first "##"
+                if (i === 0) {
+                    filteredSections.push(section);
+                    return;
+                }
+
+                const title = section.split('\n')[0].trim();
+
+                if (title === "What's This ?" || title === "For Me") {
+                    return; // Skip
+                }
+
+                if (title === "Live Resume") {
+                    liveResumeSection = `## ${section.trim()}`; // Save to insert later
+                    return;
+                }
+
+                filteredSections.push(`## ${section.trim()}`);
+            });
+
+            // Inject Live Resume section before the last section
+            if (liveResumeSection) {
+                filteredSections.splice(filteredSections.length - 1, 0, liveResumeSection);
+            }
+
+            const cleanedMarkdown = filteredSections.join('\n\n');
+            document.getElementById("readme-content").innerHTML = marked.parse(cleanedMarkdown);
+        }
+
+        loadFilteredReadme().catch(err => {
+            console.error("Error loading README:", err);
+            document.getElementById("readme-content").innerText = "Failed to load content.";
+        });
+    </script>
+    <link rel="stylesheet" href="css/blog-style.css">
+
+    <title>Building My Live, Interactive Resume: A Case Study | Blog</title>
+</head>
+<body>
+<header>
+    <div class="header-container">
+        <img src="img/profile_picture_cartoon.jpg" alt="Petros Savidis" class="profile-pic" />
+        <div class="header-text">
+            <span class="blog-badge">Blog</span>
+            <h1 class="blog-title">Beyond the PDF: How I Built My Interactive, Live Resume</h1>
+            <p class="blog-subtitle">Petros Savidis - Software Engineer | Java Specialist | Architecture & Design</p>
+        </div>
+    </div>
+</header>
+
+<main>
+    <div id="readme-content">Loading content…</div>
+</main>
+</body>
