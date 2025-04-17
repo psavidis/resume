@@ -42,6 +42,8 @@ My resume should support:
 
 ## Features
 
+### For My Users
+
 - **Responsive Design**: The resume can be loaded on any device
   - For smaller screens, there is a little compromise with the buttons appearing at the top of the screen. This is an acceptable trait for my project.
 - **Search Mode**: The resume can search simple keywords in my projects and highlight them
@@ -58,13 +60,18 @@ My resume should support:
     - This is not a good experience in case the user hasn't setup a native email client.
   - For mobile devices, the resume uses the mailto directive to open the default email client which serves a good user experience.
 - **Dark Mode**
-  - The resume supports a dark theme as well ❤️ 
-- **Push Notifications**
-  - I get push notifications for page views on my phone
+  - The resume supports a dark theme as well ❤️
 - **Voice Commands**
   - You can interact with the features of my resume with voice commands if your browser supports them 🗣️
 - **QR Code + URL in PDF**
   - Lets people access the live version even if links are stripped
+
+### For Me as a Developer
+- **Git Integration**: The resume is versioned using git 🤘
+- **Data Separation**: The data is loaded from a JSON file and presented dynamically.
+  - Even my total experience is calculated on the fly 🙃
+- **Push Notifications**: I get push notifications for page views on my phone.
+- **Analytics**: I can track the user activity of my resume.
 
 ## Issues & Decisions
 
