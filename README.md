@@ -1,4 +1,4 @@
-# Petros Savidis' Resume
+# Petros Savidis - My Ultimate Interactive Developer Resume
 
 <div id="welcome-text">
   Welcome to my resume! This README can be read in <a href="https://psavidis.github.io/resume/blog.html">blog</a> format as well 🙃
