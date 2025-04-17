@@ -51,9 +51,8 @@ My resume should support:
   - A simple regex is used to find the keywords and highlight them.
   - The limitation of the current implementation is acceptable for the needs of my project as the user can fallback to single keyword search to assist him in browsing through my projects.
 - **Download PDF**: The resume can be downloaded as a PDF file
-- **Keyboard Shortcuts**: For big screens, the user can use keyboard shortcuts to trigger the buttons.
-  - The keyboard shortcuts can be found at the end of the resume only for big screens.
-  - For smaller screens, the shortcuts are not visible.
+- **Keyboard Shortcuts**: Users can access the features using keyboard shortcuts!
+  - **Note**: The feature is only available for Desktop clients.
 - **Built-in Messaging**
   - The resume can send email messages to me using the web client for large screens and desktop setups.
     - **Why**: The mailto directive prompts the user to open the default email client. 
@@ -62,9 +61,10 @@ My resume should support:
 - **Dark Mode**
   - The resume supports a dark theme as well ❤️
 - **Voice Commands**
-  - You can interact with the features of my resume with voice commands if your browser supports them 🗣️
-- **QR Code + URL in PDF**
-  - Lets people access the live version even if links are stripped
+  - You can interact with the features of my resume with voice commands if your browser supports them! 🗣
+    - E.g. you can say "Search Java️" and you make a search for the keyword java in my projects 🤘
+- **QR Code + URL in the PDF**
+  - Enables people access the live version even if links are stripped
 
 ### For Me as a Developer
 - **Git Integration**: The resume is versioned using git 🤘
@@ -101,9 +101,11 @@ To mitigate this issue, I've included a QR code for pdf-first user journeys and 
 
 ## Final Thoughts
 
-I’m extremely happy with how this project turned out. What started as a common hassle — unmaintainable typical resumes — has evolved into something far more impactful: 
+I'm thrilled with how this project evolved. What began as a common frustration—unwieldy, traditional resumes—has transformed into a dynamic digital showcase of my professional journey.
 
-A digital _reflection_ of my professional profile!
+The process of creating this digital profile has been both challenging and rewarding. Each line of code and design choice was made with the intent to showcase not just what I've done, but who I am as a professional.
+
+It's a living document that evolves with me, reflecting my journey in a creative way while at the same time expressing my taste in software.
 
 ## Copyright
 
