@@ -373,7 +373,7 @@ p {
     font-family: 'Montserrat', sans-serif;
     font-weight: 600;
     font-size: 13px;
-    color: #708090; /* Soft professional blue */
+    color: #0080ff; /* Soft professional blue */
 }
 
 .fun-fact-text {
@@ -1211,6 +1211,14 @@ body.dark-mode #phoneButton.clicked + #overlay #circle {
     background-color: #9b4eaf; /* Slightly lighter purple when clicked */
     box-shadow: 0 0 15px rgba(143, 95, 208, 0.7); /* Glowing effect */
     transform: scale(5); /* Enlarging the circle on click */
+}
+
+body.dark-mode .fun-fact {
+    color: #d859ff; /* Soft professional blue */
+}
+
+body.dark-mode .fun-fact-text {
+    color: white; /* Dark gray for readability */
 }
 
 input:-webkit-autofill::first-line {
