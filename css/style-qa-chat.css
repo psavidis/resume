@@ -1,0 +1,70 @@
+#microphone-btn {
+    position: relative;
+    font-size: 1.5rem;
+    background-color: #2c3e50;
+    color: white; /* Icon color */
+    border: none;
+    border-radius: 50%; /* Make it fully round */
+    cursor: pointer;
+    padding: 10px;
+    margin: 5px;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.2s ease;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Optional: add shadow like other buttons */
+}
+
+#submit-btn {
+    position: relative;
+    font-size: 1.5rem;
+    background-color: #2c3e50;
+    color: white; /* Icon color */
+    border: none;
+    border-radius: 50%; /* Make it fully round */
+    cursor: pointer;
+    padding: 10px;
+    margin: 5px;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.2s ease;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Optional: add shadow like other buttons */
+}
+
+body {
+    background: linear-gradient(to right, #f8fafc, #e0f2fe);
+}
+.typing-indicator {
+    width: 50px;
+    height: 30px;
+    background: #f3f4f6;
+    border-radius: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 3px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    margin-left: 0.5rem;
+}
+.typing-indicator span {
+    width: 6px;
+    height: 6px;
+    background: #9ca3af;
+    border-radius: 50%;
+    animation: blink 1.4s infinite both;
+}
+.typing-indicator span:nth-child(2) {
+    animation-delay: 0.2s;
+}
+.typing-indicator span:nth-child(3) {
+    animation-delay: 0.4s;
+}
+@keyframes blink {
+    0%, 80%, 100% { opacity: 0; }
+    40% { opacity: 1; }
+}

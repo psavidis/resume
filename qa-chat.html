@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Ask My Resume</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(to right, #f8fafc, #e0f2fe);
+        }
+        #submit-btn, #microphone-btn {
+            position: relative;
+            font-size: 1.5rem;
+            background-color: #2c3e50;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            padding: 10px;
+            margin: 5px;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background-color 0.2s ease;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        #submit-btn:hover, #microphone-btn:hover {
+            background-color: #1f2a38;
+        }
+        .typing-indicator {
+            width: 50px;
+            height: 30px;
+            background: #f3f4f6;
+            border-radius: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 3px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            margin-left: 0.5rem;
+        }
+        .typing-indicator span {
+            width: 6px;
+            height: 6px;
+            background: #9ca3af;
+            border-radius: 50%;
+            animation: blink 1.4s infinite both;
+        }
+        .typing-indicator span:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+        .typing-indicator span:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+        @keyframes blink {
+            0%, 80%, 100% { opacity: 0; }
+            40% { opacity: 1; }
+        }
+        /* New Styles for Profile Header */
+        .profile-header {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        .profile-header img {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            border: 3px solid #2c3e50;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+            margin-bottom: 1rem;
+        }
+        .profile-header h2 {
+            font-size: 2.5rem;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 0.5rem;
+        }
+        .profile-header p {
+            font-size: 1.25rem;
+            color: #34495e;
+            font-weight: 500;
+        }
+    </style>
+</head>
+<body class="font-sans">
+<div class="min-h-screen flex flex-col justify-center items-center p-4">
+    <div class="w-full max-w-2xl bg-white rounded-2xl shadow-xl p-6 space-y-6">
+        <!-- Profile Header -->
+        <div class="profile-header">
+            <!-- Replace 'your-photo.jpg' with your actual image path -->
+            <img src="img/profile_picture.jpeg" alt="Petros Savidis" />
+            <div>
+                <h2 class="text-2xl font-semibold text-gray-800">Petros Savidis</h2>
+                <p class="text-gray-600">Q&A Interactive Conversation</p>
+            </div>
+        </div>
+        <!-- Chat Input -->
+        <div class="flex gap-2">
+            <input id="question" type="text" class="flex-1 p-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400" placeholder="Ask something like 'What experience do you have with Java?'" />
+            <button id="submit-btn" onclick="askQuestion()" title="Submit">
+                ▶
+            </button>
+            <button id="microphone-btn" onclick="startVoiceInput(event)" title="Speak">
+                🎤
+            </button>
+        </div>
+        <!-- Chat Window -->
+        <div id="chat" class="space-y-4 overflow-y-auto max-h-[60vh] pr-2">
+            <!-- Chat content will appear here -->
+        </div>
+    </div>
+</div>
+
+<script>
+    const qaData = [
+        { question: "education", answer: "I hold a degree in Electrical and Computer Engineering from Aristotle University of Thessaloniki." },
+        { question: "recent work experience", answer: "I worked at Camunda from 2023 to 2025 on workflow engines and microservice orchestration." },
+        { question: "skills", answer: "My skills include Java, software architecture, Camunda BPM, microservices, and intelligent document processing." },
+        { question: "java experience", answer: "I have 5+ years of experience with Java, including backend development and microservices." },
+        { question: "interests", answer: "I am interested in software architecture, microservices, and intelligent document processing." }
+    ];
+
+    function simulateTyping(text, container, delay = 25) {
+        container.innerHTML = '';
+        let i = 0;
+        const interval = setInterval(() => {
+            container.innerHTML += text.charAt(i);
+            i++;
+            if (i >= text.length) clearInterval(interval);
+        }, delay);
+    }
+
+    function createTypingIndicator() {
+        const wrapper = document.createElement("div");
+        wrapper.className = "typing-indicator";
+        for (let i = 0; i < 3; i++) {
+            const dot = document.createElement("span");
+            wrapper.appendChild(dot);
+        }
+        return wrapper;
+    }
+
+    function askQuestion() {
+        const input = document.getElementById("question");
+        const chatBox = document.getElementById("chat");
+        const questionText = input.value.trim();
+        if (!questionText) return;
+
+        const userBubble = document.createElement("div");
+        userBubble.className = "bg-blue-100 text-blue-900 p-3 rounded-xl shadow max-w-xl ml-auto";
+        userBubble.textContent = questionText;
+        chatBox.appendChild(userBubble);
+        input.value = "";
+
+        const questionInput = questionText.toLowerCase();
+        const scores = qaData.map(qa => {
+            const questionWords = qa.question.split(" ");
+            const overlap = questionWords.filter(word => questionInput.includes(word)).length;
+            return { ...qa, score: overlap };
+        });
+        const bestMatch = scores.reduce((max, qa) => qa.score > max.score ? qa : max, { score: 0 });
+
+        const botBubble = document.createElement("div");
+        botBubble.className = "bg-gray-100 text-gray-800 p-3 rounded-xl shadow max-w-xl mr-auto flex items-center";
+        const indicator = createTypingIndicator();
+        botBubble.appendChild(indicator);
+        chatBox.appendChild(botBubble);
+
+        setTimeout(() => {
+            const reply = bestMatch.score > 0 ? bestMatch.answer : "Sorry, I couldn’t find an answer to that. Try asking something else!";
+            botBubble.innerHTML = '';
+            simulateTyping(reply, botBubble);
+        }, 1000);
+    }
+
+    function startVoiceInput(event) {
+        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+        if (!SpeechRecognition) {
+            alert("Your browser does not support voice input. Try using Chrome or Edge on desktop.");
+            return;
+        }
+
+        const recognition = new SpeechRecognition();
+        recognition.lang = 'en-US';
+        recognition.interimResults = true;
+        recognition.maxAlternatives = 1;
+
+        const micBtn = event.target.closest('button');
+        micBtn.classList.add('animate-pulse', 'bg-green-200');
+
+        const input = document.getElementById("question");
+
+        recognition.onresult = function(event) {
+            let interim = '';
+            for (let i = event.resultIndex; i < event.results.length; i++) {
+                const transcript = event.results[i][0].transcript;
+                if (event.results[i].isFinal) {
+                    input.value = transcript;
+                    micBtn.classList.remove('animate-pulse', 'bg-green-200');
+                    askQuestion();
+                } else {
+                    interim += transcript;
+                    input.value = interim;
+                }
+            }
+        };
+
+        recognition.onerror = function(event) {
+            micBtn.classList.remove('animate-pulse', 'bg-green-200');
+            alert('Voice recognition error: ' + event.error);
+        };
+
+        recognition.onend = function() {
+            micBtn.classList.remove('animate-pulse', 'bg-green-200');
+        };
+
+        recognition.start();
+    }
+</script>
+</body>
+</html>
