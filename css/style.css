@@ -2,6 +2,7 @@ html, body {
     width: 100%;
     overflow-x: hidden; /* prevents accidental horizontal shift */
 }
+
 body.lock-width {
     overflow: hidden;
     position: fixed;
@@ -99,6 +100,7 @@ p {
     gap: 10px;            /* space between each button */
     position:fixed;
     right:20px;
+    z-index: 1001; /* 1 index above container */
 }
 
 .button-group {
@@ -1263,13 +1265,13 @@ input:-moz-autofill {
         display: flex !important;
         flex-direction: row !important;
         gap: 10px !important;
-        max-height: none !important;     /* desktop: never collapse */
-        opacity:    1    !important;     /* desktop: always visible */
-        transform:  none !important;     /* desktop: no slide transform */
+        max-height: none !important; /* desktop: never collapse */
+        opacity: 1 !important; /* desktop: always visible */
+        transform: none !important; /* desktop: no slide transform */
     }
 
     #menu-toggle {
-        display: none !important;        /* hide hamburger on desktop */
+        display: none !important; /* hide hamburger on desktop */
     }
 }
 
@@ -1281,6 +1283,8 @@ input:-moz-autofill {
         opacity: 0 !important;
     }
 }
+
+/* Blur everything except the search bar*/
 body.search-active .container > *:not(#Projects):not(.search-container):not(#search-bar) {
     filter: blur(4px);
     pointer-events: none;
@@ -1300,31 +1304,43 @@ body.search-active::before {
     pointer-events: none;
 }
 
-body.search-active .search-container {
-    position: fixed;
-    top: 80px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 300px;
-    z-index: 9999;
-    pointer-events: auto;
+.container {
+    position: relative; /* Ensure it's positioned relative to the page */
+    z-index: 1000; /* Make sure it's above the dimming overlay */
+    pointer-events: auto; /* Ensure it's interactive */
 }
 
-body.search-active #search-bar {
-    border-radius: 25px;
-    width: 100%;
-    padding: 12px 20px;
-    font-size: 16px;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.2);
-    border: 1px solid #ccc;
-    outline: none;
+/* Search Bar Active */
+body.search-active {
+
+    .search-container {
+        position: fixed;
+        top: 80px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 300px;
+        z-index: 9999;
+        pointer-events: auto;
+    }
+
+    #search-bar {
+        border-radius: 25px;
+        width: 100%;
+        padding: 12px 20px;
+        font-size: 16px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+        border: 1px solid #ccc;
+        outline: none;
+    }
 }
 
 /* Blur all buttons besides the search button */
-body.search-active .button-container > button:not(#toggle-search),
-body.search-active .button-group > button:not(#toggle-search),
-body.search-active .menu-toggle {
-    filter: blur(4px);
-    pointer-events: none;
-    transition: filter 0.3s ease;
+body.search-active {
+    .button-container > button:not(#toggle-search),
+    .button-group > button:not(#toggle-search),
+    .menu-toggle {
+        filter: blur(4px);
+        pointer-events: none;
+        transition: filter 0.3s ease;
+    }
 }
