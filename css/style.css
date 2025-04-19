@@ -312,7 +312,7 @@ body.search-active .toggle-button {
     border-radius: 50%; /* Keeps it circular */
     box-shadow:
             inset 0 6px 8px rgba(0, 0, 0, 0.3),     /* Inner shadow (pressed effect) */
-            0 6px 16px rgba(0, 0, 0, 0.35),        /* Strong drop shadow for depth */
+            0 6px 8px rgba(0, 0, 0, 0.35),        /* Strong drop shadow for depth */
             0 0 12px rgba(255, 255, 255, 0.5);     /* Outer glow */
     backdrop-filter: blur(8px);
     -webkit-backdrop-filter: blur(8px);
