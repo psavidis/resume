@@ -1429,23 +1429,40 @@
 
     function registerSearchInputNavigationShortcuts() {
         const searchBar = document.getElementById("search-bar");
+
         searchBar.addEventListener('keydown', (e) => {
 
             if (!isArrowsContainerVisible()) {
-                console.log("Arrows are pressed but contains is invisible. Ignoring.");
                 return;
             }
 
+            let targetElement = null;
+
             if (e.key === 'ArrowUp') {
                 e.preventDefault();
-                document.getElementById('arrowUp').click();
-                return;
+                targetElement = document.getElementById('arrowUp');
             }
 
             if (e.key === 'ArrowDown') {
                 e.preventDefault();
-                document.getElementById('arrowDown').click();
-                return;
+                targetElement = document.getElementById('arrowDown');
+            }
+
+            if (targetElement) {
+                // Add a class to simulate a click effect (like :active state)
+                targetElement.classList.add('click-active');
+
+                // Dispatch the click event
+                const clickEvent = new MouseEvent('click', {
+                    bubbles: true,
+                    cancelable: true,
+                });
+                targetElement.dispatchEvent(clickEvent);
+
+                // Remove the class after a brief delay to simulate a "click"
+                setTimeout(() => {
+                    targetElement.classList.remove('click-active');
+                }, 150);
             }
         });
     }

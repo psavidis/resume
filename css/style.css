@@ -1320,6 +1320,10 @@ body.dark-mode .arrow-down:hover {
     color: #f1c40f !important; /* Yellow color on hover */
 }
 
+body.dark-mode .click-active {
+    color: #f1c40f !important;
+}
+
 body.dark-mode #circle {
     position: absolute;
     background-color: #8a2be2; /* Purple background for dark mode */
@@ -1480,6 +1484,12 @@ body.search-active {
     .arrow-up:active,
     .arrow-down:active {
         transform: scale(1.1); /* Slightly shrink the icon on click */
+    }
+
+    .click-active {
+        transform: scale(0.95);
+        color: #007BFF;
+        transition: transform 0.1s ease-out;
     }
 }
 
