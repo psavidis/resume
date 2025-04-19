@@ -1161,6 +1161,10 @@ body.dark-mode .highlight {
     border-radius: 4px;
 }
 
+body.dark-mode .current-highlight {
+    background-color: #8a2be2;
+}
+
 body.dark-mode .btn {
     background: linear-gradient(145deg, #2e2a36, #1c1c24); /* Dark gradient */
     color: #c9b6e4; /* Soft Lavender text */
