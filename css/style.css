@@ -1315,6 +1315,11 @@ body.dark-mode #copyButton:hover {
     background: linear-gradient(145deg, #337984, #205763) !important;
 }
 
+body.dark-mode .arrow-up:hover,
+body.dark-mode .arrow-down:hover {
+    color: #f1c40f !important; /* Yellow color on hover */
+}
+
 body.dark-mode #circle {
     position: absolute;
     background-color: #8a2be2; /* Purple background for dark mode */
