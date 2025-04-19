@@ -300,15 +300,26 @@ p {
 }
 
 .highlight {
-    background-color: yellow;
-    font-weight: bold;
-    opacity: 0.6;
+    background: linear-gradient(45deg, #a8c7e7, #c8d9f0, #e1ebf8); /* Softer blue gradient */
+    padding: 0.3em 0.6em;                             /* More padding for emphasis */
+    border-radius: 12px;                               /* Rounded corners for elegance */
+    font-weight: 500;                                  /* Medium weight for better visibility */
+    color: #3a4a5c;                                    /* Darker, softer text color for contrast */
+    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);      /* Subtle shadow for depth */
+    outline: 2px solid rgba(200, 217, 240, 0.6);       /* Softer, semi-transparent outline */
+    outline-offset: 2px;                               /* Adjust outline spacing for emphasis */
+    transition: all 0.2s ease-in-out;                  /* Smooth transition for outline on hover/focus */
 }
 
 .current-highlight {
-    background-color: #ffc400;
-    font-weight: bold;
-    opacity: 1;
+    background: linear-gradient(45deg, #007b9f, #0099cc, #00b2ff); /* Stronger, vibrant blue gradient */
+    padding: 0.3em 0.6em;                         /* More padding for emphasis */
+    border-radius: 12px;                           /* Rounded corners for elegance */
+    font-weight: bold;                             /* Bold for maximum impact */
+    color: white;                                 /* White text for high contrast */
+    text-shadow: 3px 3px 5px rgba(0, 0, 0, 0.3);  /* Stronger text shadow for a striking effect */
+    outline: 3px dashed #005f75;                   /* Darker dashed outline to contrast the gradient */
+    outline-offset: 3px;                           /* Adjust outline spacing for emphasis */
 }
 
 /*Search Button Style when Active */
