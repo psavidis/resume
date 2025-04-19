@@ -403,7 +403,7 @@
 
                 const firstHighlight = document.querySelector('.highlight');
                 if (firstHighlight) {
-                    scrollToElement(firstHighlight);
+                    scrollToElementWithSearchBarOnTop(firstHighlight);
                 }
             } else {
                 // section.style.display = 'none'; // Hide the section if it does not contain the search term
@@ -1036,17 +1036,24 @@
         scrollToElementById("shortcuts");
     }
 
-    function scrollToProjects() {
+    function scrollToElementWithSearchBarOnTop(element) {
         const searchBar = document.getElementById("search-bar");
-        const projectsSection = document.getElementById("Projects");
 
-        const offset = (searchBar.height || 60) + 50; // fallback in case it’s not rendered yet
-        const topPosition = projectsSection.getBoundingClientRect().top + window.scrollY;
+        const offsetMargin = 100;
+
+        const offset = (searchBar.height || 60) + offsetMargin; // fallback in case it’s not rendered yet
+        const topPosition = element.getBoundingClientRect().top + window.scrollY;
 
         window.scrollTo({
             top: topPosition - offset,
             behavior: "smooth"
         });
+    }
+
+    function scrollToProjects() {
+        const projectsSection = document.getElementById("Projects");
+
+        scrollToElementWithSearchBarOnTop(projectsSection);
     }
 
     function scrollToTop() {
