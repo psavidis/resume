@@ -123,7 +123,14 @@ p {
     transition: background-color 0.3s ease;
 }
 
-.btn:hover {
+/* Hover effect only on desktop*/
+@media (hover: hover) and (pointer: fine) {
+    .btn:hover {
+        background-color: #FFC107;
+    }
+}
+
+#menu-toggle.active {
     background-color: #FFC107;
 }
 
@@ -371,25 +378,6 @@ body.search-active .toggle-button:focus {
     }
 }
 
-/*End of Search Button style when Active*/
-
-/* Hover effect for the toggle button */
-.toggle-button:hover {
-    background-color: #f1c40f; /* Match the exact yellow color for hover (adjusted) */
-    color: #fff; /* Change icon color to white on hover */
-}
-
-/* Focus effect for accessibility */
-.toggle-button:focus {
-    outline: none;
-    box-shadow: 0 0 0 2px rgba(241, 196, 15, 0.6); /* A subtle yellow outline matching the hover color */
-}
-
-.toggle-button.locked:hover {
-    background-color: #f1c40f; /* Maintain yellow background when hover is locked */
-    color: #fff; /* Icon color stays white */
-}
-
 .disable-scroll {
     height: auto !important;
     max-height: none !important;
@@ -399,7 +387,6 @@ body.search-active .toggle-button:focus {
 .hidden {
     display: none;
 }
-
 
 #summary-instructions ul {
     list-style: none;
@@ -579,11 +566,6 @@ body.search-active .toggle-button:focus {
             0 0 6px #4fc3f7,
             0 0 12px rgba(33, 150, 243, 0.7), /* deeper blue */
             0 0 20px rgba(33, 150, 243, 0.5); /* outer glow */
-}
-
-/* Optional: Hover effect */
-#microphone-btn:hover {
-    background-color: #FFC107;
 }
 
 /* Icon color */

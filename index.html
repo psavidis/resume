@@ -264,11 +264,11 @@
     const toggleIcon   = document.getElementById('toggle-icon');
 
     toggleBtn.addEventListener('click', function () {
+        toggleBtn.classList.toggle('active');
         buttonGroup.classList.toggle('show');
         toggleIcon.classList.toggle('fa-bars');
         toggleIcon.classList.toggle('fa-times'); // Switch to ✖️ when open, ☰ when closed
     });
-
 </script>
 <script>
 
