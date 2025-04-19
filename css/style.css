@@ -1380,6 +1380,10 @@ body.search-active {
         width: 290px;
         z-index: 9999;
         pointer-events: auto;
+
+        display: flex;
+        align-items: center;
+        justify-content: center; /* Ensure input is centered */
     }
 
     #search-bar {
@@ -1390,6 +1394,43 @@ body.search-active {
         box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
         border: 1px solid #ccc;
         outline: none;
+    }
+
+    .arrows-container {
+        position: absolute;
+        right: -30px; /* Ensure arrows are at the right edge of the input */
+        top: 22px;
+        bottom: 0;
+        display: flex;
+        flex-direction: column;
+        justify-content: center; /* Align arrows vertically */
+        z-index: 10000;
+    }
+
+    .arrow-up,
+    .arrow-down {
+        cursor: pointer;
+        font-size: 18px;
+
+        color: #333; /* Dark grey for the arrows */
+        transition: color 0.3s ease, transform 0.3s ease;
+    }
+
+    .arrow-up {
+        margin-bottom: 5px; /* Small space between arrows */
+    }
+
+    /* Hover effect */
+    .arrow-up:hover,
+    .arrow-down:hover {
+        color: #007BFF; /* Blue color on hover */
+        transform: scale(1.2); /* Slightly enlarge the icon on hover */
+    }
+
+    /* Active state effect (when clicked) */
+    .arrow-up:active,
+    .arrow-down:active {
+        transform: scale(1.1); /* Slightly shrink the icon on click */
     }
 }
 
