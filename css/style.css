@@ -1281,3 +1281,50 @@ input:-moz-autofill {
         opacity: 0 !important;
     }
 }
+body.search-active .container > *:not(#Projects):not(.search-container):not(#search-bar) {
+    filter: blur(4px);
+    pointer-events: none;
+    transition: filter 0.3s ease;
+}
+
+/* Add a dimming effect to the background */
+body.search-active::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5); /* Semi-transparent black */
+    z-index: 999;
+    pointer-events: none;
+}
+
+body.search-active .search-container {
+    position: fixed;
+    top: 80px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 300px;
+    z-index: 9999;
+    pointer-events: auto;
+}
+
+body.search-active #search-bar {
+    border-radius: 25px;
+    width: 100%;
+    padding: 12px 20px;
+    font-size: 16px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+    border: 1px solid #ccc;
+    outline: none;
+}
+
+/* Blur all buttons besides the search button */
+body.search-active .button-container > button:not(#toggle-search),
+body.search-active .button-group > button:not(#toggle-search),
+body.search-active .menu-toggle {
+    filter: blur(4px);
+    pointer-events: none;
+    transition: filter 0.3s ease;
+}

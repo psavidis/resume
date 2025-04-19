@@ -1027,7 +1027,16 @@
     }
 
     function scrollToProjects() {
-        scrollToElement("Projects");
+        const searchBar = document.getElementById("search-bar");
+        const projectsSection = document.getElementById("Projects");
+
+        const offset = (searchBar.height || 60) + 50; // fallback in case it’s not rendered yet
+        const topPosition = projectsSection.getBoundingClientRect().top + window.scrollY;
+
+        window.scrollTo({
+            top: topPosition - offset,
+            behavior: "smooth"
+        });
     }
 
     function scrollToTop() {
@@ -1139,30 +1148,28 @@
 
     function configureSearchToggle() {
         const searchToggle = document.getElementById('toggle-search');
+        const searchBar = document.getElementById('search-bar');
+
         searchToggle.addEventListener('click', function () {
-            const searchBar = document.getElementById('search-bar');
+            const body = document.body;
+            const isSearchActive = body.classList.toggle('search-active');
 
-            if (searchBar.style.display === 'block') {
-                searchBar.style.display = 'none';
-
-                scrollToTop();
-                hideProjects();
-
-                // init search bar and remove highlights
-                if (searchBar) {
-                    searchBar.value = '';
-                    searchResume();
-                }
-
-            } else {
-                scrollToProjects();
+            if (isSearchActive) {
                 showProjects();
-
                 searchBar.style.display = 'block';
                 searchBar.focus();
+
+                scrollToProjects();
+            } else {
+                hideProjects();
+                searchBar.style.display = 'none';
+                searchBar.value = '';
+                searchResume();
+                scrollToTop();
             }
         });
     }
+
 
     function configureSearchBar() {
         // Configures the search bar to always remain at the top during scrolling
