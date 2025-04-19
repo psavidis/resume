@@ -1375,9 +1375,9 @@ body.search-active {
     .search-container {
         position: fixed;
         top: 80px;
-        left: 50%;
+        left: 48%;
         transform: translateX(-50%);
-        width: 300px;
+        width: 290px;
         z-index: 9999;
         pointer-events: auto;
     }
