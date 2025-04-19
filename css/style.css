@@ -28,19 +28,17 @@ body {
     background: #fff;
     padding: 20px;
     border-radius: 12px;
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
     animation: fadeIn 1s ease-in-out;
     display: block !important;
     visibility: visible !important;
     opacity: 1 !important;
     position: relative;
-
     flex: 1;
-
-    /*height: 100vh; !* or a specific height for the scrollable area *!*/
-    /*min-height: 100vh;*/
     max-height: 100%;
     overflow: auto; /* Ensure the content is scrollable */
+
+    outline: 2px solid rgba(0, 0, 0, 0.8);
+    box-shadow: 0 0 10px 10px rgba(255, 255, 255, 0.1); /* glowing shadow */
 }
 
 h1 {
@@ -852,6 +850,10 @@ input:-webkit-autofill:active {
 body.dark-mode .container {
     background-color: #1e1e1e; /* Dark background for the container */
     color: white;
+
+    /* Outline and glow */
+    outline: 2px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 0 40px 30px rgba(255, 166, 0, 0.1); /* glowing shadow */
 }
 
 body.dark-mode {
