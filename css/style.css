@@ -756,6 +756,16 @@ body.search-active .toggle-button:focus {
     transform: translateY(20px);
 }
 
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+    background-color: white !important;
+    -webkit-box-shadow: 0 0 0 1000px white inset !important;
+    box-shadow: 0 0 0 1000px white inset !important;
+    -webkit-text-fill-color: black !important;
+}
+
 /* Responsive design for smaller screens */
 @media (max-width: 600px) {
     .search-bar {
