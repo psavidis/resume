@@ -302,6 +302,13 @@ p {
 .highlight {
     background-color: yellow;
     font-weight: bold;
+    opacity: 0.6;
+}
+
+.current-highlight {
+    background-color: #ffc400;
+    font-weight: bold;
+    opacity: 1;
 }
 
 /*Search Button Style when Active */
@@ -826,6 +833,10 @@ body.search-active .toggle-button:focus {
         .menu-toggle {
             opacity: 0.1;
         }
+    }
+
+    body.search-active .arrows-container{
+        right: -30px !important;
     }
 }
 
@@ -1398,7 +1409,7 @@ body.search-active {
 
     .arrows-container {
         position: absolute;
-        right: -30px; /* Ensure arrows are at the right edge of the input */
+        right: -85px; /* Ensure arrows are at the right edge of the input */
         top: 22px;
         bottom: 0;
         display: flex;
@@ -1411,9 +1422,16 @@ body.search-active {
     .arrow-down {
         cursor: pointer;
         font-size: 18px;
-
         color: #333; /* Dark grey for the arrows */
         transition: color 0.3s ease, transform 0.3s ease;
+        background-color: white; /* White circle background */
+        border-radius: 50%; /* Circle shape */
+        padding: 10px; /* Add some padding to make the circle bigger */
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2); /* Light shadow for depth */
+        margin-bottom: 5px; /* Space between arrows */
+        display: flex;
+        justify-content: center;
+        align-items: center;
     }
 
     .arrow-up {

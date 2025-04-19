@@ -71,9 +71,9 @@
 <div class="search-container">
     <input type="text" id="search-bar" class="search-bar" placeholder="Search Keyword in Projects..."
            oninput="searchResume()"/>
-    <<div class="arrows-container">
-        <i class="fas fa-chevron-up arrow-up"></i>
-        <i class="fas fa-chevron-down arrow-down"></i>
+    <div class="arrows-container">
+        <i id="arrowUp" class="fas fa-chevron-up arrow-up"></i>
+        <i id="arrowDown" class="fas fa-chevron-down arrow-down"></i>
     </div>
 </div>
 
@@ -243,7 +243,6 @@
     </div>
 </div>
 
-
 <div id="voice-command-hint" style="display:none">
     <strong>💬 Voice Commands </strong>
     <br/><br/>
@@ -404,14 +403,17 @@
 
             let textContent = section.textContent || section.innerText;
             if (textContent.toLowerCase().includes(input)) {
+                showArrowsContainer();
                 // section.style.display = 'block'; // Show the section if it contains the search term
                 highlightText(section, input); // Highlight the matching text
 
-                const firstHighlight = document.querySelector('.highlight');
+                const firstHighlight = findNextHighlightedElement();
                 if (firstHighlight) {
+                    firstHighlight.classList.replace('highlight', 'current-highlight');
                     scrollToElementWithSearchBarOnTop(firstHighlight);
                 }
             } else {
+                hideArrowsContainer();
                 // section.style.display = 'none'; // Hide the section if it does not contain the search term
             }
         });
@@ -420,6 +422,38 @@
         setTimeout(() => {
             document.body.classList.remove('searching');
         }, 1000); // Timeout to allow changes to take place before animations are re-enabled
+    }
+
+    function findNextHighlightedElement(current) {
+        const allHighlights = Array.from(document.querySelectorAll('.highlight'));
+
+        if (allHighlights.length === 0) return null;
+        if (allHighlights.length === 1) return allHighlights[0];
+
+        if (!current || !allHighlights.includes(current)) {
+            return allHighlights[0];
+        }
+
+        const index = allHighlights.indexOf(current);
+        return allHighlights[(index + 1) % allHighlights.length];
+    }
+
+    function findPreviousHighlightedElement(current) {
+        const allHighlights = Array.from(document.querySelectorAll('.highlight'));
+
+        if (allHighlights.length === 0) return null;
+        if (allHighlights.length === 1) return allHighlights[0];
+
+        if (!current || !allHighlights.includes(current)) {
+            return allHighlights[allHighlights.length - 1];
+        }
+
+        const index = allHighlights.indexOf(current);
+        return allHighlights[(index - 1 + allHighlights.length) % allHighlights.length];
+    }
+
+    function findCurrentHighlightedElement() {
+        return document.querySelector('.current-highlight');
     }
 
     // Functions: Create elements
@@ -932,6 +966,16 @@
         searchContainer.style.visibility = 'hidden';
     }
 
+    function hideArrowsContainer() {
+        const searchContainer = document.querySelector('.arrows-container');
+        searchContainer.style.visibility = 'hidden';
+    }
+
+    function showArrowsContainer() {
+        const searchContainer = document.querySelector('.arrows-container');
+        searchContainer.style.visibility = 'visible';
+    }
+
     function showProfileInfo() {
         document.querySelector('#pdfEmailHeader').style.display = 'block';
         document.querySelector('.live-resume').style.display = 'block';
@@ -1179,9 +1223,48 @@
         });
     }
 
+    function configureArrowButtons() {
+        document.getElementById('arrowUp')["onclick"] = function () {
+            const allHighlights = Array.from(document.querySelectorAll('.highlight'));
+
+            if (allHighlights.length === 0) return;
+
+            const current = findCurrentHighlightedElement();
+            const previous = findPreviousHighlightedElement(current);
+
+            const target = previous || allHighlights[0];
+            swapHighlightAndScroll(current, target);
+        };
+
+        document.getElementById('arrowDown')["onclick"] = function () {
+            const allHighlights = Array.from(document.querySelectorAll('.highlight'));
+
+            if (allHighlights.length === 0) return;
+
+            const current = findCurrentHighlightedElement();
+            const next = findNextHighlightedElement(current);
+
+            const target = next || allHighlights[0];
+            swapHighlightAndScroll(current, target);
+        };
+    }
+
+    function swapHighlightAndScroll(current, next) {
+        if (current) {
+            current.classList.remove('current-highlight');
+        }
+        if (next) {
+            next.classList.add('current-highlight');
+            scrollToElementWithSearchBarOnTop(next);
+        }
+    }
+
     function configureSearchToggle() {
         const searchToggle = document.getElementById('toggle-search');
         const searchBar = document.getElementById('search-bar');
+
+        hideArrowsContainer();
+        configureArrowButtons();
 
         searchToggle.addEventListener('click', function () {
             const body = document.body;
@@ -1195,6 +1278,7 @@
 
                 scrollToProjects();
             } else {
+                resetCurrentHighlight();
                 hideProjects();
                 searchBar.style.display = 'none';
                 searchBar.value = '';
@@ -1204,6 +1288,12 @@
         });
     }
 
+    function resetCurrentHighlight() {
+        const current = document.querySelector('.current-highlight');
+        if (current) {
+            document.querySelector('.current-highlight').classList.remove('current-highlight');
+        }
+    }
 
     function configureSearchBar() {
         // Configures the search bar to always remain at the top during scrolling
