@@ -125,7 +125,7 @@
         </p>
     </div>
 
-    <div class="section" id="experience">
+    <div class="section page-break-after" id="experience">
         <h2 id="experienceTitle">Experience</h2>
         <ul id="experience-list"></ul>
     </div>
@@ -282,10 +282,12 @@
 
         showProfileInfo();
         hideFormContainer();
+        hideSearchContainer();
+        hideButtonContainer();
 
         showPdfSummary();
 
-        const resume = document.querySelector('.container');
+        const resume = document.querySelector('#page-top');
 
         if (!resume) {
             console.error("Resume container not found!");
@@ -916,6 +918,16 @@
         formContainer.style.display = 'none';
     }
 
+    function hideSearchContainer() {
+        const searchContainer = document.querySelector('.search-container');
+        searchContainer.style.visibility = 'hidden';
+    }
+
+    function hideButtonContainer() {
+        const searchContainer = document.querySelector('.button-container');
+        searchContainer.style.visibility = 'hidden';
+    }
+
     function showProfileInfo() {
         document.querySelector('#pdfEmailHeader').style.display = 'block';
         document.querySelector('.live-resume').style.display = 'block';
@@ -961,7 +973,7 @@
     // Functions: Customize Page Breaks (PDF)
 
     function customizePageBreaks(projectItems) {
-        projectItems[2].style.marginTop = '95mm';
+        projectItems[2].style.marginTop = '105mm';
         projectItems[5].style.marginTop = '95mm';
     }
 
