@@ -768,6 +768,20 @@ p {
         opacity: 1;
         transform: translateX(0);
     }
+
+    body.search-active #search-bar {
+        width: 80% !important;
+        margin: 0 auto;
+        left: 0;
+    }
+
+    body.search-active {
+        .button-container > button:not(#toggle-search),
+        .button-group > button:not(#toggle-search),
+        .menu-toggle {
+            opacity: 0.1;
+        }
+    }
 }
 
 /* Dark Mode Styles */
