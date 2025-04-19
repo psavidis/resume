@@ -47,9 +47,8 @@ My resume should support:
 - **Responsive Design**: The resume can be loaded on any device
   - For smaller screens, there is a toggle button which can be clicked to unfold all buttons to save space.
 - **Search Mode**: The resume can search simple keywords in my projects and highlight them
-  - It works with single keywords or some of them separated with space.
+  - It works with multiple keywords separated by space.
   - A simple regex is used to find the keywords and highlight them.
-  - The limitation of the current implementation is acceptable for the needs of my project as the user can fallback to single keyword search to assist him in browsing through my projects.
 - **Download PDF**: The resume can be downloaded as a PDF file
 - **Keyboard Shortcuts**: Users can access the features using keyboard shortcuts!
   - **Note**: The feature is only available for Desktop clients.
