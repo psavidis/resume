@@ -1028,14 +1028,29 @@
     // Functions: Highlighting Text
 
     function highlightText(section, input) {
-        const words = input.split(/\s+/); // Split the input into multiple words separated by spaces
+
+        const text = input.trim();
+
+        if (isBlank(text)) {
+            return;
+        }
+
+        const words = text.split(/\s+/); // Split the input into multiple words separated by spaces
         words.forEach(word => {
             const escapedWord = escapeRegExp(word); // Escape the word for safe regex use
             const regex = new RegExp(`\\b(${escapedWord})\\b`, 'gi'); // Case-insensitive matching for whole words
             const nodes = getTextNodes(section);
 
             nodes.forEach(node => {
-                const text = node.nodeValue;
+                const text = node.nodeValue.trim();
+                console.log(text + ": " + text.length);
+
+                // Skip this iteration if the text is empty
+                if (text.length === 0) {
+                    console.log("Skipping empty text");
+                    return;
+                }
+
                 const parts = text.replace(regex, (match) => {
                     // Wrap matched words in a span
                     return `<span class="highlight">${match}</span>`;
@@ -1807,6 +1822,12 @@
         document.getElementById('blog-btn').addEventListener('click', function() {
             window.open("https://psavidis.github.io/resume/blog.html", "_blank"); // Open the blog in a new tab
         });
+    }
+
+    // functions: misc
+
+    function isBlank(str) {
+        return !str.trim().length;
     }
 
     // Call functions to load data and initialize the page components
