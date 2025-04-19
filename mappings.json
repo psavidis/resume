@@ -1,0 +1,36 @@
+[
+  {
+    "patterns": [
+      "What's your first name",
+      "What is your first name",
+      "Tell me your first name",
+      "Your first name"
+    ],
+    "template": "{{#firstWord}}{{basics.name}}{{/firstWord}}"
+  },
+  {
+    "patterns": [
+      "What's your last name",
+      "What is your last name",
+      "Tell me your last name",
+      "Your last name"
+    ],
+    "template": "{{#secondWord}}{{name}}{{/secondWord}}"
+  },
+  {
+    "patterns": [
+      "What's your experience",
+      "How many years of experience do you have",
+      "How many years of experience",
+      "Years of experience",
+      "Experience years"
+    ],
+    "handler": "calculateExperience"
+  },
+  {
+    "patterns": [
+      "What is your education?"
+    ],
+    "template": "{{#education}}I studied {{fieldOfStudy}} at {{school}} and have a {{degree}}. {{/education}}"
+  }
+]
