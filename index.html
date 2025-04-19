@@ -1172,6 +1172,7 @@
             const isSearchActive = body.classList.toggle('search-active');
 
             if (isSearchActive) {
+                hideFormContainer();
                 showProjects();
                 searchBar.style.display = 'block';
                 searchBar.focus();
