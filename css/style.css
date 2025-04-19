@@ -1427,7 +1427,7 @@ body.search-active {
     .arrows-container {
         position: absolute;
         right: -85px; /* Ensure arrows are at the right edge of the input */
-        top: 22px;
+        top: 25px;
         bottom: 0;
         display: flex;
         flex-direction: column;
