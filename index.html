@@ -1148,11 +1148,6 @@
             top: topPosition - offset,
             behavior: "smooth"
         });
-
-        // fixes scrolling issue with keyboard
-        if (isIOS()) {
-            setTimeout(() => window.scrollBy(0, 1), 50);
-        }
     }
 
     function scrollToProjects() {
@@ -1636,10 +1631,6 @@
 
     function isMobile() {
         return /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
-    }
-
-    function isIOS() {
-        return "/iPhone|iPad|iPod/i".test(navigator.userAgent);
     }
 
     function isMac() {
