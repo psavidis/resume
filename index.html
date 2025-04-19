@@ -205,6 +205,7 @@
             <li id="li-open-github"></li>
             <li id="li-open-location"></li>
             <li id="li-toggle-dark-mode"></li>
+            <li id="li-search-results"></li>
         </ul>
     </div>
 </div>
@@ -1387,6 +1388,7 @@
 
         <!-- Populate commands list -->
         document.getElementById('li-search-projects').innerHTML = `<strong>${modifierKey} + F</strong>: Search Projects`;
+        document.getElementById('li-search-results').innerHTML = `<strong>Up / Down</strong>: Navigate Search Results`;
         document.getElementById('li-download-resume').innerHTML = `<strong>${modifierKey} + S</strong>: Download Resume`;
         document.getElementById('li-send-email').innerHTML = `<strong>${modifierKey} + E</strong>: Send Email`;
         document.getElementById('li-open-linkedin').innerHTML = `<strong>${modifierKey} + Shift + L</strong>: Open LinkedIn`;
