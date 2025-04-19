@@ -1293,26 +1293,6 @@ body.dark-mode .fun-fact-text {
     color: white; /* Dark gray for readability */
 }
 
-input:-webkit-autofill::first-line {
-    color: #e0e0e0 !important; /* Ensure the text color is consistent */
-}
-
-/* Webkit-based browsers (Chrome, Safari, etc.) */
-input:-webkit-autofill {
-    background-color: #2a2a2a !important; /* Dark background */
-    color: #e0e0e0 !important; /* Light text color */
-    border: 1px solid #444 !important; /* Optional: Consistent border */
-    box-shadow: 0 0 0 30px #2a2a2a inset !important; /* Important to override background color */
-}
-
-/* Firefox */
-input:-moz-autofill {
-    background-color: #2a2a2a !important; /* Dark background */
-    color: #e0e0e0 !important; /* Light text color */
-    border: 1px solid #444 !important; /* Optional: Consistent border */
-    box-shadow: 0 0 0 30px #2a2a2a inset !important; /* Important to override background color */
-}
-
 #copyright {
     color: white;
     font-size: 1em;
