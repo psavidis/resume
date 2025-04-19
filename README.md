@@ -49,6 +49,7 @@ My resume should support:
 - **Search Mode**: The resume can search simple keywords in my projects and highlight them
   - It works with multiple keywords separated by space.
   - A simple regex is used to find the keywords and highlight them.
+  - The user can also use navigate between the highlighted results using next / previous arrows.
 - **Download PDF**: The resume can be downloaded as a PDF file
 - **Keyboard Shortcuts**: Users can access the features using keyboard shortcuts!
   - **Note**: The feature is only available for Desktop clients.
