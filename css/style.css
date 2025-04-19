@@ -154,6 +154,12 @@ p {
     object-fit: cover;
 }
 
+.dark-mode .profile-picture {
+    outline: rgba(255, 174, 0, 0.68) solid 1px;
+    outline-offset: 1px;
+    transition: all 0.3s ease;
+}
+
 .profile-info {
     display: flex;
     flex-direction: column;
@@ -165,6 +171,10 @@ p {
 .profile-info-name {
     margin: 0;
     font-size: em;
+}
+
+.dark-mode .profile-info-name {
+    text-shadow: rgba(255, 174, 0, 0.8) 0 0 2px;
 }
 
 .profile-info-email {
