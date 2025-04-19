@@ -386,6 +386,8 @@
 
     function searchResume() {
         let input = document.getElementById('search-bar').value.toLowerCase();
+        const trimmedInput = input.trim();
+
         let sections = document.querySelectorAll('#Projects'); // Assuming sections are in the 'container' class
 
         // Add a class to disable animations during search
@@ -402,10 +404,12 @@
             }
 
             let textContent = section.textContent || section.innerText;
-            if (textContent.toLowerCase().includes(input)) {
+            if (sectionContainsTokens(textContent, trimmedInput)) {
                 showArrowsContainer();
                 // section.style.display = 'block'; // Show the section if it contains the search term
-                highlightText(section, input); // Highlight the matching text
+
+                const tokens = getTokens(trimmedInput);
+                highlightText(section, tokens); // Highlight the matching text
 
                 const firstHighlight = findNextHighlightedElement();
                 if (firstHighlight) {
@@ -422,6 +426,18 @@
         setTimeout(() => {
             document.body.classList.remove('searching');
         }, 1000); // Timeout to allow changes to take place before animations are re-enabled
+    }
+
+    function sectionContainsTokens(textContent, trimmedInput) {
+        const tokens = getTokens(trimmedInput);
+        const text = textContent.toLowerCase();
+
+        return tokens.some(token => text.includes(token));
+    }
+
+    function getTokens(query) {
+        const tokens = query.split(/\s+/);
+        return [...new Set(tokens)];
     }
 
     function findNextHighlightedElement(current) {
@@ -1027,27 +1043,23 @@
 
     // Functions: Highlighting Text
 
-    function highlightText(section, input) {
+    function highlightText(section, tokens) {
+        tokens.forEach(token => {
 
-        const text = input.trim();
+            // Skip highlighting blank tokens
+            if (isBlank(token)) {
+                return;
+            }
 
-        if (isBlank(text)) {
-            return;
-        }
-
-        const words = text.split(/\s+/); // Split the input into multiple words separated by spaces
-        words.forEach(word => {
-            const escapedWord = escapeRegExp(word); // Escape the word for safe regex use
+            const escapedWord = escapeRegExp(token); // Escape the word for safe regex use
             const regex = new RegExp(`\\b(${escapedWord})\\b`, 'gi'); // Case-insensitive matching for whole words
             const nodes = getTextNodes(section);
 
             nodes.forEach(node => {
                 const text = node.nodeValue.trim();
-                console.log(text + ": " + text.length);
 
                 // Skip this iteration if the text is empty
                 if (text.length === 0) {
-                    console.log("Skipping empty text");
                     return;
                 }
 
