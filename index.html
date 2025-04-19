@@ -1055,6 +1055,7 @@
     }
 
     function removeHighlights(section) {
+        resetCurrentHighlight();
         const highlightedText = section.querySelectorAll('.highlight');
         highlightedText.forEach(span => {
             const parentNode = span.parentNode;
