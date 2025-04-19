@@ -1372,10 +1372,31 @@ body.dark-mode .fun-fact-text {
 }
 
 /* Blur everything except the search bar*/
-body.search-active .container > *:not(#Projects):not(.search-container):not(#search-bar) {
-    filter: blur(4px);
-    pointer-events: none;
-    transition: filter 0.3s ease;
+body.search-active {
+
+    .container > *:not(#Projects):not(.search-container):not(#search-bar) {
+        filter: blur(4px);
+        pointer-events: none;
+        transition: filter 0.3s ease;
+    }
+
+    #shortcut-hint {
+        filter: blur(4px);
+        pointer-events: none;
+        transition: filter 0.3s ease;
+    }
+
+    #copyright {
+        filter: blur(4px);
+        pointer-events: none;
+        transition: filter 0.3s ease;
+    }
+
+    #voice-command-hint {
+        filter: blur(4px);
+        pointer-events: none;
+        transition: filter 0.3s ease;
+    }
 }
 
 /* Add a dimming effect to the background */
