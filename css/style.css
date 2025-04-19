@@ -302,6 +302,13 @@ p {
 .highlight {
     background-color: yellow;
     font-weight: bold;
+    opacity: 0.6;
+}
+
+.current-highlight {
+    background-color: #ffc400;
+    font-weight: bold;
+    opacity: 1;
 }
 
 /*Search Button Style when Active */
@@ -827,6 +834,15 @@ body.search-active .toggle-button:focus {
             opacity: 0.1;
         }
     }
+
+    body.search-active .arrows-container{
+        right: -30px !important;
+    }
+
+    .arrow-up,
+    .arrow-down {
+        padding: 10px; /* For small screens, make the arrow bigger */
+    }
 }
 
 /* Dark Mode Styles */
@@ -1150,6 +1166,10 @@ body.dark-mode .highlight {
     border-radius: 4px;
 }
 
+body.dark-mode .current-highlight {
+    background-color: #8a2be2;
+}
+
 body.dark-mode .btn {
     background: linear-gradient(145deg, #2e2a36, #1c1c24); /* Dark gradient */
     color: #c9b6e4; /* Soft Lavender text */
@@ -1282,26 +1302,6 @@ body.dark-mode .fun-fact-text {
     color: white; /* Dark gray for readability */
 }
 
-input:-webkit-autofill::first-line {
-    color: #e0e0e0 !important; /* Ensure the text color is consistent */
-}
-
-/* Webkit-based browsers (Chrome, Safari, etc.) */
-input:-webkit-autofill {
-    background-color: #2a2a2a !important; /* Dark background */
-    color: #e0e0e0 !important; /* Light text color */
-    border: 1px solid #444 !important; /* Optional: Consistent border */
-    box-shadow: 0 0 0 30px #2a2a2a inset !important; /* Important to override background color */
-}
-
-/* Firefox */
-input:-moz-autofill {
-    background-color: #2a2a2a !important; /* Dark background */
-    color: #e0e0e0 !important; /* Light text color */
-    border: 1px solid #444 !important; /* Optional: Consistent border */
-    box-shadow: 0 0 0 30px #2a2a2a inset !important; /* Important to override background color */
-}
-
 #copyright {
     color: white;
     font-size: 1em;
@@ -1380,6 +1380,10 @@ body.search-active {
         width: 290px;
         z-index: 9999;
         pointer-events: auto;
+
+        display: flex;
+        align-items: center;
+        justify-content: center; /* Ensure input is centered */
     }
 
     #search-bar {
@@ -1390,6 +1394,50 @@ body.search-active {
         box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
         border: 1px solid #ccc;
         outline: none;
+    }
+
+    .arrows-container {
+        position: absolute;
+        right: -85px; /* Ensure arrows are at the right edge of the input */
+        top: 22px;
+        bottom: 0;
+        display: flex;
+        flex-direction: column;
+        justify-content: center; /* Align arrows vertically */
+        z-index: 10000;
+    }
+
+    .arrow-up,
+    .arrow-down {
+        cursor: pointer;
+        font-size: 18px;
+        color: #333; /* Dark grey for the arrows */
+        transition: color 0.3s ease, transform 0.3s ease;
+        background-color: white; /* White circle background */
+        border-radius: 50%; /* Circle shape */
+        padding: 8px; /* Add some padding to make the circle bigger */
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2); /* Light shadow for depth */
+        margin-bottom: 5px; /* Space between arrows */
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .arrow-up {
+        margin-bottom: 5px; /* Small space between arrows */
+    }
+
+    /* Hover effect */
+    .arrow-up:hover,
+    .arrow-down:hover {
+        color: #007BFF; /* Blue color on hover */
+        transform: scale(1.2); /* Slightly enlarge the icon on hover */
+    }
+
+    /* Active state effect (when clicked) */
+    .arrow-up:active,
+    .arrow-down:active {
+        transform: scale(1.1); /* Slightly shrink the icon on click */
     }
 }
 
