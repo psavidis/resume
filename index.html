@@ -786,8 +786,6 @@
 
             projectsList.appendChild(li);
         });
-
-        console.log("Populate Projects ended");
     }
 
     function populateEducation(data) {
@@ -1050,7 +1048,6 @@
 
         nodes.forEach(node => {
             const text = node.nodeValue.trim();
-            console.log("Wrap: " + text);
 
             if (text.length === 0) return;
 
@@ -1304,9 +1301,7 @@
         hideArrowsContainer();
         configureArrowButtons();
 
-        console.log("Init sections!");
         let sections = document.querySelectorAll('.project-li');
-        console.log("Found sections: " + sections.length);
         sections.forEach(section => {wrapWordsInSpans(section)});
 
         searchToggle.addEventListener('click', function () {
