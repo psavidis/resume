@@ -385,6 +385,7 @@
     }
 
     function searchResume() {
+        resetCurrentHighlight();
         let input = document.getElementById('search-bar').value.toLowerCase();
         const trimmedInput = input.trim();
 
@@ -394,16 +395,15 @@
         document.body.classList.add('searching');
 
         sections.forEach(section => {
-            // Reset previous highlights and ensure animation is not triggered
             removeHighlights(section);
 
-            // Only proceed if there is search input
             if (input === '') {
                 section.style.display = 'block'; // Show the section if search input is empty
                 return;
             }
 
             let textContent = section.textContent || section.innerText;
+
             if (sectionContainsTokens(textContent, trimmedInput)) {
                 showArrowsContainer();
                 // section.style.display = 'block'; // Show the section if it contains the search term
@@ -786,6 +786,8 @@
 
             projectsList.appendChild(li);
         });
+
+        console.log("Populate Projects ended");
     }
 
     function populateEducation(data) {
@@ -1043,50 +1045,56 @@
 
     // Functions: Highlighting Text
 
+    function wrapWordsInSpans(section) {
+        const nodes = getTextNodes(section);
+
+        nodes.forEach(node => {
+            const text = node.nodeValue.trim();
+            console.log("Wrap: " + text);
+
+            if (text.length === 0) return;
+
+            // Split the text into words (you can adjust the split logic based on your needs)
+            const words = text.split(/\s+/); // Split by spaces
+
+            // Create a fragment to hold the new span-wrapped text
+            const fragment = document.createDocumentFragment();
+
+            words.forEach(word => {
+                const span = document.createElement('span');
+                span.classList.add('word');
+                span.textContent = word; // Set the word as the text content of the span
+                fragment.appendChild(span);
+                fragment.appendChild(document.createTextNode(' ')); // Add space between words
+            });
+
+            // Replace the original text node with the new wrapped content
+            node.replaceWith(fragment);
+        });
+    }
+
     function highlightText(section, tokens) {
+        const nodes = section.querySelectorAll('.word'); // Select all wrapped words
+
         tokens.forEach(token => {
+            if (!token.trim()) return;
 
-            // Skip highlighting blank tokens
-            if (isBlank(token)) {
-                return;
-            }
+            const regex = new RegExp(`\\b(${escapeRegExp(token)})\\b`, 'gi'); // Case-insensitive whole word matching
 
-            const escapedWord = escapeRegExp(token); // Escape the word for safe regex use
-            const regex = new RegExp(`\\b(${escapedWord})\\b`, 'gi'); // Case-insensitive matching for whole words
-            const nodes = getTextNodes(section);
+            nodes.forEach(span => {
+                const text = span.textContent.trim();
 
-            nodes.forEach(node => {
-                const text = node.nodeValue.trim();
-
-                // Skip this iteration if the text is empty
-                if (text.length === 0) {
-                    return;
-                }
-
-                const parts = text.replace(regex, (match) => {
-                    // Wrap matched words in a span
-                    return `<span class="highlight">${match}</span>`;
-                });
-
-                if (parts !== text) { // Only replace if something was highlighted
-                    const fragment = document.createDocumentFragment();
-                    const tempDiv = document.createElement('div');
-                    tempDiv.innerHTML = parts; // Use innerHTML to insert the replaced content
-                    while (tempDiv.firstChild) {
-                        fragment.appendChild(tempDiv.firstChild); // Append all child nodes (including the span)
-                    }
-                    node.replaceWith(fragment); // Replace original node with the new fragment
+                if (regex.test(text)) {
+                    span.classList.add('highlight'); // Add highlight to matching words
                 }
             });
         });
     }
 
     function removeHighlights(section) {
-        resetCurrentHighlight();
-        const highlightedText = section.querySelectorAll('.highlight');
-        highlightedText.forEach(span => {
-            const parentNode = span.parentNode;
-            parentNode.replaceChild(document.createTextNode(span.innerText), span); // Replace span with plain text
+        const highlightedSpans = section.querySelectorAll('.highlight');
+        highlightedSpans.forEach(span => {
+            span.classList.remove('highlight'); // Remove the highlight class
         });
     }
 
@@ -1280,7 +1288,9 @@
     function swapHighlightAndScroll(current, next) {
         if (current) {
             current.classList.remove('current-highlight');
+            current.classList.add('highlight');
         }
+
         if (next) {
             next.classList.add('current-highlight');
             scrollToElementWithSearchBarOnTop(next);
@@ -1293,6 +1303,11 @@
 
         hideArrowsContainer();
         configureArrowButtons();
+
+        console.log("Init sections!");
+        let sections = document.querySelectorAll('.project-li');
+        console.log("Found sections: " + sections.length);
+        sections.forEach(section => {wrapWordsInSpans(section)});
 
         searchToggle.addEventListener('click', function () {
             const body = document.body;
@@ -1838,28 +1853,26 @@
 
     // functions: misc
 
-    function isBlank(str) {
-        return !str.trim().length;
-    }
-
     // Call functions to load data and initialize the page components
 
-    loadResumeData();
+    loadResumeData().then(() => {
+        hideSearchBar();
 
-    hideSearchBar();
+        configurePdfButton();
+        configureSearchToggle();
+        configureSearchBar();
+        configurePhoneButton();
 
-    configurePdfButton();
-    configureSearchToggle();
-    configureSearchBar();
-    configurePhoneButton();
+        configureBasedOnClient();
 
-    configureBasedOnClient();
+        showEasterEgg();
 
-    showEasterEgg();
+        configureDarkModeButton();
+        configurePushNotificationOnLoad();
+        configureVoice();
+    });
 
-    configureDarkModeButton();
-    configurePushNotificationOnLoad();
-    configureVoice();
+
 </script>
 </body>
 </html>
