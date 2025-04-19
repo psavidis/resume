@@ -400,6 +400,11 @@
             if (textContent.toLowerCase().includes(input)) {
                 // section.style.display = 'block'; // Show the section if it contains the search term
                 highlightText(section, input); // Highlight the matching text
+
+                const firstHighlight = document.querySelector('.highlight');
+                if (firstHighlight) {
+                    scrollToElement(firstHighlight);
+                }
             } else {
                 // section.style.display = 'none'; // Hide the section if it does not contain the search term
             }
@@ -1015,15 +1020,20 @@
 
     // Functions: Scrolling
 
-    function scrollToElement(elementId) {
-        document.getElementById(elementId).scrollIntoView({
+    function scrollToElementById(elementId) {
+        const element = document.getElementById(elementId);
+        scrollToElement(element);
+    }
+
+    function scrollToElement(element) {
+        element.scrollIntoView({
             behavior: "smooth"
         });
         window.dispatchEvent(new Event('scroll'));
     }
 
     function scrollToShortcuts() {
-        scrollToElement("shortcuts");
+        scrollToElementById("shortcuts");
     }
 
     function scrollToProjects() {
