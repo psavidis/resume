@@ -278,6 +278,10 @@ p {
     color: #777;
 }
 
+.dark-mode .location-badge {
+    color: #ff9dbf !important;
+}
+
 .location-badge span {
     font-size: 16px; /* Icon size */
     margin-right: 5px; /* Space between icon and location text */
