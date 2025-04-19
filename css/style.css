@@ -2,6 +2,7 @@ html, body {
     width: 100%;
     overflow-x: hidden; /* prevents accidental horizontal shift */
 }
+
 body.lock-width {
     overflow: hidden;
     position: fixed;
@@ -99,6 +100,7 @@ p {
     gap: 10px;            /* space between each button */
     position:fixed;
     right:20px;
+    z-index: 1001; /* 1 index above container */
 }
 
 .button-group {
@@ -302,16 +304,61 @@ p {
     font-weight: bold;
 }
 
-/* Styling for the toggle button */
-.toggle-button {
-    display: flex;
+/*Search Button Style when Active */
+body.search-active .toggle-button {
+    background-color: rgba(255, 255, 255, 0.85); /* Frosted white with slight opacity */
+    color: #111;  /* Black icon/text */
+    border: 2px solid rgba(0, 0, 0, 0.3); /* Stronger border for more definition */
+    border-radius: 50%; /* Keeps it circular */
+    box-shadow:
+            inset 0 6px 8px rgba(0, 0, 0, 0.3),     /* Inner shadow (pressed effect) */
+            0 6px 16px rgba(0, 0, 0, 0.35),        /* Strong drop shadow for depth */
+            0 0 12px rgba(255, 255, 255, 0.5);     /* Outer glow */
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    transform: scale(1);  /* Normal size */
+    transition: all 0.3s ease; /* Smooth transition */
+    z-index: 10001;
 }
+
+body.search-active .toggle-button:active {
+    transform: scale(0.98);  /* Slightly shrink when pressed */
+    border: 3px solid rgba(0, 0, 0, 0.6); /* Thicker, sharper border when pressed */
+    box-shadow:
+            inset 0 10px 12px rgba(0, 0, 0, 0.5),   /* Stronger inset shadow (deep press) */
+            0 8px 20px rgba(0, 0, 0, 0.5),          /* Stronger outer shadow */
+            0 0 20px rgba(255, 255, 255, 0.7);      /* Enhanced glowing effect when pressed */
+}
+
+body.search-active .toggle-button.search-active {
+    animation: glowing 1.5s infinite alternate; /* Glowing animation */
+    box-shadow:
+            inset 0 10px 12px rgba(0, 0, 0, 0.5),   /* Stronger inset shadow */
+            0 8px 20px rgba(0, 0, 0, 0.5),          /* Stronger outer shadow */
+            0 0 25px rgba(255, 255, 255, 1),        /* Bright white glowing effect */
+            0 0 35px rgba(255, 255, 255, 0.8);      /* Larger, softer glow */
+}
+
+body.search-active .toggle-button:focus {
+    outline: none; /* Remove default focus outline */
+    box-shadow: 0 0 14px rgba(0, 0, 0, 0.45); /* Strong focus glow */
+}
+
+@keyframes glowing {
+    0% {
+        box-shadow: 0 0 15px rgba(255, 255, 255, 0.6), 0 0 20px rgba(0, 0, 0, 0.6); /* Glowing effect */
+    }
+    100% {
+        box-shadow: 0 0 30px rgba(255, 255, 255, 1), 0 0 40px rgba(0, 0, 0, 0.7); /* Brightest glow */
+    }
+}
+
+/*End of Search Button style when Active*/
 
 /* Hover effect for the toggle button */
 .toggle-button:hover {
     background-color: #f1c40f; /* Match the exact yellow color for hover (adjusted) */
     color: #fff; /* Change icon color to white on hover */
-    transform: scale(1.1); /* Slight enlarge effect on hover */
 }
 
 /* Focus effect for accessibility */
@@ -765,6 +812,20 @@ p {
         max-height: 1000px;
         opacity: 1;
         transform: translateX(0);
+    }
+
+    body.search-active #search-bar {
+        width: 80% !important;
+        margin: 0 auto;
+        left: 0;
+    }
+
+    body.search-active {
+        .button-container > button:not(#toggle-search),
+        .button-group > button:not(#toggle-search),
+        .menu-toggle {
+            opacity: 0.1;
+        }
     }
 }
 
@@ -1263,13 +1324,13 @@ input:-moz-autofill {
         display: flex !important;
         flex-direction: row !important;
         gap: 10px !important;
-        max-height: none !important;     /* desktop: never collapse */
-        opacity:    1    !important;     /* desktop: always visible */
-        transform:  none !important;     /* desktop: no slide transform */
+        max-height: none !important; /* desktop: never collapse */
+        opacity: 1 !important; /* desktop: always visible */
+        transform: none !important; /* desktop: no slide transform */
     }
 
     #menu-toggle {
-        display: none !important;        /* hide hamburger on desktop */
+        display: none !important; /* hide hamburger on desktop */
     }
 }
 
@@ -1279,5 +1340,66 @@ input:-moz-autofill {
         display: none !important;
         visibility: hidden !important;
         opacity: 0 !important;
+    }
+}
+
+/* Blur everything except the search bar*/
+body.search-active .container > *:not(#Projects):not(.search-container):not(#search-bar) {
+    filter: blur(4px);
+    pointer-events: none;
+    transition: filter 0.3s ease;
+}
+
+/* Add a dimming effect to the background */
+body.search-active::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5); /* Semi-transparent black */
+    z-index: 999;
+    pointer-events: none;
+}
+
+.container {
+    position: relative; /* Ensure it's positioned relative to the page */
+    z-index: 1000; /* Make sure it's above the dimming overlay */
+    pointer-events: auto; /* Ensure it's interactive */
+}
+
+/* Search Bar Active */
+body.search-active {
+
+    .search-container {
+        position: fixed;
+        top: 80px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 300px;
+        z-index: 9999;
+        pointer-events: auto;
+    }
+
+    #search-bar {
+        border-radius: 25px;
+        width: 100%;
+        padding: 12px 20px;
+        font-size: 16px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+        border: 1px solid #ccc;
+        outline: none;
+    }
+}
+
+/* Blur all buttons besides the search button */
+body.search-active {
+    .button-container > button:not(#toggle-search),
+    .button-group > button:not(#toggle-search),
+    .menu-toggle {
+        filter: blur(4px);
+        pointer-events: none;
+        transition: filter 0.3s ease;
     }
 }

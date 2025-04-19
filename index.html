@@ -400,6 +400,11 @@
             if (textContent.toLowerCase().includes(input)) {
                 // section.style.display = 'block'; // Show the section if it contains the search term
                 highlightText(section, input); // Highlight the matching text
+
+                const firstHighlight = document.querySelector('.highlight');
+                if (firstHighlight) {
+                    scrollToElementWithSearchBarOnTop(firstHighlight);
+                }
             } else {
                 // section.style.display = 'none'; // Hide the section if it does not contain the search term
             }
@@ -1015,19 +1020,40 @@
 
     // Functions: Scrolling
 
-    function scrollToElement(elementId) {
-        document.getElementById(elementId).scrollIntoView({
+    function scrollToElementById(elementId) {
+        const element = document.getElementById(elementId);
+        scrollToElement(element);
+    }
+
+    function scrollToElement(element) {
+        element.scrollIntoView({
             behavior: "smooth"
         });
         window.dispatchEvent(new Event('scroll'));
     }
 
     function scrollToShortcuts() {
-        scrollToElement("shortcuts");
+        scrollToElementById("shortcuts");
+    }
+
+    function scrollToElementWithSearchBarOnTop(element) {
+        const searchBar = document.getElementById("search-bar");
+
+        const offsetMargin = 100;
+
+        const offset = (searchBar.height || 60) + offsetMargin; // fallback in case it’s not rendered yet
+        const topPosition = element.getBoundingClientRect().top + window.scrollY;
+
+        window.scrollTo({
+            top: topPosition - offset,
+            behavior: "smooth"
+        });
     }
 
     function scrollToProjects() {
-        scrollToElement("Projects");
+        const projectsSection = document.getElementById("Projects");
+
+        scrollToElementWithSearchBarOnTop(projectsSection);
     }
 
     function scrollToTop() {
@@ -1139,30 +1165,28 @@
 
     function configureSearchToggle() {
         const searchToggle = document.getElementById('toggle-search');
+        const searchBar = document.getElementById('search-bar');
+
         searchToggle.addEventListener('click', function () {
-            const searchBar = document.getElementById('search-bar');
+            const body = document.body;
+            const isSearchActive = body.classList.toggle('search-active');
 
-            if (searchBar.style.display === 'block') {
-                searchBar.style.display = 'none';
-
-                scrollToTop();
-                hideProjects();
-
-                // init search bar and remove highlights
-                if (searchBar) {
-                    searchBar.value = '';
-                    searchResume();
-                }
-
-            } else {
-                scrollToProjects();
+            if (isSearchActive) {
                 showProjects();
-
                 searchBar.style.display = 'block';
                 searchBar.focus();
+
+                scrollToProjects();
+            } else {
+                hideProjects();
+                searchBar.style.display = 'none';
+                searchBar.value = '';
+                searchResume();
+                scrollToTop();
             }
         });
     }
+
 
     function configureSearchBar() {
         // Configures the search bar to always remain at the top during scrolling
@@ -1243,7 +1267,7 @@
             // Check if Control (Windows) or Command (Mac) + F is pressed
             if ((event.ctrlKey || event.metaKey) && event.key === 'f') {
                 event.preventDefault();
-                document.getElementById('toggle-search').click(); // Replace with your button's ID
+                document.getElementById('toggle-search').click();
             }
         });
     }
