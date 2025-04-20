@@ -266,6 +266,12 @@ p {
     margin-bottom: 0.5rem;
 }
 
+.dark-mode .work-title {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
 .experience-content {
     display: flex;
     flex-direction: column;
@@ -280,9 +286,18 @@ p {
     align-items: center;
 }
 
+.dark-mode .title {
+    color: #f8f8ff;
+}
+
 .role,
 .company {
     font-weight: 600;
+}
+
+.dark-mode .role,
+.dark-mode .company {
+    color: #ffffff;
 }
 
 .at-symbol {
@@ -290,6 +305,10 @@ p {
     font-weight: 500;
     margin: 0 0.3rem;
     letter-spacing: 0.5px;
+}
+
+.dark-mode .at-symbol {
+    color: #b28ddb;
 }
 
 .date {
@@ -316,6 +335,8 @@ p {
 
 .dark-mode .location-badge {
     color: #ff9dbf !important;
+    font-size: 0.9rem;
+    margin-top: 0.3rem;
 }
 
 .location-badge span {
