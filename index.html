@@ -326,10 +326,9 @@
         resume.classList.add('pdf-mode');
 
         const projectItems = document.querySelectorAll('.project-li');
+        const workExperience = document.querySelectorAll('.work-experience');
 
         customizeProjectPageBreaks(projectItems);
-
-        const workExperience = document.querySelectorAll('.work-experience');
         customizeWorkExperiencePageBreaks(workExperience);
 
         const techUsed = document.querySelectorAll('.project-tech');
@@ -770,13 +769,6 @@
             li.style.backgroundColor = '#f9f9f9';
             li.style.transition = 'background-color 0.2s ease-in-out';
 
-            li.addEventListener('mouseenter', () => {
-                li.style.backgroundColor = '#e3eafc';
-            });
-            li.addEventListener('mouseleave', () => {
-                li.style.backgroundColor = '#f9f9f9';
-            });
-
             // Project name
             const projectName = document.createElement('span');
             projectName.textContent = project.name || 'Project not provided';
@@ -797,7 +789,7 @@
             // Tools Used
             const techUsed = document.createElement('p');
             techUsed.classList.add('project-tech');
-            techUsed.textContent = project.techUsed ? `Tools: ${project.techUsed.join(', ')}` : '';
+            techUsed.textContent = project.techUsed ? `${project.techUsed.join(' ')}` : '';
             techUsed.style.display = 'none';
             techUsed.style.fontSize = '13px';
             techUsed.style.fontStyle = 'italic';
@@ -1123,8 +1115,8 @@
     // Functions: Customize Page Breaks (PDF)
 
     function customizeProjectPageBreaks(projectItems) {
-        projectItems[2].style.marginTop = '60mm';
-        projectItems[6].style.marginTop = '25mm';
+        projectItems[2].style.marginTop = '45mm';
+        projectItems[5].style.marginTop = '60mm'; //benelux
     }
 
     function customizeWorkExperiencePageBreaks(workExperienceItems) {

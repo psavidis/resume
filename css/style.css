@@ -1120,6 +1120,56 @@ button.dark-mode i {
     color: #333;
 }
 
+.project-tech {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    padding: 8px 0;
+    align-items: center;
+}
+
+.project-tech span {
+    font-size: 13px;
+    background-color: rgba(68, 149, 255, 0.07);
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+    padding: 3px 8px;
+    line-height: 1.4;
+    white-space: nowrap;
+    transition: background-color 0.2s ease;
+}
+
+.project-tech span:hover {
+    background-color: #5993ff;
+}
+
+.dark-mode .project-tech {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    padding: 8px 0;
+    align-items: center;
+}
+
+.dark-mode .project-tech span {
+    font-size: 13px;
+    background-color: rgba(100, 149, 255, 0.1); /* a subtle blue tint */
+    border: 1px solid #333;
+    border-radius: 4px;
+    padding: 3px 8px;
+    line-height: 1.4;
+    white-space: nowrap;
+    color: #ccc;
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.dark-mode .project-tech span:hover {
+    background-color: rgba(255, 174, 0, 0.8);
+    color: #fff;
+}
+
+
+
 .project-description {
     font-size: 0.95em; /* just slightly smaller */
     color: #777; /* gentle gray */
