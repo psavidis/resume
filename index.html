@@ -679,14 +679,11 @@
             const workTitleAndImg = document.createElement('div');
             workTitleAndImg.classList.add('work-title');
 
-            // Company logo
             const companyImg = createCompanyImg(item);
 
-            // Content container
             const contentDiv = document.createElement('div');
             contentDiv.classList.add('experience-content');
 
-            // Job title and company
             const titleDiv = document.createElement('div');
             titleDiv.classList.add('title');
 
@@ -706,33 +703,44 @@
             titleDiv.appendChild(atSpan);
             titleDiv.appendChild(companySpan);
 
-            // Date (on new line)
-            const dateDiv = document.createElement('div');
-            dateDiv.classList.add('date');
-            dateDiv.textContent = `(${item.startDate || ''} – ${item.endDate || 'Present'})`;
+            // Info row: Dates on left, location + workMode on right
+            const infoRow = document.createElement('div');
+            infoRow.classList.add('info-row');
+
+            const leftInfo = document.createElement('div');
+            leftInfo.classList.add('left-info');
+            leftInfo.textContent = `(${item.startDate || ''} – ${item.endDate || 'Present'})`;
+
+            const rightInfo = document.createElement('div');
+            rightInfo.classList.add('right-info');
+
+            if (item.location) {
+                const locationDiv = document.createElement('div');
+                locationDiv.classList.add('badge', 'location-badge');
+                locationDiv.textContent = item.location;
+                rightInfo.appendChild(locationDiv);
+            }
+
+            if (item.workMode) {
+                const workModeDiv = document.createElement('div');
+                workModeDiv.classList.add('badge', 'work-mode-badge', item.workMode.toLowerCase());
+                workModeDiv.textContent = item.workMode;
+                rightInfo.appendChild(workModeDiv);
+            }
+
+            infoRow.appendChild(leftInfo);
+            infoRow.appendChild(rightInfo);
 
             contentDiv.appendChild(titleDiv);
-            contentDiv.appendChild(dateDiv);
+            contentDiv.appendChild(infoRow);
 
-            // Combine logo + text
             workTitleAndImg.appendChild(companyImg);
             workTitleAndImg.appendChild(contentDiv);
 
-            // Location badge
-            const locationDiv = document.createElement('div');
-            locationDiv.classList.add('location-badge');
-            locationDiv.textContent = '📍' + item.location;
-
             li.appendChild(workTitleAndImg);
-            li.appendChild(locationDiv);
-
             experienceList.appendChild(li);
         });
 
-        const totalXP = getTotalExperience(data.workExperience);
-        const formattedXP = formatTotalExperienceIntoYears(totalXP);
-
-        document.getElementById('experienceTitle').textContent = 'Experience (' + formattedXP + ')';
     }
 
 

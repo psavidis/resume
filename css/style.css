@@ -261,9 +261,9 @@ p {
 
 .work-title {
     display: flex;
-    gap: 1rem;
     align-items: flex-start;
-    margin-bottom: 0.5rem;
+    gap: 1rem;
+    width: 100%;
 }
 
 .dark-mode .work-title {
@@ -273,26 +273,28 @@ p {
 }
 
 .experience-content {
+    flex: 1;
     display: flex;
     flex-direction: column;
+    gap: 0.4rem;
+    width: 100%;
 }
 
 .title {
-    font-size: 1.1rem;
     font-weight: bold;
-    color: #222;
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
 }
 
 .dark-mode .title {
     color: #f8f8ff;
 }
 
-.role,
+.role {
+    font-size: 1.1em;
+    margin-right: 5px;
+}
+
 .company {
-    font-weight: 600;
+    font-size: 1.1em;
 }
 
 .dark-mode .role,
@@ -301,10 +303,7 @@ p {
 }
 
 .at-symbol {
-    color: #666;
-    font-weight: 500;
-    margin: 0 0.3rem;
-    letter-spacing: 0.5px;
+    margin: 0 5px;
 }
 
 .dark-mode .at-symbol {
@@ -312,36 +311,115 @@ p {
 }
 
 .date {
-    font-size: 0.85rem;
-    color: #666;
-    margin-top: 0.25rem;
-    font-style: italic;
+    margin-top: 5px;
+    color: gray;
 }
 
-.work-experience {
+.dark-mode .date {
+    color: #b8a0ff;  /* Softer yet readable light purple */
+    font-size: 0.85rem;  /* Slightly larger for better readability */
+    font-weight: 500; /* A bit bolder to enhance legibility */
+    margin-top: 0.5rem;
+    letter-spacing: 0.3px;
+    text-shadow: 0 0 5px rgba(189, 147, 249, 0.15); /* Subtle glow effect */
+}
+.info-row {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 15px;
+    flex-wrap: wrap;
+    width: 100%;
 }
 
-.location-badge {
-    display: inline-flex;
-    align-items: center;
-    font-size: 11px;
-    color: #444;
-    margin-left: 3.2rem;
+.left-info {
+    font-size: 0.9rem;
+    color: #555;
+    flex: 1;
 }
+
+.right-info {
+    display: flex;
+    gap: 0.5rem;
+    justify-content: flex-end;
+    flex-shrink: 0;
+    white-space: nowrap;
+}
+
+.badge {
+    padding: 0.25rem 0.6rem;
+    border-radius: 0.5rem;
+    font-size: 0.75rem;
+    font-weight: 500;
+    background-color: #f0f0f0;
+    color: #333;
+}
+
+.location-badge::before {
+    content: "📍 ";
+}
+
+.work-mode-badge.remote {
+    background-color: #e3f2fd;
+    color: #0d47a1;
+}
+
+.work-mode-badge.hybrid {
+    background-color: #f3e5f5;
+    color: #6a1b9a;
+}
+
+.work-mode-badge.onsite {
+    background-color: #e8f5e9;
+    color: #1b5e20;
+}
+
+@media (max-width: 600px) {
+    .info-row {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.3rem;
+    }
+
+    .left-info {
+        width: 100%;
+        font-size: 0.85rem;
+    }
+
+    .right-info {
+        width: 100%;
+        justify-content: flex-start;
+        gap: 0.4rem;
+        flex-wrap: wrap;
+    }
+
+    .badge {
+        font-size: 0.7rem;
+        padding: 0.2rem 0.5rem;
+    }
+
+    .title {
+        font-size: 1rem;
+        font-weight: 500;
+        line-height: 1.3;
+    }
+
+    .experience-content {
+        gap: 0.5rem;
+    }
+
+    .work-title {
+        flex-direction: row;
+        align-items: flex-start;
+    }
+}
+
+
+
 
 .dark-mode .location-badge {
     color: #ff9dbf !important;
     font-size: 0.9rem;
     margin-top: 0.3rem;
-}
-
-.location-badge span {
-    font-size: 16px; /* Icon size */
-    margin-right: 5px; /* Space between icon and location text */
 }
 
 /* Avoid breaking inside these elements */

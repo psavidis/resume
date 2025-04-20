@@ -18,7 +18,8 @@
       "startDate": "April 2023",
       "endDate": "Present",
       "employmentType": "Full-time",
-      "location": "Athens, Greece | Remote"
+      "location": "Athens, Greece",
+      "workMode": "Remote"
     },
     {
       "title": "Senior Software Engineer",
@@ -28,7 +29,8 @@
       "startDate": "August 2020",
       "endDate": "December 2022",
       "employmentType": "Full-time",
-      "location": "Vienna, Austria | Hybrid"
+      "location": "Vienna, Austria",
+      "workMode": "Hybrid"
     },
     {
       "title": "Software Engineer",
@@ -38,7 +40,8 @@
       "startDate": "March 2016",
       "endDate": "June 2020",
       "employmentType": "Full-time",
-      "location": "Athens, Greece | On-site"
+      "location": "Athens, Greece",
+      "workMode": "On-site"
     },
     {
       "title": "Software Engineer",
@@ -48,7 +51,8 @@
       "startDate": "December 2012",
       "endDate": "December 2015",
       "employmentType": "Full-time",
-      "location": "Athens, Greece | On-site"
+      "location": "Athens, Greece",
+      "workMode": "On-site"
     },
     {
       "title": "Army Duties",
@@ -58,7 +62,8 @@
       "startDate": "October 2011",
       "endDate": "July 2012",
       "employmentType": "Voluntary",
-      "location": "Athens, Greece"
+      "location": "Athens, Greece",
+      "workMode": "On-site"
     },
     {
       "title": "Android Developer",
@@ -68,7 +73,8 @@
       "startDate": "March 2011",
       "endDate": "October 2011",
       "employmentType": "Internship",
-      "location": "Athens, Greece | On-site"
+      "location": "Athens, Greece",
+      "workMode": "On-site"
     }
   ],
   "project": [
