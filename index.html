@@ -689,7 +689,22 @@
             // Job title and company
             const titleDiv = document.createElement('div');
             titleDiv.classList.add('title');
-            titleDiv.textContent = `${item.title || 'Position not provided'} at ${item.company || 'Company not provided'}`;
+
+            const roleSpan = document.createElement('span');
+            roleSpan.classList.add('role');
+            roleSpan.textContent = item.title || 'Position not provided';
+
+            const atSpan = document.createElement('span');
+            atSpan.classList.add('at-symbol');
+            atSpan.textContent = ' @ ';
+
+            const companySpan = document.createElement('span');
+            companySpan.classList.add('company');
+            companySpan.textContent = item.company || 'Company not provided';
+
+            titleDiv.appendChild(roleSpan);
+            titleDiv.appendChild(atSpan);
+            titleDiv.appendChild(companySpan);
 
             // Date (on new line)
             const dateDiv = document.createElement('div');
