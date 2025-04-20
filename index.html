@@ -129,7 +129,7 @@
         </p>
     </div>
 
-    <div class="section page-break-after" id="experience">
+    <div class="section" id="experience">
         <h2 id="experienceTitle">Experience</h2>
         <ul id="experience-list"></ul>
     </div>
@@ -327,7 +327,10 @@
 
         const projectItems = document.querySelectorAll('.project-li');
 
-        customizePageBreaks(projectItems);
+        customizeProjectPageBreaks(projectItems);
+
+        const workExperience = document.querySelectorAll('.work-experience');
+        customizeWorkExperiencePageBreaks(workExperience);
 
         const techUsed = document.querySelectorAll('.project-tech');
         const projectDescriptions = document.querySelectorAll('.project-description');
@@ -1119,9 +1122,13 @@
 
     // Functions: Customize Page Breaks (PDF)
 
-    function customizePageBreaks(projectItems) {
-        projectItems[2].style.marginTop = '105mm';
-        projectItems[5].style.marginTop = '95mm';
+    function customizeProjectPageBreaks(projectItems) {
+        projectItems[2].style.marginTop = '60mm';
+        projectItems[6].style.marginTop = '25mm';
+    }
+
+    function customizeWorkExperiencePageBreaks(workExperienceItems) {
+        workExperienceItems[5].style.marginTop = '10mm';
     }
 
     // Functions: Highlighting Text
