@@ -1213,6 +1213,10 @@ body.dark-mode .btn {
     transition: background 0.3s, transform 0.2s, color 0.3s;
 }
 
+body.dark-mode #menu-toggle.active {
+    background: linear-gradient(145deg, #9f479f, #1c1c24) !important; /* Dark gradient */
+}
+
 body.dark-mode #microphone-btn {
     background: linear-gradient(145deg, #2e2a36, #1c1c24);
     color: #c9b6e4;
