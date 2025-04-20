@@ -417,9 +417,6 @@
                     firstHighlight.classList.replace('highlight', 'current-highlight');
                     scrollToElementWithSearchBarOnTop(firstHighlight);
                 }
-            } else {
-                hideArrowsContainer();
-                // section.style.display = 'none'; // Hide the section if it does not contain the search term
             }
         });
 
@@ -1450,41 +1447,43 @@
     function registerSearchInputNavigationShortcuts() {
         const searchBar = document.getElementById("search-bar");
 
+        // Map key name to the corresponding key id of the arrows
+        const keyToArrowId = new Map();
+        keyToArrowId.set("ArrowUp", 'arrowUp');
+        keyToArrowId.set("ArrowDown", 'arrowUp');
+
         searchBar.addEventListener('keydown', (e) => {
 
             if (!isArrowsContainerVisible()) {
                 return;
             }
 
-            let targetElement = null;
+            const keyName = e.key;
+            const arrowId = keyToArrowId.get(keyName);
 
-            if (e.key === 'ArrowUp') {
-                e.preventDefault();
-                targetElement = document.getElementById('arrowUp');
-            }
-
-            if (e.key === 'ArrowDown') {
-                e.preventDefault();
-                targetElement = document.getElementById('arrowDown');
-            }
-
-            if (targetElement) {
-                // Add a class to simulate a click effect (like :active state)
-                targetElement.classList.add('click-active');
-
-                // Dispatch the click event
-                const clickEvent = new MouseEvent('click', {
-                    bubbles: true,
-                    cancelable: true,
-                });
-                targetElement.dispatchEvent(clickEvent);
-
-                // Remove the class after a brief delay to simulate a "click"
-                setTimeout(() => {
-                    targetElement.classList.remove('click-active');
-                }, 150);
-            }
+            clickArrowButton(arrowId);
         });
+    }
+
+    function clickArrowButton(arrowId) {
+        const targetElement = document.getElementById(arrowId);
+
+        if (targetElement) {
+            // Add a class to simulate a click effect (like :active state)
+            targetElement.classList.add('click-active');
+
+            // Dispatch the click event
+            const clickEvent = new MouseEvent('click', {
+                bubbles: true,
+                cancelable: true,
+            });
+            targetElement.dispatchEvent(clickEvent);
+
+            // Remove the class after a brief delay to simulate a "click"
+            setTimeout(() => {
+                targetElement.classList.remove('click-active');
+            }, 150);
+        }
     }
 
     function registerSavePdfShortcut() {
@@ -1763,6 +1762,18 @@
             if (isSearchBarVisible) {
                 const searchToggle = document.getElementById('toggle-search');
                 searchToggle.click();
+            }
+        } else if (command.includes("down")) {
+            const userPerformsSearchAndHasResults = isArrowsContainerVisible();
+
+            if (userPerformsSearchAndHasResults) {
+                clickArrowButton("arrowDown");
+            }
+        } else if (command.includes("up")) {
+            const userPerformsSearchAndHasResults = isArrowsContainerVisible();
+
+            if (userPerformsSearchAndHasResults) {
+                clickArrowButton("arrowUp");
             }
         } else if (command.includes("open shortcuts")) {
             const modal = document.getElementById('shortcuts');
