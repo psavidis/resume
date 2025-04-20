@@ -356,6 +356,7 @@
         "Microsoft SQL Server 2017",
         "Microsoft SQL Server 2019",
         "Microsoft Azure SQL",
+        "MyBatis",
         "H2 2.3",
         "Docker",
         "Jenkins",
