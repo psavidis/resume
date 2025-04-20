@@ -679,26 +679,37 @@
             const workTitleAndImg = document.createElement('div');
             workTitleAndImg.classList.add('work-title');
 
-            // Create company logo image
+            // Company logo
             const companyImg = createCompanyImg(item);
 
-            // Create text span for job details
-            const textSpan = document.createElement('span');
-            textSpan.textContent = `${item.title || 'Position not provided'} at ${item.company || 'Company not provided'} (${item.startDate || ''} - ${item.endDate || 'Present'})`;
+            // Content container
+            const contentDiv = document.createElement('div');
+            contentDiv.classList.add('experience-content');
 
+            // Job title and company
+            const titleDiv = document.createElement('div');
+            titleDiv.classList.add('title');
+            titleDiv.textContent = `${item.title || 'Position not provided'} at ${item.company || 'Company not provided'}`;
+
+            // Date (on new line)
+            const dateDiv = document.createElement('div');
+            dateDiv.classList.add('date');
+            dateDiv.textContent = `(${item.startDate || ''} – ${item.endDate || 'Present'})`;
+
+            contentDiv.appendChild(titleDiv);
+            contentDiv.appendChild(dateDiv);
+
+            // Combine logo + text
             workTitleAndImg.appendChild(companyImg);
-            workTitleAndImg.appendChild(textSpan);
+            workTitleAndImg.appendChild(contentDiv);
 
-            const div = document.createElement('div');
-            div.classList.add('location-badge');
+            // Location badge
+            const locationDiv = document.createElement('div');
+            locationDiv.classList.add('location-badge');
+            locationDiv.textContent = '📍' + item.location;
 
-            const span = document.createElement('span');
-            div.appendChild(span);
-            div.textContent = '📍' + item.location;
-
-            // Append logo and text
             li.appendChild(workTitleAndImg);
-            li.appendChild(div);
+            li.appendChild(locationDiv);
 
             experienceList.appendChild(li);
         });
@@ -708,6 +719,7 @@
 
         document.getElementById('experienceTitle').textContent = 'Experience (' + formattedXP + ')';
     }
+
 
     function populateProjects(data) {
         const projectsList = document.getElementById('projects-list');

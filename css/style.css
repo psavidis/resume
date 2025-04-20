@@ -261,7 +261,27 @@ p {
 
 .work-title {
     display: flex;
-    align-items: center;
+    gap: 1rem;
+    align-items: flex-start;
+    margin-bottom: 0.5rem;
+}
+
+.experience-content {
+    display: flex;
+    flex-direction: column;
+}
+
+.title {
+    font-weight: 600;
+    font-size: 1.1rem;
+    color: #222;
+}
+
+.date {
+    font-size: 0.85rem;
+    color: #666;
+    margin-top: 0.25rem;
+    font-style: italic;
 }
 
 .work-experience {
@@ -275,7 +295,8 @@ p {
     display: inline-flex;
     align-items: center;
     font-size: 11px;
-    color: #777;
+    color: #444;
+    margin-left: 3.2rem;
 }
 
 .dark-mode .location-badge {
