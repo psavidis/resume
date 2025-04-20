@@ -1133,6 +1133,7 @@ body.dark-mode #shortcuts ul li:hover {
 
 body.dark-mode h2 {
     color: #ffffff !important; /* Light color for the heading */
+    text-shadow: rgba(255, 174, 0, 0.8) 0 0 3px;
 }
 
 body.dark-mode #Projects #projects-list span {
