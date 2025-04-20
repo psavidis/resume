@@ -407,7 +407,6 @@
             let textContent = section.textContent || section.innerText;
 
             if (sectionContainsTokens(textContent, trimmedInput)) {
-                showArrowsContainer();
                 // section.style.display = 'block'; // Show the section if it contains the search term
 
                 const tokens = getTokens(trimmedInput);
@@ -423,6 +422,8 @@
                 // section.style.display = 'none'; // Hide the section if it does not contain the search term
             }
         });
+
+        configureArrowVisibility();
 
         // Remove the class to re-enable animations after a short delay
         setTimeout(() => {
@@ -442,8 +443,27 @@
         return [...new Set(tokens)];
     }
 
+    function configureArrowVisibility() {
+        if (hasHighlights()) {
+            showArrowsContainer();
+            return;
+        }
+
+        hideArrowsContainer();
+    }
+
+    function hasHighlights() {
+        const currentHighlight = findCurrentHighlightedElement();
+
+        return currentHighlight !== null;
+    }
+
+    function findAllHighlights() {
+        return Array.from(document.querySelectorAll('.highlight'));
+    }
+
     function findNextHighlightedElement(current) {
-        const allHighlights = Array.from(document.querySelectorAll('.highlight'));
+        const allHighlights = findAllHighlights();
 
         if (allHighlights.length === 0) return null;
         if (allHighlights.length === 1) return allHighlights[0];
@@ -457,7 +477,7 @@
     }
 
     function findPreviousHighlightedElement(current) {
-        const allHighlights = Array.from(document.querySelectorAll('.highlight'));
+        const allHighlights = findAllHighlights();
 
         if (allHighlights.length === 0) return null;
         if (allHighlights.length === 1) return allHighlights[0];
