@@ -1155,11 +1155,18 @@ ul.project-points li {
 
 
 .project-tech {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 6px;
-    padding: 8px 0;
-    align-items: center;
+    position: relative;
+    padding-top: 15px; /* Add spacing between the top and the content */
+    margin-top: 10px; /* Optional: space between previous content and the dashed line */
+}
+
+.project-tech::before {
+    content: ''; /* Empty content for the line */
+    position: absolute;
+    top: 0; /* Position the line at the top */
+    left: 0;
+    width: 100%; /* Make the line span the full width of the element */
+    border-top: 1px dashed rgba(30, 60, 114, 0.4); /* Lighter, subtler dashed line */
 }
 
 .project-tech span {
