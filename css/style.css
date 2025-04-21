@@ -1576,6 +1576,7 @@ body.dark-mode #voice-command-hint span {
 
 body.dark-mode .profile-title {
     color: #ffffff !important;
+    text-shadow: rgba(255, 174, 0, 0.8) 0 0 2px;
 }
 
 /* DARK MODE for Contact Form */
