@@ -714,9 +714,9 @@ body.search-active .toggle-button:focus {
 #shortcuts {
     margin-top: 50px;
     padding: 20px;
-    background-color: #f0f0f0; /* Lighter background */
+    background-color: #f0f0f0;
     border-radius: 8px;
-    font-family: 'Courier New', monospace; /* Gives it a keyboard/coding feel */
+    font-family: 'Courier New', monospace;
 }
 
 #shortcuts h2 {
@@ -760,6 +760,7 @@ body.search-active .toggle-button:focus {
     font-size: 15px;
     border-radius: 5px;
     font-family: 'Courier New', monospace;
+    display: none;
     z-index: 1;
 }
 
@@ -788,7 +789,7 @@ body.search-active .toggle-button:focus {
     margin: 5px;
     width: 50px;
     height: 50px;
-    display: flex;
+    display: none;
     align-items: center;
     justify-content: center;
     transition: background-color 0.2s ease;
@@ -1977,4 +1978,14 @@ body.dark-mode .resume-version {
     color: rgba(255, 255, 255, 0.7);
     text-shadow: rgba(255, 174, 0, 0.8) 0 0 2px;
     background: none;
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.2); opacity: 0.7; }
+    100% { transform: scale(1); opacity: 1; }
+}
+
+.pulse {
+    animation: pulse 1.2s ease-in-out infinite;
 }
