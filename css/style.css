@@ -1110,6 +1110,10 @@ button.dark-mode i {
     padding: 10px;
     margin: 5px 0;
     border: 1px solid #ccc;
+
+    page-break-inside: avoid;   /* Older spec for print */
+    break-inside: avoid;        /* Modern spec */
+    display: block;
 }
 
 .project-li:hover {
