@@ -283,9 +283,9 @@
 </div>
 
 <script>
-    const toggleBtn    = document.getElementById('menu-toggle');
-    const buttonGroup  = document.querySelector('.button-group');
-    const toggleIcon   = document.getElementById('toggle-icon');
+    const toggleBtn = document.getElementById('menu-toggle');
+    const buttonGroup = document.querySelector('.button-group');
+    const toggleIcon = document.getElementById('toggle-icon');
 
     toggleBtn.addEventListener('click', function () {
         toggleBtn.classList.toggle('active');
@@ -897,10 +897,6 @@
         });
     }
 
-
-
-
-
     function sortByField(data, field, order = 'desc') {
         return data.sort((a, b) => {
             // Extract the date components (e.g., "MM-YYYY")
@@ -1401,7 +1397,9 @@
         configureArrowButtons();
 
         let sections = document.querySelectorAll('.project-li');
-        sections.forEach(section => {wrapWordsInSpans(section)});
+        sections.forEach(section => {
+            wrapWordsInSpans(section)
+        });
 
         searchToggle.addEventListener('click', function () {
             const body = document.body;
@@ -1996,7 +1994,7 @@
     // functions: blog
 
     function configureBlogButton() {
-        document.getElementById('blog-btn').addEventListener('click', function() {
+        document.getElementById('blog-btn').addEventListener('click', function () {
             window.open("https://psavidis.github.io/resume/blog.html", "_blank"); // Open the blog in a new tab
         });
     }
