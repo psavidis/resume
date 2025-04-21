@@ -1470,7 +1470,7 @@ body.dark-mode #shortcuts {
 body.dark-mode .summary-all {
     background: linear-gradient(145deg, #3e2a47, #141414); /* Dark gradient background */
     color: #e0e0e0; /* Light text color */
-    padding: 20px;
+    /*padding: 20px;*/
     border-radius: 10px;
 }
 
