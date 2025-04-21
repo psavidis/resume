@@ -1126,6 +1126,34 @@ button.dark-mode i {
     color: #333;
 }
 
+ul.project-points li {
+    background-color: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+}
+
+
+.project-points {
+    display: none;
+    padding-left: 20px;
+    margin-top: 15px;
+    font-size: 13px;
+    list-style-type: disc;
+}
+
+.project-point-item {
+    list-style-type: circle;  /* Keeps the bullet point */
+    padding: 0 !important;
+    margin-left: 15px;
+    margin-bottom: 3px;
+    font-size: 13px;
+    color: #444;
+    background-color: transparent;  /* Ensures no background */
+    border: none;  /* Removes any borders */
+    box-shadow: none;  /* Removes any shadow effect */
+}
+
+
 .project-tech {
     display: flex;
     flex-wrap: wrap;

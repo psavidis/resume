@@ -800,23 +800,12 @@
             const pointsList = document.createElement('ul');
 
             pointsList.classList.add('project-points');
-            pointsList.style.display = 'none';
-            pointsList.style.paddingLeft = '20px';
-            pointsList.style.listStyleType = 'disc';
-            pointsList.style.marginTop = '5px';
-            pointsList.style.fontSize = '13px';
 
             if (project.points && Array.isArray(project.points)) {
                 project.points.forEach(point => {
                     const pointItem = document.createElement('li');
                     pointItem.textContent = point.toString();
-                    pointItem.style.marginBottom = '3px';
-                    pointItem.style.listStyleType = 'circle';
-                    pointItem.style.background = 'none';
-                    pointItem.style.padding = '2px 0';
-                    pointItem.style.backgroundColor = 'transparent';
-                    pointItem.style.border = 'none';
-                    pointItem.style.boxShadow = 'none';
+                    pointItem.classList.add('project-point-item');
                     pointsList.appendChild(pointItem);
                 });
             }
@@ -832,7 +821,7 @@
                 if (document.body.classList.contains('search-active')) return;
 
                 // Avoid toggling if user is selecting text
-                const selection = window.getSelection();
+                const selection = window.getSelection() ;
                 if (selection && selection.toString().length > 0) return;
 
                 const isVisible = projectDescription.style.display === 'block';
