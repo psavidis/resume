@@ -221,6 +221,9 @@
 </div>
 
 <div class="button-container">
+
+    <canvas id="hint-canvas" style="position: fixed; top: 0; left: 0; z-index: 1000; pointer-events: none;"></canvas>
+
     <button id="menu-toggle" class="btn mobile-only">
         <i id="toggle-icon" class="fas fa-bars"></i>
     </button>
@@ -2016,6 +2019,114 @@
         });
     }
 
+    function drawSpeechBubble(ctx, x, y, width, height, radius, tailX, tailY, alpha, textToShow) {
+        ctx.save();
+        ctx.globalAlpha = alpha;
+        ctx.fillStyle = "#ffffff";
+        ctx.strokeStyle = "#03a9f4";
+        ctx.lineWidth = 2;
+        ctx.shadowColor = "#03a9f4";
+        ctx.shadowBlur = 10;
+
+        ctx.beginPath();
+        ctx.moveTo(x + radius, y);
+        ctx.lineTo(x + width - radius, y);
+        ctx.quadraticCurveTo(x + width, y, x + width, y + radius);
+        ctx.lineTo(x + width, y + height - radius);
+        ctx.quadraticCurveTo(x + width, y + height, x + width - radius, y + height);
+        ctx.lineTo(x + width / 2 + 10, y + height);
+        ctx.lineTo(tailX, tailY); // Tail
+        ctx.lineTo(x + width / 2 - 10, y + height);
+        ctx.lineTo(x + radius, y + height);
+        ctx.quadraticCurveTo(x, y + height, x, y + height - radius);
+        ctx.lineTo(x, y + radius);
+        ctx.quadraticCurveTo(x, y, x + radius, y);
+        ctx.closePath();
+
+        ctx.fill();
+        ctx.stroke();
+
+        // Text inside bubble
+        ctx.fillStyle = "#333";
+        ctx.font = "bold 16px sans-serif";
+        ctx.textAlign = "center";
+        ctx.fillText(textToShow, x + width / 2, y + height / 2 + 6);
+
+        ctx.restore();
+    }
+
+    function showAnimationHint(textToShow, milliseconds) {
+        document.addEventListener("DOMContentLoaded", () => {
+
+            if (!isMobile()) return;
+
+            setTimeout(() => {
+                const canvas = document.getElementById("hint-canvas");
+                const ctx = canvas.getContext("2d");
+                const drawerButton = document.getElementById("menu-toggle");
+
+                if (!canvas || !ctx || !drawerButton) return;
+
+                // Full screen canvas
+                const resizeCanvas = () => {
+                    canvas.width = window.innerWidth;
+                    canvas.height = window.innerHeight;
+                };
+                resizeCanvas();
+                window.addEventListener("resize", resizeCanvas);
+
+                // Get button position
+                const rect = drawerButton.getBoundingClientRect();
+                const tailX = rect.left + rect.width / 2;
+                const tailY = rect.top + rect.height / 2;
+
+                const bubbleWidth = 180;
+                const bubbleHeight = 60;
+                const bubbleX = Math.min(window.innerWidth - bubbleWidth - 10, tailX - bubbleWidth / 2);
+                const bubbleY = tailY - 100;
+
+                let alpha = 0;
+                let phase = "in";
+                let startTime = null;
+
+                drawerButton.classList.add("pulse");
+
+                const animate = (timestamp) => {
+                    if (!startTime) startTime = timestamp;
+                    const elapsed = timestamp - startTime;
+
+                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+                    drawSpeechBubble(ctx, bubbleX, bubbleY, bubbleWidth, bubbleHeight, 16, tailX, tailY, alpha, textToShow);
+
+                    if (phase === "in") {
+                        alpha += 0.05;
+                        if (alpha >= 1) {
+                            alpha = 1;
+                            phase = "pause";
+                            startTime = timestamp;
+                        }
+                    } else if (phase === "pause") {
+                        if (elapsed > milliseconds) {
+                            phase = "out";
+                            startTime = timestamp;
+                        }
+                    } else if (phase === "out") {
+                        alpha -= 0.05;
+                        if (alpha <= 0) {
+                            canvas.remove();
+                            drawerButton.classList.remove("pulse");
+                            return;
+                        }
+                    }
+
+                    requestAnimationFrame(animate);
+                };
+
+                requestAnimationFrame(animate);
+            }, 100);
+        });
+    }
+
     // functions: misc
 
     async function getLatestTag() {
@@ -2080,6 +2191,8 @@
         configurePushNotificationOnLoad();
         configureVoice();
     });
+
+    showAnimationHint("Tap here!", 5000);
 
 </script>
 </body>
