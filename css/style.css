@@ -1161,6 +1161,14 @@ ul.project-points li {
     box-shadow: none !important;
 }
 
+ul.project-points li::marker {
+    color: #009ffd;
+}
+
+.dark-mode ul.project-points li::marker {
+    color: #FFC107;
+}
+
 .project-points {
     display: none;
     padding-left: 0;  /* We'll use custom padding per item */
@@ -1171,7 +1179,7 @@ ul.project-points li {
 }
 
 .project-point-item {
-    list-style-type: circle;  /* Keeps the bullet point */
+    list-style-type: disc;  /* Keeps the bullet point */
     padding: 0 !important;
     margin-left: 25px;
     margin-bottom: 3px;
