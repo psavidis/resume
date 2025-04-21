@@ -1954,33 +1954,23 @@ body.search-active {
 /* Resume Version */
 .resume-version {
     position: absolute;
-    bottom: 15px;
-    right: 20px;
-    font-size: 0.8rem;
-    color: rgba(0, 0, 0, 0.5);
+    bottom: 10px;
+    right: 15px;
+    font-size: 0.65rem;
+    color: rgba(0, 0, 0, 0.4);
     font-family: 'Arial', sans-serif;
     font-weight: 400;
     font-style: normal;
     pointer-events: none;
-    background-color: rgba(255, 255, 255, 0.6);
-    padding: 4px 8px;
-    border-radius: 5px;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+    background-color: rgba(255, 255, 255, 0.4);
+    padding: 2px 6px;
+    border-radius: 4px;
+    box-shadow: none;
+    opacity: 0.8;
 }
 
-.dark-mode .resume-version {
-    position: absolute;
-    bottom: 15px;
-    right: 20px;
-    font-size: 0.8rem;
+body.dark-mode .resume-version {
     color: rgba(255, 255, 255, 0.7);
     text-shadow: rgba(255, 174, 0, 0.8) 0 0 2px;
-    font-family: 'Arial', sans-serif;
-    font-weight: 400;
-    font-style: normal;
-    pointer-events: none;
-    background: linear-gradient(145deg, #3e2a47, #1a1a1a);
-    padding: 4px 8px;
-    border-radius: 5px;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+    background: none;
 }
