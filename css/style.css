@@ -22,7 +22,8 @@ body {
 }
 
 .container {
-    width: 750px; /* Set a fixed width */
+    max-width: 730px;
+    width: 100%; /* or omit this, default is 100% of parent */
     margin: 0 auto;
     box-sizing: border-box;
     background: #fff;
