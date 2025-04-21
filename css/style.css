@@ -348,13 +348,23 @@ p {
 }
 
 .left-info::before {
-    content: '🗓️';
     font-size: 0.85rem;
     margin-right: 2px;
 }
 
-.left-info.edu::before {
-    content: '🎓';
+.left-info.calendar::before {
+    content: '🗓️';
+}
+
+.left-info .edu-icon {
+    width: 1em;
+    height: 1em;
+    vertical-align: middle;
+    margin-right: 4px;
+}
+
+.left-info.edu {
+    width : fit-content;
 }
 
 .dark-mode .left-info {
