@@ -984,6 +984,11 @@ body.dark-mode select:-webkit-autofill {
     caret-color: #ffffff;
 }
 
+body.dark-mode input:-webkit-autofill {
+    -webkit-box-shadow: 0 0 0 1000px #ffffff inset !important;
+    -webkit-text-fill-color: black !important;
+}
+
 /* Responsive design for smaller screens */
 @media (max-width: 600px) {
     .search-bar {
