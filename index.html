@@ -2022,10 +2022,15 @@
     function drawSpeechBubble(ctx, x, y, width, height, radius, tailX, tailY, alpha, textToShow) {
         ctx.save();
         ctx.globalAlpha = alpha;
-        ctx.fillStyle = "#ffffff";
-        ctx.strokeStyle = "#03a9f4";
+
+        // Check if dark mode is active
+        const isDarkMode = document.body.classList.contains('dark-mode');
+
+        // Set bubble colors based on the mode
+        ctx.fillStyle = isDarkMode ? "#3e1a68" : "#ffffff"; // Dark mode bubble: purple, light mode: white
+        ctx.strokeStyle = isDarkMode ? "#9c4dff" : "#03a9f4"; // Dark mode border: purple, light mode: blue
         ctx.lineWidth = 2;
-        ctx.shadowColor = "#03a9f4";
+        ctx.shadowColor = isDarkMode ? "#9c4dff" : "#03a9f4"; // Shadow color for dark mode (purple)
         ctx.shadowBlur = 10;
 
         ctx.beginPath();
@@ -2047,7 +2052,7 @@
         ctx.stroke();
 
         // Text inside bubble
-        ctx.fillStyle = "#333";
+        ctx.fillStyle = isDarkMode ? "#ffffff" : "#333"; // Dark mode text: white, light mode text: black
         ctx.font = "bold 16px sans-serif";
         ctx.textAlign = "center";
         ctx.fillText(textToShow, x + width / 2, y + height / 2 + 6);
@@ -2058,9 +2063,9 @@
     function showAnimationHint(textToShow, milliseconds) {
         if (!isMobile()) return;
 
-        // if (localStorage.getItem("drawerHintShown") === "true") return;
+        if (localStorage.getItem("drawerHintShown") === "true") return;
 
-        // localStorage.setItem("drawerHintShown", "true");
+        localStorage.setItem("drawerHintShown", "true");
 
         setTimeout(() => {
             const canvas = document.createElement("canvas");
