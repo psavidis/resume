@@ -1054,6 +1054,11 @@
         formContainer.style.display = 'none';
     }
 
+    function isFormContainerVisible() {
+        const formContainer = document.getElementById('contact-form-container');
+        return formContainer.style.display === 'block'
+    }
+
     function hideSearchContainer() {
         const searchContainer = document.querySelector('.search-container');
         searchContainer.style.visibility = 'hidden';
@@ -1638,13 +1643,12 @@
             return;
         }
 
-        const formContainer = document.getElementById('contact-form-container');
         const formName = document.getElementById('form-name');
         const form = document.getElementById('contact-form');
 
         emailBtn.addEventListener('click', function () {
 
-            if (formContainer.style.display === 'block') {
+            if (isFormContainerVisible()) {
                 hideFormContainer()
             } else {
                 showFormContainer()
@@ -1861,9 +1865,7 @@
         } else if (command.includes("send email")) {
             document.getElementById('email-btn').click();
         } else if (command.includes("close email")) {
-            const formContainer = document.getElementById('contact-form-container');
-            const isVisible = formContainer.style.display === 'block'
-            if (isVisible) {
+            if (isFormContainerVisible()) {
                 document.getElementById('email-btn').click();
             }
         } else if (command.includes("open linkedin")) {
@@ -1940,6 +1942,9 @@
 
         document.getElementById('microphone-btn').addEventListener('click', () => {
             if (!isListening) {
+                if (isFormContainerVisible()) {
+                    hideFormContainer();
+                }
                 recognition.start();
             } else {
                 recognition.stop();
