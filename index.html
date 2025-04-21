@@ -871,18 +871,35 @@
 
         data.education.forEach(item => {
             const li = document.createElement('li');
+            li.className = 'education-item';
 
-            const textSpan = document.createElement('span');
-            textSpan.textContent = `${item.school || 'Institution not provided'}, ${item.degree || 'Field of study not provided'} (${item.startYear || ''} - ${item.endYear || 'Present'})`;
-
+            // Create school icon
             const schoolImg = createSchoolImg(item);
 
-            li.appendChild(schoolImg);
-            li.appendChild(textSpan);
+            // Create the text content (title, school name, and dates)
+            const textContainer = document.createElement('div');
+            textContainer.className = 'text-container';
 
+            textContainer.innerHTML = `
+            <div class="education-title">
+                <strong>${item.degree || 'Degree not provided'}</strong> in ${item.fieldOfStudy || 'Field not provided'}
+            </div>
+            <div class="school-name"><strong>${item.school || 'Institution not provided'}</strong></div>
+            <div class="dates"><span class="left-info">${item.startYear || ''} – ${item.endYear || 'Present'}</span></div>
+        `;
+
+            // Append image and text to the li
+            li.appendChild(schoolImg);
+            li.appendChild(textContainer);
+
+            // Append the li to the list
             educationList.appendChild(li);
         });
     }
+
+
+
+
 
     function sortByField(data, field, order = 'desc') {
         return data.sort((a, b) => {

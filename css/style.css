@@ -351,6 +351,10 @@ p {
     margin-right: 2px;
 }
 
+.left-info.edu::before {
+    content: '🎓';
+}
+
 .dark-mode .left-info {
     display: inline-flex;
     align-items: center;
@@ -1778,4 +1782,76 @@ body.search-active {
         pointer-events: none;
         transition: filter 0.3s ease;
     }
+}
+
+.education-item {
+    display: flex;
+    align-items: flex-start;
+    padding: 12px;
+    margin-bottom: 10px;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    gap: 15px;
+}
+
+.education-item .university-image {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+}
+
+.text-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+}
+
+.education-item .education-title {
+    font-size: 1rem;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.education-item .school-name {
+    font-size: 0.9rem;
+    color: #555;
+    margin-bottom: 5px;
+}
+
+.education-item .dates {
+    font-size: 0.8rem;
+    color: #888;
+}
+
+.left-info {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    color: #555;
+    font-size: 0.8rem;
+    font-weight: 500;
+}
+
+/* Dark mode styling */
+.dark-mode .education-item {
+    background-color: #333;
+    border: 1px solid #444;
+}
+
+.dark-mode .education-item .education-title {
+    color: #e0e0e0;
+}
+
+.dark-mode .education-item .school-name {
+    color: #ccc;
+}
+
+.dark-mode .education-item .dates {
+    color: #aaa;
+}
+
+.dark-mode .left-info {
+    color: #ddd;
 }
