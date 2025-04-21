@@ -381,12 +381,6 @@ p {
     box-shadow: 0 0 4px 1px rgba(255, 215, 0, 0.05);
 }
 
-.dark-mode .left-info::before {
-    content: '🗓️';
-    font-size: 0.85rem;
-    margin-right: 2px;
-}
-
 .right-info {
     display: flex;
     gap: 0.5rem;
