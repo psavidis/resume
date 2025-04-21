@@ -1059,6 +1059,11 @@
         return formContainer.style.display === 'block'
     }
 
+    function isSearchBarVisible() {
+        const searchBar = document.getElementById('search-bar');
+        return getComputedStyle(searchBar).display !== 'none';
+    }
+
     function hideSearchContainer() {
         const searchContainer = document.querySelector('.search-container');
         searchContainer.style.visibility = 'hidden';
@@ -1516,6 +1521,14 @@
                 document.getElementById('toggle-search').click();
             }
         });
+
+        document.addEventListener('keydown', function (event) {
+            // Check if Escape is pressed during search mode
+            if (event.key === 'Escape' && isSearchBarVisible()) {
+                event.preventDefault();
+                document.getElementById('toggle-search').click();
+            }
+        });
     }
 
     function registerSearchInputNavigationShortcuts() {
@@ -1819,10 +1832,7 @@
         if (command.startsWith("search ")) {
             const keyword = command.replace("search ", "").trim();
 
-            const searchBar = document.getElementById('search-bar');
-            const isSearchBarVisible = getComputedStyle(searchBar).display !== 'none';
-
-            if (!isSearchBarVisible) {
+            if (!isSearchBarVisible()) {
                 const searchToggle = document.getElementById('toggle-search');
                 searchToggle.click();
             }
