@@ -2095,6 +2095,16 @@
                     if (!startTime) startTime = timestamp;
                     const elapsed = timestamp - startTime;
 
+                    // Recalculate position each frame in case of scroll/resize
+                    const rect = drawerButton.getBoundingClientRect();
+                    const tailX = rect.left + rect.width / 2;
+                    const tailY = rect.top + rect.height / 2;
+
+                    const bubbleWidth = 180;
+                    const bubbleHeight = 60;
+                    const bubbleX = Math.min(window.innerWidth - bubbleWidth - 10, tailX - bubbleWidth / 2);
+                    const bubbleY = tailY - 100;
+
                     ctx.clearRect(0, 0, canvas.width, canvas.height);
                     drawSpeechBubble(ctx, bubbleX, bubbleY, bubbleWidth, bubbleHeight, 16, tailX, tailY, alpha, textToShow);
 
