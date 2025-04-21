@@ -968,6 +968,15 @@ input:-webkit-autofill:active {
     -webkit-text-fill-color: black !important;
 }
 
+/* Fix the autofill color for dark mode */
+body.dark-mode input:-webkit-autofill,
+body.dark-mode textarea:-webkit-autofill,
+body.dark-mode select:-webkit-autofill {
+    -webkit-box-shadow: 0 0 0 1000px #2a2a2a inset !important;
+    -webkit-text-fill-color: #ffffff !important;
+    caret-color: #ffffff;
+}
+
 /* Responsive design for smaller screens */
 @media (max-width: 600px) {
     .search-bar {
