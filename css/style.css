@@ -1218,13 +1218,23 @@ body.dark-mode .project-point-item {
 }
 
 
-
 .project-description {
-    font-size: 0.95em; /* just slightly smaller */
-    color: #777; /* gentle gray */
-    font-weight: 400; /* normal weight, not too bold, not too light */
-    opacity: 0.85; /* slight fade to make it feel less aggressive */
-    margin-bottom: 10px;
+    background-color: rgba(30, 60, 114, 0.02); /* ultra-soft blue tint */
+    border: 1px dashed rgba(30, 60, 114, 0.25); /* subtle, elegant dashed border */
+    padding: 16px 18px;
+    border-radius: 8px;
+    font-size: 15.5px;
+    line-height: 25px;
+    margin: 20px 0 16px 0;
+    color: #1e1e1e;
+    font-family: 'Segoe UI', 'Open Sans', sans-serif;
+}
+
+/* Dark mode */
+.dark-mode .project-description {
+    background-color: rgba(255, 255, 255, 0.015);
+    border: 1px dashed rgba(255, 174, 0, 0.25);
+    color: #dcdcdc;
 }
 
 .project-button {
