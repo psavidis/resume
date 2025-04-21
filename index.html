@@ -222,7 +222,7 @@
 
 <div class="button-container">
 
-    <canvas id="hint-canvas" style="position: fixed; top: 0; left: 0; z-index: 1000; pointer-events: none;"></canvas>
+    <div id="drawer-hint" class="speech-bubble"></div>
 
     <button id="menu-toggle" class="btn mobile-only">
         <i id="toggle-icon" class="fas fa-bars"></i>
@@ -2056,26 +2056,49 @@
     }
 
     function showAnimationHint(textToShow, milliseconds) {
-        document.addEventListener("DOMContentLoaded", () => {
+        if (!isMobile()) return;
 
-            if (!isMobile()) return;
+        // if (localStorage.getItem("drawerHintShown") === "true") return;
 
-            setTimeout(() => {
-                const canvas = document.getElementById("hint-canvas");
-                const ctx = canvas.getContext("2d");
-                const drawerButton = document.getElementById("menu-toggle");
+        // localStorage.setItem("drawerHintShown", "true");
 
-                if (!canvas || !ctx || !drawerButton) return;
+        setTimeout(() => {
+            const canvas = document.createElement("canvas");
+            canvas.id = "hint-canvas";
+            canvas.style.position = "fixed";
+            canvas.style.top = 0;
+            canvas.style.left = 0;
+            canvas.style.pointerEvents = "none";
+            canvas.style.zIndex = 9999;
+            document.body.appendChild(canvas);
 
-                // Full screen canvas
-                const resizeCanvas = () => {
-                    canvas.width = window.innerWidth;
-                    canvas.height = window.innerHeight;
-                };
-                resizeCanvas();
-                window.addEventListener("resize", resizeCanvas);
+            const ctx = canvas.getContext("2d");
+            const drawerButton = document.getElementById("menu-toggle");
 
-                // Get button position
+            if (!canvas || !ctx || !drawerButton) return;
+
+            // Resize canvas
+            const resizeCanvas = () => {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+            };
+            resizeCanvas();
+            window.addEventListener("resize", resizeCanvas);
+
+            let alpha = 0;
+            let phase = "in";
+            let startTime = null;
+
+            // Add glowing effect
+            drawerButton.classList.add("pulse");
+
+            const animate = (timestamp) => {
+                if (!startTime) startTime = timestamp;
+                const elapsed = timestamp - startTime;
+
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+                // Recalculate button position
                 const rect = drawerButton.getBoundingClientRect();
                 const tailX = rect.left + rect.width / 2;
                 const tailY = rect.top + rect.height / 2;
@@ -2085,57 +2108,36 @@
                 const bubbleX = Math.min(window.innerWidth - bubbleWidth - 10, tailX - bubbleWidth / 2);
                 const bubbleY = tailY - 100;
 
-                let alpha = 0;
-                let phase = "in";
-                let startTime = null;
+                drawSpeechBubble(ctx, bubbleX, bubbleY, bubbleWidth, bubbleHeight, 16, tailX, tailY, alpha, textToShow);
 
-                drawerButton.classList.add("pulse");
-
-                const animate = (timestamp) => {
-                    if (!startTime) startTime = timestamp;
-                    const elapsed = timestamp - startTime;
-
-                    // Recalculate position each frame in case of scroll/resize
-                    const rect = drawerButton.getBoundingClientRect();
-                    const tailX = rect.left + rect.width / 2;
-                    const tailY = rect.top + rect.height / 2;
-
-                    const bubbleWidth = 180;
-                    const bubbleHeight = 60;
-                    const bubbleX = Math.min(window.innerWidth - bubbleWidth - 10, tailX - bubbleWidth / 2);
-                    const bubbleY = tailY - 100;
-
-                    ctx.clearRect(0, 0, canvas.width, canvas.height);
-                    drawSpeechBubble(ctx, bubbleX, bubbleY, bubbleWidth, bubbleHeight, 16, tailX, tailY, alpha, textToShow);
-
-                    if (phase === "in") {
-                        alpha += 0.05;
-                        if (alpha >= 1) {
-                            alpha = 1;
-                            phase = "pause";
-                            startTime = timestamp;
-                        }
-                    } else if (phase === "pause") {
-                        if (elapsed > milliseconds) {
-                            phase = "out";
-                            startTime = timestamp;
-                        }
-                    } else if (phase === "out") {
-                        alpha -= 0.05;
-                        if (alpha <= 0) {
-                            canvas.remove();
-                            drawerButton.classList.remove("pulse");
-                            return;
-                        }
+                if (phase === "in") {
+                    alpha += 0.05;
+                    if (alpha >= 1) {
+                        alpha = 1;
+                        phase = "pause";
+                        startTime = timestamp;
                     }
-
-                    requestAnimationFrame(animate);
-                };
+                } else if (phase === "pause") {
+                    if (elapsed > milliseconds) {
+                        phase = "out";
+                        startTime = timestamp;
+                    }
+                } else if (phase === "out") {
+                    alpha -= 0.05;
+                    if (alpha <= 0) {
+                        canvas.remove();
+                        drawerButton.classList.remove("pulse");
+                        return;
+                    }
+                }
 
                 requestAnimationFrame(animate);
-            }, 100);
-        });
+            };
+
+            requestAnimationFrame(animate);
+        }, 100);
     }
+
 
     // functions: misc
 
@@ -2200,9 +2202,9 @@
         configureDarkModeButton();
         configurePushNotificationOnLoad();
         configureVoice();
-    });
 
-    showAnimationHint("Tap here!", 5000);
+        showAnimationHint("Tap here!", 5000);
+    });
 
 </script>
 </body>
