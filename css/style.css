@@ -1132,19 +1132,19 @@ ul.project-points li {
     box-shadow: none !important;
 }
 
-
 .project-points {
     display: none;
-    padding-left: 20px;
+    padding-left: 0;  /* We'll use custom padding per item */
     margin-top: 15px;
+    margin-bottom: -10px;
     font-size: 13px;
-    list-style-type: disc;
+    list-style: none;  /* Remove default bullet */
 }
 
 .project-point-item {
     list-style-type: circle;  /* Keeps the bullet point */
     padding: 0 !important;
-    margin-left: 15px;
+    margin-left: 25px;
     margin-bottom: 3px;
     font-size: 13px;
     color: #444;
