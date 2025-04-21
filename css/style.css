@@ -549,12 +549,12 @@ p {
     outline-offset: 3px;                           /* Adjust outline spacing for emphasis */
 }
 
-/*Search Button Style when Active */
+/* Search Button Style when Active */
 body.search-active .toggle-button {
-    background-color: rgba(255, 255, 255, 0.85); /* Frosted white with slight opacity */
-    color: #111;  /* Black icon/text */
+    background-color: rgba(255, 255, 255, 0.85);
+    color: #111;
     border: 2px solid rgba(0, 0, 0, 0.3); /* Stronger border for more definition */
-    border-radius: 50%; /* Keeps it circular */
+    border-radius: 50%;
     box-shadow:
             inset 0 6px 8px rgba(0, 0, 0, 0.3),     /* Inner shadow (pressed effect) */
             0 6px 8px rgba(0, 0, 0, 0.35),        /* Strong drop shadow for depth */
@@ -568,15 +568,22 @@ body.search-active .toggle-button {
 
 body.search-active .toggle-button:active {
     transform: scale(0.98);  /* Slightly shrink when pressed */
-    border: 3px solid rgba(0, 0, 0, 0.6); /* Thicker, sharper border when pressed */
     box-shadow:
             inset 0 10px 12px rgba(0, 0, 0, 0.5),   /* Stronger inset shadow (deep press) */
             0 8px 20px rgba(0, 0, 0, 0.5),          /* Stronger outer shadow */
             0 0 20px rgba(255, 255, 255, 0.7);      /* Enhanced glowing effect when pressed */
 }
 
+.dark-mode.search-active .toggle-button {
+    color: white !important;
+    box-shadow:
+            inset 0 6px 8px rgba(176, 100, 232, 0.5),     /* Inner shadow (pressed effect) */
+            0 6px 8px rgba(236, 154, 255, 0.5),        /* Strong drop shadow for depth */
+            0 0 12px rgba(255, 255, 255, 0.7) !important;     /* Outer glow */
+}
+
 body.search-active .toggle-button.search-active {
-    animation: glowing 1.5s infinite alternate; /* Glowing animation */
+    animation: glowing 1.5s infinite alternate;
     box-shadow:
             inset 0 10px 12px rgba(0, 0, 0, 0.5),   /* Stronger inset shadow */
             0 8px 20px rgba(0, 0, 0, 0.5),          /* Stronger outer shadow */
