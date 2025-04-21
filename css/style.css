@@ -1153,6 +1153,10 @@ ul.project-points li {
     box-shadow: none;  /* Removes any shadow effect */
 }
 
+body.dark-mode .project-point-item {
+    background: transparent !important;
+}
+
 
 .project-tech {
     position: relative;
@@ -1167,6 +1171,10 @@ ul.project-points li {
     left: 0;
     width: 100%; /* Make the line span the full width of the element */
     border-top: 1px dashed rgba(30, 60, 114, 0.4); /* Lighter, subtler dashed line */
+}
+
+.dark-mode .project-tech::before {
+    border-top: 1px dashed rgba(255, 215, 0, 0.4); /* Softer golden dashed line for dark mode */
 }
 
 .project-tech span {
