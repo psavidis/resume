@@ -638,6 +638,10 @@ body.search-active .toggle-button:focus {
     border-radius: 50%;
 }
 
+.dark-mode #summary-instructions ul li::before {
+    background-color: #FFC107;
+}
+
 .emoji {
     font-size: 1.5em; /* Makes emojis 1.5x bigger */
     vertical-align: middle; /* Keeps them aligned nicely with the text */
