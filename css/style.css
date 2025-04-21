@@ -1980,42 +1980,44 @@ body.dark-mode .resume-version {
     background: none;
 }
 
-/* Default (light mode) pulse */
 #menu-toggle.pulse {
     animation: pulse-glow 1.5s infinite;
+    will-change: transform, box-shadow;
+    animation-delay: 50ms;
 }
 
 @keyframes pulse-glow {
     0% {
         transform: scale(1);
-        box-shadow: 0 0 0px rgba(3, 169, 244, 0.7); /* Blue glow */
+        box-shadow: 0 0 2px rgba(3, 169, 244, 0.2);
     }
     50% {
-        transform: scale(1.1); /* Slightly enlarges the button */
-        box-shadow: 0 0 4px rgba(3, 169, 244, 0.9); /* Blue glow */
+        transform: scale(1.1);
+        box-shadow: 0 0 10px rgba(3, 169, 244, 0.8);
     }
     100% {
         transform: scale(1);
-        box-shadow: 0 0 0px rgba(3, 169, 244, 0.7); /* Blue glow */
+        box-shadow: 0 0 2px rgba(3, 169, 244, 0.2);
     }
 }
 
-/* Dark mode with Gold and Purple Glow */
 .dark-mode #menu-toggle.pulse {
     animation: pulse-glow-dark 1.5s infinite;
+    will-change: transform, box-shadow;
+    animation-delay: 50ms;
 }
 
 @keyframes pulse-glow-dark {
     0% {
         transform: scale(1);
-        box-shadow: 0 0 0px rgba(255, 223, 0, 0.4), 0 0 0px rgba(128, 0, 128, 0.4); /* Gold and Purple */
+        box-shadow: 0 0 2px rgba(255, 223, 0, 0.2), 0 0 2px rgba(128, 0, 128, 0.2);
     }
     50% {
-        transform: scale(1.1); /* Slightly enlarges the button */
-        box-shadow: 0 0 4px rgba(255, 223, 0, 0.8), 0 0 15px rgba(128, 0, 128, 0.8); /* Gold and Purple */
+        transform: scale(1.1);
+        box-shadow: 0 0 10px rgba(255, 223, 0, 0.8), 0 0 15px rgba(128, 0, 128, 0.8);
     }
     100% {
         transform: scale(1);
-        box-shadow: 0 0 0px rgba(255, 223, 0, 0.4), 0 0 0px rgba(128, 0, 128, 0.4); /* Gold and Purple */
+        box-shadow: 0 0 2px rgba(255, 223, 0, 0.2), 0 0 2px rgba(128, 0, 128, 0.2);
     }
 }
