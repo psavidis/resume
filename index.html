@@ -2063,18 +2063,18 @@
     function showAnimationHint(textToShow, milliseconds) {
         if (!isMobile()) return;
 
-        if (localStorage.getItem("drawerHintShown") === "true") return;
+        // if (localStorage.getItem("drawerHintShown") === "true") return;
 
-        localStorage.setItem("drawerHintShown", "true");
+        // localStorage.setItem("drawerHintShown", "true");
 
         setTimeout(() => {
             const canvas = document.createElement("canvas");
             canvas.id = "hint-canvas";
             canvas.style.position = "fixed";
-            canvas.style.top = 0;
-            canvas.style.left = 0;
+            canvas.style.top = "0";
+            canvas.style.left = "0";
             canvas.style.pointerEvents = "none";
-            canvas.style.zIndex = 9999;
+            canvas.style.zIndex = "9999";
             document.body.appendChild(canvas);
 
             const ctx = canvas.getContext("2d");

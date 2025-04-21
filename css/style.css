@@ -1987,13 +1987,16 @@ body.dark-mode .resume-version {
 
 @keyframes pulse-glow {
     0% {
+        transform: scale(1);
         box-shadow: 0 0 0px rgba(3, 169, 244, 0.7); /* Blue glow */
     }
     50% {
-        box-shadow: 0 0 15px rgba(3, 169, 244, 1); /* Blue glow */
+        transform: scale(1.1); /* Slightly enlarges the button */
+        box-shadow: 0 0 4px rgba(3, 169, 244, 0.9); /* Blue glow */
     }
     100% {
-        box-shadow: 0 0 0px rgba(3, 169, 244, 0.7);
+        transform: scale(1);
+        box-shadow: 0 0 0px rgba(3, 169, 244, 0.7); /* Blue glow */
     }
 }
 
@@ -2004,16 +2007,15 @@ body.dark-mode .resume-version {
 
 @keyframes pulse-glow-dark {
     0% {
+        transform: scale(1);
         box-shadow: 0 0 0px rgba(255, 223, 0, 0.4), 0 0 0px rgba(128, 0, 128, 0.4); /* Gold and Purple */
     }
     50% {
-        box-shadow: 0 0 15px rgba(255, 223, 0, 0.8), 0 0 20px rgba(128, 0, 128, 0.8); /* Gold and Purple */
+        transform: scale(1.1); /* Slightly enlarges the button */
+        box-shadow: 0 0 4px rgba(255, 223, 0, 0.8), 0 0 15px rgba(128, 0, 128, 0.8); /* Gold and Purple */
     }
     100% {
+        transform: scale(1);
         box-shadow: 0 0 0px rgba(255, 223, 0, 0.4), 0 0 0px rgba(128, 0, 128, 0.4); /* Gold and Purple */
     }
-}
-
-#menu-toggle.pulse {
-    animation: pulse-glow 1.5s infinite;
 }
