@@ -2063,9 +2063,9 @@
     function showAnimationHint(textToShow, milliseconds) {
         if (!isMobile()) return;
 
-        // if (localStorage.getItem("drawerHintShown") === "true") return;
+        if (localStorage.getItem("drawerHintShown") === "true") return;
 
-        // localStorage.setItem("drawerHintShown", "true");
+        localStorage.setItem("drawerHintShown", "true");
 
         setTimeout(() => {
             const canvas = document.createElement("canvas");
