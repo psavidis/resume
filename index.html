@@ -208,6 +208,8 @@
             <li id="li-search-results"></li>
         </ul>
     </div>
+
+    <div class="resume-version"></div>
 </div>
 
 <footer>
@@ -2012,8 +2014,52 @@
 
     // functions: misc
 
+    async function getLatestTag() {
+        const url = `https://api.github.com/repos/psavidis/resume/tags`;
+
+        // Check if the result is already cached in sessionStorage
+        const cachedTags = sessionStorage.getItem('githubTags');
+
+        if (cachedTags) {
+            return JSON.parse(cachedTags)[0].name; // Return the first tag from cached data
+        }
+
+        try {
+            const response = await fetch(url);
+            if (!response.ok) {
+                throw new Error(`GitHub API error: ${response.status}`);
+            }
+
+            const tags = await response.json();
+            if (tags.length === 0) {
+                return null; // No tags found
+            }
+
+            // Cache the result in sessionStorage
+            sessionStorage.setItem('githubTags', JSON.stringify(tags));
+
+            console.log("Returning latest tag:", tags[0].name);
+            return tags[0].name; // Return the first (latest) tag
+        } catch (error) {
+            console.error('Error fetching tags:', error);
+            return null;
+        }
+    }
+
+    async function configureResumeVersion() {
+        const latestTag = await getLatestTag();
+        const versionElement = document.querySelector(".resume-version");
+
+        if (latestTag) {
+            versionElement.textContent = `Resume ${latestTag}`;
+        } else {
+            versionElement.textContent = 'Resume latest';
+        }
+    }
+
     // Call functions to load data and initialize the page components
 
+    configureResumeVersion();
     loadResumeData().then(() => {
         hideSearchBar();
 
@@ -2030,7 +2076,6 @@
         configurePushNotificationOnLoad();
         configureVoice();
     });
-
 
 </script>
 </body>
