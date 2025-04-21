@@ -22,7 +22,7 @@ body {
 }
 
 .container {
-    max-width: 730px;
+    width: 750px; /* Set a fixed width */
     margin: 0 auto;
     box-sizing: border-box;
     background: #fff;
@@ -40,6 +40,7 @@ body {
     outline: 2px solid rgba(0, 0, 0, 0.8);
     box-shadow: 0 0 10px 10px rgba(255, 255, 255, 0.1); /* glowing shadow */
 }
+
 
 h1 {
     text-align: center;
