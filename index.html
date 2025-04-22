@@ -70,7 +70,7 @@
 
 <div class="search-container">
     <input type="text" id="search-bar" class="search-bar" placeholder="Search Keywords in Projects..."
-           oninput="searchResume()"/>
+           oninput="searchResume()" autocomplete="off"/>
     <div class="arrows-container">
         <i id="arrowUp" class="fas fa-chevron-up arrow-up"></i>
         <i id="arrowDown" class="fas fa-chevron-down arrow-down"></i>
@@ -1544,7 +1544,7 @@
         // Map key name to the corresponding key id of the arrows
         const keyToArrowId = new Map();
         keyToArrowId.set("ArrowUp", 'arrowUp');
-        keyToArrowId.set("ArrowDown", 'arrowUp');
+        keyToArrowId.set("ArrowDown", 'arrowDown');
 
         searchBar.addEventListener('keydown', (e) => {
 
