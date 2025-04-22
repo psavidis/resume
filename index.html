@@ -2171,6 +2171,9 @@
     }
 
     function maskAllSkeletonsAndGet() {
+        // Add 'loading' class to hide or disable buttons
+        document.body.classList.add('loading');
+
         const skeletons = [];
 
         // All Titles
@@ -2201,6 +2204,9 @@
 
             // Remove all skeletons
             skeletons.forEach(s => s.remove());
+
+            document.body.classList.remove('loading');
+            document.body.classList.add('loaded');
         }, delay);
     }
 

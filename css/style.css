@@ -102,6 +102,27 @@ p {
     z-index: 1001; /* 1 index above container */
 }
 
+/* When the page is in loading state, hide or disable the buttons */
+body.loading .button-container {
+    visibility: hidden; /* Or use display: none; to completely hide them */
+    /* Optionally, disable the buttons instead of hiding them */
+    pointer-events: none;  /* Disable button clicks */
+    opacity: 0.3;  /* Make buttons appear inactive */
+}
+
+/* You can also style a "loading" button state if you want */
+body.loading .button-container .button {
+    background-color: #e2e2e2;  /* Light gray for disabled state */
+    cursor: not-allowed;
+}
+
+/* Once loading is complete, buttons will become visible again */
+body.loaded .button-container {
+    visibility: visible; /* Show the buttons when data is loaded */
+    opacity: 1; /* Restore normal visibility */
+    pointer-events: auto; /* Enable clicking */
+}
+
 .button-group {
     display: flex;
     flex-direction: row;  /* override the column default */
