@@ -47,7 +47,7 @@ h1 {
     color: #2c3e50;
     font-size: 2.5em;
     margin-bottom: 10px;
-    animation: slideIn 1s ease-in-out;
+    /*animation: slideIn 1s ease-in-out;*/
 }
 
 h2 {
@@ -1954,4 +1954,109 @@ body.dark-mode .resume-version {
         transform: scale(1);
         box-shadow: 0 0 2px rgba(255, 223, 0, 0.2), 0 0 2px rgba(128, 0, 128, 0.2);
     }
+}
+
+/* Group wrapper to space out sections */
+.skeleton-group {
+    margin-bottom: 24px; /* space between sections */
+}
+
+/* The actual loading lines */
+
+.skeleton-name {
+    height: 47px;
+    width: 258px;
+    background-color: #e2e2e2;
+    border-radius: 6px;
+    margin: 8px 0;
+    position: relative;
+    overflow: hidden;
+}
+
+.skeleton-profile-picture {
+    height: 10px;
+    width: 124px;
+    background-color: #e2e2e2;
+    border-radius: 6px;
+    margin: 8px 0;
+    position: relative;
+    overflow: hidden;
+}
+
+.skeleton-line {
+    height: 12px;
+    background-color: #e2e2e2;
+    border-radius: 6px;
+    margin: 8px 0;
+    position: relative;
+    overflow: hidden;
+}
+
+.skeleton-project {
+    height: 87px;
+    width: 690px;
+    background-color: #e2e2e2;
+    border-radius: 6px;
+    margin: 8px 0;
+    position: relative;
+    overflow: hidden;
+}
+
+.skeleton-experience {
+    height: 55px;
+    width: 690px;
+    background-color: #e2e2e2;
+    border-radius: 6px;
+    margin: 8px 0;
+    position: relative;
+    overflow: hidden;
+}
+
+.skeleton-education {
+    height: 87px;
+    width: 690px;
+    background-color: #e2e2e2;
+    border-radius: 6px;
+    margin: 8px 0;
+    position: relative;
+    overflow: hidden;
+}
+
+.skeleton-title {
+    height: 30px;
+    width: 30% !important;
+    margin-bottom: 12px;
+    background-color: #e2e2e2;
+    border-radius: 6px;
+    position: relative;
+    overflow: hidden;
+}
+
+.skeleton-title::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -150px;
+    height: 100%;
+    width: 150px;
+    background: linear-gradient(to right, transparent 0%, #f0f0f0 50%, transparent 100%);
+    animation: shimmer 1.5s infinite;
+}
+
+
+/* Shimmer effect */
+.skeleton-line::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -150px;
+    height: 100%;
+    width: 150px;
+    background: linear-gradient(to right, transparent 0%, #f0f0f0 50%, transparent 100%);
+    animation: shimmer 1.5s infinite;
+}
+
+@keyframes shimmer {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(100%); }
 }

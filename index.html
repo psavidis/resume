@@ -2113,6 +2113,115 @@
         return `v${next}`;
     }
 
+    function createTitleSkeleton(lines) {
+        return createSkeletonLines(lines, "skeleton-title");
+    }
+
+    function createSkeletonLines(lines, className) {
+        const group = document.createElement('div');
+        group.className = 'skeleton-group';
+        for (let i = 0; i < lines; i++) {
+            const line = document.createElement('div');
+            line.className = className;
+            // line.style.width = `${80 - i * 10}%`; // Stagger line lengths
+            group.appendChild(line);
+        }
+        return group;
+    }
+
+    function replaceSelectorAllWithSkeleton(skeletons, selector, createSkeletonLinesFunction) {
+        console.log(`selector: ${selector}, function: ${createSkeletonLinesFunction}`);
+        const elements = document.querySelectorAll(selector);
+
+        if (!elements) {
+            return;
+        }
+
+        elements.forEach(element => {
+            element.classList.add('hidden');
+
+            const skeletonGroup = createSkeletonLinesFunction();
+            element.parentNode.insertBefore(skeletonGroup, element);
+            skeletons.push(skeletonGroup);
+        });
+    }
+
+    function replaceSelectorWithSkeleton(skeletons, selector, createSkeletonLinesFunction) {
+        console.log(`selector: ${selector}, function: ${createSkeletonLinesFunction}`);
+        const el = document.querySelector(selector);
+        if (el) {
+            el.classList.add('hidden');
+
+            const skeletonGroup = createSkeletonLinesFunction();
+            el.parentNode.insertBefore(skeletonGroup, el);
+            skeletons.push(skeletonGroup);
+        }
+    }
+
+    function removeSkeletonForSelectorAll(selector) {
+        console.log(`selector: ${selector}`);
+        const elements = document.querySelectorAll(selector);
+
+        if (!elements) {
+            return;
+        }
+
+        elements.forEach(element => {
+            element.classList.remove('hidden');
+        });
+    }
+
+    function replaceSelectorMappingsWithSkeletons(skeletons, elementsToSkeleton) {
+        elementsToSkeleton.forEach((createSkeletonLinesFunction, selector) => {
+            replaceSelectorWithSkeleton(skeletons, selector, createSkeletonLinesFunction);
+        });
+    }
+
+    function showLoadingScreen() {
+        document.addEventListener("DOMContentLoaded", () => {
+            const elementsToSkeleton = new Map();
+
+            // Education
+            elementsToSkeleton.set("#education-list", () => createSkeletonLines(1, "skeleton-education"));
+
+            const skeletons = [];
+
+            // All Titles
+            replaceSelectorAllWithSkeleton(skeletons, "h2", () => createTitleSkeleton(1));
+            replaceSelectorAllWithSkeleton(skeletons, "#experience-list", () => createSkeletonLines(8, "skeleton-project"));
+            replaceSelectorAllWithSkeleton(skeletons, "#projects-list", () => createSkeletonLines(8, "skeleton-experience"));
+            replaceSelectorAllWithSkeleton(skeletons, ".summary-all", () => createSkeletonLines(7, "skeleton-line"));
+            replaceSelectorAllWithSkeleton(skeletons, ".profile-picture-container", () => createSkeletonLines(6, "skeleton-profile-picture"));
+            replaceSelectorAllWithSkeleton(skeletons, "#summary", () => createSkeletonLines(1, "skeleton-line"));
+            replaceSelectorAllWithSkeleton(skeletons, ".profile-info", () => createSkeletonLines(1, "skeleton-name"));
+
+            // mappings
+            replaceSelectorMappingsWithSkeletons(skeletons, elementsToSkeleton);
+
+            // 2. Simulate data loading and reveal content
+            setTimeout(() => {
+
+                removeSkeletonForSelectorAll("h2");
+                removeSkeletonForSelectorAll("#experience-list");
+                removeSkeletonForSelectorAll("#projects-list");
+                removeSkeletonForSelectorAll(".summary-all");
+                removeSkeletonForSelectorAll(".profile-picture-container");
+                removeSkeletonForSelectorAll("#summary");
+                removeSkeletonForSelectorAll(".profile-info");
+
+                elementsToSkeleton.forEach((createSkeletonLinesFunction, selector) => {
+                    const element = document.querySelector(selector);
+                    if (element) {
+                        element.classList.remove('hidden');
+                    }
+                });
+
+                // Remove all skeletons
+                skeletons.forEach(s => s.remove());
+            }, 1000);
+        });
+    }
+
     // functions: misc
 
     async function getLatestTag() {
@@ -2161,6 +2270,8 @@
     }
 
     // Call functions to load data and initialize the page components
+
+    showLoadingScreen();
 
     configureResumeVersion();
     loadResumeData().then(() => {
