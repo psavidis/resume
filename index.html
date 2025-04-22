@@ -2113,6 +2113,131 @@
         return `v${next}`;
     }
 
+    // Functions: Skeletons
+
+    function createTitleSkeleton(lines) {
+        return createSkeletonLines(lines, "skeleton-title");
+    }
+
+    function createSkeletonLines(lines, className) {
+        const group = document.createElement('div');
+        group.className = 'skeleton-group';
+        for (let i = 0; i < lines; i++) {
+            const line = document.createElement('div');
+            line.className = className;
+            // line.style.width = `${80 - i * 10}%`; // Stagger line lengths
+            group.appendChild(line);
+        }
+        return group;
+    }
+
+    function replaceSelectorAllWithSkeleton(skeletons, selector, createSkeletonLinesFunction) {
+        const elements = document.querySelectorAll(selector);
+
+        if (!elements) {
+            return;
+        }
+
+        elements.forEach(element => {
+            element.classList.add('hidden');
+
+            const skeletonGroup = createSkeletonLinesFunction();
+            element.parentNode.insertBefore(skeletonGroup, element);
+            skeletons.push(skeletonGroup);
+        });
+    }
+
+    function replaceSelectorWithSkeleton(skeletons, selector, createSkeletonLinesFunction) {
+        const el = document.querySelector(selector);
+        if (el) {
+            el.classList.add('hidden');
+
+            const skeletonGroup = createSkeletonLinesFunction();
+            el.parentNode.insertBefore(skeletonGroup, el);
+            skeletons.push(skeletonGroup);
+        }
+    }
+
+    function removeSkeletonForSelectorAll(selector) {
+        const elements = document.querySelectorAll(selector);
+
+        if (!elements) {
+            return;
+        }
+
+        elements.forEach(element => {
+            element.classList.remove('hidden');
+        });
+    }
+
+    function maskAllSkeletonsAndGet() {
+        // Add 'loading' class to hide or disable buttons
+        document.body.classList.add('loading');
+
+        const skeletons = [];
+
+        // All Titles
+        replaceSelectorAllWithSkeleton(skeletons, "h2", () => createTitleSkeleton(1));
+        replaceSelectorAllWithSkeleton(skeletons, "#experience-list", () => createSkeletonLines(8, "skeleton-project"));
+        replaceSelectorAllWithSkeleton(skeletons, "#projects-list", () => createSkeletonLines(8, "skeleton-experience"));
+        replaceSelectorAllWithSkeleton(skeletons, ".summary-all", () => createSkeletonLines(7, "skeleton-line"));
+        replaceSelectorAllWithSkeleton(skeletons, ".profile-picture-container", () => createSkeletonLines(6, "skeleton-profile-picture"));
+        replaceSelectorAllWithSkeleton(skeletons, "#summary", () => createSkeletonLines(1, "skeleton-line"));
+        replaceSelectorAllWithSkeleton(skeletons, ".profile-info", () => createSkeletonLines(1, "skeleton-name"));
+
+        replaceSelectorWithSkeleton(skeletons, "#education-list", () => createSkeletonLines(1, "skeleton-education"));
+
+        return skeletons;
+    }
+
+    function removeAllSkeletons(skeletons, delay = 1000) {
+        setTimeout(() => {
+            removeSkeletonForSelectorAll("h2");
+            removeSkeletonForSelectorAll("#experience-list");
+            removeSkeletonForSelectorAll("#projects-list");
+            removeSkeletonForSelectorAll(".summary-all");
+            removeSkeletonForSelectorAll(".profile-picture-container");
+            removeSkeletonForSelectorAll("#summary");
+            removeSkeletonForSelectorAll(".profile-info");
+            removeSkeletonForSelectorAll("#education-list");
+
+
+            // Remove all skeletons
+            skeletons.forEach(s => s.remove());
+
+            document.body.classList.remove('loading');
+            document.body.classList.add('loaded');
+        }, delay);
+    }
+
+    function adjustSkeletonSizes() {
+        const screenWidth = window.innerWidth;
+
+        // Adjust skeleton sizes based on screen width
+        if (screenWidth <= 480) {
+            document.querySelectorAll('.skeleton-title').forEach(element => {
+                element.style.width = '60%';
+            });
+            document.querySelectorAll('.skeleton-name').forEach(element => {
+                element.style.width = '150px';
+            });
+        } else if (screenWidth <= 768) {
+            document.querySelectorAll('.skeleton-title').forEach(element => {
+                element.style.width = '50%';
+            });
+            document.querySelectorAll('.skeleton-name').forEach(element => {
+                element.style.width = '200px';
+            });
+        } else {
+            document.querySelectorAll('.skeleton-title').forEach(element => {
+                element.style.width = '30%';
+            });
+            document.querySelectorAll('.skeleton-name').forEach(element => {
+                element.style.width = '258px';
+            });
+        }
+    }
+
     // functions: misc
 
     async function getLatestTag() {
@@ -2160,7 +2285,13 @@
         }
     }
 
+    // Run the function when the window is resized or loaded
+    window.addEventListener('resize', adjustSkeletonSizes);
+    window.addEventListener('load', adjustSkeletonSizes);
+
     // Call functions to load data and initialize the page components
+
+    const skeletons = maskAllSkeletonsAndGet();
 
     configureResumeVersion();
     loadResumeData().then(() => {
@@ -2180,6 +2311,8 @@
         configureVoice();
 
         showAnimationHint(6000, true);
+    }).then(() => {
+        removeAllSkeletons(skeletons, 2000);
     });
 
 </script>

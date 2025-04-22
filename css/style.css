@@ -47,7 +47,7 @@ h1 {
     color: #2c3e50;
     font-size: 2.5em;
     margin-bottom: 10px;
-    animation: slideIn 1s ease-in-out;
+    /*animation: slideIn 1s ease-in-out;*/
 }
 
 h2 {
@@ -100,6 +100,49 @@ p {
     position:fixed;
     right:20px;
     z-index: 1001; /* 1 index above container */
+}
+
+/* When the page is in loading state, hide or disable the buttons */
+body.loading .button-container {
+    visibility: hidden; /* Or use display: none; to completely hide them */
+    /* Optionally, disable the buttons instead of hiding them */
+    pointer-events: none;  /* Disable button clicks */
+    opacity: 0.3;  /* Make buttons appear inactive */
+}
+
+/* You can also style a "loading" button state if you want */
+body.loading .button-container .button {
+    background-color: #e2e2e2;  /* Light gray for disabled state */
+    cursor: not-allowed;
+}
+
+body.loading #copyright,
+body.loading .resume-version {
+    filter: blur(5px);
+    opacity: 0.3;
+    transition: filter 0.3s ease, opacity 0.3s ease;
+    filter: blur(5px);
+    opacity: 0.3;
+    transition: filter 0.3s ease, opacity 0.3s ease;
+}
+
+/* Once loading is complete, buttons will become visible again */
+body.loaded .button-container {
+    visibility: visible; /* Show the buttons when data is loaded */
+    opacity: 1; /* Restore normal visibility */
+    pointer-events: auto; /* Enable clicking */
+}
+
+/* When the page is in loading state, hide the shortcut hint */
+body.loading #shortcut-hint {
+    visibility: hidden; /* Or display: none; to completely remove it */
+    opacity: 0; /* Fade it out for smooth transition */
+}
+
+/* Once loading is complete, show the shortcut hint */
+body.loaded #shortcut-hint {
+    visibility: visible;
+    opacity: 1; /* Ensure it is fully visible */
 }
 
 .button-group {
@@ -1656,6 +1699,12 @@ body.dark-mode .fun-fact-text {
     font-size: 1em;
 }
 
+#copyright,
+.resume-version {
+    filter: none;
+    opacity: 1;
+}
+
 .dark-mode #copyright {
     color: white;
 }
@@ -1955,3 +2004,179 @@ body.dark-mode .resume-version {
         box-shadow: 0 0 2px rgba(255, 223, 0, 0.2), 0 0 2px rgba(128, 0, 128, 0.2);
     }
 }
+
+/* Skeleton Styles */
+
+.skeleton-name,
+.skeleton-profile-picture,
+.skeleton-line,
+.skeleton-project,
+.skeleton-experience,
+.skeleton-education,
+.skeleton-title {
+    background-color: #e2e2e2;
+    border-radius: 6px;
+    margin: 8px 0;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Skeleton Line Styles */
+.skeleton-line {
+    height: 12px;
+    width: 80%;
+}
+
+.skeleton-project {
+    height: 87px;
+    width: 690px;
+}
+
+.skeleton-experience {
+    height: 55px;
+    width: 690px;
+}
+
+.skeleton-education {
+    height: 87px;
+    width: 690px;
+}
+
+.skeleton-title {
+    height: 30px;
+    width: 30%;
+    margin-bottom: 12px;
+}
+
+/* Profile Picture Skeleton */
+.skeleton-profile-picture {
+    height: 10px;
+    width: 124px;
+}
+
+/* Name Skeleton */
+.skeleton-name {
+    height: 47px;
+    width: 258px;
+}
+
+/* Shimmer Effect */
+.skeleton-line::after,
+.skeleton-name::after,
+.skeleton-profile-picture::after,
+.skeleton-project::after,
+.skeleton-experience::after,
+.skeleton-education::after,
+.skeleton-title::after
+{
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -150px;
+    height: 100%;
+    width: 100%;
+    background: linear-gradient(to right, transparent 0%, #f0f0f0 50%, transparent 100%);
+    animation: shimmer 1.5s infinite;
+}
+
+@keyframes shimmer {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(100%); }
+}
+
+/* Media Queries */
+
+/* For tablets */
+@media (max-width: 768px) {
+    .skeleton-name {
+        width: 200px;
+    }
+
+    .skeleton-profile-picture {
+        width: 100px;
+    }
+
+    .skeleton-title {
+        width: 50%;
+    }
+
+    .skeleton-project,
+    .skeleton-experience,
+    .skeleton-education {
+        width: 100%; /* Full-width for tablet screens */
+    }
+}
+
+/* For phones */
+@media (max-width: 480px) {
+    .skeleton-name {
+        width: 150px;  /* Smaller width for phones */
+    }
+
+    .skeleton-profile-picture {
+        width: 80px;  /* Smaller profile picture for phones */
+    }
+
+    .skeleton-title {
+        width: 60%; /* Adjust the title skeleton width */
+    }
+
+    .skeleton-project,
+    .skeleton-experience,
+    .skeleton-education {
+        width: 100%; /* Full-width for phones */
+    }
+
+    .skeleton-group {
+        margin-bottom: 12px; /* Less space between sections for phones */
+    }
+
+    .skeleton-title {
+        margin-bottom: 8px; /* Less margin for phones */
+    }
+}
+/* General dark mode background for skeletons with purple gradient */
+body.dark-mode .skeleton-line,
+body.dark-mode .skeleton-name,
+body.dark-mode .skeleton-profile-picture,
+body.dark-mode .skeleton-project,
+body.dark-mode .skeleton-experience,
+body.dark-mode .skeleton-education,
+body.dark-mode .skeleton-title {
+    background: linear-gradient(45deg, #5f3b8a, #9c7cc3);  /* Purple gradient background */
+    border-radius: 6px;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 0 10px rgba(156, 124, 195, 0.7);  /* Subtle purple glow */
+}
+
+/* Shimmer effect with purple glow */
+body.dark-mode .skeleton-line::after,
+body.dark-mode .skeleton-name::after,
+body.dark-mode .skeleton-profile-picture::after,
+body.dark-mode .skeleton-project::after,
+body.dark-mode .skeleton-experience::after,
+body.dark-mode .skeleton-education::after,
+body.dark-mode .skeleton-title::after {
+    background: linear-gradient(to right, transparent 0%, rgba(156, 124, 195, 0.6) 50%, transparent 100%);  /* Lighter purple shimmer */
+    animation: shimmer-glow 1.5s infinite;
+}
+
+/* Glowing shimmer animation */
+@keyframes shimmer-glow {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(100%); }
+}
+
+/* Dark mode skeleton title adjustments */
+body.dark-mode .skeleton-title {
+    height: 30px;
+    width: 30% !important;
+    margin-bottom: 12px;
+    background: linear-gradient(45deg, #5f3b8a, #9c7cc3);  /* Purple gradient */
+    border-radius: 6px;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 0 10px rgba(156, 124, 195, 0.7);  /* Glowing effect */
+}
+
