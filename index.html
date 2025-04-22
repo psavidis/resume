@@ -792,7 +792,8 @@
             // Tools Used
             const techUsed = document.createElement('p');
             techUsed.classList.add('project-tech');
-            techUsed.textContent = project.techUsed ? `${project.techUsed.join(' ')}` : '';
+            techUsed.innerHTML = project.techUsed ?
+                project.techUsed.map(word => `<span class="word">${word}</span>`).join(' ') : '';
             techUsed.style.display = 'none';
             techUsed.style.fontSize = '13px';
             techUsed.style.fontStyle = 'italic';
@@ -1205,13 +1206,20 @@
 
     function getTextNodes(element) {
         let textNodes = [];
+
         for (let node of element.childNodes) {
-            if (node.nodeType === 3) { // Text node
+            if (node.nodeType === 3) {
+                // Text node
                 textNodes.push(node);
-            } else if (node.nodeType === 1) { // Element node, recurse into child elements
+            } else if (node.nodeType === 1) {
+                // Element node: skip if this node or any ancestor is .project-tech
+                if (node.classList.contains('project-tech')) continue;
+
+                // Recurse into children
                 textNodes = textNodes.concat(getTextNodes(node));
             }
         }
+
         return textNodes;
     }
 
@@ -1410,6 +1418,7 @@
         configureArrowButtons();
 
         let sections = document.querySelectorAll('.project-li');
+
         sections.forEach(section => {
             wrapWordsInSpans(section)
         });
