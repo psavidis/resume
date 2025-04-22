@@ -1694,6 +1694,11 @@ body.dark-mode .fun-fact-text {
     color: white;
 }
 
+#copyright {
+    color: white;
+    font-size: 1em;
+}
+
 #copyright,
 .resume-version {
     filter: none;
