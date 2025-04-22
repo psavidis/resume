@@ -2205,6 +2205,34 @@
         }, delay);
     }
 
+    function adjustSkeletonSizes() {
+        const screenWidth = window.innerWidth;
+
+        // Adjust skeleton sizes based on screen width
+        if (screenWidth <= 480) {
+            document.querySelectorAll('.skeleton-title').forEach(element => {
+                element.style.width = '60%';
+            });
+            document.querySelectorAll('.skeleton-name').forEach(element => {
+                element.style.width = '150px';
+            });
+        } else if (screenWidth <= 768) {
+            document.querySelectorAll('.skeleton-title').forEach(element => {
+                element.style.width = '50%';
+            });
+            document.querySelectorAll('.skeleton-name').forEach(element => {
+                element.style.width = '200px';
+            });
+        } else {
+            document.querySelectorAll('.skeleton-title').forEach(element => {
+                element.style.width = '30%';
+            });
+            document.querySelectorAll('.skeleton-name').forEach(element => {
+                element.style.width = '258px';
+            });
+        }
+    }
+
     // functions: misc
 
     async function getLatestTag() {
@@ -2251,6 +2279,10 @@
             versionElement.textContent = 'Resume latest';
         }
     }
+
+    // Run the function when the window is resized or loaded
+    window.addEventListener('resize', adjustSkeletonSizes);
+    window.addEventListener('load', adjustSkeletonSizes);
 
     // Call functions to load data and initialize the page components
 

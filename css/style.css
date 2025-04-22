@@ -1955,17 +1955,14 @@ body.dark-mode .resume-version {
         box-shadow: 0 0 2px rgba(255, 223, 0, 0.2), 0 0 2px rgba(128, 0, 128, 0.2);
     }
 }
-
-/* Group wrapper to space out sections */
-.skeleton-group {
-    margin-bottom: 24px; /* space between sections */
-}
-
-/* The actual loading lines */
-
-.skeleton-name {
-    height: 47px;
-    width: 258px;
+/* Base styles for desktop */
+.skeleton-name,
+.skeleton-profile-picture,
+.skeleton-line,
+.skeleton-project,
+.skeleton-experience,
+.skeleton-education,
+.skeleton-title {
     background-color: #e2e2e2;
     border-radius: 6px;
     margin: 8px 0;
@@ -1973,79 +1970,48 @@ body.dark-mode .resume-version {
     overflow: hidden;
 }
 
-.skeleton-profile-picture {
-    height: 10px;
-    width: 124px;
-    background-color: #e2e2e2;
-    border-radius: 6px;
-    margin: 8px 0;
-    position: relative;
-    overflow: hidden;
-}
-
+/* Skeleton Line Styles */
 .skeleton-line {
     height: 12px;
-    background-color: #e2e2e2;
-    border-radius: 6px;
-    margin: 8px 0;
-    position: relative;
-    overflow: hidden;
+    width: 80%;
 }
 
 .skeleton-project {
     height: 87px;
     width: 690px;
-    background-color: #e2e2e2;
-    border-radius: 6px;
-    margin: 8px 0;
-    position: relative;
-    overflow: hidden;
 }
 
 .skeleton-experience {
     height: 55px;
     width: 690px;
-    background-color: #e2e2e2;
-    border-radius: 6px;
-    margin: 8px 0;
-    position: relative;
-    overflow: hidden;
 }
 
 .skeleton-education {
     height: 87px;
     width: 690px;
-    background-color: #e2e2e2;
-    border-radius: 6px;
-    margin: 8px 0;
-    position: relative;
-    overflow: hidden;
 }
 
 .skeleton-title {
     height: 30px;
-    width: 30% !important;
+    width: 30%;
     margin-bottom: 12px;
-    background-color: #e2e2e2;
-    border-radius: 6px;
-    position: relative;
-    overflow: hidden;
 }
 
+/* Profile Picture Skeleton */
+.skeleton-profile-picture {
+    height: 10px;
+    width: 124px;
+}
+
+/* Name Skeleton */
+.skeleton-name {
+    height: 47px;
+    width: 258px;
+}
+
+/* Shimmer Effect */
+.skeleton-line::after,
 .skeleton-title::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -150px;
-    height: 100%;
-    width: 150px;
-    background: linear-gradient(to right, transparent 0%, #f0f0f0 50%, transparent 100%);
-    animation: shimmer 1.5s infinite;
-}
-
-
-/* Shimmer effect */
-.skeleton-line::after {
     content: '';
     position: absolute;
     top: 0;
@@ -2059,4 +2025,56 @@ body.dark-mode .resume-version {
 @keyframes shimmer {
     0% { transform: translateX(0); }
     100% { transform: translateX(100%); }
+}
+
+/* Media Queries */
+
+/* For tablets */
+@media (max-width: 768px) {
+    .skeleton-name {
+        width: 200px;
+    }
+
+    .skeleton-profile-picture {
+        width: 100px;
+    }
+
+    .skeleton-title {
+        width: 50%;
+    }
+
+    .skeleton-project,
+    .skeleton-experience,
+    .skeleton-education {
+        width: 100%; /* Full-width for tablet screens */
+    }
+}
+
+/* For phones */
+@media (max-width: 480px) {
+    .skeleton-name {
+        width: 150px;  /* Smaller width for phones */
+    }
+
+    .skeleton-profile-picture {
+        width: 80px;  /* Smaller profile picture for phones */
+    }
+
+    .skeleton-title {
+        width: 60%; /* Adjust the title skeleton width */
+    }
+
+    .skeleton-project,
+    .skeleton-experience,
+    .skeleton-education {
+        width: 100%; /* Full-width for phones */
+    }
+
+    .skeleton-group {
+        margin-bottom: 12px; /* Less space between sections for phones */
+    }
+
+    .skeleton-title {
+        margin-bottom: 8px; /* Less margin for phones */
+    }
 }
