@@ -1893,7 +1893,7 @@ body.search-active {
 /* Resume Version */
 .resume-version {
     position: absolute;
-    bottom: 10px;
+    bottom: 0px;
     right: 15px;
     font-size: 0.65rem;
     color: rgba(0, 0, 0, 0.4);
