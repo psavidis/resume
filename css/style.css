@@ -123,6 +123,18 @@ body.loaded .button-container {
     pointer-events: auto; /* Enable clicking */
 }
 
+/* When the page is in loading state, hide the shortcut hint */
+body.loading #shortcut-hint {
+    visibility: hidden; /* Or display: none; to completely remove it */
+    opacity: 0; /* Fade it out for smooth transition */
+}
+
+/* Once loading is complete, show the shortcut hint */
+body.loaded #shortcut-hint {
+    visibility: visible;
+    opacity: 1; /* Ensure it is fully visible */
+}
+
 .button-group {
     display: flex;
     flex-direction: row;  /* override the column default */
