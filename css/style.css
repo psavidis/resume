@@ -1215,7 +1215,7 @@ body.dark-mode .project-point-item {
 }
 
 .project-tech span:hover {
-    background-color: #5993ff;
+    background-color: rgba(89, 147, 255, 0.21);
 }
 
 .dark-mode .project-tech {
@@ -1232,14 +1232,13 @@ body.dark-mode .project-point-item {
     border: 1px solid #333;
     border-radius: 4px;
     padding: 3px 8px;
-    line-height: 1.4;
     white-space: nowrap;
     color: #ccc;
     transition: background-color 0.2s ease, color 0.2s ease;
 }
 
 .dark-mode .project-tech span:hover {
-    background-color: rgba(255, 174, 0, 0.8);
+    background-color: rgba(255, 204, 0, 0.45);
     color: #fff;
 }
 
