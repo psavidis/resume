@@ -2143,6 +2143,11 @@
         }, 100);
     }
 
+    function getNextTag(version) {
+        const number = parseFloat(version.replace(/^v/, ''));
+        const next = (number + 0.1).toFixed(1);
+        return `v${next}`;
+    }
 
     // functions: misc
 
@@ -2183,7 +2188,9 @@
         const versionElement = document.querySelector(".resume-version");
 
         if (latestTag) {
-            versionElement.textContent = `Resume ${latestTag}`;
+            const versionTag = productionMode ? latestTag :getNextTag(latestTag);
+
+            versionElement.textContent = `Resume ${versionTag}`;
         } else {
             versionElement.textContent = 'Resume latest';
         }
