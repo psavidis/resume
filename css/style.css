@@ -1601,7 +1601,7 @@ body.dark-mode #contact-form-container .submit-button {
     background: linear-gradient(145deg, #46618a, #2f3e55) !important;
     color: #ffffff;
     border: none;
-    padding: 8px 16px;
+    /*padding: 8px 16px;*/
     border-radius: 6px;
     cursor: pointer;
 }
@@ -1615,14 +1615,14 @@ body.dark-mode #contact-form-container .submit-button:hover {
 body.dark-mode #copyButton {
     background: linear-gradient(145deg, #8f5fd0, #6c44a5) !important;
     color: #ffffff;
-    border: none;
-    padding: 6px 12px;
-    border-radius: 6px;
+    /*border: none;*/
+    /*padding: 6px 12px;*/
+    /*border-radius: 6px;*/
     cursor: pointer;
     transition: background 0.3s ease;
-    margin-left: 10px;
+    /*margin-left: 10px;*/
     font-weight: 500;
-    letter-spacing: 0.5px;
+    /*letter-spacing: 0.5px;*/
 }
 
 body.dark-mode #copyButton:hover {
