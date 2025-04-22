@@ -1739,15 +1739,6 @@ body.dark-mode .fun-fact-text {
     }
 }
 
-/* If the screen height small for phones, hide one button */
-@media screen and (max-height: 932px) {
-    #phoneButton {
-        display: none !important;
-        visibility: hidden !important;
-        opacity: 0 !important;
-    }
-}
-
 /* Blur everything except the search bar*/
 body.search-active {
 

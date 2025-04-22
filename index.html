@@ -1772,11 +1772,13 @@
 
         if (!isMobile()) {
             document.getElementById('shortcut-hint').style.display = 'block';
+            document.getElementById('phoneButton').style.display = 'block';
 
             configureKeyboardModal();
             registerKeyboardShortcuts();
         } else {
             // Mobile styling for voice button
+            document.getElementById('phoneButton').style.display = 'none';
             document.getElementById('shortcut-hint').style.visibility = 'hidden';
             document.getElementById('microphone-btn').style.visibility = 'hidden';
         }
