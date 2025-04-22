@@ -2046,13 +2046,19 @@ body.dark-mode .resume-version {
 
 /* Shimmer Effect */
 .skeleton-line::after,
-.skeleton-title::after {
+.skeleton-name::after,
+.skeleton-profile-picture::after,
+.skeleton-project::after,
+.skeleton-experience::after,
+.skeleton-education::after,
+.skeleton-title::after
+{
     content: '';
     position: absolute;
     top: 0;
     left: -150px;
     height: 100%;
-    width: 150px;
+    width: 100%;
     background: linear-gradient(to right, transparent 0%, #f0f0f0 50%, transparent 100%);
     animation: shimmer 1.5s infinite;
 }
