@@ -116,7 +116,11 @@ body.loading .button-container .button {
     cursor: not-allowed;
 }
 
-body.loading #copyright {
+body.loading #copyright,
+body.loading .resume-version {
+    filter: blur(5px);
+    opacity: 0.3;
+    transition: filter 0.3s ease, opacity 0.3s ease;
     filter: blur(5px);
     opacity: 0.3;
     transition: filter 0.3s ease, opacity 0.3s ease;
@@ -1690,9 +1694,8 @@ body.dark-mode .fun-fact-text {
     color: white;
 }
 
-#copyright {
-    color: white;
-    font-size: 1em;
+#copyright,
+.resume-version {
     filter: none;
     opacity: 1;
 }
