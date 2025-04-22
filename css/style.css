@@ -1596,8 +1596,7 @@ body.dark-mode #microphone-btn:hover {
 
 body.dark-mode .btn:hover {
     background: linear-gradient(145deg, #3e2a47, #1f1f2a); /* Slightly lighter purple-black on hover */
-    color: #ffffff; /* Brighter text on hover */
-    transform: translateY(-2px); /* Subtle lift effect */
+    color: #ffffff;
 }
 
 body.dark-mode #voice-command-hint {
