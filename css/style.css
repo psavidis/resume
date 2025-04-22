@@ -1955,7 +1955,9 @@ body.dark-mode .resume-version {
         box-shadow: 0 0 2px rgba(255, 223, 0, 0.2), 0 0 2px rgba(128, 0, 128, 0.2);
     }
 }
-/* Base styles for desktop */
+
+/* Skeleton Styles */
+
 .skeleton-name,
 .skeleton-profile-picture,
 .skeleton-line,
@@ -2078,3 +2080,48 @@ body.dark-mode .resume-version {
         margin-bottom: 8px; /* Less margin for phones */
     }
 }
+/* General dark mode background for skeletons with purple gradient */
+body.dark-mode .skeleton-line,
+body.dark-mode .skeleton-name,
+body.dark-mode .skeleton-profile-picture,
+body.dark-mode .skeleton-project,
+body.dark-mode .skeleton-experience,
+body.dark-mode .skeleton-education,
+body.dark-mode .skeleton-title {
+    background: linear-gradient(45deg, #5f3b8a, #9c7cc3);  /* Purple gradient background */
+    border-radius: 6px;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 0 10px rgba(156, 124, 195, 0.7);  /* Subtle purple glow */
+}
+
+/* Shimmer effect with purple glow */
+body.dark-mode .skeleton-line::after,
+body.dark-mode .skeleton-name::after,
+body.dark-mode .skeleton-profile-picture::after,
+body.dark-mode .skeleton-project::after,
+body.dark-mode .skeleton-experience::after,
+body.dark-mode .skeleton-education::after,
+body.dark-mode .skeleton-title::after {
+    background: linear-gradient(to right, transparent 0%, rgba(156, 124, 195, 0.6) 50%, transparent 100%);  /* Lighter purple shimmer */
+    animation: shimmer-glow 1.5s infinite;
+}
+
+/* Glowing shimmer animation */
+@keyframes shimmer-glow {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(100%); }
+}
+
+/* Dark mode skeleton title adjustments */
+body.dark-mode .skeleton-title {
+    height: 30px;
+    width: 30% !important;
+    margin-bottom: 12px;
+    background: linear-gradient(45deg, #5f3b8a, #9c7cc3);  /* Purple gradient */
+    border-radius: 6px;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 0 10px rgba(156, 124, 195, 0.7);  /* Glowing effect */
+}
+
