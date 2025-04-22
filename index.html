@@ -2086,87 +2086,25 @@
         ctx.restore();
     }
 
-    function showAnimationHint(textToShow, milliseconds) {
+    function showAnimationHint(milliseconds, showOnlyOnce) {
+
         if (!isMobile()) return;
 
-        if (localStorage.getItem("drawerHintShown") === "true") return;
+        if (showOnlyOnce && localStorage.getItem("drawerHintShown") === "true") {
+            return;
+        }
 
-        localStorage.setItem("drawerHintShown", "true");
+        const menuToggle = document.getElementById("menu-toggle");
+        const glowClass = "pulse";
+        menuToggle.classList.add(glowClass);
 
         setTimeout(() => {
-            const canvas = document.createElement("canvas");
-            canvas.id = "hint-canvas";
-            canvas.style.position = "fixed";
-            canvas.style.top = "0";
-            canvas.style.left = "0";
-            canvas.style.pointerEvents = "none";
-            canvas.style.zIndex = "9999";
-            document.body.appendChild(canvas);
+            menuToggle.classList.remove(glowClass);
+        }, milliseconds);
 
-            const ctx = canvas.getContext("2d");
-            const drawerButton = document.getElementById("menu-toggle");
-
-            if (!canvas || !ctx || !drawerButton) return;
-
-            // Resize canvas
-            const resizeCanvas = () => {
-                canvas.width = window.innerWidth;
-                canvas.height = window.innerHeight;
-            };
-            resizeCanvas();
-            window.addEventListener("resize", resizeCanvas);
-
-            let alpha = 0;
-            let phase = "in";
-            let startTime = null;
-
-            // Add glowing effect
-            drawerButton.classList.add("pulse");
-
-            const animate = (timestamp) => {
-                if (!startTime) startTime = timestamp;
-                const elapsed = timestamp - startTime;
-
-                ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-                // Recalculate button position
-                const rect = drawerButton.getBoundingClientRect();
-                const tailX = rect.left + rect.width / 2;
-                const tailY = rect.top + rect.height / 2;
-
-                const bubbleWidth = 130;
-                const bubbleHeight = 60;
-                const bubbleX = Math.min(window.innerWidth - bubbleWidth - 10, tailX - bubbleWidth / 2);
-                const bubbleY = tailY - 100;
-
-                drawSpeechBubble(ctx, bubbleX, bubbleY, bubbleWidth, bubbleHeight, 16, tailX, tailY, alpha, textToShow);
-
-                if (phase === "in") {
-                    alpha += 0.05;
-                    if (alpha >= 1) {
-                        alpha = 1;
-                        phase = "pause";
-                        startTime = timestamp;
-                    }
-                } else if (phase === "pause") {
-                    if (elapsed > milliseconds) {
-                        phase = "out";
-                        startTime = timestamp;
-                    }
-                } else if (phase === "out") {
-                    alpha -= 0.05;
-                    if (alpha <= 0) {
-                        canvas.remove();
-                        drawerButton.classList.remove("pulse");
-                        return;
-                    }
-                }
-
-                requestAnimationFrame(animate);
-            };
-
-            requestAnimationFrame(animate);
-        }, 100);
+        if (showOnlyOnce) {
+            localStorage.setItem("drawerHintShown", "true");
+        }
     }
 
     function getNextTag(version) {
@@ -2241,7 +2179,7 @@
         configurePushNotificationOnLoad();
         configureVoice();
 
-        showAnimationHint("Tap here!", 5000);
+        showAnimationHint(6000, true);
     });
 
 </script>
