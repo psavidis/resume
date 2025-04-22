@@ -116,6 +116,12 @@ body.loading .button-container .button {
     cursor: not-allowed;
 }
 
+body.loading #copyright {
+    filter: blur(5px);
+    opacity: 0.3;
+    transition: filter 0.3s ease, opacity 0.3s ease;
+}
+
 /* Once loading is complete, buttons will become visible again */
 body.loaded .button-container {
     visibility: visible; /* Show the buttons when data is loaded */
@@ -1687,6 +1693,8 @@ body.dark-mode .fun-fact-text {
 #copyright {
     color: white;
     font-size: 1em;
+    filter: none;
+    opacity: 1;
 }
 
 .dark-mode #copyright {
