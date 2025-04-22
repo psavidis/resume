@@ -777,9 +777,7 @@
             // Project name
             const projectName = document.createElement('span');
             projectName.textContent = project.name || 'Project not provided';
-            projectName.style.color = '#1e3c72';
-            projectName.style.fontSize = '18px';
-            projectName.style.fontWeight = 'bold';
+            projectName.classList.add('project-name');
 
             // Description
             const projectDescription = document.createElement('p');

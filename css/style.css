@@ -1488,8 +1488,16 @@ body.dark-mode h2 {
     text-shadow: rgba(255, 174, 0, 0.8) 0 0 3px;
 }
 
-body.dark-mode #Projects #projects-list span {
-    color: #ffffff !important;
+body .project-name {
+    color: #1e3c72;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+body.dark-mode .project-name {
+    color: #ffffff;
+    font-size: 18px;
+    font-weight: bold;
 }
 
 body.dark-mode h1 {
