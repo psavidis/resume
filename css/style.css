@@ -15,7 +15,6 @@ body {
     padding: 0;
     background: linear-gradient(145deg, #2a2a72, #009ffd);
     color: #333;
-    /*overflow: hidden;*/
 
     display: flex;
     flex-direction: column;
@@ -932,7 +931,6 @@ body.search-active .toggle-button:focus {
     cursor: pointer;
 }
 
-/* Change background color when hovering */
 #copyButton:hover {
     background-color: #45a049;
 }
@@ -1572,7 +1570,6 @@ body.dark-mode .profile-title {
     text-shadow: rgba(255, 174, 0, 0.8) 0 0 2px;
 }
 
-/* DARK MODE for Contact Form */
 body.dark-mode #contact-form-container {
     background-color: #1e1e1e; /* dark container */
     color: #e0e0e0;
@@ -1590,12 +1587,10 @@ body.dark-mode #contact-form-container textarea {
     border: 1px solid #444;
 }
 
-/* Label styling */
 body.dark-mode #contact-form-container label {
     color: #c4bfd6;
 }
 
-/* Buttons inside the contact form */
 body.dark-mode #contact-form-container button,
 body.dark-mode #contact-form-container .submit-button {
     background: linear-gradient(145deg, #46618a, #2f3e55) !important;
@@ -1615,14 +1610,9 @@ body.dark-mode #contact-form-container .submit-button:hover {
 body.dark-mode #copyButton {
     background: linear-gradient(145deg, #8f5fd0, #6c44a5) !important;
     color: #ffffff;
-    /*border: none;*/
-    /*padding: 6px 12px;*/
-    /*border-radius: 6px;*/
     cursor: pointer;
     transition: background 0.3s ease;
-    /*margin-left: 10px;*/
     font-weight: 500;
-    /*letter-spacing: 0.5px;*/
 }
 
 body.dark-mode #copyButton:hover {
@@ -1631,7 +1621,7 @@ body.dark-mode #copyButton:hover {
 
 body.dark-mode .arrow-up:hover,
 body.dark-mode .arrow-down:hover {
-    color: #f1c40f !important; /* Yellow color on hover */
+    color: #f1c40f !important;
 }
 
 body.dark-mode .click-active {
@@ -1640,7 +1630,7 @@ body.dark-mode .click-active {
 
 body.dark-mode #circle {
     position: absolute;
-    background-color: #8a2be2; /* Purple background for dark mode */
+    background-color: #8a2be2;
     border-radius: 50%;
     width: 0;
     height: 0;
@@ -1649,17 +1639,17 @@ body.dark-mode #circle {
 }
 
 body.dark-mode #phoneButton.clicked + #overlay #circle {
-    background-color: #9b4eaf; /* Slightly lighter purple when clicked */
-    box-shadow: 0 0 15px rgba(143, 95, 208, 0.7); /* Glowing effect */
+    background-color: #9b4eaf;
+    box-shadow: 0 0 15px rgba(143, 95, 208, 0.7);
     transform: scale(5); /* Enlarging the circle on click */
 }
 
 body.dark-mode .fun-fact {
-    color: #d859ff; /* Soft professional blue */
+    color: #d859ff;
 }
 
 body.dark-mode .fun-fact-text {
-    color: white; /* Dark gray for readability */
+    color: white;
 }
 
 #copyright {
