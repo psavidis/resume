@@ -2166,7 +2166,7 @@
         // Check if the result is already cached in sessionStorage
         const cachedTags = sessionStorage.getItem('githubTags');
 
-        if (cachedTags) {
+        if (productionMode && cachedTags) {
             return JSON.parse(cachedTags)[0].name; // Return the first tag from cached data
         }
 
