@@ -1528,7 +1528,6 @@ body.dark-mode .summary-all h2 {
 /* Paragraphs inside .summary-all */
 body.dark-mode .summary-all p {
     color: #ffffff; /* Bright white for high contrast */
-    line-height: 1.6;
     text-shadow:
             0 0 5px rgba(255, 255, 255, 0.2),
             0 0 10px rgba(255, 255, 255, 0.1);
