@@ -268,12 +268,6 @@ p {
     width: 100%;
 }
 
-.dark-mode .work-title {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-}
-
 .experience-content {
     flex: 1;
     display: flex;
@@ -1345,7 +1339,6 @@ body.dark-mode .project-point-item {
     cursor: pointer;
 }
 
-/* Base styles for projects */
 #Projects {
     background-color: white;
     color: black;
@@ -1388,7 +1381,7 @@ body.dark-mode #Projects {
 
 body.dark-mode .project-li {
     background-color: #2a2a2a !important; /* Force dark mode background */
-    border: 0 !important;
+    border: 1px solid #1a1a1a !important;
     color: #e0e0e0;
 }
 
@@ -1425,10 +1418,9 @@ body.dark-mode .experience-list {
 }
 
 body.dark-mode .section ul li {
-    border: 0px !important;
+    border: 1px solid #1a1a1a;
     background: linear-gradient(145deg, #3e2a47, #1a1a1a);
     color: #e0e0e0 !important; /* Light text color */
-    /*border: 1px solid #444 !important; !* Darker border *!*/
 }
 
 body.dark-mode .section ul li:hover {
