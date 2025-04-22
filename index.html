@@ -749,6 +749,10 @@
             experienceList.appendChild(li);
         });
 
+        const totalXP = getTotalExperience(data.workExperience);
+        const formattedXP = formatTotalExperienceIntoYears(totalXP);
+
+        document.getElementById('experienceTitle').textContent = 'Experience (' + formattedXP + ')';
     }
 
     function populateProjects(data) {
@@ -2277,7 +2281,7 @@
         const versionElement = document.querySelector(".resume-version");
 
         if (latestTag) {
-            const versionTag = productionMode ? latestTag :getNextTag(latestTag);
+            const versionTag = productionMode ? latestTag : getNextTag(latestTag);
 
             versionElement.textContent = `Resume ${versionTag}`;
         } else {
