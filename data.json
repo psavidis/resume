@@ -318,7 +318,8 @@
       ],
       "links": {
         "Product Website": "https://www.cortical.io/semanticpro/"
-      }
+      },
+      "badges": ["lead"]
     },
     {
       "name": "Camunda Platform 7 - The Open Source BPMN platform",
@@ -383,7 +384,8 @@
       "links": {
         "GitHub": "https://github.com/camunda/camunda-bpm-platform",
         "My Commits": "https://github.com/camunda/camunda-bpm-platform/issues?q=is%3Aissue%20state%3Aclosed%20assignee%3Apsavidis&page=1"
-      }
+      },
+      "badges": ["open-source"]
     }
   ],
   "education": [
