@@ -742,7 +742,7 @@ body.search-active .toggle-button:focus {
 
 #shortcuts {
     margin-top: 50px;
-    padding: 20px;
+    padding: 1px 15px;
     background-color: #f0f0f0;
     border-radius: 8px;
     font-family: 'Courier New', monospace;
@@ -753,8 +753,7 @@ body.search-active .toggle-button:focus {
     margin-bottom: 10px;
     padding-left: unset;
     border-left: unset;
-    color: #555; /* Slightly dark gray */
-    font-weight: normal; /* Lighter heading */
+    color: #555;
 }
 
 #shortcuts ul {
