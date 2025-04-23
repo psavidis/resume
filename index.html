@@ -768,7 +768,6 @@
 
         data.project.forEach(project => {
             const li = document.createElement('li');
-
             li.classList.add('project-li');
             li.style.cursor = 'pointer';
             li.style.padding = '12px';
@@ -782,6 +781,16 @@
             const projectName = document.createElement('span');
             projectName.textContent = project.name || 'Project not provided';
             projectName.classList.add('project-name');
+
+            // Add badges if available
+            if (project.badges && Array.isArray(project.badges)) {
+                project.badges.forEach(badgeText => {
+                    const badge = document.createElement('span');
+                    badge.className = 'project-badge-' + badgeText;
+                    badge.textContent = badgeText;
+                    projectName.appendChild(badge);
+                });
+            }
 
             // Description
             const projectDescription = document.createElement('p');

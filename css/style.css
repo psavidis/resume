@@ -2206,3 +2206,98 @@ li {
     -webkit-tap-highlight-color: transparent;
 }
 
+.project-badge-open-source {
+    display: inline-block;
+    background: linear-gradient(135deg, #FFD700, #FFC300);
+    color: #5c4400;
+    font-size: 0.6rem; /* Smaller font */
+    font-weight: 800;
+    padding: 0.15em 0.5em; /* Tighter padding */
+    border-radius: 999px;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    border: 1.2px solid #e6c200;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.25), inset 0 0 3px rgba(255, 255, 255, 0.3);
+    position: relative;
+    z-index: 1;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+    line-height: 1;
+}
+
+.project-badge-open-source::before {
+    content: '★';
+    margin-right: 4px;
+    font-size: 0.65rem;
+    color: #fffaf0;
+}
+
+.project-badge-open-source:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 7px rgba(0, 0, 0, 0.35), inset 0 0 5px rgba(255, 255, 255, 0.5);
+}
+.project-badge-lead {
+    display: inline-block;
+    background: linear-gradient(to right, #fdf5e6, #fff8dc); /* soft gold tone */
+    color: #6c4c1a;
+    font-size: 0.6rem;
+    font-weight: 600;
+    padding: 0.18em 0.55em;
+    border-radius: 999px;
+    text-transform: uppercase;
+    letter-spacing: 0.9px;
+    border: 1px solid #d4b373;
+    box-shadow: inset 0 0 1px rgba(255, 255, 255, 0.4), 0 2px 4px rgba(0,0,0,0.1);
+    transition: transform 0.2s ease;
+}
+
+.project-badge-lead::before {
+    content: '🛡️';
+    margin-right: 4px;
+    font-size: 0.65rem;
+}
+
+.project-badge-lead:hover {
+    transform: scale(1.06);
+    box-shadow: 0 4px 6px rgba(0,0,0,0.2), inset 0 0 2px rgba(255,255,255,0.4);
+}
+
+.dark-mode .project-badge-open-source {
+    background: linear-gradient(145deg, #3a2b55, #4b306d);
+    color: #e2d9ff;
+    border: 1px solid #a57dff;
+    box-shadow: 0 0 4px rgba(165, 125, 255, 0.4);
+    transition: all 0.2s ease-in-out;
+}
+
+.dark-mode .project-badge-open-source::before {
+    content: '🚀';
+    color: #d8c6ff;
+}
+
+.dark-mode .project-badge-open-source:hover {
+    transform: scale(1.06);
+    box-shadow: 0 0 6px rgba(165, 125, 255, 0.7), inset 0 0 2px rgba(255, 255, 255, 0.1);
+}
+
+.dark-mode .project-badge-lead {
+    background: linear-gradient(135deg, #2f2545, #412b5c);
+    color: #ffe9b4;
+    font-weight: 800;
+    text-transform: uppercase;
+    border: 1px solid #ffd87f;
+    box-shadow: 0 0 5px rgba(255, 215, 113, 0.35);
+    transition: all 0.2s ease-in-out;
+}
+
+.dark-mode .project-badge-lead::before {
+    content: '🛡️';
+    /*margin-right: 5px;*/
+    /*font-size: 0.65rem;*/
+    color: #fff2c7;
+}
+
+.dark-mode .project-badge-lead:hover {
+    transform: scale(1.06);
+    box-shadow: 0 0 7px rgba(255, 215, 113, 0.6), inset 0 0 2px rgba(255, 255, 255, 0.15);
+}
+
