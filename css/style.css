@@ -753,6 +753,8 @@ body.search-active .toggle-button:focus {
     font-size: 1.3em;
     margin-bottom: 12px;
     color: #333;
+    padding-left: unset;
+    border-left: unset;
 }
 
 #shortcuts ul {
