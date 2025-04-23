@@ -2180,3 +2180,12 @@ body.dark-mode .skeleton-title {
     box-shadow: 0 0 10px rgba(156, 124, 195, 0.7);  /* Glowing effect */
 }
 
+/* disable default focus/active style of browsers on click */
+li, li:focus, li:active {
+    outline: none;
+}
+
+li {
+    -webkit-tap-highlight-color: transparent;
+}
+
