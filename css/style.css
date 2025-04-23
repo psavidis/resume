@@ -742,19 +742,17 @@ body.search-active .toggle-button:focus {
 
 #shortcuts {
     margin-top: 50px;
-    padding: 1px 15px;
-    background-color: #f0f0f0;
-    border-radius: 8px;
+    padding: 16px 20px;
+    background-color: rgb(249, 249, 249);
+    border-radius: 12px;
     font-family: 'Courier New', monospace;
-    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
 }
 
 #shortcuts h2 {
-    font-size: 1.2em;
-    margin-bottom: 10px;
-    padding-left: unset;
-    border-left: unset;
-    color: #555;
+    font-size: 1.3em;
+    margin-bottom: 12px;
+    color: #333;
 }
 
 #shortcuts ul {
@@ -763,20 +761,37 @@ body.search-active .toggle-button:focus {
 }
 
 #shortcuts ul li {
-    font-size: 0.9em; /* Smaller font */
-    margin-bottom: 5px;
-    color: #777; /* Greyed text */
+    font-size: 0.95em;
+    margin-bottom: 8px;
+    color: #444;
 }
 
 #shortcuts ul li strong {
-    background: white;
-    padding: 2px 6px;
-    margin: 0 2px;
-    border-radius: 5px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-    font-weight: bold;
+    display: inline-block;
+    font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+    padding: 4px 8px;
+    margin: 0 3px;
+    background: #fff;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    box-shadow: inset 0 -2px 0 #ccc, 0 2px 3px rgba(0, 0, 0, 0.1);
     font-size: 0.85em;
-    color: #333;
+    color: #222;
+    line-height: 1.4;
+}
+
+.dark-mode #shortcuts ul li strong {
+    display: inline-block;
+    font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+    padding: 4px 8px;
+    margin: 0 3px;
+    background: #333; /* Darker background */
+    border: 1px solid #555;
+    border-radius: 6px;
+    box-shadow: inset 0 -2px 0 #222, 0 2px 3px rgba(0, 0, 0, 0.3);
+    font-size: 0.85em;
+    color: #fff; /* Light text for contrast */
+    line-height: 1.4;
 }
 
 #shortcut-hint {
