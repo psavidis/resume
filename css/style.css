@@ -2270,7 +2270,6 @@ li {
 }
 
 .dark-mode .project-badge-open-source::before {
-    content: '🚀';
     color: #d8c6ff;
 }
 
