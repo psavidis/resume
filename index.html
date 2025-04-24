@@ -1243,8 +1243,25 @@
         });
     }
 
+    function getAllSearchableNodes() {
+        const allWords = document.querySelectorAll('.word');
+
+        return Array.from(allWords).filter(word => {
+            // add filtering here
+            const wordIsInsideBadge = word.closest('.project-badge');
+
+            // keep words of badges
+            if (wordIsInsideBadge) {
+                return true;
+            }
+
+            // keep words that are not in the title
+            return !word.closest('.project-name');
+        });
+    }
+
     function highlightText(section, tokens) {
-        const nodes = section.querySelectorAll('.word'); // Select all wrapped words
+        const nodes = getAllSearchableNodes();
 
         tokens.forEach(token => {
             if (!token.trim()) return;
