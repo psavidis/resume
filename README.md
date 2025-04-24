@@ -46,10 +46,15 @@ My resume should support:
 
 - **Responsive Design**: The resume can be loaded on any device
   - For smaller screens, there is a toggle button which can be clicked to unfold all buttons to save space.
+- **Skeleton Loading**: When the page is loading, a skeleton UI appears to the user.
+  - **Why**
+    - To enhance UX while loading
+    - Cause it's beautiful ❤️
 - **Search Mode**: The resume can search simple keywords in my projects and highlight them
   - It works with multiple keywords separated by space.
   - A simple regex is used to find the keywords and highlight them.
   - The user can also use navigate between the highlighted results using next / previous arrows.
+- **Project Badges**: Each project contains badges to present to the user important highlights that describe the working experience.
 - **Download PDF**: The resume can be downloaded as a PDF file
 - **Keyboard Shortcuts**: Users can access the features using keyboard shortcuts!
   - **Note**: The feature is only available for Desktop clients.
