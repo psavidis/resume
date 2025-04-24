@@ -2218,7 +2218,7 @@ body.search-active .project-badges-list {
     cursor: pointer;
     margin-top: 30px; /* Adds space from the points section */
     /*display: flex;*/
-    /*flex-wrap: wrap;*/
+    flex-wrap: wrap;
     gap: 8px;
     justify-content: flex-start;
 }
@@ -2226,7 +2226,9 @@ body.search-active .project-badges-list {
 .project-badge {
     font-size: 0.6rem;
     font-family: Arial, sans-serif;
-    display: inline-block; /* Ensure badges align nicely */
+    display: inline-flex; /* Ensure badges align nicely */
+    align-items: center;
+    white-space: nowrap;
     z-index: 1;
     padding: 0.15em 0.5em;
     letter-spacing: 1px;
@@ -2261,7 +2263,6 @@ body.search-active .project-badges-list {
 }
 
 .project-badge-lead {
-    display: inline-block;
     background: linear-gradient(135deg, #1e2a4a, #2f3b5c); /* royal navy blend */
     color: #e0e0e0;
     font-weight: 700;
@@ -2282,7 +2283,6 @@ body.search-active .project-badges-list {
 }
 
 .project-badge-architecture {
-    display: inline-block;
     background: linear-gradient(135deg, #452c63, #5a189a); /* rich violet gradient */
     color: #e8e0ff;
     font-size: 0.6rem;
