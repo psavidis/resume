@@ -2372,18 +2372,18 @@ body.search-active .project-badges-list {
 }
 
 .project-badge-mentoring {
-    background: linear-gradient(135deg, #4e9f9f, #2d7b7b); /* teal for calmness & trust */
+    background: linear-gradient(135deg, #55802d, #53570e); /* teal for calmness & trust */
     color: #f0f8f0;
     font-weight: 700;
     border-radius: 999px;
-    border: 1px solid #8fb7b7;
+    border: 1px solid #93b78f;
 }
 
 .project-badge-mentoring::before {
     content: '🌿';
     margin-right: 4px;
     font-size: 0.65rem;
-    color: #b0e2e2;
+    color: #93b78f;
 }
 
 .project-badge-mentoring:hover {
@@ -2572,8 +2572,8 @@ body.search-active .project-badges-list {
 .dark-mode .project-badge-endurance {
     background: linear-gradient(135deg, #2e3d59, #1c2a44);
     color: #fff;
-    border: 1px solid #1c2a44;
-    box-shadow: 0 0 10px rgba(60, 60, 150, 0.5), inset 0 0 5px rgba(255, 255, 255, 0.1);
+    border: 1px solid #557fc7;
+    box-shadow: 0 0 10px rgba(60, 60, 150, 0.3), inset 0 0 5px rgba(255, 255, 255, 0.05);
 }
 
 .dark-mode .project-badge-endurance::before {
@@ -2582,41 +2582,42 @@ body.search-active .project-badges-list {
 
 .dark-mode .project-badge-endurance:hover {
     transform: scale(1.06);
-    box-shadow: 0 0 15px rgba(60, 60, 150, 0.6), inset 0 0 8px rgba(255, 255, 255, 0.1);
+    box-shadow: 0 0 6px rgba(94, 94, 241, 0.5), inset 0 0 2px rgba(255, 255, 255, 0.05);
 }
 
-/*Badge - Delivery */
-.project-badge-delivery {
+
+/*Badge - Execution */
+.project-badge-execution {
     background: linear-gradient(135deg, #c7e3e1, #a1c9c7); /* Soft pastel teal gradient */
     color: #2a4746; /* Deep teal text */
     border: 1px solid #8bb7b3; /* Subtle teal border */
-    box-shadow: 0 0 4px rgba(0, 0, 0, 0.1), inset 0 0 1px rgba(255, 255, 255, 0.1);
+    box-shadow: 0 0 6px rgba(0, 0, 0, 0.1), inset 0 0 1px rgba(255, 255, 255, 0.1);
 }
 
-.project-badge-delivery::before {
-    content: '🚚'; /* Delivery truck icon */
+.project-badge-execution::before {
+    content: '🚀'; /* execution truck icon */
     margin-right: 4px;
     font-size: 0.75rem;
     color: #4d7270; /* Soft teal icon */
 }
 
-.project-badge-delivery:hover {
+.project-badge-execution:hover {
     transform: scale(1.04);
     box-shadow: 0 0 6px rgba(0, 0, 0, 0.15), inset 0 0 2px rgba(255, 255, 255, 0.05);
 }
 
-.dark-mode .project-badge-delivery {
+.dark-mode .project-badge-execution {
     background: linear-gradient(135deg, #3a4d4b, #2c3e3c); /* Darker muted teal gradient */
     color: #e0e0e0;
     border: 1px solid #4b6b68;
     box-shadow: 0 0 6px rgba(255, 255, 255, 0.1), inset 0 0 2px rgba(255, 255, 255, 0.05);
 }
 
-.dark-mode .project-badge-delivery::before {
+.dark-mode .project-badge-execution::before {
     color: #a3c0bc; /* Lightened teal icon for dark mode */
 }
 
-.dark-mode .project-badge-delivery:hover {
+.dark-mode .project-badge-execution:hover {
     transform: scale(1.04);
     box-shadow: 0 0 8px rgba(255, 255, 255, 0.15), inset 0 0 3px rgba(255, 255, 255, 0.1);
 }
@@ -2658,6 +2659,80 @@ body.search-active .project-badges-list {
     transform: scale(1.04);
     box-shadow: 0 0 8px rgba(255, 255, 255, 0.15), inset 0 0 3px rgba(255, 255, 255, 0.1);
 }
+
+.project-badge-product {
+    background: linear-gradient(135deg, #e8eaf6, #d1d9f2); /* Soft lavender/indigo gradient */
+    color: #2c3e50; /* Deep blue-gray text */
+    border: 1px solid #c3cae5; /* Subtle indigo border */
+    box-shadow: 0 0 4px rgba(0, 0, 0, 0.1), inset 0 0 1px rgba(255, 255, 255, 0.1);
+}
+
+.project-badge-product::before {
+    content: '📦'; /* Box icon to symbolize product */
+    margin-right: 4px;
+    font-size: 0.75rem;
+    color: #5c6bc0; /* Muted lavender icon */
+}
+
+.project-badge-product:hover {
+    transform: scale(1.04);
+    box-shadow: 0 0 6px rgba(0, 0, 0, 0.15), inset 0 0 2px rgba(255, 255, 255, 0.05);
+}
+
+.dark-mode .project-badge-product {
+    background: linear-gradient(135deg, #3f3d56, #2c2b4c); /* Dark indigo gradient */
+    color: #e0e0ff;
+    border: 1px solid #5c6bc0;
+    box-shadow: 0 0 10px rgba(130, 140, 255, 0.4), inset 0 0 4px rgba(255, 255, 255, 0.1);
+}
+
+.dark-mode .project-badge-product::before {
+    color: #a7b8ff; /* Soft neon indigo for dark mode */
+}
+
+.dark-mode .project-badge-product:hover {
+    transform: scale(1.04);
+    box-shadow: 0 0 15px rgba(130, 140, 255, 0.6), inset 0 0 6px rgba(255, 255, 255, 0.1);
+}
+
+/*Badge - Resilience */
+
+.project-badge-resilience {
+    background: linear-gradient(135deg, #d9e9e5, #c6dcd7); /* Soft sage gradient */
+    color: #304842; /* Deep green-gray text */
+    border: 1px solid #b4ccc6; /* Gentle green border */
+    box-shadow: 0 0 4px rgba(0, 0, 0, 0.08), inset 0 0 1px rgba(255, 255, 255, 0.1);
+}
+
+.project-badge-resilience::before {
+    content: '🧘'; /* Calm resilience icon */
+    margin-right: 4px;
+    font-size: 0.75rem;
+    color: #406d66; /* Stronger contrast for icon */
+}
+
+.project-badge-resilience:hover {
+    transform: scale(1.04);
+    box-shadow: 0 0 6px rgba(0, 0, 0, 0.15), inset 0 0 2px rgba(255, 255, 255, 0.05);
+}
+
+/* Dark Mode */
+.dark-mode .project-badge-resilience {
+    background: linear-gradient(135deg, #3b524d, #2e3f3a); /* Deeper sage tones */
+    color: #e0f7f4;
+    border: 1px solid #4a6862;
+    box-shadow: 0 0 10px rgba(100, 255, 230, 0.4), inset 0 0 4px rgba(255, 255, 255, 0.08);
+}
+
+.dark-mode .project-badge-resilience::before {
+    color: #9efee5; /* Neon aqua for contrast */
+}
+
+.dark-mode .project-badge-resilience:hover {
+    transform: scale(1.06);
+    box-shadow: 0 0 12px rgba(100, 255, 230, 0.5), inset 0 0 6px rgba(255, 255, 255, 0.1);
+}
+
 
 
 

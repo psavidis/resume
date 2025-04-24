@@ -144,7 +144,7 @@
         "Jenkins",
         "Sonar"
       ],
-      "badges": ["consulting", "delivery"]
+      "badges": ["consulting", "execution"]
     },
     {
       "name": "Benelux Patent Platform",
@@ -192,7 +192,7 @@
         "Netherland": "https://mijnoctrooi.rvo.nl/bpp-portal/",
         "Luxembourg": "https://patent.public.lu/bpp-portal/"
       },
-      "badges": ["consulting", "delivery"]
+      "badges": ["consulting", "execution", "lead"]
     },
     {
       "name": "e-PPS",
@@ -215,7 +215,7 @@
       "links": {
         "Project": "https://www.etenders.gov.mt/epps/home.do"
       },
-      "badges": ["consulting", "delivery"]
+      "badges": ["consulting", "research"]
     },
     {
       "name": "Dryad & Medusa",
@@ -253,7 +253,7 @@
         "JIRA",
         "Canban board"
       ],
-      "badges": ["endurance", "delivery"]
+      "badges": ["product","endurance", "execution"]
     },
     {
       "name": "SecureD",
@@ -292,7 +292,7 @@
       "links": {
         "Product Website": "https://www.secure-d.io/?utm_source=upstreamwebsite"
       },
-      "badges": ["endurance", "delivery"]
+      "badges": ["product","endurance", "execution"]
     },
     {
       "name": "Contract Intelligence & Services",
@@ -325,7 +325,7 @@
       "links": {
         "Product Website": "https://www.cortical.io/semanticpro/"
       },
-      "badges": ["lead", "architecture", "mentoring"]
+      "badges": ["product","lead", "architecture", "mentoring"]
     },
     {
       "name": "Camunda Platform 7 - The Open Source BPMN platform",
@@ -391,7 +391,7 @@
         "GitHub": "https://github.com/camunda/camunda-bpm-platform",
         "My Commits": "https://github.com/camunda/camunda-bpm-platform/issues?q=is%3Aissue%20state%3Aclosed%20assignee%3Apsavidis&page=1"
       },
-      "badges": ["open-source", "impact", "project-management", "extreme"]
+      "badges": ["product","open-source", "impact", "project-management", "extreme", "resilience"]
     }
   ],
   "education": [
