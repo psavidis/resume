@@ -813,6 +813,7 @@
             if (project.badges && Array.isArray(project.badges)) {
                 project.badges.forEach(badgeText => {
                     const badge = document.createElement('span');
+                    badge.classList.add('project-badge');
                     badge.classList.add('project-badge-' + badgeText.toLowerCase());
                     badge.textContent = badgeText;
 

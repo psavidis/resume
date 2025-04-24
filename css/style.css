@@ -2206,34 +2206,38 @@ li {
     -webkit-tap-highlight-color: transparent;
 }
 
-.project-badges-list {
-    margin-top: 30px; /* Adds space from the points section */
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px; /* Spacing between badges */
-    justify-content: flex-start;  /* Align badges to the left */
+body.search-active .project-badges-list {
+    display: flex !important; /* maintains the position of the badges on search mode */
 }
 
-/* Badge styling, if needed */
-.project-badge-open-source,
-.project-badge-lead,
-.project-badge-quarkus,
-.project-badge-microservices {
-    margin-right: 8px; /* Keeps badges spaced out */
+.project-badges-list {
+    cursor: pointer;
+    margin-top: 30px; /* Adds space from the points section */
+    /*display: flex;*/
+    /*flex-wrap: wrap;*/
+    gap: 8px;
+    justify-content: flex-start;
+}
+
+.project-badge {
+    font-size: 0.6rem;
+    font-family: Arial, sans-serif;
+    display: inline-block; /* Ensure badges align nicely */
+    z-index: 1;
+    padding: 0.15em 0.5em;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.25), inset 0 0 3px rgba(255, 255, 255, 0.3);
+    border-radius: 999px;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+    font-weight: 700;
 }
 
 .project-badge-open-source {
-    display: inline-block;
     background: linear-gradient(135deg, #FFD700, #FFC300);
     color: #5c4400;
-    font-size: 0.6rem; /* Smaller font */
     font-weight: 800;
-    padding: 0.15em 0.5em; /* Tighter padding */
-    border-radius: 999px;
-    text-transform: uppercase;
-    letter-spacing: 0.8px;
-    border: 1.2px solid #e6c200;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.25), inset 0 0 3px rgba(255, 255, 255, 0.3);
+    border: 1px solid #e6c200;
     position: relative;
     z-index: 1;
     transition: transform 0.15s ease, box-shadow 0.15s ease;
@@ -2242,8 +2246,8 @@ li {
 
 .project-badge-open-source::before {
     content: '★';
-    margin-right: 4px;
-    font-size: 0.65rem;
+        margin-right: 4px;
+        font-size: 0.65rem;
     color: #fffaf0;
 }
 
@@ -2256,15 +2260,9 @@ li {
     display: inline-block;
     background: linear-gradient(135deg, #1e2a4a, #2f3b5c); /* royal navy blend */
     color: #e0e0e0;
-    font-size: 0.6rem;
     font-weight: 700;
-    padding: 0.18em 0.55em;
-    border-radius: 999px;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    border: 1px solid #8fa6c9;
     box-shadow: 0 0 6px rgba(100, 140, 200, 0.3), inset 0 0 2px rgba(255, 255, 255, 0.05);
-    transition: transform 0.2s ease;
+    border: 1px solid #8fa6c9;
 }
 
 .project-badge-lead::before {
@@ -2285,13 +2283,7 @@ li {
     color: #e8e0ff;
     font-size: 0.6rem;
     font-weight: 700;
-    padding: 0.18em 0.55em;
-    border-radius: 999px;
-    text-transform: uppercase;
-    letter-spacing: 1px;
     border: 1px solid #9f8ddc;
-    box-shadow: 0 0 6px rgba(120, 100, 200, 0.3), inset 0 0 2px rgba(255, 255, 255, 0.05);
-    transition: transform 0.2s ease;
 }
 
 .project-badge-architecture::before {
@@ -2341,18 +2333,10 @@ li {
 }
 
 .project-badge-project-management {
-    display: inline-block;
     background: linear-gradient(135deg, #374c63, #4e627a); /* steel blue gradient */
     color: #f0f4f8;
-    font-size: 0.6rem;
-    font-weight: 700;
-    padding: 0.18em 0.55em;
-    border-radius: 999px;
-    text-transform: uppercase;
-    letter-spacing: 1px;
     border: 1px solid #a6b8cc;
     box-shadow: 0 0 6px rgba(100, 130, 160, 0.3), inset 0 0 2px rgba(255, 255, 255, 0.05);
-    transition: transform 0.2s ease;
 }
 
 .project-badge-project-management::before {
@@ -2384,18 +2368,11 @@ li {
 }
 
 .project-badge-mentoring {
-    display: inline-block;
     background: linear-gradient(135deg, #4e9f9f, #2d7b7b); /* teal for calmness & trust */
     color: #f0f8f0;
-    font-size: 0.6rem;
     font-weight: 700;
-    padding: 0.18em 0.55em;
     border-radius: 999px;
-    text-transform: uppercase;
-    letter-spacing: 1px;
     border: 1px solid #8fb7b7;
-    box-shadow: 0 0 6px rgba(100, 150, 150, 0.3), inset 0 0 2px rgba(255, 255, 255, 0.05);
-    transition: transform 0.2s ease;
 }
 
 .project-badge-mentoring::before {
@@ -2427,18 +2404,11 @@ li {
 }
 
 .project-badge-extreme {
-    display: inline-block;
     background: linear-gradient(135deg, #ff5e5b, #f8a775); /* red to orange gradient for intensity */
     color: #fff;
-    font-size: 0.6rem;
     font-weight: 700;
-    padding: 0.18em 0.55em;
     border-radius: 999px;
-    text-transform: uppercase;
-    letter-spacing: 1px;
     border: 1px solid #d67c3f;
-    box-shadow: 0 0 6px rgba(255, 100, 100, 0.5), inset 0 0 2px rgba(255, 255, 255, 0.05);
-    transition: transform 0.2s ease, box-shadow 0.3s ease;
 }
 
 .project-badge-extreme::before {
@@ -2456,7 +2426,7 @@ li {
 .dark-mode .project-badge-extreme {
     background: linear-gradient(135deg, #ff0066, #ff6600); /* neon pink to neon orange gradient */
     color: #fff;
-    border: 1px solid #ff3333; /* brighter border */
+    border: 1px solid #ff7a7a; /* brighter border */
     box-shadow: 0 0 10px rgba(255, 0, 102, 0.8), inset 0 0 5px rgba(255, 255, 255, 0.1);
 }
 
@@ -2470,18 +2440,10 @@ li {
 }
 
 .project-badge-research {
-    display: inline-block;
     background: linear-gradient(135deg, #3e8e41, #2c6e2e); /* green to darker green gradient (representing growth, analysis) */
     color: #fff;
-    font-size: 0.75rem;
-    font-weight: 700;
-    padding: 0.18em 0.55em;
-    border-radius: 999px;
     text-transform: uppercase;
-    letter-spacing: 1px;
     border: 1px solid #6b8e23; /* olive green border */
-    box-shadow: 0 0 6px rgba(70, 120, 40, 0.3), inset 0 0 2px rgba(255, 255, 255, 0.05);
-    transition: transform 0.2s ease;
 }
 
 .project-badge-research::before {
@@ -2499,7 +2461,7 @@ li {
 .dark-mode .project-badge-research {
     background: linear-gradient(135deg, #3e8e41, #2c6e2e); /* Keeping the green to darker green gradient for dark mode */
     color: #fff;
-    border: 1px solid #6b8e23; /* Olive green border for consistency */
+    border: 1px solid #adc769; /* Olive green border for consistency */
     box-shadow: 0 0 10px rgba(70, 120, 40, 0.6), inset 0 0 5px rgba(255, 255, 255, 0.1); /* Subtle glow effect in dark mode */
 }
 
@@ -2513,25 +2475,18 @@ li {
 }
 
 .project-badge-internship {
-    display: inline-block;
     background: linear-gradient(135deg, #8e99f3, #6f84e1); /* Soft blue gradient */
     color: #fff;
-    font-size: 0.75rem;
-    font-weight: 700;
-    padding: 0.18em 0.55em;
-    border-radius: 999px;
     text-transform: uppercase;
-    letter-spacing: 1px;
-    border: 1px solid #5b74c9; /* Slightly darker blue border */
+    border: 1px solid #7289de; /* Slightly darker blue border */
     box-shadow: 0 0 6px rgba(120, 135, 255, 0.3), inset 0 0 2px rgba(255, 255, 255, 0.05);
-    transition: transform 0.2s ease;
 }
 
 .project-badge-internship::before {
-    content: '🎓'; /* Graduation cap emoji */
+    content: '🎓';
     margin-right: 4px;
     font-size: 0.75rem;
-    color: #b0c4de; /* light gray for the icon */
+    color: #b0c4de;
 }
 
 .project-badge-internship:hover {
@@ -2542,7 +2497,7 @@ li {
 .dark-mode .project-badge-internship {
     background: linear-gradient(135deg, #6a8ec9, #4e6c98); /* Softer blue gradient for dark mode */
     color: #fff;
-    border: 1px solid #4e6c98; /* Darker blue border */
+    border: 1px solid #9bb7e1; /* Darker blue border */
     box-shadow: 0 0 10px rgba(106, 142, 201, 0.6), inset 0 0 5px rgba(255, 255, 255, 0.1);
 }
 
@@ -2555,6 +2510,150 @@ li {
     box-shadow: 0 0 15px rgba(106, 142, 201, 0.6), inset 0 0 8px rgba(255, 255, 255, 0.1);
 }
 
+.project-badge-impact {
+    background: linear-gradient(135deg, #f4f1ea, #e5dac7); /* warm, soft neutral */
+    color: #5b3a1d; /* rich, earthy brown */
+    text-transform: uppercase;
+    border: 1px solid #d6b279; /* subtle warm gold */
+    box-shadow: 0 0 4px rgba(214, 178, 121, 0.3), inset 0 0 1px rgba(255, 255, 255, 0.08);
+}
+
+.project-badge-impact::before {
+    content: '🎯';
+    margin-right: 4px;
+    font-size: 0.75rem;
+    color: #b7791f; /* muted gold */
+}
+
+.project-badge-impact:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 6px rgba(214, 178, 121, 0.35), inset 0 0 2px rgba(255, 255, 255, 0.1);
+}
+
+.dark-mode .project-badge-impact {
+    background: linear-gradient(135deg, #2e2b25, #3a352d); /* warm charcoal blend */
+    color: #d6c9b1; /* soft beige */
+    border: 1px solid #9e855d; /* muted gold border */
+    box-shadow: 0 0 6px rgba(158, 133, 93, 0.4), inset 0 0 2px rgba(255, 255, 255, 0.06);
+}
+
+.dark-mode .project-badge-impact::before {
+    color: #facc15; /* soft amber for contrast */
+}
+
+.dark-mode .project-badge-impact:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 8px rgba(158, 133, 93, 0.5), inset 0 0 3px rgba(255, 255, 255, 0.08);
+}
+
+.project-badge-endurance {
+    background: linear-gradient(135deg, #8b9dc3, #3b5998); /* Cool endurance blue gradient */
+    color: #fff;
+    border: 1px solid #3b5998;
+    box-shadow: 0 0 6px rgba(60, 60, 150, 0.3), inset 0 0 2px rgba(255, 255, 255, 0.05);
+}
+
+.project-badge-endurance::before {
+    content: '🔋'; /* Battery icon for endurance */
+    margin-right: 4px;
+    font-size: 0.75rem;
+    color: #d0e1ff;
+}
+
+.project-badge-endurance:hover {
+    transform: scale(1.06);
+    box-shadow: 0 0 8px rgba(60, 60, 150, 0.4), inset 0 0 3px rgba(255, 255, 255, 0.1);
+}
+
+.dark-mode .project-badge-endurance {
+    background: linear-gradient(135deg, #2e3d59, #1c2a44);
+    color: #fff;
+    border: 1px solid #1c2a44;
+    box-shadow: 0 0 10px rgba(60, 60, 150, 0.5), inset 0 0 5px rgba(255, 255, 255, 0.1);
+}
+
+.dark-mode .project-badge-endurance::before {
+    color: #00e5ff; /* Vibrant cyan for contrast */
+}
+
+.dark-mode .project-badge-endurance:hover {
+    transform: scale(1.06);
+    box-shadow: 0 0 15px rgba(60, 60, 150, 0.6), inset 0 0 8px rgba(255, 255, 255, 0.1);
+}
+
+/*Badge - Delivery */
+.project-badge-delivery {
+    background: linear-gradient(135deg, #c7e3e1, #a1c9c7); /* Soft pastel teal gradient */
+    color: #2a4746; /* Deep teal text */
+    border: 1px solid #8bb7b3; /* Subtle teal border */
+    box-shadow: 0 0 4px rgba(0, 0, 0, 0.1), inset 0 0 1px rgba(255, 255, 255, 0.1);
+}
+
+.project-badge-delivery::before {
+    content: '🚚'; /* Delivery truck icon */
+    margin-right: 4px;
+    font-size: 0.75rem;
+    color: #4d7270; /* Soft teal icon */
+}
+
+.project-badge-delivery:hover {
+    transform: scale(1.04);
+    box-shadow: 0 0 6px rgba(0, 0, 0, 0.15), inset 0 0 2px rgba(255, 255, 255, 0.05);
+}
+
+.dark-mode .project-badge-delivery {
+    background: linear-gradient(135deg, #3a4d4b, #2c3e3c); /* Darker muted teal gradient */
+    color: #e0e0e0;
+    border: 1px solid #4b6b68;
+    box-shadow: 0 0 6px rgba(255, 255, 255, 0.1), inset 0 0 2px rgba(255, 255, 255, 0.05);
+}
+
+.dark-mode .project-badge-delivery::before {
+    color: #a3c0bc; /* Lightened teal icon for dark mode */
+}
+
+.dark-mode .project-badge-delivery:hover {
+    transform: scale(1.04);
+    box-shadow: 0 0 8px rgba(255, 255, 255, 0.15), inset 0 0 3px rgba(255, 255, 255, 0.1);
+}
+
+
+/* Badge - Consulting */
+
+.project-badge-consulting {
+    background: linear-gradient(135deg, #e0e0e0, #cfcfcf); /* Soft gray gradient */
+    color: #333;
+    border: 1px solid #b0b0b0; /* Gentle gray border */
+    box-shadow: 0 0 4px rgba(0, 0, 0, 0.1), inset 0 0 1px rgba(255, 255, 255, 0.1);
+}
+
+.project-badge-consulting::before {
+    content: '🧑‍💻'; /* Developer consulting icon */
+    margin-right: 4px;
+    font-size: 0.75rem;
+    color: #666;
+}
+
+.project-badge-consulting:hover {
+    transform: scale(1.04);
+    box-shadow: 0 0 6px rgba(0, 0, 0, 0.15), inset 0 0 2px rgba(255, 255, 255, 0.05);
+}
+
+.dark-mode .project-badge-consulting {
+    background: linear-gradient(135deg, #4a4a4a, #2e2e2e); /* Subtle dark gray gradient */
+    color: #e0e0e0;
+    border: 1px solid #555;
+    box-shadow: 0 0 6px rgba(255, 255, 255, 0.1), inset 0 0 2px rgba(255, 255, 255, 0.05);
+}
+
+.dark-mode .project-badge-consulting::before {
+    color: #aaa;
+}
+
+.dark-mode .project-badge-consulting:hover {
+    transform: scale(1.04);
+    box-shadow: 0 0 8px rgba(255, 255, 255, 0.15), inset 0 0 3px rgba(255, 255, 255, 0.1);
+}
 
 
 
