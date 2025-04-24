@@ -868,7 +868,7 @@
                 projectDescription.style.display = isVisible ? 'none' : 'block';
                 projectBadgesWrapper.style.display = isVisible ? 'none' : 'flex'; // badges toggle
                 pointsList.style.display = isVisible ? 'none' : 'block';
-                techUsed.style.display = isVisible ? 'none' : 'block';
+                // techUsed.style.display = isVisible ? 'none' : 'block';
 
                 if (hasProjectButtons) {
                     showProjectButtons.forEach(button => {
@@ -1082,6 +1082,20 @@
         makeHidden(projectPoints);
         makeHidden(projectButtons);
         makeHidden(badges);
+    }
+
+    function hideProjectTech() {
+        const techUsed = document.querySelectorAll('.project-tech');
+        techUsed.forEach(item => {
+            item.style.display = 'none';
+        })
+    }
+
+    function showProjectTech() {
+        const techUsed = document.querySelectorAll('.project-tech');
+        techUsed.forEach(item => {
+            item.style.display = 'block';
+        })
     }
 
     function hideEverythingAfterSeconds(seconds) {
@@ -1479,6 +1493,7 @@
 
             if (isSearchActive) {
                 hideFormContainer();
+                showProjectTech();
                 showProjects();
                 searchBar.style.display = 'block';
                 searchBar.focus();
@@ -1487,6 +1502,7 @@
             } else {
                 resetCurrentHighlight();
                 hideProjects();
+                hideProjectTech();
                 hideArrowsContainer();
                 searchBar.style.display = 'none';
                 searchBar.value = '';
@@ -2346,6 +2362,7 @@
     configureResumeVersion();
     loadResumeData().then(() => {
         hideSearchBar();
+        hideProjectTech();
 
         configurePdfButton();
         configureSearchToggle();
