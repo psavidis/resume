@@ -755,6 +755,19 @@
         document.getElementById('experienceTitle').textContent = 'Experience (' + formattedXP + ')';
     }
 
+    function isOpenSource(badge) {
+        return badge.textContent === 'open-source';
+    }
+
+    function appendBadge(badge, projectBadgesWrapper, projectName) {
+        if (isOpenSource(badge)) {
+            projectName.appendChild(badge);
+            return;
+        }
+
+        projectBadgesWrapper.appendChild(badge);
+    }
+
     function populateProjects(data) {
         const projectsList = document.getElementById('projects-list');
         projectsList.innerHTML = '';
@@ -782,16 +795,6 @@
             projectName.textContent = project.name || 'Project not provided';
             projectName.classList.add('project-name');
 
-            // Add badges if available
-            if (project.badges && Array.isArray(project.badges)) {
-                project.badges.forEach(badgeText => {
-                    const badge = document.createElement('span');
-                    badge.className = 'project-badge-' + badgeText;
-                    badge.textContent = badgeText;
-                    projectName.appendChild(badge);
-                });
-            }
-
             // Description
             const projectDescription = document.createElement('p');
             projectDescription.classList.add('project-description');
@@ -801,6 +804,21 @@
             projectDescription.style.color = '#444';
             projectDescription.style.marginTop = '10px';
             projectDescription.style.textAlign = 'left';
+
+            // Badges
+            const projectBadgesWrapper = document.createElement('div');
+            projectBadgesWrapper.classList.add('project-badges-list');
+            projectBadgesWrapper.style.display = 'none';
+
+            if (project.badges && Array.isArray(project.badges)) {
+                project.badges.forEach(badgeText => {
+                    const badge = document.createElement('span');
+                    badge.classList.add('project-badge-' + badgeText.toLowerCase());
+                    badge.textContent = badgeText;
+
+                    appendBadge(badge, projectBadgesWrapper, projectName);
+                });
+            }
 
             // Tools Used
             const techUsed = document.createElement('p');
@@ -844,6 +862,7 @@
 
                 const isVisible = projectDescription.style.display === 'block';
                 projectDescription.style.display = isVisible ? 'none' : 'block';
+                projectBadgesWrapper.style.display = isVisible ? 'none' : 'flex'; // badges toggle
                 pointsList.style.display = isVisible ? 'none' : 'block';
                 techUsed.style.display = isVisible ? 'none' : 'block';
 
@@ -857,6 +876,7 @@
             li.appendChild(projectName);
             li.appendChild(projectDescription);
             li.appendChild(pointsList);
+            li.appendChild(projectBadgesWrapper);
             li.appendChild(document.createElement('br'));
 
             let hasTechUsed = techUsed && techUsed.textContent.trim() !== "Tools:";
@@ -1043,11 +1063,13 @@
         const projectDescriptions = document.querySelectorAll('.project-description');
         const projectPoints = document.querySelectorAll('.project-points');
         const projectButtons = document.querySelectorAll('.project-button');
+        const badges = document.querySelectorAll('.project-badges-list');
 
         makeHidden(techUsed);
         makeHidden(projectDescriptions);
         makeHidden(projectPoints);
         makeHidden(projectButtons);
+        makeHidden(badges);
     }
 
     function hideEverythingAfterSeconds(seconds) {
@@ -1124,11 +1146,14 @@
         const projectDescriptions = document.querySelectorAll('.project-description');
         const projectPoints = document.querySelectorAll('.project-points');
         const projectButtons = document.querySelectorAll('.project-button');
+        const projectBadges = document.querySelectorAll('.project-badges-list');
 
         makeVisible(projectItems);
         makeVisible(techUsed);
         makeVisible(projectDescriptions);
         makeVisible(projectPoints);
+        makeVisible(projectBadges);
+
         makeButtonsVisible(projectButtons);
     }
 
