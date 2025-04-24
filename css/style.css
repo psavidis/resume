@@ -1090,6 +1090,10 @@ body.dark-mode input:-webkit-autofill {
 /* Do not display keyboard shortcuts for smaller screens such as phones / tables */
 @media (max-width: 768px) {
 
+    .project-badge {
+        font-size: 0.5rem !important;
+    }
+
     #shortcuts {
         display: none;
     }
