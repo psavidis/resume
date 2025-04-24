@@ -2733,7 +2733,26 @@ body.search-active .project-badges-list {
     box-shadow: 0 0 12px rgba(100, 255, 230, 0.5), inset 0 0 6px rgba(255, 255, 255, 0.1);
 }
 
+/* Badges are current-highlighted with gold */
+.project-badge .word.current-highlight {
+    color: #000; /* Strong contrast for visibility */
+    background: #FFD700 !important; /* Bold gold */
+    outline: none !important;
+    box-shadow: 0 0 14px 1px rgba(255, 215, 0, 0.85);
+    z-index: 11;
+}
 
+/* 🌟 Make the entire badge gold when highlighted */
+.project-badge:has(.word.highlight) {
+    background-color: unset;
+    box-shadow: unset !important;
+    border-radius: 4px;
+}
 
-
-
+/* 🏅 Make the entire badge golden when it's the current-highlight */
+.project-badge:has(.word.current-highlight) {
+    background: #FFD700; /* Full gold */
+    /*box-shadow: 0 0 16px 6px rgba(255, 215, 0, 0.85);*/
+    border-radius: 4px;
+    border: unset !important;
+}
