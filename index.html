@@ -1243,21 +1243,31 @@
         });
     }
 
+    function isInTitleExcludingBadge(word) {
+        // add filtering here
+        const wordIsInsideBadge = word.closest('.project-badge');
+
+        // keep words of badges
+        if (wordIsInsideBadge) {
+            return true;
+        }
+
+        // keep words that are not in the title
+        return !word.closest('.project-name');
+    }
+
+    function isInProjectButton(word) {
+        const projectButtonParent = word.closest('.project-button');
+
+        return projectButtonParent === null;
+    }
+
     function getAllSearchableNodes() {
         const allWords = document.querySelectorAll('.word');
 
-        return Array.from(allWords).filter(word => {
-            // add filtering here
-            const wordIsInsideBadge = word.closest('.project-badge');
-
-            // keep words of badges
-            if (wordIsInsideBadge) {
-                return true;
-            }
-
-            // keep words that are not in the title
-            return !word.closest('.project-name');
-        });
+        return Array.from(allWords)
+            .filter(word => isInTitleExcludingBadge(word))
+            .filter(word => isInProjectButton(word));
     }
 
     function highlightText(section, tokens) {
