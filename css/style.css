@@ -2279,6 +2279,49 @@ li {
     box-shadow: 0 0 8px rgba(110, 150, 230, 0.4), inset 0 0 3px rgba(255,255,255,0.1);
 }
 
+.project-badge-architecture {
+    display: inline-block;
+    background: linear-gradient(135deg, #452c63, #5a189a); /* rich violet gradient */
+    color: #e8e0ff;
+    font-size: 0.6rem;
+    font-weight: 700;
+    padding: 0.18em 0.55em;
+    border-radius: 999px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    border: 1px solid #9f8ddc;
+    box-shadow: 0 0 6px rgba(120, 100, 200, 0.3), inset 0 0 2px rgba(255, 255, 255, 0.05);
+    transition: transform 0.2s ease;
+}
+
+.project-badge-architecture::before {
+    content: '🏛️';
+    margin-right: 4px;
+    font-size: 0.65rem;
+    color: #d4c1ff;
+}
+
+.project-badge-architecture:hover {
+    transform: scale(1.06);
+    box-shadow: 0 0 8px rgba(140, 110, 240, 0.4), inset 0 0 3px rgba(255,255,255,0.1);
+}
+
+.dark-mode .project-badge-architecture {
+    background: linear-gradient(135deg, #3a1c5f, #5f239a);
+    color: #ffcb4f;
+    border: 1px solid #c5aaff;
+    box-shadow: 0 0 6px rgba(190, 160, 255, 0.25), inset 0 0 2px rgba(255, 255, 255, 0.05);
+}
+
+.dark-mode .project-badge-architecture::before {
+    color: #ffeeba;
+}
+
+.dark-mode .project-badge-architecture:hover {
+    transform: scale(1.06);
+    box-shadow: 0 0 10px rgba(215, 180, 255, 0.35), inset 0 0 3px rgba(255,255,255,0.1);
+}
+
 .dark-mode .project-badge-open-source {
     background: linear-gradient(145deg, #3a2b55, #4b306d);
     color: #e2d9ff;
@@ -2296,6 +2339,223 @@ li {
     transform: scale(1.06);
     box-shadow: 0 0 6px rgba(165, 125, 255, 0.7), inset 0 0 2px rgba(255, 255, 255, 0.1);
 }
+
+.project-badge-project-management {
+    display: inline-block;
+    background: linear-gradient(135deg, #374c63, #4e627a); /* steel blue gradient */
+    color: #f0f4f8;
+    font-size: 0.6rem;
+    font-weight: 700;
+    padding: 0.18em 0.55em;
+    border-radius: 999px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    border: 1px solid #a6b8cc;
+    box-shadow: 0 0 6px rgba(100, 130, 160, 0.3), inset 0 0 2px rgba(255, 255, 255, 0.05);
+    transition: transform 0.2s ease;
+}
+
+.project-badge-project-management::before {
+    content: '🗂️';
+    margin-right: 4px;
+    font-size: 0.65rem;
+    color: #d3e0ee;
+}
+
+.project-badge-project-management:hover {
+    transform: scale(1.06);
+    box-shadow: 0 0 8px rgba(120, 150, 180, 0.4), inset 0 0 3px rgba(255,255,255,0.1);
+}
+
+.dark-mode .project-badge-project-management {
+    background: linear-gradient(135deg, #263544, #354a5c); /* deep cool steel */
+    color: #e3eaf2;
+    border: 1px solid #7a99b8;
+    box-shadow: 0 0 6px rgba(140, 180, 220, 0.2), inset 0 0 2px rgba(255, 255, 255, 0.05);
+}
+
+.dark-mode .project-badge-project-management::before {
+    color: #c8d6e8;
+}
+
+.dark-mode .project-badge-project-management:hover {
+    transform: scale(1.06);
+    box-shadow: 0 0 10px rgba(160, 200, 240, 0.35), inset 0 0 3px rgba(255,255,255,0.1);
+}
+
+.project-badge-mentoring {
+    display: inline-block;
+    background: linear-gradient(135deg, #4e9f9f, #2d7b7b); /* teal for calmness & trust */
+    color: #f0f8f0;
+    font-size: 0.6rem;
+    font-weight: 700;
+    padding: 0.18em 0.55em;
+    border-radius: 999px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    border: 1px solid #8fb7b7;
+    box-shadow: 0 0 6px rgba(100, 150, 150, 0.3), inset 0 0 2px rgba(255, 255, 255, 0.05);
+    transition: transform 0.2s ease;
+}
+
+.project-badge-mentoring::before {
+    content: '🌿';
+    margin-right: 4px;
+    font-size: 0.65rem;
+    color: #b0e2e2;
+}
+
+.project-badge-mentoring:hover {
+    transform: scale(1.06);
+    box-shadow: 0 0 8px rgba(100, 180, 180, 0.4), inset 0 0 3px rgba(255,255,255,0.1);
+}
+
+.dark-mode .project-badge-mentoring {
+    background: linear-gradient(135deg, #2a5c5c, #3b7474); /* darker teal tones */
+    color: #e0f4f4;
+    border: 1px solid #80b8b8;
+    box-shadow: 0 0 6px rgba(120, 180, 180, 0.25), inset 0 0 2px rgba(255, 255, 255, 0.05);
+}
+
+.dark-mode .project-badge-mentoring::before {
+    color: #a1d8d8;
+}
+
+.dark-mode .project-badge-mentoring:hover {
+    transform: scale(1.06);
+    box-shadow: 0 0 10px rgba(120, 180, 180, 0.35), inset 0 0 3px rgba(255,255,255,0.1);
+}
+
+.project-badge-extreme {
+    display: inline-block;
+    background: linear-gradient(135deg, #ff5e5b, #f8a775); /* red to orange gradient for intensity */
+    color: #fff;
+    font-size: 0.6rem;
+    font-weight: 700;
+    padding: 0.18em 0.55em;
+    border-radius: 999px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    border: 1px solid #d67c3f;
+    box-shadow: 0 0 6px rgba(255, 100, 100, 0.5), inset 0 0 2px rgba(255, 255, 255, 0.05);
+    transition: transform 0.2s ease, box-shadow 0.3s ease;
+}
+
+.project-badge-extreme::before {
+    content: '⚡';
+    margin-right: 4px;
+    font-size: 0.65rem;
+    color: #ffda4e;
+}
+
+.project-badge-extreme:hover {
+    transform: scale(1.06);
+    box-shadow: 0 0 8px rgba(255, 150, 150, 0.4), inset 0 0 3px rgba(255,255,255,0.1);
+}
+
+.dark-mode .project-badge-extreme {
+    background: linear-gradient(135deg, #ff0066, #ff6600); /* neon pink to neon orange gradient */
+    color: #fff;
+    border: 1px solid #ff3333; /* brighter border */
+    box-shadow: 0 0 10px rgba(255, 0, 102, 0.8), inset 0 0 5px rgba(255, 255, 255, 0.1);
+}
+
+.dark-mode .project-badge-extreme::before {
+    color: #ffeb3b; /* neon yellow */
+}
+
+.dark-mode .project-badge-extreme:hover {
+    transform: scale(1.06);
+    box-shadow: 0 0 15px rgba(255, 102, 204, 0.7), inset 0 0 6px rgba(255, 255, 255, 0.1);
+}
+
+.project-badge-research {
+    display: inline-block;
+    background: linear-gradient(135deg, #3e8e41, #2c6e2e); /* green to darker green gradient (representing growth, analysis) */
+    color: #fff;
+    font-size: 0.75rem;
+    font-weight: 700;
+    padding: 0.18em 0.55em;
+    border-radius: 999px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    border: 1px solid #6b8e23; /* olive green border */
+    box-shadow: 0 0 6px rgba(70, 120, 40, 0.3), inset 0 0 2px rgba(255, 255, 255, 0.05);
+    transition: transform 0.2s ease;
+}
+
+.project-badge-research::before {
+    content: '🔬'; /* microscope emoji to represent research */
+    margin-right: 4px;
+    font-size: 0.75rem;
+    color: #b0c4de; /* light gray for the icon */
+}
+
+.project-badge-research:hover {
+    transform: scale(1.06);
+    box-shadow: 0 0 8px rgba(90, 140, 60, 0.4), inset 0 0 3px rgba(255, 255, 255, 0.1);
+}
+
+.dark-mode .project-badge-research {
+    background: linear-gradient(135deg, #3e8e41, #2c6e2e); /* Keeping the green to darker green gradient for dark mode */
+    color: #fff;
+    border: 1px solid #6b8e23; /* Olive green border for consistency */
+    box-shadow: 0 0 10px rgba(70, 120, 40, 0.6), inset 0 0 5px rgba(255, 255, 255, 0.1); /* Subtle glow effect in dark mode */
+}
+
+.dark-mode .project-badge-research::before {
+    color: #b0c4de; /* Keep the same light gray for the microscope icon */
+}
+
+.dark-mode .project-badge-research:hover {
+    transform: scale(1.06);
+    box-shadow: 0 0 15px rgba(70, 120, 40, 0.6), inset 0 0 8px rgba(255, 255, 255, 0.1); /* Soft glow effect on hover in dark mode */
+}
+
+.project-badge-internship {
+    display: inline-block;
+    background: linear-gradient(135deg, #8e99f3, #6f84e1); /* Soft blue gradient */
+    color: #fff;
+    font-size: 0.75rem;
+    font-weight: 700;
+    padding: 0.18em 0.55em;
+    border-radius: 999px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    border: 1px solid #5b74c9; /* Slightly darker blue border */
+    box-shadow: 0 0 6px rgba(120, 135, 255, 0.3), inset 0 0 2px rgba(255, 255, 255, 0.05);
+    transition: transform 0.2s ease;
+}
+
+.project-badge-internship::before {
+    content: '🎓'; /* Graduation cap emoji */
+    margin-right: 4px;
+    font-size: 0.75rem;
+    color: #b0c4de; /* light gray for the icon */
+}
+
+.project-badge-internship:hover {
+    transform: scale(1.06);
+    box-shadow: 0 0 8px rgba(120, 135, 255, 0.4), inset 0 0 3px rgba(255, 255, 255, 0.1);
+}
+
+.dark-mode .project-badge-internship {
+    background: linear-gradient(135deg, #6a8ec9, #4e6c98); /* Softer blue gradient for dark mode */
+    color: #fff;
+    border: 1px solid #4e6c98; /* Darker blue border */
+    box-shadow: 0 0 10px rgba(106, 142, 201, 0.6), inset 0 0 5px rgba(255, 255, 255, 0.1);
+}
+
+.dark-mode .project-badge-internship::before {
+    color: #ffeb3b; /* Neon yellow for the graduation cap icon */
+}
+
+.dark-mode .project-badge-internship:hover {
+    transform: scale(1.06);
+    box-shadow: 0 0 15px rgba(106, 142, 201, 0.6), inset 0 0 8px rgba(255, 255, 255, 0.1);
+}
+
+
 
 
 

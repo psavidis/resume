@@ -103,7 +103,8 @@
       ],
       "links": {
         "Project": "https://www.pamap.org/"
-      }
+      },
+      "badges": ["internship", "research"]
     },
     {
       "name": "Eleura Platform",
@@ -319,7 +320,7 @@
       "links": {
         "Product Website": "https://www.cortical.io/semanticpro/"
       },
-      "badges": ["lead"]
+      "badges": ["lead", "architecture", "mentoring"]
     },
     {
       "name": "Camunda Platform 7 - The Open Source BPMN platform",
@@ -385,7 +386,7 @@
         "GitHub": "https://github.com/camunda/camunda-bpm-platform",
         "My Commits": "https://github.com/camunda/camunda-bpm-platform/issues?q=is%3Aissue%20state%3Aclosed%20assignee%3Apsavidis&page=1"
       },
-      "badges": ["open-source"]
+      "badges": ["open-source", "project-management", "extreme"]
     }
   ],
   "education": [
