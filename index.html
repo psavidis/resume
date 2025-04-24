@@ -314,6 +314,7 @@
         }
 
         showProfileInfo();
+
         hideFormContainer();
         hideSearchContainer();
         hideButtonContainer();
@@ -346,6 +347,8 @@
         makeVisible(projectDescriptions);
         makeVisible(projectPoints);
         makeButtonsVisible(projectButtons);
+
+        makeBadgesVisible();
 
         hideShortcuts();
 
@@ -1014,11 +1017,19 @@
 
     // Functions: Show/Hide Elements
 
-    function makeButtonsVisible(projectButtons) {
+    function makeBadgesVisible() {
+        const projectBadges = document.querySelectorAll('.project-badges-list');
+        const badges = document.querySelectorAll('.project-badge');
+
+        makeButtonsVisible(projectBadges, 'flex');
+        makeButtonsVisible(badges, 'flex-inline');
+    }
+
+    function makeButtonsVisible(projectButtons, display = 'inline-block') {
         projectButtons.forEach(button => {
             // Ensure they expand to full height, and maintain a row layout when printing
             button.style.height = 'auto';
-            button.style.display = 'inline-block';  // Or 'flex' if you prefer a flex container
+            button.style.display = display;  // Or 'flex' if you prefer a flex container
             button.style.overflow = 'visible';
             button.style.transition = 'none';
         });
