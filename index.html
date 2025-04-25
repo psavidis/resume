@@ -69,8 +69,12 @@
 <body id="page-top">
 
 <div class="search-container">
-    <input type="text" id="search-bar" class="search-bar" placeholder="Search Keywords in Projects..."
-           oninput="searchResume()" autocomplete="off"/>
+    <input type="text" id="search-bar" class="search-bar" placeholder="Search Keywords in Projects..." autocomplete="off"/>
+    <div id="qa-response-container" class="qa-hidden">
+        <div class="qa-response-row">
+            <div id="qa-response-box" class="qa-response-text"></div>
+        </div>
+    </div>
     <div class="arrows-container">
         <i id="arrowUp" class="fas fa-chevron-up arrow-up"></i>
         <i id="arrowDown" class="fas fa-chevron-down arrow-down"></i>
@@ -303,6 +307,7 @@
 
     // For production, always serve the static PDF file to avoid devices issues.
     const productionMode = true;
+    let isInteractiveSearchEnabled = true;
 
     // Functions: Main Features
 
@@ -1522,6 +1527,7 @@
                 hideFormContainer();
                 showProjectTech();
                 showProjects();
+                handleQAResponseAreaVisibility();
                 searchBar.style.display = 'block';
                 searchBar.focus();
 
@@ -1539,6 +1545,14 @@
         });
     }
 
+    function handleQAResponseAreaVisibility() {
+        if (isInteractiveSearchEnabled) {
+            document.getElementById("qa-response-container").style.display = 'block';
+        } else {
+            document.getElementById("qa-response-container").style.display = 'none';
+        }
+    }
+
     function resetCurrentHighlight() {
         const current = document.querySelector('.current-highlight');
         if (current) {
@@ -1547,15 +1561,76 @@
     }
 
     function configureSearchBar() {
+        const searchBar = document.getElementById('search-bar');
+        const qaContainer = document.getElementById('qa-response-container');
+        const qaBox = document.getElementById('qa-response-box');
+
         // Configures the search bar to always remain at the top during scrolling
         window.addEventListener('scroll', function () {
-            let searchBar = document.getElementById('search-bar');
 
             // Trigger a reflow and adjust positioning if necessary
             searchBar.style.position = 'absolute';  // temporarily change position
             searchBar.offsetHeight;  // Trigger reflow (forces layout update)
             searchBar.style.position = 'fixed';  // Reset position to fixed after reflow
         });
+
+        // simple search is triggered on input change
+        searchBar.addEventListener('input', () => {
+
+            if (isInteractiveSearchEnabled) {
+                return;
+            }
+
+            console.log("Simple search");
+            searchResume();
+        });
+
+        // interactive search is triggered on enter key
+        searchBar.addEventListener('keypress', (event) => {
+            if (event.key !== 'Enter') {
+                return;
+            }
+
+            const query = searchBar.value.trim();
+
+            if (query.length === 0) {
+                qaContainer.classList.remove('qa-visible');
+                qaContainer.classList.add('qa-hidden');
+                qaBox.textContent = '';
+                return
+            }
+
+            searchBar.disabled = true;
+
+            console.log("Search submitted: " + query);
+
+            qaContainer.classList.remove('qa-hidden');
+            qaContainer.classList.add('qa-visible');
+            // qaBox.textContent += query + '\n\n';
+
+            // perform query here
+
+            const response = getAnswer(query);
+
+
+            typeResponse(response, qaBox);
+            searchBar.disabled = false;
+        });
+    }
+
+    function typeResponse(text, element, delay = 25) {
+        element.textContent = ''; // Clear previous content
+        let index = 0;
+
+        function type() {
+            if (index < text.length) {
+                element.textContent += text.charAt(index);
+                index++;
+                setTimeout(type, delay);
+            }
+        }
+
+        type();
     }
 
     // Functions: Keyboard Shortcut
@@ -2330,6 +2405,13 @@
                 element.style.width = '258px';
             });
         }
+    }
+
+    function getAnswer() {
+        // Add your logic here or call an API
+        return `🤖Petros Savvidis is a seasoned software engineer specializing in back-end development, with a strong emphasis on scalable and maintainable architecture. Over the years, he has gained deep experience working with Java and related technologies, particularly in the domains of mCommerce, workflow engines, European projects, microservices, and intelligent document processing.
+
+From 2023 to 2025, Petros worked at Camunda, a leading company in the business process automation space, where he contributed to the development of workflow and decision automation tools used globally.`;
     }
 
     // functions: misc
