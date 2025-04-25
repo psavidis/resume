@@ -2133,47 +2133,6 @@
         });
     }
 
-    function drawSpeechBubble(ctx, x, y, width, height, radius, tailX, tailY, alpha, textToShow) {
-        ctx.save();
-        ctx.globalAlpha = alpha;
-
-        // Check if dark mode is active
-        const isDarkMode = document.body.classList.contains('dark-mode');
-
-        // Set bubble colors based on the mode
-        ctx.fillStyle = isDarkMode ? "#3e1a68" : "#ffffff"; // Dark mode bubble: purple, light mode: white
-        ctx.strokeStyle = isDarkMode ? "#9c4dff" : "#03a9f4"; // Dark mode border: purple, light mode: blue
-        ctx.lineWidth = 2;
-        ctx.shadowColor = isDarkMode ? "#9c4dff" : "#03a9f4"; // Shadow color for dark mode (purple)
-        ctx.shadowBlur = 10;
-
-        ctx.beginPath();
-        ctx.moveTo(x + radius, y);
-        ctx.lineTo(x + width - radius, y);
-        ctx.quadraticCurveTo(x + width, y, x + width, y + radius);
-        ctx.lineTo(x + width, y + height - radius);
-        ctx.quadraticCurveTo(x + width, y + height, x + width - radius, y + height);
-        ctx.lineTo(x + width / 2 + 10, y + height);
-        ctx.lineTo(tailX, tailY); // Tail
-        ctx.lineTo(x + width / 2 - 10, y + height);
-        ctx.lineTo(x + radius, y + height);
-        ctx.quadraticCurveTo(x, y + height, x, y + height - radius);
-        ctx.lineTo(x, y + radius);
-        ctx.quadraticCurveTo(x, y, x + radius, y);
-        ctx.closePath();
-
-        ctx.fill();
-        ctx.stroke();
-
-        // Text inside bubble
-        ctx.fillStyle = isDarkMode ? "#ffffff" : "#333"; // Dark mode text: white, light mode text: black
-        ctx.font = "bold 16px sans-serif";
-        ctx.textAlign = "center";
-        ctx.fillText(textToShow, x + width / 2, y + height / 2 + 6);
-
-        ctx.restore();
-    }
-
     function showAnimationHint(milliseconds, showOnlyOnce) {
 
         if (!isMobile()) return;
