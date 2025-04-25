@@ -320,7 +320,8 @@
         "Hibernate",
         "Domain Driven Design",
         "Microservices",
-        "Docker"
+        "Docker",
+        "AWS"
       ],
       "links": {
         "Product Website": "https://www.cortical.io/semanticpro/"
