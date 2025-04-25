@@ -1669,12 +1669,6 @@
         // Override the default behavior for the down and up arrow keys
         if (keyDownEvent.key === 'ArrowDown' || keyDownEvent.key === 'ArrowUp') {
             keyDownEvent.preventDefault();
-
-            // Restore cursor position (some browsers/platforms still move it)
-            // setTimeout ensures it's applied after any internal handling
-            setTimeout(() => {
-                this.setSelectionRange(cursorPosition, cursorPosition);
-            }, 0);
         }
     }
 
