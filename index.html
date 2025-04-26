@@ -1996,7 +1996,9 @@
         } else if (command.includes("download resume")) {
             downloadPage();
         } else if (command.includes("send email")) {
-            document.getElementById('email-btn').click();
+            if (!isFormContainerVisible()) {
+                document.getElementById('email-btn').click();
+            }
         } else if (command.includes("close email")) {
             if (isFormContainerVisible()) {
                 document.getElementById('email-btn').click();
