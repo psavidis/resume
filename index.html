@@ -771,6 +771,24 @@
         projectBadgesWrapper.appendChild(badge);
     }
 
+    function getCompanyLogoMap(data) {
+        const workExperience = data.workExperience;
+        const companyLogoMap = new Map();
+
+        workExperience.forEach(experience => {
+            if (experience.company && experience.companyLogo) {
+                companyLogoMap.set(experience.company, experience.companyLogo);
+            }
+        });
+
+        return companyLogoMap;
+    }
+
+    function getCompanyLogoUrl(data, company) {
+        const companyLogoMap = getCompanyLogoMap(data);
+        return companyLogoMap.get(company);
+    }
+
     function populateProjects(data) {
         const projectsList = document.getElementById('projects-list');
         projectsList.innerHTML = '';
@@ -792,6 +810,7 @@
             li.style.marginBottom = '8px';
             li.style.backgroundColor = '#f9f9f9';
             li.style.transition = 'background-color 0.2s ease-in-out';
+            li.style.position = 'relative';  // Allow positioning of the badge
 
             // Project name
             const projectName = document.createElement('span');
@@ -838,7 +857,6 @@
 
             // Points (bullet list)
             const pointsList = document.createElement('ul');
-
             pointsList.classList.add('project-points');
 
             if (project.points && Array.isArray(project.points)) {
@@ -851,6 +869,7 @@
             }
 
             const showProjectButtons = createProjectButtons(project);
+            const projectNotification = getProjectNotification(data, project);
 
             const hasProjectButtons = showProjectButtons.length > 0;
 
@@ -869,6 +888,9 @@
                 projectBadgesWrapper.style.display = isVisible ? 'none' : 'flex'; // badges toggle
                 pointsList.style.display = isVisible ? 'none' : 'block';
                 // techUsed.style.display = isVisible ? 'none' : 'block';
+
+                projectNotification.style.display = isVisible ? 'none' : 'flex';
+
 
                 if (hasProjectButtons) {
                     showProjectButtons.forEach(button => {
@@ -895,9 +917,51 @@
                 });
             }
 
+            li.appendChild(projectNotification);
+
             projectsList.appendChild(li);
         });
     }
+
+    function getProjectNotification(data, project) {
+        const projectNotification = document.createElement('div');
+        projectNotification.classList.add('project-notification');
+
+        const companyLogoUrl = getCompanyLogoUrl(data, project.company);
+
+        // Add company logo badge
+        if (companyLogoUrl) {
+            const companyLogoBadge = document.createElement('div');
+            companyLogoBadge.classList.add('company-logo-badge');
+
+            const companyLogo = document.createElement('img');
+            companyLogo.src = companyLogoUrl;
+            companyLogo.alt = 'Company Logo';
+            companyLogo.classList.add('company-logo');
+            companyLogoBadge.appendChild(companyLogo);
+
+            projectNotification.appendChild(companyLogoBadge);
+        }
+
+        // Date range (start and end date)
+        if (project.startDate && project.endDate) {
+            const dateRange = document.createElement('span');
+
+            const startDate = project.startDate;
+            const endDate = project.endDate;
+
+            const dateText = `${startDate} - ${endDate}`;
+
+            dateRange.textContent = dateText;
+            dateRange.classList.add('project-date-range');
+
+            projectNotification.style.display = 'none';
+            projectNotification.appendChild(dateRange);
+        }
+
+        return projectNotification;
+    }
+
 
     function populateEducation(data) {
         const educationList = document.getElementById('education-list');

@@ -309,6 +309,45 @@ body.loaded #shortcut-hint {
     transform: scale(1.05); /* Slightly increase the size */
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Add shadow for depth */
 }
+.project-li {
+    position: relative; /* Ensure the notification is correctly positioned */
+}
+
+.project-notification {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    display: flex;
+    align-items: center;  /* Vertically center the items */
+    justify-content: center;  /* Center the logo and date together */
+    /*background-color: rgba(0, 0, 0, 0.1); !* Soft background for the badge *!*/
+    padding: 6px 12px; /* Add some padding around the badge */
+    border-radius: 20px;  /* Rounded corners for the badge */
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow to make it pop */
+    border: 1px dashed rgba(30, 60, 114, 0.25); /* subtle, elegant dashed border */
+}
+
+.company-logo-badge {
+    width: 20px; /* Smaller size for the logo */
+    height: 20px; /* Smaller size for the logo */
+    border-radius: 50%; /* Round the logo */
+    overflow: hidden;
+    margin-right: 8px; /* Small space between logo and date */
+}
+
+.company-logo-badge img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Ensure the logo is centered and cropped nicely */
+}
+
+.project-date-range {
+    font-size: 11px; /* Keep the font size consistent */
+    color: #607d8b; /* Subtle grayish-blue color */
+    font-weight: 500; /* Slightly bolder for better emphasis */
+    margin-top: 2px; /* Slight margin above the date */
+}
+
 
 .work-title {
     display: flex;
