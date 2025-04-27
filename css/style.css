@@ -79,13 +79,14 @@ h2 {
     transition: transform 0.3s ease, background 0.3s ease;
 }
 
-.section ul li:hover {
+/* When a project has a currently highlighted result, scale it up a bit */
+.section ul li:hover,
+.section ul li:has(.current-highlight) {
     transform: scale(1.03);
     background: #e9f4ff;
 }
 
-/* When a project has a currently highlighted result, scale it up a bit */
-.section ul li:has(.current-highlight) {
+ {
     transform: scale(1.03);
     background: #e9f4ff;
 }
@@ -1447,13 +1448,7 @@ body.dark-mode .section ul li {
     color: #e0e0e0 !important; /* Light text color */
 }
 
-body.dark-mode .section ul li:hover {
-    background: linear-gradient(145deg, #4e3b5b, #3a2a45);
-    transform: scale(1.01);
-    transition: all 0.3s ease;
-    border: 1px solid #3a2a45;
-}
-
+body.dark-mode .section ul li:hover,
 body.dark-mode .section ul li:has(.current-highlight) {
     background: linear-gradient(145deg, #4e3b5b, #3a2a45);
     transform: scale(1.01);
