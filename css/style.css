@@ -327,6 +327,10 @@ body.loaded #shortcut-hint {
     border: 1px dashed rgba(30, 60, 114, 0.25); /* subtle, elegant dashed border */
 }
 
+.dark-mode .project-notification {
+    border: 1px dashed rgba(255, 174, 0, 0.25);
+}
+
 .company-logo-badge {
     width: 20px; /* Smaller size for the logo */
     height: 20px; /* Smaller size for the logo */
