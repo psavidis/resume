@@ -1148,6 +1148,8 @@
         makeHidden(projectPoints);
         makeHidden(projectButtons);
         makeHidden(badges);
+
+        hideProjectNotifications();
     }
 
     function hideProjectTech() {
@@ -1162,6 +1164,16 @@
         techUsed.forEach(item => {
             item.style.display = 'block';
         })
+    }
+
+    function showProjectNotifications() {
+        const projectNotifications = document.querySelectorAll('.project-notification');
+        makeButtonsVisible(projectNotifications, 'flex');
+    }
+
+    function hideProjectNotifications() {
+        const projectNotifications = document.querySelectorAll('.project-notification');
+        makeButtonsVisible(projectNotifications, 'none');
     }
 
     function hideEverythingAfterSeconds(seconds) {
@@ -1239,6 +1251,8 @@
         const projectPoints = document.querySelectorAll('.project-points');
         const projectButtons = document.querySelectorAll('.project-button');
         const projectBadges = document.querySelectorAll('.project-badges-list');
+
+        showProjectNotifications();
 
         makeVisible(projectItems);
         makeVisible(techUsed);
