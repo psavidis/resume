@@ -84,6 +84,12 @@ h2 {
     background: #e9f4ff;
 }
 
+/* When a project has a currently highlighted result, scale it up a bit */
+.section ul li:has(.current-highlight) {
+    transform: scale(1.03);
+    background: #e9f4ff;
+}
+
 p {
     text-align: center;
     font-size: 1.2em;
