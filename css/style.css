@@ -314,21 +314,26 @@ body.loaded #shortcut-hint {
 }
 
 .project-notification {
-    position: absolute;
-    bottom: 10px;
-    right: 10px;
-    display: flex;
-    align-items: center;  /* Vertically center the items */
-    justify-content: center;  /* Center the logo and date together */
-    /*background-color: rgba(0, 0, 0, 0.1); !* Soft background for the badge *!*/
-    padding: 3px 3px; /* Add some padding around the badge */
-    border-radius: 20px;  /* Rounded corners for the badge */
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow to make it pop */
-    border: 1px dashed rgba(30, 60, 114, 0.25); /* subtle, elegant dashed border */
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 3px 6px;
+    border-radius: 20px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    border: 1px dashed rgba(30, 60, 114, 0.25);
+    /*background-color: white;*/
+    max-width: fit-content;
+    margin-left: auto;
+    margin-top: 10px;
 }
 
 .dark-mode .project-notification {
     border: 1px dashed rgba(255, 174, 0, 0.25);
+}
+
+.dark-mode .project-date-range {
+    color: rgba(255, 190, 248, 0.57);
+    text-shadow: 0 0 5px rgba(255, 174, 0, 0.25);
 }
 
 .company-logo-badge {
