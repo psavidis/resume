@@ -341,12 +341,14 @@
         const projectDescriptions = document.querySelectorAll('.project-description');
         const projectPoints = document.querySelectorAll('.project-points');
         const projectButtons = document.querySelectorAll('.project-button');
+        const projectNotification = document.querySelectorAll('.project-notification');
 
         makeVisible(projectItems);
         makeVisible(techUsed);
         makeVisible(projectDescriptions);
         makeVisible(projectPoints);
         makeButtonsVisible(projectButtons);
+        makeButtonsVisible(projectNotification, 'flex');
 
         makeBadgesVisible();
 
