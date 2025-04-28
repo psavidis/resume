@@ -302,7 +302,7 @@
 <script>
 
     // For production, always serve the static PDF file to avoid devices issues.
-    const productionMode = true;
+    const productionMode = false;
 
     // Functions: Main Features
 
@@ -862,13 +862,53 @@
             pointsList.classList.add('project-points');
 
             if (project.points && Array.isArray(project.points)) {
-                project.points.forEach(point => {
-                    const pointItem = document.createElement('li');
-                    pointItem.textContent = point.toString();
-                    pointItem.classList.add('project-point-item');
-                    pointsList.appendChild(pointItem);
+                // Step 1: Parse the points to determine their levels
+                const parsedPoints = project.points.map(point => {
+                    const match = point.match(/^(-+)\s(.*)/); // Match leading dashes
+                    const level = match ? match[1].length : 0; // Determine the nesting level
+                    const text = match ? match[2] : point;    // Extract the sentence without the dashes
+                    return { level, text };
                 });
+
+                // Step 2: Create a function to build the nested list based on the parsed data
+                const buildList = (points) => {
+                    const stack = [{ list: pointsList }]; // Start with the main list
+
+                    points.forEach(({ level, text }) => {
+                        // If we are deeper in nesting, create new <ul> element
+                        while (stack.length <= level) {
+                            const parentLi = stack[stack.length - 1].list.lastElementChild; // Get last <li>
+                            const newUl = document.createElement('ul');
+                            parentLi.appendChild(newUl); // Append new <ul> to this <li>
+                            stack.push({ list: newUl }); // Add new <ul> to stack
+                        }
+
+                        // Pop up if we need to move back in nesting level
+                        while (stack.length > level + 1) {
+                            stack.pop();
+                        }
+
+                        // Create the <li> for the current point
+                        const li = document.createElement('li');
+                        li.classList.add('project-point-item');
+
+                        // Split the text into words and wrap each word in a <span>
+                        text.split(' ').forEach(word => {
+                            const span = document.createElement('span');
+                            span.classList.add('word');
+                            span.textContent = word;
+                            li.appendChild(span);
+                        });
+
+                        // Append the <li> to the current <ul> in the stack
+                        stack[stack.length - 1].list.appendChild(li);
+                    });
+                };
+
+                // Step 3: Build the list from the parsed data
+                buildList(parsedPoints);
             }
+
 
             const showProjectButtons = createProjectButtons(project);
             const projectNotification = getProjectNotification(data, project);
@@ -923,6 +963,10 @@
 
             projectsList.appendChild(li);
         });
+    }
+
+    function isPointNested(point) {
+        return point.toString().startsWith("-");
     }
 
     function getProjectNotification(data, project) {

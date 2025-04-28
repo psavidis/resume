@@ -1299,6 +1299,28 @@ ul.project-points li::marker {
     box-shadow: none;  /* Removes any shadow effect */
 }
 
+/* Add padding to the nested UL to give space between parent and nested items */
+ul > li > ul .project-point-item {
+    padding-top: 5px !important;  /* Adds space between the first nested ul and its parent */
+}
+
+ul > li > ul > li > ul .project-point-item {
+    color: #a9a9a9;  /* Lighter color for deeper nested items */
+    font-size: 12px;  /* Smaller font size for deeper nesting */
+    margin-left: 22px;  /* Slightly reduced indentation for third-level nesting */
+    margin-bottom: 2px;  /* Reduced space between further nested items */
+}
+
+/* Apply hover effect only to nested .project-point-item elements in dark mode */
+body.dark-mode ul > li > ul li .project-point-item {
+    color: rgba(255, 166, 227, 0.72) !important;  /* Purple-pink color on hover */
+}
+
+/* Ensure no hover effect on first-level .project-point-item elements */
+body.dark-mode ul > li .project-point-item {
+    color: inherit !important;  /* No hover effect on first-level items */
+}
+
 body.dark-mode .project-point-item {
     background: transparent !important;
 }
