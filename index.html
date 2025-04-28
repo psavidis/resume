@@ -965,13 +965,10 @@
         });
     }
 
-    function isPointNested(point) {
-        return point.toString().startsWith("-");
-    }
-
     function getProjectNotification(data, project) {
         const projectNotification = document.createElement('div');
         projectNotification.classList.add('project-notification');
+        projectNotification.style.position = 'relative';  // Required for tooltip positioning
 
         const companyLogoUrl = getCompanyLogoUrl(data, project.company);
 
@@ -1003,11 +1000,65 @@
 
             projectNotification.style.display = 'none';
             projectNotification.appendChild(dateRange);
+
+            // Parse the dates and calculate the duration (months)
+            const durationInMonths = getDurationInMonths(startDate, endDate);
+            const durationText = formatDuration(durationInMonths);  // Assuming formatDuration is available
+
+            // Tooltip to show the project duration
+            const tooltip = document.createElement('div');
+            tooltip.classList.add('tooltip');
+            tooltip.textContent = `${durationText}`;
+            projectNotification.appendChild(tooltip);
+
+            // Show tooltip on hover
+            projectNotification.addEventListener('mouseenter', function () {
+                tooltip.style.opacity = '1'; // Make tooltip visible
+            });
+
+            // Hide tooltip when mouse leaves
+            projectNotification.addEventListener('mouseleave', function () {
+                tooltip.style.opacity = '0'; // Make tooltip invisible
+            });
         }
 
         return projectNotification;
     }
 
+    // Helper function to get duration in months
+    function getDurationInMonths(startDate, endDate) {
+        const [startMonth, startYear] = startDate.split('-');
+        const [endMonth, endYear] = endDate === 'Present' ? [new Date().getMonth() + 1, new Date().getFullYear()] : endDate.split('-');
+
+        const start = new Date(startYear, startMonth - 1);
+        const end = new Date(endYear, endMonth - 1);
+
+        const durationInMonths = (end.getFullYear() - start.getFullYear()) * 12 + (end.getMonth() - start.getMonth());
+        return durationInMonths;
+    }
+
+    // Helper function to format the duration in "X years, Y months"
+    function formatDuration(durationInMonths) {
+        const years = Math.floor(durationInMonths / 12); // Get full years
+        const months = durationInMonths % 12; // Get remaining months
+
+        let formattedDuration = "";
+
+        if (years > 0) {
+            formattedDuration += `${years} year${years > 1 ? 's' : ''}`;
+        }
+
+        if (months > 0) {
+
+            if (formattedDuration !== "") {
+                formattedDuration += " ";
+            }
+
+            formattedDuration += `${months} month${months > 1 ? 's' : ''}`;
+        }
+
+        return formattedDuration || 'Less than a month'; // If there's no year or month, return "Less than a month"
+    }
 
     function populateEducation(data) {
         const educationList = document.getElementById('education-list');
