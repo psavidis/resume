@@ -318,6 +318,7 @@
         hideFormContainer();
         hideSearchContainer();
         hideButtonContainer();
+        hideTooltip();
 
         showPdfSummary();
 
@@ -1319,6 +1320,11 @@
     function hideArrowsContainer() {
         const searchContainer = document.querySelector('.arrows-container');
         searchContainer.style.visibility = 'hidden';
+    }
+
+    function hideTooltip() {
+        const tooltips = document.querySelectorAll('.tooltip');
+        makeHidden(tooltips);
     }
 
     function showArrowsContainer() {
