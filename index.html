@@ -2074,7 +2074,17 @@
             document.getElementById('phoneButton').style.display = 'none';
             document.getElementById('shortcut-hint').style.visibility = 'hidden';
             document.getElementById('microphone-btn').style.visibility = 'hidden';
+
+            configureTooltipsForMobile();
         }
+    }
+
+    function configureTooltipsForMobile() {
+        document.querySelectorAll('.project-notification').forEach(projectNotification => {
+            projectNotification.addEventListener('click', function(event) {
+                event.stopPropagation();
+            });
+        })
     }
 
     function showEasterEgg() {
