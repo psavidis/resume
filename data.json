@@ -16,7 +16,7 @@
       "companyLogo": "img/company-logo_camunda.jpeg",
       "companyLink": "https://camunda.com/",
       "startDate": "April 2023",
-      "endDate": "Present",
+      "endDate": "April 2025",
       "employmentType": "Full-time",
       "location": "Athens, Greece",
       "workMode": "Remote"
@@ -336,11 +336,14 @@
       "description": "Camunda Platform 7 is an open-source process automation engine trusted by thousands of companies worldwide. Built for Java and accessible from any language via REST, it embeds a high-performance BPMN 2.0 engine into any app or container. It integrates seamlessly with Spring, Java EE 6, Quarkus, and a wide range of databases to orchestrate workflows at scale.",
       "points": [
         "Individual Contributor to the Camunda 7 Project between April 2023 and April 2025",
-        "My contributions can be found between 7.20.0 and 7.23.0 Releases",
+        "- My contributions can be found between 7.20.0 and 7.23.0 Releases",
         "Feature Development for Open Source / Enterprise Edition",
-        "Community Worker - Worked on Reviewing community contributions, security vulnerabilities, CI improvements",
+        "Community Worker",
+        "- Managed the community contributions",
+        "- Reviewed and Scoped Security vulnerabilities",
+        "- Improved & Stabilized the CI",
         "Alpha and Minor Release Management",
-        "Worked on C7 to C8 Data Migrator PoC"
+        "Worked on C7 to C8 Data Migration"
       ],
       "techUsed": [
         "Java 11",
