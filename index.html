@@ -2083,6 +2083,15 @@
         document.querySelectorAll('.project-notification').forEach(projectNotification => {
             projectNotification.addEventListener('click', function(event) {
                 event.stopPropagation();
+
+                const mouseEnterEvent = new Event('mouseenter');
+                projectNotification.dispatchEvent(mouseEnterEvent);
+
+                // After 1 second, dispatch 'mouseleave' to hide it
+                setTimeout(() => {
+                    const mouseLeaveEvent = new Event('mouseleave');
+                    projectNotification.dispatchEvent(mouseLeaveEvent);
+                }, 1000);
             });
         })
     }
