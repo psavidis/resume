@@ -316,9 +316,12 @@
         "Cucumber",
         "JUnit 5",
         "Mockito",
+        "Test Containers",
+        "Maven",
         "JPA",
         "Hibernate",
         "Domain Driven Design",
+        "Test Driven Development (TDD)",
         "Microservices",
         "Docker",
         "AWS"
