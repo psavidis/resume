@@ -24,14 +24,13 @@
         </div>
 
     </section>
-
-    <div class="resume-version"></div>
 </div>
 
 
 <script>
     const textarea = document.getElementById('keywords');
     const outputDiv = document.getElementById('output');
+    const generateButton = document.getElementById('gen-btn');
 
     // Highlight the keywords when space is pressed
     textarea.addEventListener('input', function(e) {
@@ -53,6 +52,57 @@
             e.preventDefault(); // Prevent newline when pressing Enter
         }
     });
+
+    generateButton.addEventListener('click', function() {
+        const text = outputDiv.textContent || outputDiv.innerText;
+        const baseUrl = "https://psavidis.github.io/resume";
+
+        if (text.trim() === '') {
+            return;
+        }
+
+        const keywords = text
+            .trim()
+            .split(/\s+/)
+            .filter(Boolean);
+
+        const params = new URLSearchParams();
+        keywords.forEach(keyword => {
+            params.append("keywords", keyword);
+        });
+
+        const finalUrl = `${baseUrl}?${params.toString()}`;
+        // console.log(finalUrl);
+
+        outputDiv.innerHTML = `
+    <div class="search-generator__result">
+        <span class="url-highlight">${finalUrl}</span>
+        <div class="action-buttons">
+            <button id="copy-btn" class="copy-btn" title="Copy to clipboard">📋</button>
+            <button id="visit-btn" class="visit-btn" title="Open link in new tab">➡️</button>
+        </div>
+    </div>
+`;
+
+        const copyBtn = document.getElementById('copy-btn');
+        const visitBtn = document.getElementById('visit-btn');
+
+        copyBtn.addEventListener('click', function () {
+            const urlText = document.querySelector('.url-highlight').textContent;
+            navigator.clipboard.writeText(urlText).then(() => {
+                copyBtn.textContent = '✅';
+                setTimeout(() => {
+                    copyBtn.textContent = '📋';
+                }, 1500);
+            });
+        });
+
+        visitBtn.addEventListener('click', function () {
+            const urlText = document.querySelector('.url-highlight').textContent;
+            window.open(urlText, '_blank');
+        });
+    });
+
 </script>
 
 </body>
