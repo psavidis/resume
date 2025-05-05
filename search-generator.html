@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Resume Search Link Generator</title>
+    <!-- Link your existing resume CSS -->
+    <link rel="stylesheet" href="/css/search-generator.css"/>
+</head>
+
+<body class="resume-body">
+
+<div class="container">
+
+    <section class="section">
+
+        <h1 class="section__title">Generate Resume Search Link</h1>
+
+        <div class="search-generator">
+            <label for="keywords">Enter keywords (comma or space separated):</label>
+            <textarea id="keywords" class="search-generator__input" rows="4" placeholder="e.g. Java, Microservices, Camunda"></textarea>
+            <button id="gen-btn" class="btn">Generate Link</button>
+            <div id="output" class="search-generator__output"></div>
+        </div>
+
+    </section>
+
+    <div class="resume-version"></div>
+</div>
+
+
+<script>
+    const textarea = document.getElementById('keywords');
+    const outputDiv = document.getElementById('output');
+
+    // Highlight the keywords when space is pressed
+    textarea.addEventListener('input', function(e) {
+        // Split the input text into words (keywords) by spaces
+        const keywords = e.target.value.trim().split(/\s+/);
+
+        // Create HTML elements for each keyword, applying a class to highlight them
+        const highlightedKeywords = keywords.map(keyword => {
+            return `<span class="keyword">${keyword}</span>`;
+        }).join(' ');
+
+        // Update the output area with the highlighted keywords
+        outputDiv.innerHTML = highlightedKeywords;
+    });
+
+    // Prevent newline (Enter key), but allow space
+    textarea.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter') {
+            e.preventDefault(); // Prevent newline when pressing Enter
+        }
+    });
+</script>
+
+</body>
+</html>
