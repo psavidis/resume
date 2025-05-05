@@ -54,9 +54,10 @@
     });
 
     generateButton.addEventListener('click', function() {
-        const text = outputDiv.textContent || outputDiv.innerText;
+        const text = textarea.value;
         const baseUrl = "https://psavidis.github.io/resume";
-
+        // const baseUrl = "http://localhost:63342/resume/index.html";
+        console.log(text);
         if (text.trim() === '') {
             return;
         }
@@ -72,7 +73,7 @@
         });
 
         const finalUrl = `${baseUrl}?${params.toString()}`;
-        // console.log(finalUrl);
+        console.log(finalUrl);
 
         outputDiv.innerHTML = `
     <div class="search-generator__result">
