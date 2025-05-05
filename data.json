@@ -320,6 +320,7 @@
         "Test Containers",
         "Maven",
         "JPA",
+        "Hazelcast",
         "Hibernate",
         "Domain Driven Design",
         "Test Driven Development (TDD)",
