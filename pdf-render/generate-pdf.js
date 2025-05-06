@@ -9,7 +9,7 @@ const puppeteer = require('puppeteer');
     const page = await browser.newPage();
 
     // Replace with your local or hosted resume URL
-    await goToPage(page, 'https://psavidis.github.io/resume');
+    await goToPage(page, 'https://psavidis.github.io/resume?no-track=true');
 
     await new Promise(resolve => setTimeout(resolve, 1000));
 
