@@ -13,7 +13,7 @@ const puppeteer = require('puppeteer');
 
     await new Promise(resolve => setTimeout(resolve, 1000));
 
-    await debugScreenshotPage(page);
+    // await debugScreenshotPage(page);
 
     // Wait for critical elements to be present before manipulating them
     await waitForSelector('#pdfEmailHeader', page);
@@ -25,7 +25,6 @@ const puppeteer = require('puppeteer');
     await page.waitForSelector('.live-resume-url'); // Make sure this selector exists
 
     console.log("Printing screenshot before evaluate")
-
 
     // Inject your logic to prepare the page for printing
     await page.evaluate(() => {
@@ -70,90 +69,7 @@ const puppeteer = require('puppeteer');
         container.style.maxHeight = 'none';
         container.style.overflow = 'visible';
 
-        // Functions
-        function showProfileInfo() {
-            const emailHeader = document.querySelector('#pdfEmailHeader');
-            if (emailHeader) emailHeader.style.display = 'block';
-
-            const liveResume = document.querySelector('.live-resume');
-            if (liveResume) liveResume.style.display = 'block';
-
-            const liveResumeUrl = document.querySelector('.live-resume-url');
-            if (liveResumeUrl) liveResumeUrl.style.visibility = 'visible';
-
-            const liveResumeQr = document.querySelector('.live-resume-qr');
-            if (liveResumeQr) liveResumeQr.style.visibility = 'visible';
-        }
-
-        function hideFormContainer() {
-            const formContainer = document.getElementById('contact-form-container');
-            if (formContainer) {
-                formContainer.classList.remove('show');
-                formContainer.style.display = 'none';
-            }
-        }
-
-        function hideSearchContainer() {
-            const searchContainer = document.querySelector('.search-container');
-            if (searchContainer) searchContainer.style.visibility = 'hidden';
-        }
-
-        function hideButtonContainer() {
-            const buttonContainer = document.querySelector('.button-container');
-            if (buttonContainer) buttonContainer.style.visibility = 'hidden';
-        }
-
-        function hideTooltip() {
-            const tooltips = document.querySelectorAll('.tooltip');
-            tooltips.forEach(item => item.style.display = 'none');
-        }
-
-        function showPdfSummary() {
-            const liveSummaryElements = document.querySelectorAll('.liveSummary');
-            liveSummaryElements.forEach(element => element.classList.add('hidden'));
-
-            const pdfSummaryElements = document.querySelectorAll('.pdfSummary');
-            pdfSummaryElements.forEach(element => element.classList.remove('hidden'));
-        }
-
-        function customizeWorkExperiencePageBreaks(workExperienceItems) {
-            if (workExperienceItems.length > 5) {
-                workExperienceItems[5].style.marginTop = '10mm';
-            }
-        }
-
-        function makeVisible(elements) {
-            elements.forEach(item => {
-                item.style.height = 'auto';
-                item.style.display = 'block';
-                item.style.overflow = 'visible';
-                item.style.transition = 'none';
-            });
-        }
-
-        function makeButtonsVisible(buttons, display = 'inline-block') {
-            buttons.forEach(button => {
-                button.style.height = 'auto';
-                button.style.display = display;
-                button.style.overflow = 'visible';
-                button.style.transition = 'none';
-            });
-        }
-
-        function makeBadgesVisible() {
-            const projectBadges = document.querySelectorAll('.project-badges-list');
-            const badges = document.querySelectorAll('.project-badge');
-            makeButtonsVisible(projectBadges, 'flex');
-            makeButtonsVisible(badges, 'flex-inline');
-        }
-
-        function hideShortcuts() {
-            const shortcuts = document.querySelector('#shortcuts');
-            if (shortcuts) shortcuts.style.display = 'none';
-
-            const shortcutHint = document.querySelector('#shortcut-hint');
-            if (shortcutHint) shortcutHint.style.display = 'none';
-        }
+        configureResumeVersion(true);
     });
 
     // Create the PDF

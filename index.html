@@ -2521,12 +2521,12 @@
         }
     }
 
-    async function configureResumeVersion() {
+    async function configureResumeVersion(useNextTag=false) {
         const latestTag = await getLatestTag();
         const versionElement = document.querySelector(".resume-version");
 
         if (latestTag) {
-            const versionTag = productionMode ? latestTag : getNextTag(latestTag);
+            const versionTag = useNextTag ? getNextTag(latestTag) : latestTag;
 
             versionElement.textContent = `Resume ${versionTag}`;
         } else {
