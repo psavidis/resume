@@ -158,10 +158,10 @@ const puppeteer = require('puppeteer');
 
     // Create the PDF
     await page.pdf({
-        path: 'resume-petros-savvidis.pdf',
+        path: '../resume-petros_savidis.pdf',
         format: 'A4',
         printBackground: true,
-        margin: { top: '0in', right: '0in', bottom: '0in', left: '0in' }
+        margin: {top: '0in', right: '0in', bottom: '0in', left: '0in'}
     });
 
     await browser.close();
@@ -169,7 +169,7 @@ const puppeteer = require('puppeteer');
 
 async function debugScreenshotPage(page) {
     console.log("Printing screenshot before evaluate");
-    await page.screenshot({ path: 'debug.png', fullPage: true });
+    await page.screenshot({path: 'debug.png', fullPage: true});
 }
 
 async function waitForSelector(selector, page) {
