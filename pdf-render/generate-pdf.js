@@ -160,8 +160,8 @@ const puppeteer = require('puppeteer');
     await page.pdf({
         path: '../resume-petros_savidis.pdf',
         format: 'A4',
-        printBackground: true,
-        margin: {top: '0in', right: '0in', bottom: '0in', left: '0in'}
+        printBackground: false,
+        preferCSSPageSize: true
     });
 
     await browser.close();
