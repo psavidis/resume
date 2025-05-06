@@ -1,13 +1,15 @@
 (async () => {
 
   // Utility: sleep until an element is available
-  const waitForElementWithContent = (selector, minLength = 100, timeout = 5000) => {
+  const waitForElementWithContent = (selector, minLength = 100, timeout = 10000, pollInterval = 500) => {
     return new Promise((resolve, reject) => {
       const start = Date.now();
+
       const check = () => {
         const el = document.querySelector(selector);
         const content = el?.innerText?.trim() ?? '';
 
+        // Check for non-placeholder content
         if (el && content.length >= minLength && content.toLowerCase() !== 'about the job') {
           return resolve(el);
         }
@@ -16,11 +18,14 @@
           return reject("❌ Job description element with sufficient content not found");
         }
 
-        requestAnimationFrame(check);
+        // Poll every 500ms instead of using requestAnimationFrame
+        setTimeout(check, pollInterval);
       };
+
       check();
     });
   };
+
 
 
   async function geyKeywords() {
