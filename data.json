@@ -155,7 +155,7 @@
       "points": [
         "Developed the platform's back-office from the ground up (Backend + Frontend)",
         "Created the search criteria functionality",
-        "Led the data migration from Lucene to Elasticsearch"
+        "Led the data migration from Lucene to Elasticsearch ensuring 100% data correctness"
       ],
       "techUsed": [
         "Java",
