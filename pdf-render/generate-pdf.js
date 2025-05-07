@@ -76,7 +76,7 @@ const puppeteer = require('puppeteer');
     await page.pdf({
         path: '../resume-petros_savidis.pdf',
         format: 'A4',
-        printBackground: false,
+        printBackground: true,
         preferCSSPageSize: true
     });
 
