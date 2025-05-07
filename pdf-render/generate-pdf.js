@@ -69,7 +69,7 @@ const puppeteer = require('puppeteer');
         container.style.maxHeight = 'none';
         container.style.overflow = 'visible';
 
-        configureResumeVersion(true);
+        configureResumeVersion(false);
     });
 
     // Create the PDF
