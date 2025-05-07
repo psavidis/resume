@@ -2487,6 +2487,35 @@
         }
     }
 
+    function keywordsUrlParam() {
+        const urlParams = new URLSearchParams(window.location.search);
+
+        if (urlParams.has('keywords')) {
+            return urlParams.getAll('keywords');
+        }
+
+        return [];
+    }
+
+    function checkSearchModeAndConfigure() {
+        const keywords = keywordsUrlParam();
+
+        if (keywords.length === 0) {
+            return;
+        }
+
+        // console.log(keywords);
+
+        setTimeout(() => {
+            const searchToggle = document.getElementById('toggle-search');
+            searchToggle.click();
+
+            setTimeout(() => {
+                searchKeyword(keywords.join(' '));
+            }, 1000);
+        }, 1000);
+    }
+
     // functions: misc
 
     async function getLatestTag() {
@@ -2563,6 +2592,8 @@
         showAnimationHint(6000, true);
     }).then(() => {
         removeAllSkeletons(skeletons, 700);
+    }).then(() => {
+        checkSearchModeAndConfigure();
     });
 
 </script>
