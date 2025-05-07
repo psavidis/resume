@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Petros Savidis Resume | Q&A Interactive Conversation</title>
+
+    <!-- Styles -->
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <link href="css/style-qa-chat.css" rel="stylesheet">
+
+</head>
+<body class="font-sans">
+<div class="min-h-screen flex flex-col justify-center items-center p-4">
+    <div class="w-full max-w-2xl bg-white rounded-2xl shadow-xl p-6 space-y-6">
+        <!-- Profile Header -->
+        <div class="profile-header flex items-center gap-4">
+            <img src="img/profile_picture.jpeg" alt="Petros Savidis" class="w-16 h-16 rounded-full object-cover"/>
+            <div>
+                <h2 class="text-2xl font-semibold text-gray-800">Petros Savidis</h2>
+                <p class="text-gray-600">Q&A Interactive Conversation</p>
+            </div>
+        </div>
+        <!-- Chat Input -->
+        <div class="flex gap-2">
+            <input id="question" type="text"
+                   class="flex-1 p-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
+                   placeholder="Ask something like 'What experience do you have with Java?'"/>
+            <button id="submit-btn" class="btn px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
+                    onclick="askQuestion()" title="Submit">
+                <i class="fas fa-paper-plane"></i>
+            </button>
+            <button id="microphone-btn" class="btn px-4 py-2 bg-gray-200 rounded-md hover:bg-gray-300"
+                    onclick="startVoiceInput(event)" title="Speak">
+                <i class="fas fa-microphone"></i>
+            </button>
+        </div>
+        <!-- Chat Window -->
+        <div id="chat" class="space-y-4 overflow-y-auto max-h-[60vh] pr-2">
+            <!-- Chat content will appear here -->
+        </div>
+    </div>
+</div>
+
+<!-- Mustache for dynamic templating -->
+<script src="https://unpkg.com/mustache@4.2.0/mustache.min.js"></script>
+
+<script>
+    let resumeData = null;
+    let mappings = [];
+    let qaData = [];
+
+    // Handlers for dynamic content
+    const mappingHandlers = createMappingHandlers();
+
+    async function loadData() {
+        try {
+            const [resData, resMap] = await Promise.all([
+                fetch('data.json'),
+                fetch('mappings.json')
+            ]);
+
+            resumeData = await resData.json();
+            populateFunctions(resumeData);
+            mappings = await resMap.json();
+
+            // Build QA array
+            qaData = populateQAData(mappings, mappingHandlers, resumeData);
+        } catch (err) {
+            console.error('Error loading data or mappings:', err);
+        }
+    }
+
+    function populateQAData(mappings, mappingHandlers, resumeData) {
+        let qaData = [];
+        mappings.forEach(m => {
+            // figure out the answer just once
+            let answer = '';
+            if (m.answer) {
+                answer = m.answer;
+            } else if (m.template) {
+                answer = Mustache.render(m.template, resumeData);
+            } else if (m.handler && mappingHandlers[m.handler]) {
+                answer = mappingHandlers[m.handler](resumeData);
+            }
+            // for each pattern alias, push one entry
+            (m.patterns || []).forEach(pat => {
+                qaData.push({
+                    question: pat.toLowerCase(),
+                    answer
+                });
+            });
+        });
+
+        return qaData;
+    }
+
+    function simulateTyping(text, container, delay = 25) {
+        container.innerHTML = '';
+        let i = 0;
+        const interval = setInterval(() => {
+            container.innerHTML += text.charAt(i++);
+            if (i >= text.length) clearInterval(interval);
+        }, delay);
+    }
+
+    function createTypingIndicator() {
+        const wrapper = document.createElement('div');
+        wrapper.className = 'typing-indicator';
+        for (let i = 0; i < 3; i++) {
+            wrapper.appendChild(document.createElement('span'));
+        }
+        return wrapper;
+    }
+
+    async function askQuestion() {
+        if (!resumeData) await xloadData();
+        const input = document.getElementById('question');
+        const chatBox = document.getElementById('chat');
+        const questionText = input.value.trim();
+        if (!questionText) return;
+
+        // User bubble
+        const userBubble = document.createElement('div');
+        userBubble.className = 'bg-blue-100 text-blue-900 p-3 rounded-xl shadow max-w-xl ml-auto';
+        userBubble.textContent = questionText;
+        chatBox.appendChild(userBubble);
+        input.value = '';
+
+        // Score overlap
+        const questionInput = questionText.toLowerCase();
+        const scores = qaData.map(qa => {
+            const questionWords = qa.question.split(" ");
+            const overlap = questionWords.filter(word => questionInput.includes(word)).length;
+            return {...qa, score: overlap};
+        });
+        const bestMatch = scores.reduce((max, qa) => qa.score > max.score ? qa : max, {score: 0});
+
+
+        const botBubble = document.createElement('div');
+        botBubble.className = 'bg-gray-100 text-gray-800 p-3 rounded-xl shadow max-w-xl mr-auto flex items-center';
+        const indicator = createTypingIndicator();
+        botBubble.appendChild(indicator);
+        chatBox.appendChild(botBubble);
+
+        setTimeout(() => {
+            botBubble.innerHTML = '';
+            const reply = bestMatch.score > 0 ? bestMatch.answer : 'Sorry, I couldn\'t find an answer to that.';
+            simulateTyping(reply, botBubble);
+        }, 1000);
+    }
+
+    function startVoiceInput(event) {
+        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+        if (!SpeechRecognition) {
+            alert('Your browser does not support voice input.');
+            return;
+        }
+        const recognition = new SpeechRecognition();
+        recognition.lang = 'en-US';
+        recognition.interimResults = true;
+        recognition.maxAlternatives = 1;
+
+        const micBtn = event.target.closest('button');
+        micBtn.classList.add('animate-pulse', 'bg-green-200');
+        const input = document.getElementById('question');
+
+        recognition.onresult = (e) => {
+            let interim = '';
+            for (let i = e.resultIndex; i < e.results.length; i++) {
+                const t = e.results[i][0].transcript;
+                if (e.results[i].isFinal) {
+                    input.value = t;
+                    micBtn.classList.remove('animate-pulse', 'bg-green-200');
+                    askQuestion();
+                } else {
+                    interim += t;
+                    input.value = interim;
+                }
+            }
+        };
+        recognition.onerror = (e) => {
+            micBtn.classList.remove('animate-pulse', 'bg-green-200');
+            alert('Voice recognition error: ' + e.error);
+        };
+        recognition.onend = () => micBtn.classList.remove('animate-pulse', 'bg-green-200');
+        recognition.start();
+    }
+
+    // Functions: Mappings Handlers
+
+    function createMappingHandlers() {
+        return {
+
+            // Add handlers here
+
+            calculateExperience: (data) => {
+                if (!data.workExperience || !data.workExperience.length) return 'No work experience listed.';
+                const result = getTotalExperience(data.workExperience);
+                return `I have more than ${result.years} years of experience.`;
+            },
+            javaExperienceYesNo: (data) => {
+                const has = data.skills?.some(s => s.name.toLowerCase().includes('java'));
+                return has ? 'Yes, my experience includes Java.' : 'No, I do not have Java experience.';
+            }
+        };
+    }
+
+    // Functions: Template
+
+    function populateFunctions(resumeData) {
+
+        // Add functions here
+
+        resumeData.firstWord = function () {
+            return (text, render) => {
+                // `text` is the raw section content, e.g. "{{name}}"
+                // `render(text)` gives you the interpolated value, e.g. "Petros Savidis"
+                const full = render(text).trim();
+                return full.split(' ')[0];            // returns "Petros"
+            }
+        };
+
+        resumeData.secondWord = function () {
+            return (text, render) => {
+                // `text` is the raw section content, e.g. "{{name}}"
+                // `render(text)` gives you the interpolated value, e.g. "Petros Savidis"
+                const full = render(text).trim();
+                return full.split(' ')[1];            // returns "Savidis"
+            }
+        };
+    }
+
+    // Functions: Calculate Experience
+
+    function calculateExperience(startDate, endDate) {
+        const start = parseMonthYearString(startDate);
+        const end = (endDate === 'Present') ? new Date() : new parseMonthYearString(endDate);  // Handle 'Present' as current date
+
+        return (end.getFullYear() - start.getFullYear()) * 12 + (end.getMonth() - start.getMonth());
+    }
+
+    function getTotalExperience(workExperience) {
+        let totalExperienceMonths = 0;
+
+        workExperience.forEach(job => {
+
+            if (job.company === 'Hellenic Army') {
+                return;
+            }
+
+            totalExperienceMonths += calculateExperience(job.startDate, job.endDate);
+        });
+
+        // Convert the total experience to years and months
+        const years = Math.floor(totalExperienceMonths / 12);
+        const months = totalExperienceMonths % 12;
+
+        return {years, months};
+    }
+
+    function parseMonthYearString(monthYearString) {
+        const [monthName, yearString] = monthYearString.split(' ');
+        const year = parseInt(yearString, 10);
+
+        const monthNames = [
+            "January", "February", "March", "April", "May", "June",
+            "July", "August", "September", "October", "November", "December"
+        ];
+
+        const monthIndex = monthNames.indexOf(monthName);
+
+        if (monthIndex === -1 || isNaN(year)) {
+            throw new Error(`Invalid date string: ${monthYearString}`);
+        }
+
+        return new Date(Date.UTC(year, monthIndex, 1)); // Always safe
+    }
+
+    window.onload = async function() {
+        await loadData();
+        const input = document.getElementById('question');
+        input.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') askQuestion();
+        });
+    };
+</script>
+
+</body>
+</html>
