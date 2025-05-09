@@ -2243,7 +2243,7 @@ body.dark-mode .resume-version {
     }
 
     .skeleton-profile-picture {
-        width: 100px;
+        width: 100px !important;
     }
 
     .skeleton-title {
