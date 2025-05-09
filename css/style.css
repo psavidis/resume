@@ -220,25 +220,25 @@ body.loaded #shortcut-hint {
 
 .speech-bubble {
     position: absolute;
-    top: -10px; /* Position above the profile */
-    left: 100%; /* Moves it to the right of the picture */
-    transform: translateX(-50%); /* Adjust for perfect centering */
-    background: linear-gradient(145deg, #a0c8f0, #77b0e2); /* Light, airy blues for cloud look */
+    top: -10px;
+    left: 100%;
+    transform: translateX(-50%);
+    background: linear-gradient(145deg, #85c1ff, #3387ce);
     padding: 7px 12px;
-    border-radius: 30px; /* Soft rounded corners for a cloud-like look */
+    border-radius: 30px;
     font-size: 13px;
     font-weight: bold;
-    color: #fff; /* White text for contrast */
-    box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.1); /* Soft shadow for depth */
+    color: #fff;
+    box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.1);
     display: inline-block;
     opacity: 1;
-    animation: float 2s ease-in-out infinite; /* Floating animation */
+    animation: float 2s ease-in-out infinite;
     cursor: pointer;
-    text-align: center; /* Center the text */
-    font-family: 'Comic Sans MS', sans-serif; /* Fun, cartoonish font */
-    border: 2px solid #fff; /* White border for a clean effect */
-    text-transform: uppercase; /* Make the text more impactful */
-    z-index: 1; /* Ensure it stays above the profile */
+    text-align: center;
+    font-family: 'Comic Sans MS', sans-serif;
+    border: 2px solid #fff;
+    text-transform: uppercase;
+    z-index: 1;
 }
 
 body.dark-mode .speech-bubble {
