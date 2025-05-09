@@ -82,8 +82,17 @@
     <div id="topRightCorner" class="topRightCorner"></div>
 
     <div class="header">
-        <div class="profile-picture-container">
-            <img src="/resume/img/profile_picture.jpeg" alt="Profile Picture" class="profile-picture">
+        <div class="profile-wrapper">
+            <div class="profile-picture-container">
+                <video id="profile-video" playsinline>
+                    <source src="/img/profile-video.mp4" type="video/mp4" />
+                </video>
+                <img src="/resume/img/profile_picture.jpeg" alt="Profile Picture" class="profile-picture" id="profile-picture">
+            </div>
+            <!-- Speech Bubble -->
+            <div class="speech-bubble" id="speech-bubble">
+                Click me!
+            </div>
         </div>
 
         <div class="profile-info">
@@ -286,6 +295,31 @@
         <li>Close Search</li>
     </ul>
 </div>
+
+<script>
+    const video = document.getElementById("profile-video");
+    const profilePic = document.getElementById("profile-picture");
+    const speechBubble = document.getElementById("speech-bubble");
+
+    function playIntro() {
+        video.muted = false; // unmute the video
+        video.currentTime = 0;
+        video.play().then(() => {
+            profilePic.style.opacity = 0;
+            speechBubble.style.display = "none"; // Hide the speech bubble after click
+        }).catch(err => {
+            console.error("Autoplay failed:", err);
+        });
+    }
+
+    speechBubble.addEventListener("click", playIntro);
+
+    video.addEventListener("ended", () => {
+        profilePic.style.opacity = 1;
+    });
+
+</script>
+
 
 <script>
     const toggleBtn = document.getElementById('menu-toggle');

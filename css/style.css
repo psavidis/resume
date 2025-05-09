@@ -194,8 +194,71 @@ body.loaded #shortcut-hint {
     color: #222; /* optional: a little darker if you want it to pop more */
 }
 
+.profile-wrapper {
+    position: relative;
+    display: inline-block;
+}
+
 .profile-picture-container {
-    flex-shrink: 0;
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    overflow: hidden;
+    position: relative;
+}
+
+.profile-picture-container video,
+.profile-picture-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+
+
+.speech-bubble {
+    position: absolute;
+    top: 20px; /* Position above the profile */
+    left: 120%; /* Moves it to the right of the picture */
+    transform: translateX(-50%); /* Adjust for perfect centering */
+    background: linear-gradient(145deg, #a0c8f0, #77b0e2); /* Light, airy blues for cloud look */
+    padding: 15px 25px;
+    border-radius: 30px; /* Soft rounded corners for a cloud-like look */
+    font-size: 18px;
+    font-weight: bold;
+    color: #fff; /* White text for contrast */
+    box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.1); /* Soft shadow for depth */
+    display: inline-block;
+    opacity: 1;
+    animation: float 2s ease-in-out infinite; /* Floating animation */
+    cursor: pointer;
+    text-align: center; /* Center the text */
+    font-family: 'Comic Sans MS', sans-serif; /* Fun, cartoonish font */
+    border: 3px solid #fff; /* White border for a clean effect */
+    text-transform: uppercase; /* Make the text more impactful */
+    z-index: 1; /* Ensure it stays above the profile */
+}
+
+.speech-bubble:hover {
+    background: linear-gradient(145deg, #77b0e2, #a0c8f0); /* Reverse gradient on hover */
+    box-shadow: 0px 8px 25px rgba(0, 0, 0, 0.2); /* Slightly stronger shadow on hover */
+    transform: translateX(-50%) translateY(-5px); /* Lift up slightly on hover */
+}
+
+@keyframes float {
+    0% {
+        transform: translateY(0) translateX(-50%);
+    }
+    50% {
+        transform: translateY(-5px) translateX(-50%);
+    }
+    100% {
+        transform: translateY(0) translateX(-50%);
+    }
 }
 
 .profile-picture {
@@ -203,6 +266,50 @@ body.loaded #shortcut-hint {
     height: 120px;
     border-radius: 50%;
     object-fit: cover;
+    opacity: 0;
+}
+
+#profile-video,
+#profile-picture {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+    transition: opacity 1s ease;
+}
+
+.play-button {
+    position: absolute;
+    background: rgba(0, 0, 0, 0.6);
+    color: white;
+    border-radius: 50%;
+    cursor: pointer;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: opacity 0.3s ease;
+}
+
+.play-button:hover {
+    background: rgba(0, 0, 0, 0.8);
+}
+
+.play-button.large {
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 30px;
+    padding: 10px 14px;
+}
+
+.play-button.small {
+    bottom: 5px;
+    right: 5px;
+    font-size: 14px;
+    padding: 5px 6px;
+    display: none;
 }
 
 .dark-mode .profile-picture {
