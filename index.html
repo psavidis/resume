@@ -90,7 +90,7 @@
                 <img src="/resume/img/profile_picture.jpeg" alt="Profile Picture" class="profile-picture" id="profile-picture">
             </div>
             <!-- Speech Bubble -->
-            <div class="speech-bubble" id="speech-bubble">
+            <div class="speech-bubble" id="speech-bubble" style="opacity: 0;">
                 Click me!
             </div>
         </div>
@@ -1263,6 +1263,19 @@
     function hideSearchBar() {
         const searchBar = document.getElementById('search-bar');
         searchBar.style.display = 'none';
+    }
+
+    function hideProfilePictureBubble() {
+        const bubble = document.querySelector('.speech-bubble');
+        bubble.style.opacity = '0';
+    }
+
+    function showProfilePictureBubble(delay) {
+        setTimeout(() => {
+            const bubble = document.querySelector('.speech-bubble');
+            bubble.style.transition = 'opacity 0.5s ease';
+            bubble.style.opacity = '1';
+        }, delay); // Match the duration of the transition
     }
 
     function hideProjects() {
@@ -2603,6 +2616,7 @@
         showAnimationHint(6000, true);
     }).then(() => {
         removeAllSkeletons(skeletons, 700);
+        showProfilePictureBubble(700);
     });
 
 </script>
