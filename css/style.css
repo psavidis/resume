@@ -218,8 +218,6 @@ body.loaded #shortcut-hint {
     left: 0;
 }
 
-
-
 .speech-bubble {
     position: absolute;
     top: 20px; /* Position above the profile */
@@ -241,6 +239,15 @@ body.loaded #shortcut-hint {
     border: 3px solid #fff; /* White border for a clean effect */
     text-transform: uppercase; /* Make the text more impactful */
     z-index: 1; /* Ensure it stays above the profile */
+}
+
+body.dark-mode .speech-bubble {
+    background: linear-gradient(145deg, #5e3a87, #432c64);
+    border: 2px solid #b366ff;
+    box-shadow:
+            0 0 6px #b366ff,
+            0 0 12px #b366ff,
+            0 0 20px #b366ff;
 }
 
 .speech-bubble:hover {
