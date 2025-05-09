@@ -2368,6 +2368,12 @@
         return createSkeletonLines(lines, "skeleton-title");
     }
 
+    function createSkeletonCircle(className) {
+        const group = document.createElement('div');
+        group.className = className;
+        return group;
+    }
+
     function createSkeletonLines(lines, className) {
         const group = document.createElement('div');
         group.className = 'skeleton-group';
@@ -2430,7 +2436,7 @@
         replaceSelectorAllWithSkeleton(skeletons, "#experience-list", () => createSkeletonLines(8, "skeleton-project"));
         replaceSelectorAllWithSkeleton(skeletons, "#projects-list", () => createSkeletonLines(8, "skeleton-experience"));
         replaceSelectorAllWithSkeleton(skeletons, ".summary-all", () => createSkeletonLines(7, "skeleton-line"));
-        replaceSelectorAllWithSkeleton(skeletons, ".profile-picture-container", () => createSkeletonLines(6, "skeleton-profile-picture"));
+        replaceSelectorAllWithSkeleton(skeletons, ".profile-picture-container", () => createSkeletonCircle("skeleton-profile-picture"));
         replaceSelectorAllWithSkeleton(skeletons, "#summary", () => createSkeletonLines(1, "skeleton-line"));
         replaceSelectorAllWithSkeleton(skeletons, ".profile-info", () => createSkeletonLines(1, "skeleton-name"));
 
