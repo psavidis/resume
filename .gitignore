@@ -1,3 +1,6 @@
 /pdf-render/package.json
 /pdf-render/package-lock.json
 /pdf-render/node_modules/
+
+/markdown-render/package.json
+/markdown-render/package-lock.json
