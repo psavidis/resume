@@ -9,9 +9,11 @@
 You can find my live resume [here](https://psavidis.github.io/resume/).
 
 ## What's This ?
+
 This is the Github repository of my official resume. The code is used by a Github page which hosts my resume online.
 
 ## Why the Heck You Coded Your Resume ?
+
 - **Format Complexity**: I've used different templates each time I've been after a new business opportunity and it was a pain to keep them up to date.
 - **Template Limitations**: Free resume templates have content restrictions which didn't work well as my resume grew in size.
 - **Lack of Version Control**: Repetitive copy-pasting of content across multiple templates and versions of my resume has been a big pain.
@@ -35,6 +37,7 @@ My resume should support:
 - Collapsible Cards for modelling my experience
 
 ## Technical Requirements
+
 - Git Support
 - Frontend Application using JS without a Backend
 - Github Pages Hosting
@@ -72,6 +75,7 @@ My resume should support:
   - Enables people access the live version even if links are stripped
 
 ### For Me as a Developer
+
 - **Git Integration**: The resume is versioned using git 🤘
 - **Data Separation**: The data is loaded from a JSON file and presented dynamically.
   - Even my total experience is calculated on the fly 🙃
