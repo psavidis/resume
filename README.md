@@ -24,7 +24,7 @@ But the best reasons of all are
 
 The above made me contemplate of requirements for my project.
 
-## Functional Requirements
+## Requirements
 
 My resume should support:
 
