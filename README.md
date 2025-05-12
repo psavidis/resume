@@ -104,7 +104,7 @@ To mitigate this issue, I've included a QR code for pdf-first user journeys and 
 
 ## For Me
 
-- See Analytics [here](https://statcounter.com/p13118834/summary/).
+- See Analytics [here](https://clarity.microsoft.com/projects/view/ri7umniw4o/project)
 - [Ntfy.sh](https://ntfy.sh/) is used to push notifications to my phone of page views
 
 ## Final Thoughts
