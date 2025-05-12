@@ -33,25 +33,9 @@
     <!-- JS -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.2/html2pdf.bundle.js"></script>
 
-    <!-- Default Statcounter code for My Live Resume -->
+    <!-- Analytics -->
     <script>
-        function shouldTrack() {
-            const urlParams = new URLSearchParams(window.location.search);
-            return urlParams.get('no-track') !== 'true';
-        }
-
-        if (shouldTrack()) {
-            // Define vars before loading script
-            var sc_project = 13118834;
-            var sc_invisible = 1;
-            var sc_security = "69f9f1f5";
-
-            // Dynamically load the script
-            var sc = document.createElement('script');
-            sc.src = 'https://www.statcounter.com/counter/counter.js';
-            sc.async = true;
-            document.head.appendChild(sc);
-        }
+        loadAnalytics();
     </script>
 
     <noscript>
@@ -2538,6 +2522,23 @@
         } else {
             versionElement.textContent = 'Resume latest';
         }
+    }
+
+    function shouldTrack() {
+        const urlParams = new URLSearchParams(window.location.search);
+        return urlParams.get('no-track') !== 'true';
+    }
+
+    function loadAnalytics() {
+        if (!shouldTrack()) {
+            return;
+        }
+
+        (function(c,l,a,r,i,t,y){
+            c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+            t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+            y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+        })(window, document, "clarity", "script", "ri7umniw4o");
     }
 
     // Run the function when the window is resized or loaded
