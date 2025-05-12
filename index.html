@@ -331,22 +331,6 @@
             return;
         }
 
-        // Add class to disable transforms, animations    function shouldTrack() {
-        const urlParams = new URLSearchParams(window.location.search);
-        return urlParams.get('no-track') !== 'true';
-    }
-
-    function loadAnalytics() {
-        if (!shouldTrack()) {
-            return;
-        }
-
-        (function(c,l,a,r,i,t,y){
-            c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
-            t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
-            y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
-        })(window, document, "clarity", "script", "ri7umniw4o");
-    }, etc.
         resume.classList.add('pdf-mode');
 
         const projectItems = document.querySelectorAll('.project-li');
