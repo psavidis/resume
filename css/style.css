@@ -292,20 +292,18 @@ body.loaded #shortcut-hint {
 .pdf-mode {
     background: white !important;
     color: black !important;
+}
 
-    <!-- Remove emojis for pdf -->
+.pdf-mode.location-badge::before {
+    content: "";
+}
 
-    .location-badge::before {
-        content: "";
-    }
+.pdf-mode.left-info.calendar::before {
+    content: "";
+}
 
-    .left-info.calendar::before {
-        content: "";
-    }
-
-    .edu-icon {
-        display: none;
-    }
+.pdf-mode.edu-icon {
+    display: none;
 }
 
 .topRightCorner {
