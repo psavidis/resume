@@ -294,6 +294,10 @@ body.loaded #shortcut-hint {
     color: black !important;
 }
 
+.pdf-mode .location-badge::before {
+    content: "";
+}
+
 .topRightCorner {
     position: absolute;
     top: 2px; /* Place topRightCorner higher on the top-right corner */
