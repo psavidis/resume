@@ -87,7 +87,7 @@
       "points": [
         "Developed mobile client that used PAMAP's infrastructure to access PAMAP's services",
         "Conducted Research around HL7 protocol to standardize PAMAP's communication so it can easily exchange data with other medical systems",
-        "Created a new web interface for PAMAP using XSLT and CSS"
+        "Generated a new web interface for PAMAP using XSLT and CSS"
       ],
       "techUsed": [
         "Java",

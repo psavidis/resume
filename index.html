@@ -1,6 +1,6 @@
 <!--
   Created by Petros Savidis
-  Resume project started in April 2025
+  Interactive Resume project started in April 2025
   All rights reserved — not for reuse or redistribution.
 -->
 <!DOCTYPE html>
@@ -79,10 +79,11 @@
 
         <div class="profile-info">
             <h1 class="profile-info-name" id="myNameTitle"></h1>
+            <p class="profile-info-linkedin" id="linkedInHeader"></p>
             <p class="profile-info-email" id="pdfEmailHeader"></p>
 
             <div class="live-resume">
-                <div class="live-resume-url">psavidis.github.io/resume</div>
+                <div class="live-resume-url">https://psavidis.github.io/resume</div>
                 <img src="/resume/img/qr-code.png" alt="QR Code" class="live-resume-qr">
             </div>
         </div>
@@ -624,6 +625,7 @@
             configureLinkedinButton(data);
             configureBlogButton();
             configureEmail(data);
+            configureLinkedin(data);
             configureGithubButton();
 
             // copyright
@@ -1205,6 +1207,7 @@
 
     function hideProfileInfo() {
         document.querySelector('#pdfEmailHeader').style.display = 'none';
+        document.querySelector('#linkedInHeader').style.display = 'none';
         document.querySelector('.live-resume').style.display = 'none';
     }
 
@@ -1329,6 +1332,7 @@
 
     function showProfileInfo() {
         document.querySelector('#pdfEmailHeader').style.display = 'block';
+        document.querySelector('#linkedInHeader').style.display = 'block';
         document.querySelector('.live-resume').style.display = 'block';
         document.querySelector('.live-resume-url').style.visibility = 'visible';
         document.querySelector('.live-resume-qr').style.visibility = 'visible';
@@ -2005,6 +2009,11 @@
                 submitButton.disabled = false;
             }
         });
+    }
+
+    function configureLinkedin(data) {
+        const emailHeader = document.getElementById('linkedInHeader');
+        emailHeader.textContent = data.email;
     }
 
     function getFormDataAsObject(form) {

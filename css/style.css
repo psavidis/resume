@@ -228,6 +228,7 @@ body.loaded #shortcut-hint {
     text-shadow: rgba(255, 174, 0, 0.8) 0 0 2px;
 }
 
+.profile-info-email,
 .profile-info-email {
     font-size: 1em;
     color: #555;
