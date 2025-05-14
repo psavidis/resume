@@ -294,15 +294,15 @@ body.loaded #shortcut-hint {
     color: black !important;
 }
 
-.pdf-mode.location-badge::before {
+body.pdf-mode .location-badge::before {
     content: "";
 }
 
-.pdf-mode.left-info.calendar::before {
+body.pdf-mode .left-info.calendar::before {
     content: "";
 }
 
-.pdf-mode.edu-icon {
+body.pdf-mode .edu-icon {
     display: none;
 }
 
