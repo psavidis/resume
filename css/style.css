@@ -308,6 +308,7 @@ body.pdf-mode {
     .project-badge-mentoring::before,
     .project-badge-extreme::before,
     .project-badge-research::before,
+    .project-badge-lead::before,
     .project-badge-internship::before,
     .project-badge-impact::before,
     .project-badge-endurance::before,
