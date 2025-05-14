@@ -97,7 +97,6 @@
             <span class="liveSummary">Dynamic | Git-powered | Code-driven</span>
             <span class="pdfSummary hidden">PDF</span> version of my resume.
             <span class="pdfSummary hidden">For the live, coded experience, visit the link or scan the QR code</span>
-            <span class="emoji">🤘</span>
         </p>
         <div id="summary-instructions">
             <ul>
@@ -627,6 +626,8 @@
             configureEmail(data);
             configureLinkedin(data);
             configureGithubButton();
+
+            configureSummaryButtonHoverEffects();
 
             // copyright
             configureCopyright(data);
@@ -1730,6 +1731,32 @@
             searchBar.style.position = 'absolute';  // temporarily change position
             searchBar.offsetHeight;  // Trigger reflow (forces layout update)
             searchBar.style.position = 'fixed';  // Reset position to fixed after reflow
+        });
+    }
+
+    function configureSummaryButtonHoverEffects() {
+        const listItems = document.querySelectorAll("#summary-instructions li");
+
+        const buttonMap = [
+            ["linkedin-btn", "email-btn", "phoneButton"], // First list item
+            ["pdf-btn"],                   // Second list item
+            ["toggle-search"]             // Third list item
+        ];
+
+        listItems.forEach((item, index) => {
+            item.addEventListener("mouseenter", () => {
+                buttonMap[index]?.forEach(id => {
+                    const btn = document.getElementById(id);
+                    if (btn) btn.classList.add("btn-hover-active");
+                });
+            });
+
+            item.addEventListener("mouseleave", () => {
+                buttonMap[index]?.forEach(id => {
+                    const btn = document.getElementById(id);
+                    if (btn) btn.classList.remove("btn-hover-active");
+                });
+            });
         });
     }
 

@@ -174,7 +174,9 @@ body.loaded #shortcut-hint {
 
 /* Hover effect only on desktop*/
 @media (hover: hover) and (pointer: fine) {
-    .btn:hover {
+    .btn:hover,
+    .btn-hover-active
+    {
         background-color: #FFC107;
     }
 }
@@ -782,13 +784,13 @@ body.search-active .toggle-button:focus {
     border-radius: 50%;
 }
 
-.dark-mode #summary-instructions ul li::before {
-    background-color: #FFC107;
+#summary-instructions li:hover {
+    transform: scale(1.03);
+    background: #e9f4ff;
 }
 
-.emoji {
-    font-size: 1.5em; /* Makes emojis 1.5x bigger */
-    vertical-align: middle; /* Keeps them aligned nicely with the text */
+.dark-mode #summary-instructions ul li::before {
+    background-color: #FFC107;
 }
 
 .emoji-flags img {
