@@ -278,6 +278,8 @@ body.loaded #shortcut-hint {
     text-decoration: underline;
 }
 
+/* pdf-mode */
+
 .pdf-mode * {
     animation: none !important;
     transition: none !important;
@@ -305,6 +307,8 @@ body.pdf-mode .left-info.calendar::before {
 body.pdf-mode .edu-icon {
     display: none;
 }
+
+/* end of pdf-mode */
 
 .topRightCorner {
     position: absolute;
