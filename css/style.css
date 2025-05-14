@@ -296,12 +296,28 @@ body.loaded #shortcut-hint {
     color: black !important;
 }
 
-body.pdf-mode .location-badge::before {
-    content: "";
-}
+body.pdf-mode {
 
-body.pdf-mode .left-info.calendar::before {
-    content: "";
+    /* location, calendar */
+    .location-badge::before,
+    .left-info.calendar::before,
+
+    /* All badges */
+    .project-badge-architecture::before,
+    .project-badge-project-management::before,
+    .project-badge-mentoring::before,
+    .project-badge-extreme::before,
+    .project-badge-research::before,
+    .project-badge-internship::before,
+    .project-badge-impact::before,
+    .project-badge-endurance::before,
+    .project-badge-execution::before,
+    .project-badge-consulting::before,
+    .project-badge-product::before,
+    .project-badge-resilience::before
+    {
+        content: "";
+    }
 }
 
 body.pdf-mode .edu-icon {
