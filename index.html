@@ -1546,7 +1546,7 @@
 
     function configureLinkedinButton(data) {
         document.getElementById('linkedin-btn').onclick = function () {
-            let profileUrl = data.linkedInURL;
+            let profileUrl = "https://" + data.linkedInURL;
             window.open(profileUrl, '_blank');
         };
     }
