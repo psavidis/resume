@@ -301,7 +301,7 @@
       "endDate": "12-2022",
       "description": "Contract Intelligence and its platform services offer an IDP solution for extracting data from documents and classifying them with different algorithms (proprietary, open source).",
       "points": [
-        "Lead Developer for Refactoring the Main Product of the company using a DDD inspired approach",
+        "Lead Developer for Rearchitecting the Main Product of the company using a DDD inspired approach",
         "Redesigned & Implemented Platform Services to be configurable (turned it into microservice).",
         "Designed, Implemented & Tested Connectors, a flexible, scalable, fault tolerant microservices system to connect the Products to documents of various Cloud storage solutions Sharepoint, Box, Dropbox etc.)",
         "Played a key role in the recruitment process by conducting interviews and assisting in the selection of qualified developers.",
