@@ -676,6 +676,8 @@
             return;
         }
 
+        const companyToProject = getCompanyToProjects(data);
+
         data.workExperience = sortByField(data.workExperience, 'startDate', 'asc');
 
         data.workExperience.forEach(item => {
@@ -745,6 +747,23 @@
             workTitleAndImg.appendChild(contentDiv);
 
             li.appendChild(workTitleAndImg);
+
+            // Hook for linking experience to projects
+            li.addEventListener('click', () => {
+                clearProjectHighlights();
+                const companyΤοProjectNames = companyToProject[item.company] || [];
+
+                // console.log(companyΤοProjectNames);
+                let lastProjectElement;
+                companyΤοProjectNames.forEach(projectName => {
+                    const projectElement = findProjectElementByName(projectName);
+                    highlightPulseElement(projectElement);
+                    lastProjectElement = projectElement;
+                });
+
+                scrollToElementBottom(lastProjectElement);
+            });
+
             experienceList.appendChild(li);
         });
 
@@ -752,6 +771,58 @@
         const formattedXP = formatTotalExperienceIntoYears(totalXP);
 
         document.getElementById('experienceTitle').textContent = 'Experience (' + formattedXP + ')';
+    }
+
+    function clearProjectHighlights() {
+        document.querySelectorAll('#projects-list .highlight-pulse').forEach(el => {
+            el.classList.remove('highlight-pulse');
+        });
+    }
+
+    function highlightPulseElement(projectElement) {
+        // Highlight the project element and remove once animation finished
+        projectElement.classList.remove('highlight-pulse');
+        void projectElement.offsetWidth;
+        projectElement.classList.add('highlight-pulse');
+
+        projectElement.addEventListener(
+            'animationend',
+            () => projectElement.classList.remove('highlight-pulse'),
+            { once: true }
+        );
+    }
+
+    function findProjectElementByName(projectName) {
+        const projectItems = document.querySelectorAll('#projects-list .project-li');
+
+        // split projectName into words
+        const nameWords = projectName.split(/\s+/).map(w => w.toLowerCase());
+
+        for (const li of projectItems) {
+            const projectNameEl = li.querySelector('.project-name');
+            if (!projectNameEl) continue;
+
+            // get all text from .word spans
+            const words = Array.from(projectNameEl.querySelectorAll('.word'))
+                .map(span => span.textContent.toLowerCase());
+
+            // check if every word in projectName is included in the DOM words in order
+            let match = true;
+            let index = 0;
+            for (const w of nameWords) {
+                // skip over any non-matching words in DOM
+                while (index < words.length && words[index] !== w) index++;
+                if (index === words.length) {
+                    match = false;
+                    break;
+                }
+                index++;
+            }
+
+            if (match) return li; // found the matching project-li
+        }
+
+        return null;
     }
 
     function isOpenSource(badge) {
@@ -783,6 +854,21 @@
     function getCompanyLogoUrl(data, company) {
         const companyLogoMap = getCompanyLogoMap(data);
         return companyLogoMap.get(company);
+    }
+
+    function getCompanyToProjects(data) {
+        const companyToProjectsMap = {};
+
+        // Loop over all projects
+        data.project.forEach(proj => {
+            const company = proj.company;
+            if (!companyToProjectsMap[company]) {
+                companyToProjectsMap[company] = [];
+            }
+            companyToProjectsMap[company].push(proj.name);
+        });
+
+        return companyToProjectsMap;
     }
 
     function populateProjects(data) {
@@ -911,6 +997,8 @@
 
             // Toggle description/tech/points on click
             li.addEventListener('click', (event) => {
+
+                li.classList.remove('highlight-pulse'); // remove any pulsing
 
                 // Avoid toggling if search is active
                 if (document.body.classList.contains('search-active')) return;
@@ -1504,6 +1592,17 @@
     function scrollToElement(element) {
         element.scrollIntoView({
             behavior: "smooth"
+        });
+        window.dispatchEvent(new Event('scroll'));
+    }
+
+    function scrollToElementBottom(element) {
+        const rect = element.getBoundingClientRect();
+        const margin = 130; // arbitrary margin is added to fix the problem the first project is scrolled to the bottom
+
+        window.scrollBy({
+            top: rect.bottom - window.innerHeight + margin,
+            behavior: 'smooth'
         });
         window.dispatchEvent(new Event('scroll'));
     }
