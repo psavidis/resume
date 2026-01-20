@@ -464,6 +464,10 @@ body.pdf-mode .edu-icon {
     width: 100%;
 }
 
+.work-experience:hover {
+    cursor: pointer;
+}
+
 .title {
     font-weight: bold;
 }
@@ -1343,6 +1347,33 @@ button.dark-mode i {
 
 .project-li:hover {
     background-color: #e9e9e9;
+}
+
+.project-li.highlight-pulse::after {
+    content: '';
+    display: block;
+    position: absolute;
+    top: 40%;
+    right: 8px;
+    width: 10px;
+    height: 10px;
+    background-color: red;
+    border-radius: 50%;
+    opacity: 1;
+    animation: pulseFade 5s forwards;
+}
+
+.dark-mode .project-li.highlight-pulse::after {
+    background-color: rgb(255, 199, 0);
+}
+
+
+@keyframes pulseFade {
+    0%   { transform: scale(1); opacity: 1; }
+    25%  { transform: scale(1.5); opacity: 1; }
+    50%  { transform: scale(1); opacity: 1; }
+    75%  { transform: scale(1.5); opacity: 1; }
+    100% { transform: scale(1); opacity: 0; } /* fade out at the end */
 }
 
 .project-title {
