@@ -784,16 +784,9 @@
     }
 
     function highlightPulseElement(projectElement) {
-        // Highlight the project element and remove once animation finished
         projectElement.classList.remove('highlight-pulse');
-        void projectElement.offsetWidth;
+        void projectElement.offsetWidth; // force reflow
         projectElement.classList.add('highlight-pulse');
-
-        projectElement.addEventListener(
-            'animationend',
-            () => projectElement.classList.remove('highlight-pulse'),
-            { once: true }
-        );
     }
 
     function findProjectElementByName(projectName) {
