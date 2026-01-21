@@ -761,7 +761,11 @@
                     lastProjectElement = projectElement;
                 });
 
-                scrollToElementBottom(lastProjectElement);
+                // avoid scrolling for company cases with no projects (e.g soldier)
+                if (companyΤοProjectNames.length > 0) {
+                    scrollToElementBottom(lastProjectElement);
+                }
+
             });
 
             experienceList.appendChild(li);
