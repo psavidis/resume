@@ -117,7 +117,7 @@ It's a living project that evolves with me, reflecting my journey in a creative 
 
 ## Copyright
 
-Copyright © 2025 Petros Savidis. All rights reserved.
+Copyright © 2026 Petros Savidis. All rights reserved.
 
 This repo is public for sharing/viewing only. Not open source. Please don’t copy or reuse without permission.
 
