@@ -2465,7 +2465,7 @@ body.search-active .project-badges-list {
     text-transform: uppercase;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.25), inset 0 0 3px rgba(255, 255, 255, 0.3);
     border-radius: 999px;
-    transition: transform 0.15s ease, box-shadow 0.15s ease;
+    /*transition: transform 0.15s ease, box-shadow 0.15s ease;*/
     font-weight: 700;
 }
 
@@ -2508,8 +2508,8 @@ body.search-active .project-badges-list {
 }
 
 .project-badge-lead:hover {
-    transform: scale(1.06);
-    box-shadow: 0 0 8px rgba(110, 150, 230, 0.4), inset 0 0 3px rgba(255,255,255,0.1);
+    /*transform: scale(1.06);*/
+    /*box-shadow: 0 0 8px rgba(110, 150, 230, 0.4), inset 0 0 3px rgba(255,255,255,0.1);*/
 }
 
 .project-badge-architecture {
@@ -2528,8 +2528,8 @@ body.search-active .project-badges-list {
 }
 
 .project-badge-architecture:hover {
-    transform: scale(1.06);
-    box-shadow: 0 0 8px rgba(140, 110, 240, 0.4), inset 0 0 3px rgba(255,255,255,0.1);
+    /*transform: scale(1.06);*/
+    /*box-shadow: 0 0 8px rgba(140, 110, 240, 0.4), inset 0 0 3px rgba(255,255,255,0.1);*/
 }
 
 .dark-mode .project-badge-architecture {
@@ -2544,8 +2544,8 @@ body.search-active .project-badges-list {
 }
 
 .dark-mode .project-badge-architecture:hover {
-    transform: scale(1.06);
-    box-shadow: 0 0 10px rgba(215, 180, 255, 0.35), inset 0 0 3px rgba(255,255,255,0.1);
+    /*transform: scale(1.06);*/
+    /*box-shadow: 0 0 10px rgba(215, 180, 255, 0.35), inset 0 0 3px rgba(255,255,255,0.1);*/
 }
 
 .dark-mode .project-badge-open-source {
@@ -2581,8 +2581,8 @@ body.search-active .project-badges-list {
 }
 
 .project-badge-project-management:hover {
-    transform: scale(1.06);
-    box-shadow: 0 0 8px rgba(120, 150, 180, 0.4), inset 0 0 3px rgba(255,255,255,0.1);
+    /*transform: scale(1.06);*/
+    /*box-shadow: 0 0 8px rgba(120, 150, 180, 0.4), inset 0 0 3px rgba(255,255,255,0.1);*/
 }
 
 .dark-mode .project-badge-project-management {
@@ -2597,8 +2597,8 @@ body.search-active .project-badges-list {
 }
 
 .dark-mode .project-badge-project-management:hover {
-    transform: scale(1.06);
-    box-shadow: 0 0 10px rgba(160, 200, 240, 0.35), inset 0 0 3px rgba(255,255,255,0.1);
+    /*transform: scale(1.06);*/
+    /*box-shadow: 0 0 10px rgba(160, 200, 240, 0.35), inset 0 0 3px rgba(255,255,255,0.1);*/
 }
 
 .project-badge-mentoring {
@@ -2617,8 +2617,8 @@ body.search-active .project-badges-list {
 }
 
 .project-badge-mentoring:hover {
-    transform: scale(1.06);
-    box-shadow: 0 0 8px rgba(100, 180, 180, 0.4), inset 0 0 3px rgba(255,255,255,0.1);
+    /*transform: scale(1.06);*/
+    /*box-shadow: 0 0 8px rgba(100, 180, 180, 0.4), inset 0 0 3px rgba(255,255,255,0.1);*/
 }
 
 .dark-mode .project-badge-mentoring {
@@ -2633,8 +2633,8 @@ body.search-active .project-badges-list {
 }
 
 .dark-mode .project-badge-mentoring:hover {
-    transform: scale(1.06);
-    box-shadow: 0 0 10px rgba(120, 180, 180, 0.35), inset 0 0 3px rgba(255,255,255,0.1);
+    /*transform: scale(1.06);*/
+    /*box-shadow: 0 0 10px rgba(120, 180, 180, 0.35), inset 0 0 3px rgba(255,255,255,0.1);*/
 }
 
 .project-badge-extreme {
@@ -2653,8 +2653,8 @@ body.search-active .project-badges-list {
 }
 
 .project-badge-extreme:hover {
-    transform: scale(1.06);
-    box-shadow: 0 0 8px rgba(255, 150, 150, 0.4), inset 0 0 3px rgba(255,255,255,0.1);
+    /*transform: scale(1.06);*/
+    /*box-shadow: 0 0 8px rgba(255, 150, 150, 0.4), inset 0 0 3px rgba(255,255,255,0.1);*/
 }
 
 .dark-mode .project-badge-extreme {
@@ -2669,8 +2669,8 @@ body.search-active .project-badges-list {
 }
 
 .dark-mode .project-badge-extreme:hover {
-    transform: scale(1.06);
-    box-shadow: 0 0 15px rgba(255, 102, 204, 0.7), inset 0 0 6px rgba(255, 255, 255, 0.1);
+    /*transform: scale(1.06);*/
+    /*box-shadow: 0 0 15px rgba(255, 102, 204, 0.7), inset 0 0 6px rgba(255, 255, 255, 0.1);*/
 }
 
 .project-badge-research {
@@ -2688,8 +2688,8 @@ body.search-active .project-badges-list {
 }
 
 .project-badge-research:hover {
-    transform: scale(1.06);
-    box-shadow: 0 0 8px rgba(90, 140, 60, 0.4), inset 0 0 3px rgba(255, 255, 255, 0.1);
+    /*transform: scale(1.06);*/
+    /*box-shadow: 0 0 8px rgba(90, 140, 60, 0.4), inset 0 0 3px rgba(255, 255, 255, 0.1);*/
 }
 
 .dark-mode .project-badge-research {
@@ -2704,8 +2704,8 @@ body.search-active .project-badges-list {
 }
 
 .dark-mode .project-badge-research:hover {
-    transform: scale(1.06);
-    box-shadow: 0 0 15px rgba(70, 120, 40, 0.6), inset 0 0 8px rgba(255, 255, 255, 0.1); /* Soft glow effect on hover in dark mode */
+    /*transform: scale(1.06);*/
+    /*box-shadow: 0 0 15px rgba(70, 120, 40, 0.6), inset 0 0 8px rgba(255, 255, 255, 0.1); !* Soft glow effect on hover in dark mode *!*/
 }
 
 .project-badge-internship {
@@ -2724,8 +2724,8 @@ body.search-active .project-badges-list {
 }
 
 .project-badge-internship:hover {
-    transform: scale(1.06);
-    box-shadow: 0 0 8px rgba(120, 135, 255, 0.4), inset 0 0 3px rgba(255, 255, 255, 0.1);
+    /*transform: scale(1.06);*/
+    /*box-shadow: 0 0 8px rgba(120, 135, 255, 0.4), inset 0 0 3px rgba(255, 255, 255, 0.1);*/
 }
 
 .dark-mode .project-badge-internship {
@@ -2740,8 +2740,8 @@ body.search-active .project-badges-list {
 }
 
 .dark-mode .project-badge-internship:hover {
-    transform: scale(1.06);
-    box-shadow: 0 0 15px rgba(106, 142, 201, 0.6), inset 0 0 8px rgba(255, 255, 255, 0.1);
+    /*transform: scale(1.06);*/
+    /*box-shadow: 0 0 15px rgba(106, 142, 201, 0.6), inset 0 0 8px rgba(255, 255, 255, 0.1);*/
 }
 
 .project-badge-impact {
@@ -2760,7 +2760,7 @@ body.search-active .project-badges-list {
 }
 
 .project-badge-impact:hover {
-    transform: scale(1.05);
+    /*transform: scale(1.05);*/
     box-shadow: 0 0 6px rgba(214, 178, 121, 0.35), inset 0 0 2px rgba(255, 255, 255, 0.1);
 }
 
@@ -2776,8 +2776,8 @@ body.search-active .project-badges-list {
 }
 
 .dark-mode .project-badge-impact:hover {
-    transform: scale(1.05);
-    box-shadow: 0 0 8px rgba(158, 133, 93, 0.5), inset 0 0 3px rgba(255, 255, 255, 0.08);
+    /*transform: scale(1.05);*/
+    /*box-shadow: 0 0 8px rgba(158, 133, 93, 0.5), inset 0 0 3px rgba(255, 255, 255, 0.08);*/
 }
 
 .project-badge-endurance {
@@ -2795,8 +2795,8 @@ body.search-active .project-badges-list {
 }
 
 .project-badge-endurance:hover {
-    transform: scale(1.06);
-    box-shadow: 0 0 8px rgba(60, 60, 150, 0.4), inset 0 0 3px rgba(255, 255, 255, 0.1);
+    /*transform: scale(1.06);*/
+    /*box-shadow: 0 0 8px rgba(60, 60, 150, 0.4), inset 0 0 3px rgba(255, 255, 255, 0.1);*/
 }
 
 .dark-mode .project-badge-endurance {
@@ -2811,8 +2811,8 @@ body.search-active .project-badges-list {
 }
 
 .dark-mode .project-badge-endurance:hover {
-    transform: scale(1.06);
-    box-shadow: 0 0 6px rgba(94, 94, 241, 0.5), inset 0 0 2px rgba(255, 255, 255, 0.05);
+    /*transform: scale(1.06);*/
+    /*box-shadow: 0 0 6px rgba(94, 94, 241, 0.5), inset 0 0 2px rgba(255, 255, 255, 0.05);*/
 }
 
 
@@ -2832,8 +2832,8 @@ body.search-active .project-badges-list {
 }
 
 .project-badge-execution:hover {
-    transform: scale(1.04);
-    box-shadow: 0 0 6px rgba(0, 0, 0, 0.15), inset 0 0 2px rgba(255, 255, 255, 0.05);
+    /*transform: scale(1.04);*/
+    /*box-shadow: 0 0 6px rgba(0, 0, 0, 0.15), inset 0 0 2px rgba(255, 255, 255, 0.05);*/
 }
 
 .dark-mode .project-badge-execution {
@@ -2848,8 +2848,8 @@ body.search-active .project-badges-list {
 }
 
 .dark-mode .project-badge-execution:hover {
-    transform: scale(1.04);
-    box-shadow: 0 0 8px rgba(255, 255, 255, 0.15), inset 0 0 3px rgba(255, 255, 255, 0.1);
+    /*transform: scale(1.04);*/
+    /*box-shadow: 0 0 8px rgba(255, 255, 255, 0.15), inset 0 0 3px rgba(255, 255, 255, 0.1);*/
 }
 
 
@@ -2870,8 +2870,8 @@ body.search-active .project-badges-list {
 }
 
 .project-badge-consulting:hover {
-    transform: scale(1.04);
-    box-shadow: 0 0 6px rgba(0, 0, 0, 0.15), inset 0 0 2px rgba(255, 255, 255, 0.05);
+    /*transform: scale(1.04);*/
+    /*box-shadow: 0 0 6px rgba(0, 0, 0, 0.15), inset 0 0 2px rgba(255, 255, 255, 0.05);*/
 }
 
 .dark-mode .project-badge-consulting {
@@ -2886,8 +2886,8 @@ body.search-active .project-badges-list {
 }
 
 .dark-mode .project-badge-consulting:hover {
-    transform: scale(1.04);
-    box-shadow: 0 0 8px rgba(255, 255, 255, 0.15), inset 0 0 3px rgba(255, 255, 255, 0.1);
+    /*transform: scale(1.04);*/
+    /*box-shadow: 0 0 8px rgba(255, 255, 255, 0.15), inset 0 0 3px rgba(255, 255, 255, 0.1);*/
 }
 
 .project-badge-product {
@@ -2905,8 +2905,8 @@ body.search-active .project-badges-list {
 }
 
 .project-badge-product:hover {
-    transform: scale(1.04);
-    box-shadow: 0 0 6px rgba(0, 0, 0, 0.15), inset 0 0 2px rgba(255, 255, 255, 0.05);
+    /*transform: scale(1.04);*/
+    /*box-shadow: 0 0 6px rgba(0, 0, 0, 0.15), inset 0 0 2px rgba(255, 255, 255, 0.05);*/
 }
 
 .dark-mode .project-badge-product {
@@ -2921,8 +2921,8 @@ body.search-active .project-badges-list {
 }
 
 .dark-mode .project-badge-product:hover {
-    transform: scale(1.04);
-    box-shadow: 0 0 15px rgba(130, 140, 255, 0.6), inset 0 0 6px rgba(255, 255, 255, 0.1);
+    /*transform: scale(1.04);*/
+    /*box-shadow: 0 0 15px rgba(130, 140, 255, 0.6), inset 0 0 6px rgba(255, 255, 255, 0.1);*/
 }
 
 /*Badge - Resilience */
@@ -2942,8 +2942,8 @@ body.search-active .project-badges-list {
 }
 
 .project-badge-resilience:hover {
-    transform: scale(1.04);
-    box-shadow: 0 0 6px rgba(0, 0, 0, 0.15), inset 0 0 2px rgba(255, 255, 255, 0.05);
+    /*transform: scale(1.04);*/
+    /*box-shadow: 0 0 6px rgba(0, 0, 0, 0.15), inset 0 0 2px rgba(255, 255, 255, 0.05);*/
 }
 
 /* Dark Mode */
@@ -2959,8 +2959,8 @@ body.search-active .project-badges-list {
 }
 
 .dark-mode .project-badge-resilience:hover {
-    transform: scale(1.06);
-    box-shadow: 0 0 12px rgba(100, 255, 230, 0.5), inset 0 0 6px rgba(255, 255, 255, 0.1);
+    /*transform: scale(1.06);*/
+    /*box-shadow: 0 0 12px rgba(100, 255, 230, 0.5), inset 0 0 6px rgba(255, 255, 255, 0.1);*/
 }
 
 /* Badges are current-highlighted with gold */
