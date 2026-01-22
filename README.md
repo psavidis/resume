@@ -16,8 +16,8 @@ This is the Github repository of my official resume. The code is used by a Githu
 
 - **Format Complexity**: I've used different templates each time I've been after a new business opportunity and it was a pain to keep them up to date.
 - **Template Limitations**: Free resume templates have content restrictions which didn't work well as my resume grew in size.
-- **Lack of Version Control**: Repetitive copy-pasting of content across multiple templates and versions of my resume has been a big pain.
-- **Format Dependency**: I have always been dependent on different tools to generate my resume. I wanted to have a single source of truth which i can maintain autonomously. 
+- **Lack of Version Control**: Repetitive copy-pasting of content across multiple templates and versions of my resume have been a big pain.
+- **Format Dependency**: I have always been dependent on different tools to generate my resume. I wanted to have a single source of truth which i can maintain _autonomously_. 
 
 But the best reasons of all are
 
@@ -41,7 +41,7 @@ My resume should support:
 - Git Support
 - Frontend Application using JS without a Backend
 - Github Pages Hosting
-- All Resume Data will be loaded by a JSON file
+- All Resume Data will be loaded by a `JSON` file
 
 ## Features
 
@@ -77,7 +77,7 @@ My resume should support:
 ### For Me as a Developer
 
 - **Git Integration**: The resume is versioned using git 🤘
-- **Data Separation**: The data is loaded from a JSON file and presented dynamically.
+- **Data Separation**: The data is loaded from a `JSON` file and presented dynamically.
   - Even my total experience is calculated on the fly 🙃
 - **Push Notifications**: I get push notifications for page views on my phone.
 - **Analytics**: I can track the user activity of my resume.
