@@ -76,13 +76,13 @@ h2 {
     border: 1px solid #ddd;
     border-radius: 8px;
     box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
-    transition: transform 0.3s ease, background 0.3s ease;
+    /* transition: transform 0.3s ease, background 0.3s ease; */
 }
 
 /* When a project has a currently highlighted result, scale it up a bit */
 .section ul li:hover,
 .section ul li:has(.current-highlight) {
-    transform: scale(1.03);
+    /*transform: scale(1.03);*/
     background: #e9f4ff;
 }
 
