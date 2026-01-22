@@ -570,6 +570,11 @@
         Object.entries(projectLinks).forEach(([key, link]) => {
             const projectButton = document.createElement('a');
 
+            // prevent the card from collapsing on button click by stop event propagation to parent
+            projectButton.addEventListener('click', (e) => {
+                e.stopPropagation();
+            });
+
             projectButton.classList.add('project-button');
             projectButton.textContent = key;
             projectButton.href = link || '#'; // Default to "#" if no URL provided
