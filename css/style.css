@@ -179,6 +179,11 @@ body.loaded #shortcut-hint {
     {
         background-color: #FFC107;
     }
+
+    .dark-mode .btn-hover-active
+    {
+        background: rgba(255, 0, 234, 0.38) !important;
+    }
 }
 
 #menu-toggle.active {
