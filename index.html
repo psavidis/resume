@@ -73,8 +73,17 @@
     <div id="topRightCorner" class="topRightCorner"></div>
 
     <div class="header">
-        <div class="profile-picture-container">
-            <img src="/resume/img/profile_picture.jpeg" alt="Profile Picture" class="profile-picture">
+        <div class="profile-wrapper">
+            <div class="profile-picture-container">
+                <video id="profile-video" playsinline>
+                    <source src="/video/profile-video.mp4" type="video/mp4" />
+                </video>
+                <img src="/resume/img/profile_picture.jpeg" alt="Profile Picture" class="profile-picture" id="profile-picture">
+            </div>
+            <!-- Speech Bubble -->
+            <div class="speech-bubble" id="speech-bubble" style="opacity: 0;">
+                Click me!
+            </div>
         </div>
 
         <div class="profile-info">
@@ -213,8 +222,6 @@
 
 <div class="button-container">
 
-    <div id="drawer-hint" class="speech-bubble"></div>
-
     <button id="menu-toggle" class="btn mobile-only">
         <i id="toggle-icon" class="fas fa-bars"></i>
     </button>
@@ -276,6 +283,52 @@
         <li>Close Search</li>
     </ul>
 </div>
+
+<script>
+    const video = document.getElementById("profile-video");
+    const container = document.querySelector(".profile-picture-container");
+    const speechBubble = document.querySelector(".speech-bubble");
+    const profilePic = document.getElementById("profile-picture");
+
+    speechBubble.addEventListener("click", () => {
+        // Start transition
+        container.classList.add("zoomed");
+        speechBubble.style.display = "none";
+
+        // Hide picture, show video, play video
+        profilePic.style.opacity = "0";
+        video.style.display = "block";
+        video.muted = false;
+        video.play();
+
+        // When video ends, return to normal
+        video.onended = () => {
+            container.classList.remove("zoomed");
+            video.style.display = "none";
+            profilePic.style.opacity = "1";
+        };
+    });
+
+
+    function playIntro() {
+        video.muted = false; // unmute the video
+        video.currentTime = 0;
+        video.play().then(() => {
+            profilePic.style.opacity = 0;
+            speechBubble.style.display = "none"; // Hide the speech bubble after click
+        }).catch(err => {
+            console.error("Autoplay failed:", err);
+        });
+    }
+
+    speechBubble.addEventListener("click", playIntro);
+
+    video.addEventListener("ended", () => {
+        profilePic.style.opacity = 1;
+    });
+
+</script>
+
 
 <script>
     const toggleBtn = document.getElementById('menu-toggle');
@@ -1312,6 +1365,19 @@
     function hideSearchBar() {
         const searchBar = document.getElementById('search-bar');
         searchBar.style.display = 'none';
+    }
+
+    function hideProfilePictureBubble() {
+        const bubble = document.querySelector('.speech-bubble');
+        bubble.style.opacity = '0';
+    }
+
+    function showProfilePictureBubble(delay) {
+        setTimeout(() => {
+            const bubble = document.querySelector('.speech-bubble');
+            bubble.style.transition = 'opacity 0.5s ease';
+            bubble.style.opacity = '1';
+        }, delay); // Match the duration of the transition
     }
 
     function hideProjects() {
@@ -2696,6 +2762,7 @@
         showAnimationHint(6000, true);
     }).then(() => {
         removeAllSkeletons(skeletons, 700);
+        showProfilePictureBubble(700);
     });
 
 </script>
