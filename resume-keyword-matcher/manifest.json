@@ -1,0 +1,14 @@
+{
+  "manifest_version": 3,
+  "name": "Resume Keyword Matcher",
+  "version": "1.0",
+  "description": "Matches resume keywords with LinkedIn job descriptions.",
+  "permissions": ["scripting", "activeTab"],
+  "host_permissions": ["https://raw.githubusercontent.com/*"],
+  "content_scripts": [
+    {
+      "matches": ["*://*.linkedin.com/jobs/*"],
+      "js": ["matcher.js"]
+    }
+  ]
+}
