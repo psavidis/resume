@@ -218,6 +218,7 @@
     <button id="menu-toggle" class="btn mobile-only">
         <i id="toggle-icon" class="fas fa-bars"></i>
     </button>
+
     <div class="button-group">
         <button id="email-btn" class="btn"><i class="fas fa-envelope"></i></button>
         <button id="phoneButton" class="btn"><i class="fas fa-phone-alt"></i></button>
@@ -229,6 +230,12 @@
         <button id="toggle-search" class="btn toggle-button"><i class="fas fa-search"></i></button>
         <button id="dark-mode-toggle" class="btn"><i id="mode-icon" class="fas fa-moon"></i></button>
         <button id="microphone-btn" class="btn"><i class="fas fa-microphone"></i></button>
+    </div>
+
+    <div class="language-wrapper">
+        <button id="language-btn" class="btn">
+            <i class="fas fa-globe"></i>
+        </button>
     </div>
 
     <div id="overlay">
@@ -275,6 +282,19 @@
         <li>Down</li>
         <li>Close Search</li>
     </ul>
+</div>
+
+<div id="lang-overlay" class="lang-overlay hidden"></div>
+
+<div id="lang-modal" class="lang-modal hidden">
+
+    <button class="lang-item" data-lang="en">
+        <img id="lang-en" src="img/flag-en.png" alt="English">
+    </button>
+
+    <button class="lang-item lang-attic" data-lang="attic">
+        <img id="lang-attic" src="img/flag-attic.png" alt="Attic Greek">
+    </button>
 </div>
 
 <script>
@@ -630,6 +650,7 @@
             configureEmail(data);
             configureLinkedin(data);
             configureGithubButton();
+            configureLanguageButton();
 
             configureSummaryButtonHoverEffects();
 
@@ -1763,6 +1784,44 @@
             const target = next || allHighlights[0];
             swapHighlightAndScroll(current, target);
         };
+    }
+
+    function configureLanguageButton() {
+        const langBtn = document.getElementById("language-btn");
+        const modal = document.getElementById("lang-modal");
+        const overlay = document.getElementById("lang-overlay");
+
+        function openLang() {
+            modal.classList.remove("hidden");
+            overlay.classList.remove("hidden");
+        }
+
+        function closeLang() {
+            modal.classList.add("hidden");
+            overlay.classList.add("hidden");
+        }
+
+        langBtn.addEventListener("click", openLang);
+        overlay.addEventListener("click", closeLang);
+
+        modal.querySelectorAll(".lang-item").forEach(item => {
+            item.addEventListener("click", () => {
+                const lang = item.dataset.lang;
+
+                let targetUrl = "";
+
+                if (lang === "en") {
+                    targetUrl = "/resume";
+                }
+
+                if (lang === "attic") {
+                    targetUrl = "/resume/attic-index.html";
+                }
+
+                window.location.href = targetUrl;
+                closeLang();
+            });
+        });
     }
 
     function swapHighlightAndScroll(current, next) {
