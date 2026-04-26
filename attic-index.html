@@ -1,0 +1,2750 @@
+<!--
+  Created by Petros Savidis
+  Interactive Resume project started in April 2025
+  All rights reserved — not for reuse or redistribution.
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <meta name="author" content="Petros Savidis">
+
+    <!-- Open Graph meta tags -->
+    <meta property="og:title" content="Petros Savidis - Resume"/>
+    <meta property="og:description"
+          content="Dynamic, Interactive Resume of Peter Savidis. Crafted with love and passion."/>
+    <meta property="og:image" content="https://psavidis.github.io/resume/img/preview.png"/>
+    <meta property="og:url" content="https://psavidis.github.io/resume/"/>
+    <meta property="og:type" content="website"/>
+
+    <title></title>
+
+    <!-- Icon -->
+    <link rel="icon" href="/resume/img/icon.png" type="image/png">
+
+    <!-- Styles -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
+
+    <link href="css/style.css" rel="stylesheet">
+
+    <!-- JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.2/html2pdf.bundle.js"></script>
+
+    <!-- Analytics -->
+    <script>
+
+        function shouldTrack() {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get('no-track') !== 'true';
+        }
+
+        function loadAnalytics() {
+            if (!shouldTrack()) {
+                return;
+            }
+
+            (function(c,l,a,r,i,t,y){
+                c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+                t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+                y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+            })(window, document, "clarity", "script", "ri7umniw4o");
+        }
+
+        loadAnalytics();
+    </script>
+
+</head>
+<body id="page-top">
+
+<div class="search-container">
+    <input type="text" id="search-bar" class="search-bar" placeholder="Search Keywords in Projects..."
+           oninput="searchResume()" autocomplete="off"/>
+    <div class="arrows-container">
+        <i id="arrowUp" class="fas fa-chevron-up arrow-up"></i>
+        <i id="arrowDown" class="fas fa-chevron-down arrow-down"></i>
+    </div>
+</div>
+
+<div class="container">
+
+    <div id="topRightCorner" class="topRightCorner"></div>
+
+    <div class="header">
+        <div class="profile-picture-container">
+            <img src="/resume/img/profile_picture.jpeg" alt="Profile Picture" class="profile-picture">
+        </div>
+
+        <div class="profile-info">
+            <h1 class="profile-info-name" id="myNameTitle"></h1>
+            <p class="profile-info-email" id="pdfEmailHeader"></p>
+            <p class="profile-info-linkedin" id="linkedInHeader"></p>
+
+            <div class="live-resume">
+                <div class="live-resume-url">psavidis.github.io/resume</div>
+                <img src="/resume/img/qr-code.png" alt="QR Code" class="live-resume-qr">
+            </div>
+        </div>
+    </div>
+
+    <p id="summary" class="profile-title"></p>
+    <h2>Σύνοψις</h2>
+    <div class="summary-all">
+        <p id="summary-intro">
+            Βίος δυναμικός, ἐξ ἀποθετηρίου καὶ κώδικος ἀρχόμενος
+<!--            <span class="liveSummary">Dynamic | Git-powered | Code-driven</span>-->
+<!--            <span class="pdfSummary hidden">PDF</span> version of my resume.-->
+<!--            <span class="pdfSummary hidden">For the live, coded experience, visit the link or scan the QR code</span>-->
+        </p>
+        <div id="summary-instructions">
+            <ul>
+                <li><b>Κοινωνεῖτε</b> μοι δι᾽ ἐπιστολῆς
+                </li>
+                <li>Βίβλον βίου <b>Kατέβαλε</b></li>
+                <li><b>Ζήτει</b> τὰ ἔργα μου διὰ λέξεων</li>
+            </ul>
+        </div>
+        <p id="summary-free">Ἔξω τοῦ ἔργου μουσικῇ, φιλοσοφίᾳ, ὁδοιπορίαις καὶ κολυμβήσει τέρπομαι
+            <br>
+
+            <span class="fun-fact">Ἄξιον ἐστὶ γνῶναι:</span>
+            <span class="fun-fact-text">Διπολίτης ἐστίν</span>
+            <span class="emoji-flags">
+                <img src="img/flag_gr.png" alt="GR">
+                <img src="img/flag_au.png" alt="AU">
+            </span> ️
+        </p>
+    </div>
+
+    <div class="section" id="experience">
+        <h2 id="experienceTitle">Πείρα</h2>
+        <ul id="experience-list"></ul>
+    </div>
+
+    <div class="section" id="Projects">
+        <h2>Ἐγχειρήματα</h2>
+        <ul id="projects-list"></ul>
+    </div>
+
+    <div class="section" id="education">
+        <h2>Παιδεία</h2>
+        <ul id="education-list"></ul>
+    </div>
+
+    <!-- Hidden contact form with animation -->
+    <div id="contact-form-container" style="display: none;">
+        <form id="contact-form" action="https://api.web3forms.com/submit" method="POST" autocomplete="on">
+
+            <!-- REQUIRED: Web3Forms access key -->
+            <input type="hidden" name="access_key" value="fb378ea5-c240-451b-bc68-52b3ce5696f0">
+
+            <!-- Optional: Redirect URL after success -->
+            <input type="hidden" name="redirect" value="https://web3forms.com/success">
+
+            <div class="email-display">
+                <label for="yourEmail"><b>To:</b></label>
+                <input id="yourEmail" type="text" value="peter.savidis1@gmail.com" readonly/> <!-- Greyed-out input -->
+                <button id="copyButton" type="button" onclick="copyEmail()">Ἀντίγραφον</button>
+            </div>
+
+            <div class="form-group">
+                <label id="form-name">Ὄνομα
+                    <input type="text" id="name" name="name" required autocomplete="name">
+                </label>
+            </div>
+
+            <div class="form-group">
+                <label id="form-email">Ταχυδρομεῖον
+                    <input type="email" id="email" name="email" required autocomplete="email">
+                </label>
+            </div>
+
+            <div class="form-group">
+                <label id="form-message">Μῆνυμα
+                    <textarea id="message" name="message" required></textarea>
+                </label>
+            </div>
+
+            <button type="submit" class="submit-button">Πέμψον ἄγγελον</button>
+
+        </form>
+
+        <div id="loading-message" style="display: none;">
+            <p>O λόγος πέμπεται...</p>
+        </div>
+
+        <div id="error-message" style="display: none;">
+            <p>Σφάλμα ἐγένετο· πάλιν πειρῶ</p>
+        </div>
+
+        <div id="thank-you-message">
+            <h2>Εὖ γε</h2>
+            <p>O λόγος ἀπεστάλη· ἀποκρινοῦμαι τάχιον</p>
+        </div>
+    </div>
+    <div id="shortcuts">
+        <h2>Keyboard Shortcuts</h2>
+        <ul>
+            <li id="li-search-projects"></li>
+            <li id="li-download-resume"></li>
+            <li id="li-send-email"></li>
+            <li id="li-open-linkedin"></li>
+            <li id="li-open-github"></li>
+            <li id="li-open-location"></li>
+            <li id="li-toggle-dark-mode"></li>
+            <li id="li-search-results"></li>
+        </ul>
+    </div>
+
+    <div class="resume-version"></div>
+</div>
+
+<footer>
+    <p id="copyright"></p>
+</footer>
+
+<div id="shortcut-hint">
+    <span id="press-shortcuts"></span>
+</div>
+
+<div class="button-container">
+
+    <div id="drawer-hint" class="speech-bubble"></div>
+
+    <button id="menu-toggle" class="btn mobile-only">
+        <i id="toggle-icon" class="fas fa-bars"></i>
+    </button>
+    <div class="button-group">
+        <button id="email-btn" class="btn"><i class="fas fa-envelope"></i></button>
+        <button id="phoneButton" class="btn"><i class="fas fa-phone-alt"></i></button>
+        <button id="location-btn" class="btn"><i class="fas fa-map-marker-alt"></i></button>
+        <button id="linkedin-btn" class="btn"><i class="fab fa-linkedin-in"></i></button>
+        <button id="github-btn" class="btn"><i class="fab fa-github"></i></button>
+        <button id="blog-btn" class="btn"><i class="fas fa-blog"></i></button>
+        <button id="pdf-btn" class="btn"><i class="fas fa-file-pdf"></i></button>
+        <button id="toggle-search" class="btn toggle-button"><i class="fas fa-search"></i></button>
+        <button id="dark-mode-toggle" class="btn"><i id="mode-icon" class="fas fa-moon"></i></button>
+        <button id="microphone-btn" class="btn"><i class="fas fa-microphone"></i></button>
+    </div>
+
+    <div id="overlay">
+        <div id="circle"></div>
+        <div id="phone-message">Ἐὰν βούλῃ διαλεχθῆναι, πέμψον μοι ἐπιστολήν ἵνα ὁρίσωμεν καιρὸν διαλέξεως.
+        </div>
+    </div>
+</div>
+
+<div id="voice-command-hint" style="display:none">
+    <strong>💬 Voice Commands </strong>
+    <br/><br/>
+
+    <li>Download Resume</li>
+    <li>Toggle Dark Mode</li>
+    <br/>
+
+    <strong>⌨️ Keyboard</strong>
+    <ul style="margin:0; padding-left: 1rem;">
+        <li>Open Shortcuts</li>
+        <li>Close Shortcuts</li>
+    </ul>
+    <br/>
+
+    <strong>✉️ Email</strong>
+    <ul style="margin:0; padding-left: 1rem;">
+        <li>Send Email</li>
+        <li>Close Email</li>
+    </ul>
+    <br/>
+
+    <strong>🔗 Links</strong>
+    <ul style="margin:0; padding-left: 1rem;">
+        <li>Open LinkedIn</li>
+        <li>Open GitHub</li>
+    </ul>
+
+    <br/>
+    <strong>🔎 Search Mode </strong>
+    <ul style="margin:0; padding-left: 1rem;">
+        <li>Search "{Keyword}"</li>
+        <li>Up</li>
+        <li>Down</li>
+        <li>Close Search</li>
+    </ul>
+</div>
+
+<script>
+    const toggleBtn = document.getElementById('menu-toggle');
+    const buttonGroup = document.querySelector('.button-group');
+    const toggleIcon = document.getElementById('toggle-icon');
+
+    toggleBtn.addEventListener('click', function () {
+        toggleBtn.classList.toggle('active');
+        buttonGroup.classList.toggle('show');
+        toggleIcon.classList.toggle('fa-bars');
+        toggleIcon.classList.toggle('fa-times'); // Switch to ✖️ when open, ☰ when closed
+    });
+</script>
+<script>
+
+    // For production, always serve the static PDF file to avoid devices issues.
+    const productionMode = true;
+
+    // Functions: Main Features
+
+    function downloadPage() {
+
+        if (productionMode) {
+            downloadStaticPDF();
+            return;
+        }
+
+        showProfileInfo();
+
+        hideFormContainer();
+        hideSearchContainer();
+        hideButtonContainer();
+        hideTooltip();
+
+        showPdfSummary();
+
+        const resume = document.querySelector('#page-top');
+
+        if (!resume) {
+            console.error("Resume container not found!");
+            return;
+        }
+
+        resume.classList.add('pdf-mode');
+
+        const projectItems = document.querySelectorAll('.project-li');
+        const workExperience = document.querySelectorAll('.work-experience');
+
+        // customizeProjectPageBreaks(projectItems);
+        customizeWorkExperiencePageBreaks(workExperience);
+
+        const techUsed = document.querySelectorAll('.project-tech');
+        const projectDescriptions = document.querySelectorAll('.project-description');
+        const projectPoints = document.querySelectorAll('.project-points');
+        const projectButtons = document.querySelectorAll('.project-button');
+        const projectNotification = document.querySelectorAll('.project-notification');
+
+        makeVisible(projectItems);
+        makeVisible(techUsed);
+        makeVisible(projectDescriptions);
+        makeVisible(projectPoints);
+        makeButtonsVisible(projectButtons);
+        makeButtonsVisible(projectNotification, 'flex');
+
+        makeBadgesVisible();
+
+        hideShortcuts();
+
+        // Save the original styles
+        const container = document.querySelector('.container');
+        const originalHeight = container.style.height;
+        const originalMaxHeight = container.style.maxHeight;
+        const originalOverflow = container.style.overflow;
+
+        container.style.height = 'auto';
+        container.style.maxHeight = 'none';
+        container.style.overflow = 'visible';
+
+        // Give the browser time to apply styles
+        setTimeout(() => {
+            html2pdf()
+                .from(resume)
+                .set({
+                    margin: 0,
+                    filename: 'resume-petros_savidis.pdf',
+                    pagebreak: {
+                        mode: ['css', 'legacy']  // must include 'css' so page-break styles are respected
+                        // after: '.page-break'
+                    },
+                    image: {type: 'jpeg', quality: 0.9},
+                    html2canvas: {
+                        scale: 2,
+                        useCORS: true,
+                        logging: true,
+                        backgroundColor: '#ffffff',
+                        scrollY: 0
+                    },
+                    jsPDF: {unit: 'in', format: 'a4', orientation: 'portrait'}
+                })
+                .save()
+                .then(() => {
+                    // Disable scroll and height properties temporarily when the PDF button is clicked
+                    container.style.height = originalHeight;
+                    container.style.maxHeight = originalMaxHeight;
+                    container.style.overflow = originalOverflow;
+                })
+                .then(() => {
+                    // resume.classList.remove('pdf-mode');
+                    location.reload();
+                })
+                .catch(err => {
+                    console.error("PDF generation failed:", err);
+                    resume.classList.remove('pdf-mode');
+                });
+        }, 300); // give time for the style to apply
+    }
+
+    function downloadStaticPDF() {
+        const link = document.createElement('a');
+        link.href = 'resume-petros_savidis.pdf';  // Your PDF file
+        link.download = 'resume-petros_savidis.pdf'; // Suggested filename
+        document.body.appendChild(link);
+
+        // Simulate a user click to start the download
+        link.click();
+
+        // Give the browser a moment to trigger the download
+        setTimeout(() => {
+            location.reload();
+        }, 500); // 0.5 second is enough here, because download already triggered
+
+        // Clean up
+        document.body.removeChild(link);
+    }
+
+    function searchResume() {
+        resetCurrentHighlight();
+        let input = document.getElementById('search-bar').value.toLowerCase();
+        const trimmedInput = input.trim();
+
+        let sections = document.querySelectorAll('#Projects'); // Assuming sections are in the 'container' class
+
+        // Add a class to disable animations during search
+        document.body.classList.add('searching');
+
+        sections.forEach(section => {
+            removeHighlights(section);
+
+            if (input === '') {
+                section.style.display = 'block'; // Show the section if search input is empty
+                hideArrowsContainer();
+                return;
+            }
+
+            let textContent = section.textContent || section.innerText;
+
+            if (sectionContainsTokens(textContent, trimmedInput)) {
+                // section.style.display = 'block'; // Show the section if it contains the search term
+
+                const tokens = getTokens(trimmedInput);
+                highlightText(section, tokens); // Highlight the matching text
+
+                const firstHighlight = findNextHighlightedElement();
+                if (firstHighlight) {
+                    firstHighlight.classList.replace('highlight', 'current-highlight');
+                    scrollToElementWithSearchBarOnTop(firstHighlight);
+                }
+            }
+        });
+
+        configureArrowVisibility();
+
+        // Remove the class to re-enable animations after a short delay
+        setTimeout(() => {
+            document.body.classList.remove('searching');
+        }, 1000); // Timeout to allow changes to take place before animations are re-enabled
+    }
+
+    function sectionContainsTokens(textContent, trimmedInput) {
+        const tokens = getTokens(trimmedInput);
+        const text = textContent.toLowerCase();
+
+        return tokens.some(token => text.includes(token));
+    }
+
+    function getTokens(query) {
+        const tokens = query.split(/\s+/);
+        return [...new Set(tokens)];
+    }
+
+    function configureArrowVisibility() {
+        if (hasHighlights()) {
+            showArrowsContainer();
+            return;
+        }
+
+        hideArrowsContainer();
+    }
+
+    function hasHighlights() {
+        const currentHighlight = findCurrentHighlightedElement();
+
+        return currentHighlight !== null;
+    }
+
+    function findAllHighlights() {
+        return Array.from(document.querySelectorAll('.highlight'));
+    }
+
+    function findNextHighlightedElement(current) {
+        const allHighlights = findAllHighlights();
+
+        if (allHighlights.length === 0) return null;
+        if (allHighlights.length === 1) return allHighlights[0];
+
+        if (!current || !allHighlights.includes(current)) {
+            return allHighlights[0];
+        }
+
+        const index = allHighlights.indexOf(current);
+        return allHighlights[(index + 1) % allHighlights.length];
+    }
+
+    function findPreviousHighlightedElement(current) {
+        const allHighlights = findAllHighlights();
+
+        if (allHighlights.length === 0) return null;
+        if (allHighlights.length === 1) return allHighlights[0];
+
+        if (!current || !allHighlights.includes(current)) {
+            return allHighlights[allHighlights.length - 1];
+        }
+
+        const index = allHighlights.indexOf(current);
+        return allHighlights[(index - 1 + allHighlights.length) % allHighlights.length];
+    }
+
+    function findCurrentHighlightedElement() {
+        return document.querySelector('.current-highlight');
+    }
+
+    // Functions: Create elements
+
+    function createCompanyImg(item) {
+        const img = document.createElement('img');
+
+        img.src = item.companyLogo;
+        img.classList.add('project-image');
+        img.style.width = '40px';
+        img.style.height = '40px';
+        img.style.borderRadius = '50%';
+        img.style.marginRight = '10px';
+        img.style.verticalAlign = 'middle';
+
+        const link = document.createElement('a');
+        link.href = item.companyLink || '#'; // Default to "#" if no URL provided
+
+        link.appendChild(img);
+
+        return link;
+    }
+
+    function createSchoolImg(item) {
+        const img = document.createElement('img');
+
+        img.src = item.schoolLogo;
+        img.classList.add('university-image');
+        img.style.width = '40px';
+        img.style.height = '40px';
+        img.style.borderRadius = '50%';
+        img.style.marginRight = '10px';
+        img.style.verticalAlign = 'middle';
+
+        const link = document.createElement('a');
+        link.href = item.schoolLink || '#'; // Default to "#" if no URL provided
+
+        link.appendChild(img);
+
+        return link;
+    }
+
+    function createProjectButtons(project) {
+        const projectLinks = project.links;
+
+        if (!projectLinks) {
+            return []; // No references to show
+        }
+
+        let result = [];
+
+        Object.entries(projectLinks).forEach(([key, link]) => {
+            const projectButton = document.createElement('a');
+
+            // prevent the card from collapsing on button click by stop event propagation to parent
+            projectButton.addEventListener('click', (e) => {
+                e.stopPropagation();
+            });
+
+            projectButton.classList.add('project-button');
+            projectButton.textContent = key;
+            projectButton.href = link || '#'; // Default to "#" if no URL provided
+            projectButton.target = '_blank'; // Open in new tab
+            projectButton.style.display = 'none';
+            projectButton.style.marginTop = '10px';
+            projectButton.style.marginRight = '10px'; // Add margin between buttons
+            projectButton.style.padding = '8px 12px';
+            projectButton.style.background = '#007BFF';
+            projectButton.style.color = 'white';
+            projectButton.style.textDecoration = 'none';
+            projectButton.style.borderRadius = '5px';
+            projectButton.style.fontSize = '11px';
+            projectButton.style.fontWeight = 'bold';
+            projectButton.style.textAlign = 'center';
+            projectButton.style.width = 'fit-content';
+            projectButton.style.transition = 'background 0.3s';
+
+            // Button hover effect
+            projectButton.addEventListener('mouseover', () => {
+                projectButton.style.background = '#0056b3';
+            });
+            projectButton.addEventListener('mouseout', () => {
+                projectButton.style.background = '#007BFF';
+            });
+
+            result.push(projectButton);
+        });
+
+        return result;
+    }
+
+    // Functions: Load Data / Populate
+
+    async function loadResumeData() {
+        try {
+            // const response = await fetch('data.json');
+            const response = await fetch('attic-greek-data.json');
+
+            if (!response.ok) throw new Error('Failed to fetch data');
+
+            const data = await response.json();
+
+            populateNameTitle(data);
+            populateTitle(data);
+
+            populateHeader(data);
+            populateWorkExperience(data);
+            populateProjects(data);
+            populateEducation(data);
+
+            // buttons
+            configureLocationButton(data);
+            configureLinkedinButton(data);
+            configureBlogButton();
+            configureEmail(data);
+            configureLinkedin(data);
+            configureGithubButton();
+
+            configureSummaryButtonHoverEffects();
+
+            // copyright
+            configureCopyright(data);
+        } catch (error) {
+            console.error('Error loading resume data:', error);
+        }
+    }
+
+    function populateNameTitle(data) {
+        document.getElementById("myNameTitle").textContent = data.name;
+    }
+
+    function populateTitle(data) {
+        document.title = data.name + " Resume";
+    }
+
+    function populateHeader(data) {
+        document.getElementById('name').textContent = data.name || 'Name not provided';
+
+        let fontSize = '13px';
+
+        let summary = document.getElementById('summary');
+        summary.textContent = data.summary || 'Summary not provided';
+        summary.style.textAlign = 'left';
+        summary.style.fontSize = fontSize;
+
+        let summaryIntro = document.getElementById('summary-intro');
+        summaryIntro.style.textAlign = 'left';
+        summaryIntro.style.fontSize = fontSize;
+
+        let summaryFree = document.getElementById('summary-free');
+        summaryFree.style.textAlign = 'left';
+        summaryFree.style.fontSize = fontSize;
+
+        let summaryInstructions = document.getElementById('summary-instructions');
+        summaryInstructions.style.textAlign = 'left';
+        summaryInstructions.style.fontSize = fontSize;
+    }
+
+    function populateWorkExperience(data) {
+        const experienceList = document.getElementById('experience-list');
+        experienceList.innerHTML = '';
+
+        if (!Array.isArray(data.workExperience)) {
+            experienceList.innerHTML = '<li>No experience data available</li>';
+            return;
+        }
+
+        const companyToProject = getCompanyToProjects(data);
+
+        data.workExperience = sortByField(data.workExperience, 'startDate', 'asc');
+
+        data.workExperience.forEach(item => {
+            const li = document.createElement('li');
+            li.classList.add('work-experience');
+
+            const workTitleAndImg = document.createElement('div');
+            workTitleAndImg.classList.add('work-title');
+
+            const companyImg = createCompanyImg(item);
+
+            const contentDiv = document.createElement('div');
+            contentDiv.classList.add('experience-content');
+
+            const titleDiv = document.createElement('div');
+            titleDiv.classList.add('title');
+
+            const roleSpan = document.createElement('span');
+            roleSpan.classList.add('role');
+            roleSpan.textContent = item.title || 'Position not provided';
+
+            const atSpan = document.createElement('span');
+            atSpan.classList.add('at-symbol');
+            atSpan.textContent = ' ἐν ';
+
+            const companySpan = document.createElement('span');
+            companySpan.classList.add('company');
+            companySpan.textContent = item.company || 'Company not provided';
+
+            titleDiv.appendChild(roleSpan);
+            titleDiv.appendChild(atSpan);
+            titleDiv.appendChild(companySpan);
+
+            // Info row: Dates on left, location + workMode on right
+            const infoRow = document.createElement('div');
+            infoRow.classList.add('info-row');
+
+            const leftInfo = document.createElement('div');
+            leftInfo.classList.add('left-info');
+            leftInfo.classList.add('calendar');
+            leftInfo.textContent = `${item.startDate || ''} – ${item.endDate || 'Present'}`;
+
+            const rightInfo = document.createElement('div');
+            rightInfo.classList.add('right-info');
+
+            if (item.location) {
+                const locationDiv = document.createElement('div');
+                locationDiv.classList.add('badge', 'location-badge');
+                locationDiv.textContent = item.location;
+                rightInfo.appendChild(locationDiv);
+            }
+
+            if (item.workMode) {
+                const workModeDiv = document.createElement('div');
+                workModeDiv.classList.add('badge', 'work-mode-badge', item.workMode.toLowerCase());
+                workModeDiv.textContent = item.workMode;
+                rightInfo.appendChild(workModeDiv);
+            }
+
+            infoRow.appendChild(leftInfo);
+            infoRow.appendChild(rightInfo);
+
+            contentDiv.appendChild(titleDiv);
+            contentDiv.appendChild(infoRow);
+
+            workTitleAndImg.appendChild(companyImg);
+            workTitleAndImg.appendChild(contentDiv);
+
+            li.appendChild(workTitleAndImg);
+
+            // Hook for linking experience to projects
+            li.addEventListener('click', () => {
+                clearProjectHighlights();
+                const companyΤοProjectNames = companyToProject[item.company] || [];
+
+                // console.log(companyΤοProjectNames);
+                let lastProjectElement;
+                companyΤοProjectNames.forEach(projectName => {
+                    const projectElement = findProjectElementByName(projectName);
+                    highlightPulseElement(projectElement);
+                    lastProjectElement = projectElement;
+                });
+
+                // avoid scrolling for company cases with no projects (e.g soldier)
+                if (companyΤοProjectNames.length > 0) {
+                    scrollToElementBottom(lastProjectElement);
+                }
+
+            });
+
+            experienceList.appendChild(li);
+        });
+
+        const totalXP = getTotalExperience(data.workExperience);
+        const formattedXP = formatTotalExperienceIntoYears(totalXP);
+
+        document.getElementById('experienceTitle').textContent = 'Πείρα (' + formattedXP + ')';
+    }
+
+    function clearProjectHighlights() {
+        document.querySelectorAll('#projects-list .highlight-pulse').forEach(el => {
+            el.classList.remove('highlight-pulse');
+        });
+    }
+
+    function highlightPulseElement(projectElement) {
+        projectElement.classList.remove('highlight-pulse');
+        void projectElement.offsetWidth; // force reflow
+        projectElement.classList.add('highlight-pulse');
+    }
+
+    function findProjectElementByName(projectName) {
+        const projectItems = document.querySelectorAll('#projects-list .project-li');
+
+        // split projectName into words
+        const nameWords = projectName.split(/\s+/).map(w => w.toLowerCase());
+
+        for (const li of projectItems) {
+            const projectNameEl = li.querySelector('.project-name');
+            if (!projectNameEl) continue;
+
+            // get all text from .word spans
+            const words = Array.from(projectNameEl.querySelectorAll('.word'))
+                .map(span => span.textContent.toLowerCase());
+
+            // check if every word in projectName is included in the DOM words in order
+            let match = true;
+            let index = 0;
+            for (const w of nameWords) {
+                // skip over any non-matching words in DOM
+                while (index < words.length && words[index] !== w) index++;
+                if (index === words.length) {
+                    match = false;
+                    break;
+                }
+                index++;
+            }
+
+            if (match) return li; // found the matching project-li
+        }
+
+        return null;
+    }
+
+    function isOpenSource(badge) {
+        return badge.textContent === 'open-source';
+    }
+
+    function appendBadge(badge, projectBadgesWrapper, projectName) {
+
+        const BADGE_TRANSLATIONS = {
+            product: "ΠΡΑΞΙΣ",
+            impact: "ΕΠΙΔΡΑΣΙΣ",
+            "project-management": "ΟΙΚΟΝΟΜΙΑ",
+            extreme: "ΣΦΟΔΡΟΤΗΣ",
+            resilience: "ΚΑΡΤΕΡΙΑ",
+            lead: "ΗΓΕΜΟΝΙΑ",
+            architecture: "ΑΡΧΙΤΕΚΤΟΝΙΚΗ ΔΙΑΤΑΞΙΣ",
+            mentoring: "ΚΑΘΟΔΗΓΗΣΙΣ",
+            execution: "ΕΚΤΕΛΕΣΙΣ",
+            research: "ΕΡΕΥΝΑ",
+            consulting: "ΣΥΜΒΟΥΛΗ",
+            internship: "ΜΑΘΗΤΕΙΑ"
+        };
+
+        if (isOpenSource(badge)) {
+            badge.textContent = "ΚΟΙΝΟΣ ΚΩΔΙΞ";
+            projectName.appendChild(badge);
+            return;
+        }
+
+        const key = badge.textContent;
+        const translated = BADGE_TRANSLATIONS[key];
+
+        if (translated) {
+            badge.textContent = translated;
+        }
+
+        projectBadgesWrapper.appendChild(badge);
+    }
+
+    function getCompanyLogoMap(data) {
+        const workExperience = data.workExperience;
+        const companyLogoMap = new Map();
+
+        workExperience.forEach(experience => {
+            if (experience.company && experience.companyLogo) {
+                companyLogoMap.set(experience.company, experience.companyLogo);
+            }
+        });
+
+        return companyLogoMap;
+    }
+
+    function getCompanyLogoUrl(data, company) {
+        const companyLogoMap = getCompanyLogoMap(data);
+        return companyLogoMap.get(company);
+    }
+
+    function getCompanyToProjects(data) {
+        const companyToProjectsMap = {};
+
+        // Loop over all projects
+        data.project.forEach(proj => {
+            const company = proj.company;
+            if (!companyToProjectsMap[company]) {
+                companyToProjectsMap[company] = [];
+            }
+            companyToProjectsMap[company].push(proj.name);
+        });
+
+        return companyToProjectsMap;
+    }
+
+    function populateProjects(data) {
+        const projectsList = document.getElementById('projects-list');
+        projectsList.innerHTML = '';
+
+        if (!Array.isArray(data.project)) {
+            projectsList.innerHTML = '<li>No projects data available</li>';
+            return;
+        }
+
+        data.project = sortByField(data.project, 'startDate', 'desc');
+
+        data.project.forEach(project => {
+            const li = document.createElement('li');
+            li.classList.add('project-li');
+            li.style.cursor = 'pointer';
+            li.style.padding = '12px';
+            li.style.border = '1px solid #ccc';
+            li.style.borderRadius = '8px';
+            li.style.marginBottom = '8px';
+            li.style.backgroundColor = '#f9f9f9';
+            li.style.transition = 'background-color 0.2s ease-in-out';
+            li.style.position = 'relative';  // Allow positioning of the badge
+
+            // Project name
+            const projectName = document.createElement('span');
+            projectName.textContent = project.name || 'Project not provided';
+            projectName.classList.add('project-name');
+
+            // Description
+            const projectDescription = document.createElement('p');
+            projectDescription.classList.add('project-description');
+            projectDescription.textContent = project.description || 'No description provided';
+            projectDescription.style.display = 'none';
+            projectDescription.style.fontSize = '14px';
+            projectDescription.style.color = '#444';
+            projectDescription.style.marginTop = '10px';
+            projectDescription.style.textAlign = 'left';
+
+            // Badges
+            const projectBadgesWrapper = document.createElement('div');
+            projectBadgesWrapper.classList.add('project-badges-list');
+            projectBadgesWrapper.style.display = 'none';
+
+            if (project.badges && Array.isArray(project.badges)) {
+                project.badges.forEach(badgeText => {
+                    const badge = document.createElement('span');
+                    badge.classList.add('project-badge');
+                    badge.classList.add('project-badge-' + badgeText.toLowerCase());
+                    badge.textContent = badgeText;
+
+                    appendBadge(badge, projectBadgesWrapper, projectName);
+                });
+            }
+
+            // Tools Used
+            const techUsed = document.createElement('p');
+            techUsed.classList.add('project-tech');
+            techUsed.innerHTML = project.techUsed ?
+                project.techUsed.map(word => `<span class="word">${word}</span>`).join(' ') : '';
+            techUsed.style.display = 'none';
+            techUsed.style.fontSize = '13px';
+            techUsed.style.fontStyle = 'italic';
+            techUsed.style.color = '#666';
+            techUsed.style.marginTop = '5px';
+            techUsed.style.textAlign = 'left';
+
+            // Points (bullet list)
+            const pointsList = document.createElement('ul');
+            pointsList.classList.add('project-points');
+
+            if (project.points && Array.isArray(project.points)) {
+                // Step 1: Parse the points to determine their levels
+                const parsedPoints = project.points.map(point => {
+                    const match = point.match(/^(-+)\s(.*)/); // Match leading dashes
+                    const level = match ? match[1].length : 0; // Determine the nesting level
+                    const text = match ? match[2] : point;    // Extract the sentence without the dashes
+                    return { level, text };
+                });
+
+                // Step 2: Create a function to build the nested list based on the parsed data
+                const buildList = (points) => {
+                    const stack = [{ list: pointsList }]; // Start with the main list
+
+                    points.forEach(({ level, text }) => {
+                        // If we are deeper in nesting, create new <ul> element
+                        while (stack.length <= level) {
+                            const parentLi = stack[stack.length - 1].list.lastElementChild; // Get last <li>
+                            const newUl = document.createElement('ul');
+                            parentLi.appendChild(newUl); // Append new <ul> to this <li>
+                            stack.push({ list: newUl }); // Add new <ul> to stack
+                        }
+
+                        // Pop up if we need to move back in nesting level
+                        while (stack.length > level + 1) {
+                            stack.pop();
+                        }
+
+                        // Create the <li> for the current point
+                        const li = document.createElement('li');
+                        li.classList.add('project-point-item');
+
+                        // Split the text into words and wrap each word in a <span>
+                        text.split(' ').forEach(word => {
+                            const span = document.createElement('span');
+                            span.classList.add('word');
+                            span.textContent = word;
+                            li.appendChild(span);
+                        });
+
+                        // Append the <li> to the current <ul> in the stack
+                        stack[stack.length - 1].list.appendChild(li);
+                    });
+                };
+
+                // Step 3: Build the list from the parsed data
+                buildList(parsedPoints);
+            }
+
+
+            const showProjectButtons = createProjectButtons(project);
+            const projectNotification = getProjectNotification(data, project);
+
+            const hasProjectButtons = showProjectButtons.length > 0;
+
+            // Toggle description/tech/points on click
+            li.addEventListener('click', (event) => {
+
+                li.classList.remove('highlight-pulse'); // remove any pulsing
+
+                // Avoid toggling if search is active
+                if (document.body.classList.contains('search-active')) return;
+
+                // Avoid toggling if user is selecting text
+                const selection = window.getSelection();
+                if (selection && selection.toString().length > 0) return;
+
+                const isVisible = projectDescription.style.display === 'block';
+                projectDescription.style.display = isVisible ? 'none' : 'block';
+                projectBadgesWrapper.style.display = isVisible ? 'none' : 'flex'; // badges toggle
+                pointsList.style.display = isVisible ? 'none' : 'block';
+                // techUsed.style.display = isVisible ? 'none' : 'block';
+
+                projectNotification.style.display = isVisible ? 'none' : 'flex';
+
+
+                if (hasProjectButtons) {
+                    showProjectButtons.forEach(button => {
+                        button.style.display = isVisible ? 'none' : 'inline-block';
+                    });
+                }
+            });
+
+            li.appendChild(projectName);
+            li.appendChild(projectDescription);
+            li.appendChild(pointsList);
+            li.appendChild(projectBadgesWrapper);
+            li.appendChild(document.createElement('br'));
+
+            let hasTechUsed = techUsed && techUsed.textContent.trim() !== "Tools:";
+
+            if (hasTechUsed) {
+                li.appendChild(techUsed);
+            }
+
+            if (hasProjectButtons) {
+                showProjectButtons.forEach(button => {
+                    li.appendChild(button);
+                });
+            }
+
+            li.appendChild(projectNotification);
+
+            projectsList.appendChild(li);
+        });
+    }
+
+    function getProjectNotification(data, project) {
+        const projectNotification = document.createElement('div');
+        projectNotification.classList.add('project-notification');
+        projectNotification.style.position = 'relative';  // Required for tooltip positioning
+
+        const companyLogoUrl = getCompanyLogoUrl(data, project.company);
+
+        // Add company logo badge
+        if (companyLogoUrl) {
+            const companyLogoBadge = document.createElement('div');
+            companyLogoBadge.classList.add('company-logo-badge');
+
+            const companyLogo = document.createElement('img');
+            companyLogo.src = companyLogoUrl;
+            companyLogo.alt = 'Company Logo';
+            companyLogo.classList.add('company-logo');
+            companyLogoBadge.appendChild(companyLogo);
+
+            projectNotification.appendChild(companyLogoBadge);
+        }
+
+        // Date range (start and end date)
+        if (project.startDate && project.endDate) {
+            const dateRange = document.createElement('span');
+
+            const startDate = project.startDate;
+            const endDate = project.endDate;
+
+            const dateText = `${startDate} - ${endDate}`;
+
+            dateRange.textContent = dateText;
+            dateRange.classList.add('project-date-range');
+
+            projectNotification.style.display = 'none';
+            projectNotification.appendChild(dateRange);
+
+            // Parse the dates and calculate the duration (months)
+            const durationInMonths = getDurationInMonths(startDate, endDate);
+            const durationText = formatDuration(durationInMonths);  // Assuming formatDuration is available
+
+            // Tooltip to show the project duration
+            const tooltip = document.createElement('div');
+            tooltip.classList.add('tooltip');
+            tooltip.textContent = `${durationText}`;
+            projectNotification.appendChild(tooltip);
+
+            // Show tooltip on hover
+            projectNotification.addEventListener('mouseenter', function () {
+                tooltip.style.opacity = '1'; // Make tooltip visible
+            });
+
+            // Hide tooltip when mouse leaves
+            projectNotification.addEventListener('mouseleave', function () {
+                tooltip.style.opacity = '0'; // Make tooltip invisible
+            });
+        }
+
+        return projectNotification;
+    }
+
+    // Helper function to get duration in months
+    function getDurationInMonths(startDate, endDate) {
+        const [startMonth, startYear] = startDate.split('-');
+        const [endMonth, endYear] = endDate === 'Present' ? [new Date().getMonth() + 1, new Date().getFullYear()] : endDate.split('-');
+
+        const start = new Date(startYear, startMonth - 1);
+        const end = new Date(endYear, endMonth - 1);
+
+        const durationInMonths = (end.getFullYear() - start.getFullYear()) * 12 + (end.getMonth() - start.getMonth());
+        return durationInMonths;
+    }
+
+    // Helper function to format the duration in "X years, Y months"
+    function formatDuration(durationInMonths) {
+        const years = Math.floor(durationInMonths / 12); // Get full years
+        const months = durationInMonths % 12; // Get remaining months
+
+        let formattedDuration = "";
+
+        if (years > 0) {
+            formattedDuration += `${years} year${years > 1 ? 's' : ''}`;
+        }
+
+        if (months > 0) {
+
+            if (formattedDuration !== "") {
+                formattedDuration += " ";
+            }
+
+            formattedDuration += `${months} month${months > 1 ? 's' : ''}`;
+        }
+
+        return formattedDuration || 'Less than a month'; // If there's no year or month, return "Less than a month"
+    }
+
+    function populateEducation(data) {
+        const educationList = document.getElementById('education-list');
+
+        if (!Array.isArray(data.education)) {
+            educationList.innerHTML = '<li>No education data available</li>';
+            return;
+        }
+
+        data.education.forEach(item => {
+            const li = document.createElement('li');
+            li.className = 'education-item';
+
+            // Create school icon
+            const schoolImg = createSchoolImg(item);
+
+            // Create the text content (title, school name, and dates)
+            const textContainer = document.createElement('div');
+            textContainer.className = 'text-container';
+
+            textContainer.innerHTML = `
+            <div class="education-title">
+                <strong>${item.degree || 'Degree not provided'}</strong> in ${item.fieldOfStudy || 'Field not provided'}
+            </div>
+            <div class="school-name"><strong>${item.school || 'Institution not provided'}</strong></div>
+            <div class="left-info edu">
+                    <img src="img/icon_graduation-cap.png" alt="Graduation Cap" class="edu-icon" />
+                    ${item.startYear || ''} – ${item.endYear || 'Present'}
+            </div>
+            `;
+
+            // Append image and text to the li
+            li.appendChild(schoolImg);
+            li.appendChild(textContainer);
+
+            // Append the li to the list
+            educationList.appendChild(li);
+        });
+    }
+
+    function sortByField(data, field, order = 'desc') {
+        return data.sort((a, b) => {
+            // Extract the date components (e.g., "MM-YYYY")
+            const [monthA, yearA] = a[field].split('-');
+            const [monthB, yearB] = b[field].split('-');
+
+            // Create Date objects from the extracted month and year
+            const dateA = new Date(yearA, monthA - 1);  // monthA - 1 because months are 0-indexed
+            const dateB = new Date(yearB, monthB - 1);  // monthB - 1 for the same reason
+
+            // Return based on the order: ascending or descending
+            if (order === 'asc') {
+                return dateA - dateB; // ascending order
+            } else {
+                return dateB - dateA; // descending order
+            }
+        });
+    }
+
+    // Functions: Calculate Experience
+
+    function calculateExperience(startDate, endDate) {
+        const start = parseMonthYearString(startDate);
+        const end = (endDate === 'Present') ? new Date() : new parseMonthYearString(endDate);  // Handle 'Present' as current date
+
+        return (end.getFullYear() - start.getFullYear()) * 12 + (end.getMonth() - start.getMonth());
+    }
+
+    function formatTotalExperienceIntoYears(totalExperience) {
+        const years = totalExperience.years;
+        const months = totalExperience.months;
+
+        // Format the output
+        if (months > 0) {
+            return `${years}+ ἔτη`; // If there are months, show a +
+        } else {
+            return `${years} ἔτη`; // If no months, show only years with a "+"
+        }
+    }
+
+    function getTotalExperience(workExperience) {
+        let totalExperienceMonths = 0;
+
+        workExperience.forEach(job => {
+
+            if (job.company === 'Hellenic Army') {
+                return;
+            }
+
+            totalExperienceMonths += calculateExperience(job.startDate, job.endDate);
+        });
+
+        // Convert the total experience to years and months
+        const years = Math.floor(totalExperienceMonths / 12);
+        const months = totalExperienceMonths % 12;
+
+        return {years, months};
+    }
+
+    function normalizeMonth(month) {
+        const atticMonthToEnglish = {
+            "Ἑκατομβαιών": "January",
+            "Μεταγειτνιών": "February",
+            "Βοηδρομιών": "March",
+            "Πυανεψιών": "April",
+            "Μαιμακτηριών": "May",
+            "Ποσειδεών": "June",
+            "Γαμηλιών": "July",
+            "Ἀνθεστηριών": "August",
+            "Ἐλαφηβολιών": "September",
+            "Μουνυχιών": "October",
+            "Θαργηλιών": "November",
+            "Σκιροφοριών": "December"
+        };
+
+        return atticMonthToEnglish[month] || month;
+    }
+
+    function parseMonthYearString(monthYearString) {
+        const [monthNameRaw, yearString] = monthYearString.split(' ');
+        const monthName = normalizeMonth(monthNameRaw);
+
+        const year = parseInt(yearString, 10);
+
+        const monthNames = [
+            "January", "February", "March", "April", "May", "June",
+            "July", "August", "September", "October", "November", "December"
+        ];
+
+        const monthIndex = monthNames.indexOf(monthName);
+
+        if (monthIndex === -1 || isNaN(year)) {
+            throw new Error(`Invalid date string: ${monthYearString}`);
+        }
+
+        return new Date(Date.UTC(year, monthIndex, 1));
+    }
+
+    // Functions: Show/Hide Elements
+
+    function makeBadgesVisible() {
+        const projectBadges = document.querySelectorAll('.project-badges-list');
+        const badges = document.querySelectorAll('.project-badge');
+
+        makeButtonsVisible(projectBadges, 'flex');
+        makeButtonsVisible(badges, 'flex-inline');
+    }
+
+    function makeButtonsVisible(projectButtons, display = 'inline-block') {
+        projectButtons.forEach(button => {
+            // Ensure they expand to full height, and maintain a row layout when printing
+            button.style.height = 'auto';
+            button.style.display = display;  // Or 'flex' if you prefer a flex container
+            button.style.overflow = 'visible';
+            button.style.transition = 'none';
+        });
+    }
+
+    function makeVisible(elements) {
+        elements.forEach(item => {
+            // Directly manipulate the height and visibility to ensure they expand
+            item.style.height = 'auto';  // Ensure the items expand to their full height
+            item.style.display = 'block';  // Make sure the item is displayed (not hidden)
+            item.style.overflow = 'visible';  // Ensure the content is visible
+            item.style.transition = 'none';  // Disable any transitions that could cause issues
+        });
+    }
+
+    function makeHidden(elements) {
+        elements.forEach(item => {
+            item.style.display = 'none';  // Make sure the item is displayed (not hidden)
+        });
+    }
+
+    function hideProfileInfo() {
+        document.querySelector('#pdfEmailHeader').style.display = 'none';
+        document.querySelector('#linkedInHeader').style.display = 'none';
+        document.querySelector('.live-resume').style.display = 'none';
+    }
+
+    function hideShortcuts() {
+        const shortcuts = document.querySelector('#shortcuts')
+        shortcuts.style.display = 'none';
+
+        const shortcutHint = document.querySelector('#shortcut-hint')
+        shortcutHint.style.display = 'none';
+    }
+
+    function hideSearchBar() {
+        const searchBar = document.getElementById('search-bar');
+        searchBar.style.display = 'none';
+    }
+
+    function hideProjects() {
+
+        const techUsed = document.querySelectorAll('.project-tech');
+        const projectDescriptions = document.querySelectorAll('.project-description');
+        const projectPoints = document.querySelectorAll('.project-points');
+        const projectButtons = document.querySelectorAll('.project-button');
+        const badges = document.querySelectorAll('.project-badges-list');
+
+        makeHidden(techUsed);
+        makeHidden(projectDescriptions);
+        makeHidden(projectPoints);
+        makeHidden(projectButtons);
+        makeHidden(badges);
+
+        hideProjectNotifications();
+    }
+
+    function hideProjectTech() {
+        const techUsed = document.querySelectorAll('.project-tech');
+        techUsed.forEach(item => {
+            item.style.display = 'none';
+        })
+    }
+
+    function showProjectTech() {
+        const techUsed = document.querySelectorAll('.project-tech');
+        techUsed.forEach(item => {
+            item.style.display = 'block';
+        })
+    }
+
+    function showProjectNotifications() {
+        const projectNotifications = document.querySelectorAll('.project-notification');
+        makeButtonsVisible(projectNotifications, 'flex');
+    }
+
+    function hideProjectNotifications() {
+        const projectNotifications = document.querySelectorAll('.project-notification');
+        makeButtonsVisible(projectNotifications, 'none');
+    }
+
+    function hideEverythingAfterSeconds(seconds) {
+        setTimeout(() => {
+            hideErrorMessage();
+            hideThankYou();
+            hideFormContainer();
+        }, seconds * 1000);
+    }
+
+    function hideErrorMessage() {
+        const errorMessage = document.getElementById('error-message');
+        errorMessage.style.display = 'none';
+    }
+
+    function hideThankYou() {
+        const thankYouMessage = document.getElementById('thank-you-message');
+        thankYouMessage.style.display = 'none';
+        thankYouMessage.classList.remove('show');
+    }
+
+    function hideFormContainer() {
+        const formContainer = document.getElementById('contact-form-container');
+        formContainer.classList.remove('show');
+        formContainer.style.display = 'none';
+    }
+
+    function isFormContainerVisible() {
+        const formContainer = document.getElementById('contact-form-container');
+        return formContainer.style.display === 'block'
+    }
+
+    function isSearchBarVisible() {
+        const searchBar = document.getElementById('search-bar');
+        return getComputedStyle(searchBar).display !== 'none';
+    }
+
+    function hideSearchContainer() {
+        const searchContainer = document.querySelector('.search-container');
+        searchContainer.style.visibility = 'hidden';
+    }
+
+    function hideButtonContainer() {
+        const searchContainer = document.querySelector('.button-container');
+        searchContainer.style.visibility = 'hidden';
+    }
+
+    function hideArrowsContainer() {
+        const searchContainer = document.querySelector('.arrows-container');
+        searchContainer.style.visibility = 'hidden';
+    }
+
+    function hideTooltip() {
+        const tooltips = document.querySelectorAll('.tooltip');
+        makeHidden(tooltips);
+    }
+
+    function showArrowsContainer() {
+        const searchContainer = document.querySelector('.arrows-container');
+        searchContainer.style.visibility = 'visible';
+    }
+
+    function isArrowsContainerVisible() {
+        const searchContainer = document.querySelector('.arrows-container');
+        return searchContainer.style.visibility === 'visible';
+    }
+
+    function showProfileInfo() {
+        document.querySelector('#pdfEmailHeader').style.display = 'block';
+        document.querySelector('#linkedInHeader').style.display = 'block';
+        document.querySelector('.live-resume').style.display = 'block';
+        document.querySelector('.live-resume-url').style.visibility = 'visible';
+        document.querySelector('.live-resume-qr').style.visibility = 'visible';
+    }
+
+    function showProjects() {
+        const projectItems = document.querySelectorAll('.project-li');
+
+        const techUsed = document.querySelectorAll('.project-tech');
+        const projectDescriptions = document.querySelectorAll('.project-description');
+        const projectPoints = document.querySelectorAll('.project-points');
+        const projectButtons = document.querySelectorAll('.project-button');
+        const projectBadges = document.querySelectorAll('.project-badges-list');
+
+        showProjectNotifications();
+
+        makeVisible(projectItems);
+        makeVisible(techUsed);
+        makeVisible(projectDescriptions);
+        makeVisible(projectPoints);
+        makeVisible(projectBadges);
+
+        makeButtonsVisible(projectButtons);
+    }
+
+    function showPdfSummary() {
+        document.querySelectorAll('.liveSummary')
+            .forEach(element => element.classList.add('hidden'));
+
+        document.querySelectorAll('.pdfSummary')
+            .forEach(element => element.classList.remove('hidden'));
+    }
+
+    function showThankYou() {
+        const thankYouMessage = document.getElementById('thank-you-message');
+        thankYouMessage.style.display = 'block';
+        thankYouMessage.classList.add('show');
+    }
+
+    function showFormContainer() {
+        const formContainer = document.getElementById('contact-form-container');
+        formContainer.classList.add('show');
+        formContainer.style.display = 'block';
+    }
+
+    // Functions: Customize Page Breaks (PDF)
+
+    function customizeProjectPageBreaks(projectItems) {
+        projectItems[2].style.marginTop = '45mm';
+        projectItems[5].style.marginTop = '60mm'; //benelux
+    }
+
+    function customizeWorkExperiencePageBreaks(workExperienceItems) {
+        workExperienceItems[5].style.marginTop = '10mm';
+    }
+
+    // Functions: Highlighting Text
+
+    function wrapWordsInSpans(section) {
+        const nodes = getTextNodes(section);
+
+        nodes.forEach(node => {
+            const text = node.nodeValue.trim();
+
+            if (text.length === 0) return;
+
+            // Split the text into words (you can adjust the split logic based on your needs)
+            const words = text.split(/\s+/); // Split by spaces
+
+            // Create a fragment to hold the new span-wrapped text
+            const fragment = document.createDocumentFragment();
+
+            words.forEach(word => {
+                const span = document.createElement('span');
+                span.classList.add('word');
+                span.textContent = word; // Set the word as the text content of the span
+                fragment.appendChild(span);
+                fragment.appendChild(document.createTextNode(' ')); // Add space between words
+            });
+
+            // Replace the original text node with the new wrapped content
+            node.replaceWith(fragment);
+        });
+    }
+
+    function isInTitleExcludingBadge(word) {
+        // add filtering here
+        const wordIsInsideBadge = word.closest('.project-badge');
+
+        // keep words of badges
+        if (wordIsInsideBadge) {
+            return true;
+        }
+
+        // keep words that are not in the title
+        return !word.closest('.project-name');
+    }
+
+    function isInProjectButton(word) {
+        const projectButtonParent = word.closest('.project-button');
+
+        return projectButtonParent === null;
+    }
+
+    function getAllSearchableNodes() {
+        const allWords = document.querySelectorAll('.word');
+
+        return Array.from(allWords)
+            .filter(word => isInTitleExcludingBadge(word))
+            .filter(word => isInProjectButton(word));
+    }
+
+    function highlightText(section, tokens) {
+        const nodes = getAllSearchableNodes();
+
+        tokens.forEach(token => {
+            if (!token.trim()) return;
+
+            const regex = new RegExp(`\\b(${escapeRegExp(token)})\\b`, 'gi'); // Case-insensitive whole word matching
+
+            nodes.forEach(span => {
+                const text = span.textContent.trim();
+
+                if (regex.test(text)) {
+                    span.classList.add('highlight'); // Add highlight to matching words
+                }
+            });
+        });
+    }
+
+    function removeHighlights(section) {
+        const highlightedSpans = section.querySelectorAll('.highlight');
+        highlightedSpans.forEach(span => {
+            span.classList.remove('highlight'); // Remove the highlight class
+        });
+    }
+
+    function getTextNodes(element) {
+        let textNodes = [];
+
+        for (let node of element.childNodes) {
+            if (node.nodeType === 3) {
+                // Text node
+                textNodes.push(node);
+            } else if (node.nodeType === 1) {
+                // Element node: skip if this node or any ancestor is .project-tech
+                if (node.classList.contains('project-tech')) continue;
+
+                // Recurse into children
+                textNodes = textNodes.concat(getTextNodes(node));
+            }
+        }
+
+        return textNodes;
+    }
+
+    function escapeRegExp(string) {
+        return string.replace(/[.*+?^=!:${}()|\[\]\/\\]/g, '\\$&');
+    }
+
+    // Functions: Scrolling
+
+    function scrollToElementById(elementId) {
+        const element = document.getElementById(elementId);
+        scrollToElement(element);
+    }
+
+    function scrollToElement(element) {
+        element.scrollIntoView({
+            behavior: "smooth"
+        });
+        window.dispatchEvent(new Event('scroll'));
+    }
+
+    function scrollToElementBottom(element) {
+        const rect = element.getBoundingClientRect();
+        const margin = 130; // arbitrary margin is added to fix the problem the first project is scrolled to the bottom
+
+        window.scrollBy({
+            top: rect.bottom - window.innerHeight + margin,
+            behavior: 'smooth'
+        });
+        window.dispatchEvent(new Event('scroll'));
+    }
+
+    function scrollToShortcuts() {
+        scrollToElementById("shortcuts");
+    }
+
+    function scrollToElementWithSearchBarOnTop(element) {
+        const searchBar = document.getElementById("search-bar");
+
+        const offsetMargin = 100;
+
+        const offset = (searchBar.height || 60) + offsetMargin; // fallback in case it’s not rendered yet
+        const topPosition = element.getBoundingClientRect().top + window.scrollY;
+
+        window.scrollTo({
+            top: topPosition - offset,
+            behavior: "smooth"
+        });
+    }
+
+    function scrollToProjects() {
+        const projectsSection = document.getElementById("Projects");
+
+        scrollToElementWithSearchBarOnTop(projectsSection);
+    }
+
+    function scrollToTop() {
+        document.getElementById("page-top").scrollIntoView({
+            behavior: "smooth"
+        });
+    }
+
+    // Functions: Configure Buttons / Bars
+
+    function configurePdfButton() {
+        document.getElementById('pdf-btn').addEventListener('click', downloadPage);
+    }
+
+    function configureLinkedinButton(data) {
+        document.getElementById('linkedin-btn').onclick = function () {
+            let profileUrl = "https://" + data.linkedInURL;
+            window.open(profileUrl, '_blank');
+        };
+    }
+
+    function configureLocationButton(data) {
+        document.getElementById("location-btn").onclick = function () {
+            let location = data.addressLocation;
+            let encodedLocation = encodeURIComponent(location);  // Encode the location
+            window.open(`https://www.google.com/maps?q=${encodedLocation}`, '_blank');
+        };
+    }
+
+    function configureGithubButton() {
+        document.getElementById("github-btn").onclick = function () {
+            window.open(`https://github.com/psavidis/resume`, '_blank');
+        };
+    }
+
+    function configurePhoneButton() {
+        const phoneButton = document.getElementById('phoneButton');
+        const overlay = document.getElementById('overlay');
+        const circle = document.getElementById('circle');
+        const message = document.getElementById('phone-message');
+
+        phoneButton.addEventListener('click', () => {
+            // Show the overlay
+            overlay.style.display = 'flex';
+
+            // Position the circle over the button and animate it
+            const buttonRect = phoneButton.getBoundingClientRect();
+            const circleSize = Math.max(window.innerWidth, window.innerHeight);
+
+            // Start the circle animation
+            circle.style.left = `${buttonRect.left + buttonRect.width / 2 - circleSize / 2}px`;
+            circle.style.top = `${buttonRect.top + buttonRect.height / 2 - circleSize / 2}px`;
+            circle.style.width = `${circleSize}px`;
+            circle.style.height = `${circleSize}px`;
+
+            // Show the message after the circle animation ends
+            setTimeout(() => {
+                message.style.opacity = 1;
+            }, 1000); // Delay the text appearance until after the circle animation
+
+            setTimeout(() => {
+                message.style.opacity = 0;
+                circle.style.width = '0';
+                circle.style.height = '0';
+            }, 8000);
+
+            // Reset everything and hide the overlay after 6 seconds
+            setTimeout(() => {
+                overlay.style.display = 'none'; // Hide overlay
+                circle.style.left = '0'; // Reset circle position
+                circle.style.top = '0'; // Reset circle position
+                circle.style.width = '0'; // Reset circle size
+                circle.style.height = '0'; // Reset circle size
+            }, 9000); // Hide overlay and reset circle after the entire animation completes
+        });
+    }
+
+    function configureDarkModeButton() {
+        const toggleButton = document.getElementById('dark-mode-toggle');
+        const modeIcon = document.getElementById('mode-icon');
+
+        // Check if the user previously selected dark mode and apply it
+        if (localStorage.getItem('dark-mode') === 'true') {
+            document.body.classList.add('dark-mode');
+            toggleButton.classList.add('dark-mode');
+            modeIcon.classList.remove('fa-moon');
+            modeIcon.classList.add('fa-sun');
+        }
+
+        // Toggle dark mode when button is clicked
+        toggleButton.addEventListener('click', () => {
+            document.body.classList.toggle('dark-mode');
+            toggleButton.classList.toggle('dark-mode');
+
+            // Switch icon
+            if (document.body.classList.contains('dark-mode')) {
+                modeIcon.classList.remove('fa-moon');
+                modeIcon.classList.add('fa-sun');
+            } else {
+                modeIcon.classList.remove('fa-sun');
+                modeIcon.classList.add('fa-moon');
+            }
+
+            // Save the user's preference in localStorage
+            const isDarkMode = document.body.classList.contains('dark-mode');
+            localStorage.setItem('dark-mode', isDarkMode);
+        });
+    }
+
+    function configureArrowButtons() {
+        document.getElementById('arrowUp')["onclick"] = function () {
+            const allHighlights = Array.from(document.querySelectorAll('.highlight'));
+
+            if (allHighlights.length === 0) return;
+
+            const current = findCurrentHighlightedElement();
+            const previous = findPreviousHighlightedElement(current);
+
+            const target = previous || allHighlights[0];
+            swapHighlightAndScroll(current, target);
+        };
+
+        document.getElementById('arrowDown')["onclick"] = function () {
+            const allHighlights = Array.from(document.querySelectorAll('.highlight'));
+
+            if (allHighlights.length === 0) return;
+
+            const current = findCurrentHighlightedElement();
+            const next = findNextHighlightedElement(current);
+
+            const target = next || allHighlights[0];
+            swapHighlightAndScroll(current, target);
+        };
+    }
+
+    function swapHighlightAndScroll(current, next) {
+        if (current) {
+            current.classList.remove('current-highlight');
+            current.classList.add('highlight');
+        }
+
+        if (next) {
+            next.classList.add('current-highlight');
+            scrollToElementWithSearchBarOnTop(next);
+        }
+    }
+
+    function configureSearchToggle() {
+        const searchToggle = document.getElementById('toggle-search');
+        const searchBar = document.getElementById('search-bar');
+
+        hideArrowsContainer();
+        configureArrowButtons();
+
+        let sections = document.querySelectorAll('.project-li');
+
+        sections.forEach(section => {
+            wrapWordsInSpans(section)
+        });
+
+        searchToggle.addEventListener('click', function () {
+            const body = document.body;
+            const isSearchActive = body.classList.toggle('search-active');
+
+            if (isSearchActive) {
+                hideFormContainer();
+                showProjectTech();
+                showProjects();
+                searchBar.style.display = 'block';
+                searchBar.focus();
+
+                scrollToProjects();
+                clearProjectHighlights();
+            } else {
+                resetCurrentHighlight();
+                hideProjects();
+                hideProjectTech();
+                hideArrowsContainer();
+                searchBar.style.display = 'none';
+                searchBar.value = '';
+                searchResume();
+                scrollToTop();
+            }
+        });
+    }
+
+    function resetCurrentHighlight() {
+        const current = document.querySelector('.current-highlight');
+        if (current) {
+            document.querySelector('.current-highlight').classList.remove('current-highlight');
+        }
+    }
+
+    function configureSearchBar() {
+        // Configures the search bar to always remain at the top during scrolling
+        window.addEventListener('scroll', function () {
+            let searchBar = document.getElementById('search-bar');
+
+            // Trigger a reflow and adjust positioning if necessary
+            searchBar.style.position = 'absolute';  // temporarily change position
+            searchBar.offsetHeight;  // Trigger reflow (forces layout update)
+            searchBar.style.position = 'fixed';  // Reset position to fixed after reflow
+        });
+    }
+
+    function configureSummaryButtonHoverEffects() {
+        const listItems = document.querySelectorAll("#summary-instructions li");
+
+        const buttonMap = [
+            ["linkedin-btn", "email-btn", "phoneButton"], // First list item
+            ["pdf-btn"],                   // Second list item
+            ["toggle-search"]             // Third list item
+        ];
+
+        listItems.forEach((item, index) => {
+            item.addEventListener("mouseenter", () => {
+                buttonMap[index]?.forEach(id => {
+                    const btn = document.getElementById(id);
+                    if (btn) btn.classList.add("btn-hover-active");
+                });
+            });
+
+            item.addEventListener("mouseleave", () => {
+                buttonMap[index]?.forEach(id => {
+                    const btn = document.getElementById(id);
+                    if (btn) btn.classList.remove("btn-hover-active");
+                });
+            });
+        });
+    }
+
+    // Functions: Keyboard Shortcut
+
+    function registerKeyboardShortcuts() {
+        registerSearchShortcut();
+        registerSavePdfShortcut();
+        registerEmailShortcut();
+        registerLinkedShortcut();
+        registerGithubShortcut();
+        registerMapsShortcut();
+        registerToggleDarkModeShortcut();
+        registerEasterEggShortcut();
+        registerSearchInputNavigationShortcuts();
+
+        configureModifierKey();
+    }
+
+    function configureKeyboardModal() {
+        toggleShortcutsModal();
+        document.addEventListener('keydown', function (event) {
+            const isMac = navigator.platform.toUpperCase().indexOf('MAC') >= 0;
+
+            if ((isMac && event.metaKey && event.key === '/') || (!isMac && event.ctrlKey && event.key === '/')) {
+                event.preventDefault();
+                toggleShortcutsModal();
+            }
+        });
+    }
+
+    function configureModifierKey() {
+        const modifierKey = isMac() ? '⌘' : 'Ctrl';
+
+        document.getElementById('press-shortcuts').innerHTML = `<b>Press</b> ${modifierKey} + / for shortcuts`;
+
+        <!-- Populate commands list -->
+        document.getElementById('li-search-projects').innerHTML = `<strong>${modifierKey} + F</strong>: Search Projects`;
+        document.getElementById('li-search-results').innerHTML = `<strong>Up / Down</strong>: Navigate Search Results`;
+        document.getElementById('li-download-resume').innerHTML = `<strong>${modifierKey} + S</strong>: Download Resume`;
+        document.getElementById('li-send-email').innerHTML = `<strong>${modifierKey} + E</strong>: Send Email`;
+        document.getElementById('li-open-linkedin').innerHTML = `<strong>${modifierKey} + Shift + L</strong>: Open LinkedIn`;
+        document.getElementById('li-open-github').innerHTML = `<strong>${modifierKey} + Shift + G</strong>: Open Github`;
+        document.getElementById('li-open-location').innerHTML = `<strong>${modifierKey} + Shift + M</strong>: Open Location`;
+        document.getElementById('li-toggle-dark-mode').innerHTML = `<strong>${modifierKey} + Shift + D</strong>: Toggle Dark Mode`;
+    }
+
+    function registerToggleDarkModeShortcut() {
+        document.addEventListener('keydown', function (event) {
+            // Ctrl/Cmd + Shift + D
+            if ((event.ctrlKey || event.metaKey) && event.shiftKey && event.key.toLowerCase() === 'd') {
+                event.preventDefault();
+                document.getElementById('dark-mode-toggle').click();
+            }
+        });
+    }
+
+    function registerEasterEggShortcut() {
+        document.addEventListener('keydown', function (event) {
+            // Ctrl/Cmd + Shift + E
+            if ((event.ctrlKey || event.metaKey) && event.shiftKey && event.key.toLowerCase() === 'h') {
+                event.preventDefault();
+                window.open("https://psavidis.github.io/resume/tests.html", "_blank");
+            }
+        });
+    }
+
+    function registerSearchShortcut() {
+        document.addEventListener('keydown', function (event) {
+            // Check if Control (Windows) or Command (Mac) + F is pressed
+            if ((event.ctrlKey || event.metaKey) && event.key === 'f') {
+                event.preventDefault();
+                document.getElementById('toggle-search').click();
+            }
+        });
+
+        document.addEventListener('keydown', function (event) {
+            // Check if Escape is pressed during search mode
+            if (event.key === 'Escape' && isSearchBarVisible()) {
+                event.preventDefault();
+                document.getElementById('toggle-search').click();
+            }
+        });
+    }
+
+    function registerSearchInputNavigationShortcuts() {
+        const searchBar = document.getElementById("search-bar");
+
+        // Map key name to the corresponding key id of the arrows
+        const keyToArrowId = new Map();
+        keyToArrowId.set("ArrowUp", 'arrowUp');
+        keyToArrowId.set("ArrowDown", 'arrowDown');
+
+        searchBar.addEventListener('keydown', (e) => {
+            handleCursorPosition(e);
+
+            if (!isArrowsContainerVisible()) {
+                return;
+            }
+
+            const keyName = e.key;
+            const arrowId = keyToArrowId.get(keyName);
+
+            clickArrowButton(arrowId);
+        });
+    }
+
+    function handleCursorPosition(keyDownEvent) {
+        const input = keyDownEvent.target;
+        const cursorPosition = input.selectionStart;
+
+        // Override the default behavior for the down and up arrow keys
+        if (keyDownEvent.key === 'ArrowDown' || keyDownEvent.key === 'ArrowUp') {
+            keyDownEvent.preventDefault();
+        }
+    }
+
+    function clickArrowButton(arrowId) {
+        const targetElement = document.getElementById(arrowId);
+
+        if (targetElement) {
+            // Add a class to simulate a click effect (like :active state)
+            targetElement.classList.add('click-active');
+
+            // Dispatch the click event
+            const clickEvent = new MouseEvent('click', {
+                bubbles: true,
+                cancelable: true,
+            });
+            targetElement.dispatchEvent(clickEvent);
+
+            // Remove the class after a brief delay to simulate a "click"
+            setTimeout(() => {
+                targetElement.classList.remove('click-active');
+            }, 150);
+        }
+    }
+
+    function registerSavePdfShortcut() {
+        document.addEventListener('keydown', function (event) {
+            if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 's') {
+                event.preventDefault(); // Stop the browser's "Save Page As" behavior
+                document.getElementById('pdf-btn').click();
+            }
+        });
+    }
+
+    function registerEmailShortcut() {
+        document.addEventListener('keydown', function (event) {
+            if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 'e') {
+                event.preventDefault();
+                document.getElementById('email-btn').click();
+            }
+        });
+    }
+
+    function registerLinkedShortcut() {
+        document.addEventListener('keydown', function (event) {
+            // LinkedIn shortcut: Ctrl/Cmd + Shift + L
+            if ((event.ctrlKey || event.metaKey) && event.shiftKey && event.key.toLowerCase() === 'l') {
+                event.preventDefault();
+                document.getElementById('linkedin-btn').click();
+            }
+        });
+    }
+
+    function registerGithubShortcut() {
+        document.addEventListener('keydown', function (event) {
+            // LinkedIn shortcut: Ctrl/Cmd + Shift + G
+            if ((event.ctrlKey || event.metaKey) && event.shiftKey && event.key.toLowerCase() === 'g') {
+                event.preventDefault();
+                document.getElementById('github-btn').click();
+            }
+        });
+    }
+
+    function registerMapsShortcut() {
+        document.addEventListener('keydown', function (event) {
+            // Location shortcut: Ctrl/Cmd + Shift + M
+            if ((event.ctrlKey || event.metaKey) && event.shiftKey && event.key.toLowerCase() === 'm') {
+                event.preventDefault(); // Prevent default action
+                document.getElementById('location-btn').click();
+            }
+        });
+    }
+
+    function toggleShortcutsModal() {
+        const modal = document.getElementById('shortcuts');
+        if (modal.style.display === 'block' || modal.style.display === '') {
+            modal.style.display = 'none';
+            scrollToTop();
+        } else {
+            modal.style.display = 'block';
+            scrollToShortcuts();
+        }
+    }
+
+    // Functions: Email
+
+    function configureEmail(data) {
+        const emailHeader = document.getElementById('pdfEmailHeader');
+        emailHeader.textContent = data.email;
+
+        hideProfileInfo();
+
+        const emailBtn = document.getElementById('email-btn');
+
+        // Check if the user is on a mobile device
+        if (isMobile()) {
+            // Use mailto for mobile devices
+            emailBtn.setAttribute('href', `mailto:${data.email}`);
+            emailBtn.style.display = 'block';  // Ensure button is visible
+            emailBtn.addEventListener('click', function (e) {
+                // Optional: Prevent any further action, since mailto will open the email client
+                e.preventDefault();
+                window.location.href = `mailto:${data.email}`;
+            });
+
+            return;
+        }
+
+        const formName = document.getElementById('form-name');
+        const form = document.getElementById('contact-form');
+
+        emailBtn.addEventListener('click', function () {
+
+            if (isFormContainerVisible()) {
+                hideFormContainer()
+            } else {
+                showFormContainer()
+                formName.focus();
+            }
+        });
+
+        form.addEventListener('submit', async function (e) {
+            e.preventDefault();
+
+            const submitButton = document.querySelector('.submit-button');
+            const loadingMessage = document.getElementById('loading-message');
+            const errorMessage = document.getElementById('error-message');
+
+            submitButton.disabled = true;
+            hideThankYou();
+            errorMessage.style.display = 'none';
+
+            const formData = getFormDataAsObject(form);
+
+            // You must manually append your Web3Forms access_key if it's not already inside the form
+            formData.access_key = 'fb378ea5-c240-451b-bc68-52b3ce5696f0';
+
+            try {
+                loadingMessage.style.display = 'block';
+
+                const response = await fetch('https://api.web3forms.com/submit', {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify(formData)
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    loadingMessage.style.display = 'none';
+                    showThankYou();
+                    form.reset();
+                } else {
+                    throw new Error(result.message || 'Form submission failed.');
+                }
+            } catch (error) {
+                loadingMessage.style.display = 'none';
+                errorMessage.style.display = 'block';
+                console.error(error);
+            } finally {
+                hideEverythingAfterSeconds(4);
+                submitButton.disabled = false;
+            }
+        });
+    }
+
+    function configureLinkedin(data) {
+        const emailHeader = document.getElementById('linkedInHeader');
+        emailHeader.textContent = data.linkedInURL;
+    }
+
+    function getFormDataAsObject(form) {
+        const formData = new FormData(form);
+        const data = {};
+        formData.forEach((value, key) => {
+            data[key] = value;
+        });
+
+        return data;
+    }
+
+    function copyEmail() {
+        const emailField = document.getElementById("yourEmail");
+        emailField.select();  // Select the content in the input field
+        document.execCommand("copy");  // Copy the selected content to clipboard
+    }
+
+    // Functions: Device Detection
+
+    function isMobile() {
+        return /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+    }
+
+    function isMac() {
+        const os = getOS();
+        return os === 'Mac OS'
+    }
+
+    function getOS() {
+        const userAgent = navigator.userAgent;
+
+        if (/Macintosh|MacIntel|MacPPC|Mac68K/.test(userAgent)) {
+            return 'Mac OS';
+        } else if (/Windows NT/.test(userAgent)) {
+            return 'Windows';
+        } else if (/Linux/.test(userAgent)) {
+            return 'Linux';
+        } else {
+            return 'Unknown OS';
+        }
+    }
+
+    // Functions: Easter Egg
+
+    function configureBasedOnClient() {
+
+        if (!isMobile()) {
+            document.getElementById('shortcut-hint').style.display = 'block';
+            document.getElementById('phoneButton').style.display = 'block';
+            document.getElementById('menu-toggle').style.display = 'none';
+
+            configureKeyboardModal();
+            registerKeyboardShortcuts();
+        } else {
+            // Mobile styling for voice button
+            document.getElementById('phoneButton').style.display = 'none';
+            document.getElementById('shortcut-hint').style.visibility = 'hidden';
+            document.getElementById('microphone-btn').style.visibility = 'hidden';
+
+            configureTooltipsForMobile();
+        }
+    }
+
+    function configureTooltipsForMobile() {
+        document.querySelectorAll('.project-notification').forEach(projectNotification => {
+            projectNotification.addEventListener('click', function(event) {
+                event.stopPropagation();
+
+                const mouseEnterEvent = new Event('mouseenter');
+                projectNotification.dispatchEvent(mouseEnterEvent);
+
+                // After 1 second, dispatch 'mouseleave' to hide it
+                setTimeout(() => {
+                    const mouseLeaveEvent = new Event('mouseleave');
+                    projectNotification.dispatchEvent(mouseLeaveEvent);
+                }, 1000);
+            });
+        })
+    }
+
+    function showEasterEgg() {
+        console.log(
+            "%c 🐇🥚 Εἴτε δημιουργὸς εἶ εἴτε κώδικος ζητητὴς· χαῖρε καὶ προχώρα σοφώτερος.",
+            "font-size:16px; color:teal; background:black; padding:6px; border-radius:6px;"
+        );
+
+        const testPageUrl = "https://psavidis.github.io/resume/tests.html";
+
+        // Display the clickable link in the consoleνα το κ
+        console.log(`%cἍψαι ἐνταῦθα καὶ θαῦμα ὄψει: %c${testPageUrl}`,
+            "font-size: 16px; color: #28a745; background: #000; padding: 4px;",
+            "font-size: 16px; color: #007bff; text-decoration: underline;");
+    }
+
+    // Functions: Copyright
+
+    function configureCopyright(data) {
+        const currentYear = new Date().getFullYear();
+        const copyrightElement = document.getElementById('copyright');
+        const name = data.name;
+
+        copyrightElement.innerHTML = `&copy; ${currentYear} ${name}. All rights reserved.`;
+    }
+
+    // Functions: Push notification
+
+    function sendPushNotification() {
+        fetch("https://ntfy.sh/my-resume-page", {
+            method: "POST",
+            body: "📄 New visitor on your resume!",
+            headers: {
+                "Title": "Resume Page View"
+            }
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error("Failed to send push notification");
+                }
+            })
+            .catch(error => {
+                console.error("❌ Push notification failed:", error);
+                // Retry after a short delay
+                setTimeout(sendPushNotification, 3000);
+            });
+    }
+
+    function configurePushNotificationOnLoad() {
+        if (location.hostname !== "localhost" && shouldTrack()) {
+            window.addEventListener('load', sendPushNotification);
+        }
+    }
+
+    // Voice Commands
+
+    let isListening = false;
+
+    function handleVoiceCommand(command) {
+        <!--        console.log("Voice command:", command);-->
+
+        if (command.startsWith("search ")) {
+            const keyword = command.replace("search ", "").trim();
+
+            if (!isSearchBarVisible()) {
+                const searchToggle = document.getElementById('toggle-search');
+                searchToggle.click();
+            }
+
+            searchKeyword(keyword);
+        } else if (command.includes("close search")) {
+            const searchBar = document.getElementById('search-bar');
+            const isSearchBarVisible = getComputedStyle(searchBar).display !== 'none';
+
+            if (isSearchBarVisible) {
+                const searchToggle = document.getElementById('toggle-search');
+                searchToggle.click();
+            }
+        } else if (command.includes("down")) {
+            const userPerformsSearchAndHasResults = isArrowsContainerVisible();
+
+            if (userPerformsSearchAndHasResults) {
+                clickArrowButton("arrowDown");
+            }
+        } else if (command.includes("up")) {
+            const userPerformsSearchAndHasResults = isArrowsContainerVisible();
+
+            if (userPerformsSearchAndHasResults) {
+                clickArrowButton("arrowUp");
+            }
+        } else if (command.includes("open shortcuts")) {
+            const modal = document.getElementById('shortcuts');
+            const isModalOpen = (modal.style.display === 'block' || modal.style.display === '');
+            if (!isModalOpen) {
+                toggleShortcutsModal();
+            }
+        } else if (command.includes("close shortcuts")) {
+            const modal = document.getElementById('shortcuts');
+            const isModalOpen = (modal.style.display === 'block' || modal.style.display === '');
+            if (isModalOpen) {
+                toggleShortcutsModal();
+            }
+        } else if (command.includes("download resume")) {
+            downloadPage();
+        } else if (command.includes("send email")) {
+            if (!isFormContainerVisible()) {
+                document.getElementById('email-btn').click();
+            }
+        } else if (command.includes("close email")) {
+            if (isFormContainerVisible()) {
+                document.getElementById('email-btn').click();
+            }
+        } else if (command.includes("open linkedin")) {
+            document.getElementById('linkedin-btn').click();
+        } else if (command.includes("open github")) {
+            document.getElementById("github-btn").click();
+        } else if (command.includes("open location")) {
+            document.getElementById("location-btn").click();
+        } else if (command.includes("toggle dark mode")) {
+            document.getElementById('dark-mode-toggle').click();
+        } else {
+            <!--            console.log("Unrecognized command.");-->
+        }
+    }
+
+    function searchKeyword(keyword) {
+        const input = document.getElementById('search-bar');
+        if (input) {
+            input.value = keyword;
+            input.focus();
+            input.dispatchEvent(new Event('input')); // Optional: if you need to trigger search
+        }
+    }
+
+    function configureVoice() {
+
+        // Disable voice commands for mobiles
+        if (isMobile()) {
+            return;
+        }
+
+        const micButton = document.getElementById('microphone-btn');
+        micButton.addEventListener('click', () => {
+            micButton.classList.toggle('recording');
+        });
+
+        // Check if browser supports the Web Speech API
+        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+
+        if (!SpeechRecognition) {
+            console.log('Browser does not support speech recognition');
+            document.getElementById('microphone-btn').style.display = 'none';
+            document.getElementById('voice-command-hint').style.display = 'none';
+            return;
+        }
+
+        document.getElementById('microphone-btn').style.display = 'inline-block';
+
+        const recognition = new SpeechRecognition();
+        recognition.continuous = true;
+        recognition.lang = 'en-US';
+
+        // Show the voice command guide when listening
+        recognition.onstart = () => {
+            isListening = true;
+            document.getElementById('voice-command-hint').style.display = 'block';
+            startMicGlow();
+            <!--            console.log("Voice recognition started");-->
+        };
+
+        recognition.onend = () => {
+            isListening = false;
+            document.getElementById('voice-command-hint').style.display = 'none';
+            document.getElementById('microphone-btn').classList.remove('recording');
+            stopMicGlow();
+            <!--            console.log("Voice recognition stopped");-->
+        };
+
+        recognition.onresult = (event) => {
+            const lastResult = event.results[event.results.length - 1];
+            const command = lastResult[0].transcript.toLowerCase().trim();
+            handleVoiceCommand(command);
+        };
+
+        document.getElementById('microphone-btn').addEventListener('click', () => {
+            if (!isListening) {
+                if (isFormContainerVisible()) {
+                    hideFormContainer();
+                }
+                recognition.start();
+            } else {
+                recognition.stop();
+            }
+        });
+    }
+
+    let audioCtx;
+    let analyser;
+    let micStream;
+    let animationId;
+    const micBtn = document.getElementById('microphone-btn');
+
+    async function startMicGlow() {
+        micStream = await navigator.mediaDevices.getUserMedia({audio: true});
+        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        const source = audioCtx.createMediaStreamSource(micStream);
+        analyser = audioCtx.createAnalyser();
+        source.connect(analyser);
+        analyser.fftSize = 256;
+        const dataArray = new Uint8Array(analyser.frequencyBinCount);
+
+        function animate() {
+            animationId = requestAnimationFrame(animate);
+            analyser.getByteFrequencyData(dataArray);
+            const average = dataArray.reduce((a, b) => a + b) / dataArray.length;
+            if (average > 10) {
+                micBtn.classList.add('glowing');
+            } else {
+                micBtn.classList.remove('glowing');
+            }
+        }
+
+        animate();
+    }
+
+    function stopMicGlow() {
+        if (animationId) cancelAnimationFrame(animationId);
+        if (micStream) {
+            micStream.getTracks().forEach(track => track.stop());
+        }
+        if (audioCtx) {
+            audioCtx.close();
+        }
+        micBtn.classList.remove('glowing');
+    }
+
+    // functions: blog
+
+    function configureBlogButton() {
+        document.getElementById('blog-btn').addEventListener('click', function () {
+            window.open("https://psavidis.github.io/resume/blog.html", "_blank"); // Open the blog in a new tab
+        });
+    }
+
+    function showAnimationHint(milliseconds, showOnlyOnce) {
+
+        if (!isMobile()) return;
+
+        if (showOnlyOnce && localStorage.getItem("drawerHintShown") === "true") {
+            return;
+        }
+
+        const menuToggle = document.getElementById("menu-toggle");
+        const glowClass = "pulse";
+        menuToggle.classList.add(glowClass);
+
+        setTimeout(() => {
+            menuToggle.classList.remove(glowClass);
+        }, milliseconds);
+
+        if (showOnlyOnce) {
+            localStorage.setItem("drawerHintShown", "true");
+        }
+    }
+
+    function getNextTag(version) {
+        const number = parseFloat(version.replace(/^v/, ''));
+        const next = (number + 0.1).toFixed(1);
+        return `v${next}`;
+    }
+
+    // Functions: Skeletons
+
+    function createTitleSkeleton(lines) {
+        return createSkeletonLines(lines, "skeleton-title");
+    }
+
+    function createSkeletonCircle(className) {
+        const group = document.createElement('div');
+        group.className = className;
+        return group;
+    }
+
+    function createSkeletonLines(lines, className) {
+        const group = document.createElement('div');
+        group.className = 'skeleton-group';
+        for (let i = 0; i < lines; i++) {
+            const line = document.createElement('div');
+            line.className = className;
+            // line.style.width = `${80 - i * 10}%`; // Stagger line lengths
+            group.appendChild(line);
+        }
+        return group;
+    }
+
+    function replaceSelectorAllWithSkeleton(skeletons, selector, createSkeletonLinesFunction) {
+        const elements = document.querySelectorAll(selector);
+
+        if (!elements) {
+            return;
+        }
+
+        elements.forEach(element => {
+            element.classList.add('hidden');
+
+            const skeletonGroup = createSkeletonLinesFunction();
+            element.parentNode.insertBefore(skeletonGroup, element);
+            skeletons.push(skeletonGroup);
+        });
+    }
+
+    function replaceSelectorWithSkeleton(skeletons, selector, createSkeletonLinesFunction) {
+        const el = document.querySelector(selector);
+        if (el) {
+            el.classList.add('hidden');
+
+            const skeletonGroup = createSkeletonLinesFunction();
+            el.parentNode.insertBefore(skeletonGroup, el);
+            skeletons.push(skeletonGroup);
+        }
+    }
+
+    function removeSkeletonForSelectorAll(selector) {
+        const elements = document.querySelectorAll(selector);
+
+        if (!elements) {
+            return;
+        }
+
+        elements.forEach(element => {
+            element.classList.remove('hidden');
+        });
+    }
+
+    function maskAllSkeletonsAndGet() {
+        // Add 'loading' class to hide or disable buttons
+        document.body.classList.add('loading');
+
+        const skeletons = [];
+
+        // All Titles
+        replaceSelectorAllWithSkeleton(skeletons, "h2", () => createTitleSkeleton(1));
+        replaceSelectorAllWithSkeleton(skeletons, "#experience-list", () => createSkeletonLines(8, "skeleton-project"));
+        replaceSelectorAllWithSkeleton(skeletons, "#projects-list", () => createSkeletonLines(8, "skeleton-experience"));
+        replaceSelectorAllWithSkeleton(skeletons, ".summary-all", () => createSkeletonLines(7, "skeleton-line"));
+        replaceSelectorAllWithSkeleton(skeletons, ".profile-picture-container", () => createSkeletonCircle("skeleton-profile-picture"));
+        replaceSelectorAllWithSkeleton(skeletons, "#summary", () => createSkeletonLines(1, "skeleton-line"));
+        replaceSelectorAllWithSkeleton(skeletons, ".profile-info", () => createSkeletonLines(1, "skeleton-name"));
+
+        replaceSelectorWithSkeleton(skeletons, "#education-list", () => createSkeletonLines(1, "skeleton-education"));
+
+        return skeletons;
+    }
+
+    function removeAllSkeletons(skeletons, delay = 1000) {
+        setTimeout(() => {
+            removeSkeletonForSelectorAll("h2");
+            removeSkeletonForSelectorAll("#experience-list");
+            removeSkeletonForSelectorAll("#projects-list");
+            removeSkeletonForSelectorAll(".summary-all");
+            removeSkeletonForSelectorAll(".profile-picture-container");
+            removeSkeletonForSelectorAll("#summary");
+            removeSkeletonForSelectorAll(".profile-info");
+            removeSkeletonForSelectorAll("#education-list");
+
+
+            // Remove all skeletons
+            skeletons.forEach(s => s.remove());
+
+            document.body.classList.remove('loading');
+            document.body.classList.add('loaded');
+        }, delay);
+    }
+
+    function adjustSkeletonSizes() {
+        const screenWidth = window.innerWidth;
+
+        // Adjust skeleton sizes based on screen width
+        if (screenWidth <= 480) {
+            document.querySelectorAll('.skeleton-title').forEach(element => {
+                element.style.width = '60%';
+            });
+            document.querySelectorAll('.skeleton-name').forEach(element => {
+                element.style.width = '150px';
+            });
+        } else if (screenWidth <= 768) {
+            document.querySelectorAll('.skeleton-title').forEach(element => {
+                element.style.width = '50%';
+            });
+            document.querySelectorAll('.skeleton-name').forEach(element => {
+                element.style.width = '200px';
+            });
+        } else {
+            document.querySelectorAll('.skeleton-title').forEach(element => {
+                element.style.width = '30%';
+            });
+            document.querySelectorAll('.skeleton-name').forEach(element => {
+                element.style.width = '258px';
+            });
+        }
+    }
+
+    // functions: misc
+
+    async function getLatestTag() {
+        const url = `https://api.github.com/repos/psavidis/resume/tags`;
+
+        // Check if the result is already cached in sessionStorage
+        const cachedTags = sessionStorage.getItem('githubTags');
+
+        if (productionMode && cachedTags) {
+            return JSON.parse(cachedTags)[0].name; // Return the first tag from cached data
+        }
+
+        try {
+            const response = await fetch(url);
+            if (!response.ok) {
+                throw new Error(`GitHub API error: ${response.status}`);
+            }
+
+            const tags = await response.json();
+            if (tags.length === 0) {
+                return null; // No tags found
+            }
+
+            // Cache the result in sessionStorage
+            sessionStorage.setItem('githubTags', JSON.stringify(tags));
+
+            // console.log("Returning latest tag:", tags[0].name);
+            return tags[0].name; // Return the first (latest) tag
+        } catch (error) {
+            console.error('Error fetching tags:', error);
+            return null;
+        }
+    }
+
+    async function configureResumeVersion(useNextTag=false) {
+        const latestTag = await getLatestTag();
+        const versionElement = document.querySelector(".resume-version");
+
+        if (latestTag) {
+            const versionTag = useNextTag ? getNextTag(latestTag) : latestTag;
+
+            versionElement.textContent = `Resume ${versionTag}`;
+        } else {
+            versionElement.textContent = 'Resume latest';
+        }
+    }
+
+    // Run the function when the window is resized or loaded
+    window.addEventListener('resize', adjustSkeletonSizes);
+    window.addEventListener('load', adjustSkeletonSizes);
+
+    // Call functions to load data and initialize the page components
+
+    const skeletons = maskAllSkeletonsAndGet();
+
+    configureResumeVersion();
+    loadResumeData().then(() => {
+        hideSearchBar();
+        hideProjectTech();
+
+        configurePdfButton();
+        configureSearchToggle();
+        configureSearchBar();
+        configurePhoneButton();
+
+        configureBasedOnClient();
+
+        showEasterEgg();
+
+        configureDarkModeButton();
+        configurePushNotificationOnLoad();
+        configureVoice();
+
+        showAnimationHint(6000, true);
+    }).then(() => {
+        removeAllSkeletons(skeletons, 700);
+    });
+
+</script>
+</body>
+</html>
