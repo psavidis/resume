@@ -230,12 +230,7 @@
         <button id="toggle-search" class="btn toggle-button"><i class="fas fa-search"></i></button>
         <button id="dark-mode-toggle" class="btn"><i id="mode-icon" class="fas fa-moon"></i></button>
         <button id="microphone-btn" class="btn"><i class="fas fa-microphone"></i></button>
-    </div>
-
-    <div class="language-wrapper">
-        <button id="language-btn" class="btn">
-            <i class="fas fa-globe"></i>
-        </button>
+        <button id="language-btn" class="btn"><i class="fas fa-globe"></i></button>
     </div>
 
     <div id="overlay">
@@ -2252,6 +2247,7 @@
             document.getElementById('shortcut-hint').style.display = 'block';
             document.getElementById('phoneButton').style.display = 'block';
             document.getElementById('menu-toggle').style.display = 'none';
+            document.getElementById('language-btn').style.display = 'block';
 
             configureKeyboardModal();
             registerKeyboardShortcuts();
@@ -2260,6 +2256,7 @@
             document.getElementById('phoneButton').style.display = 'none';
             document.getElementById('shortcut-hint').style.visibility = 'hidden';
             document.getElementById('microphone-btn').style.visibility = 'hidden';
+            document.getElementById('language-btn').style.display = 'hidden';
 
             configureTooltipsForMobile();
         }
