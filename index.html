@@ -1813,6 +1813,10 @@
                     targetUrl = "/resume/attic-index.html";
                 }
 
+                if (shouldTrack()) {
+                    targetUrl += '?no-track=true';
+                }
+
                 window.location.href = targetUrl;
                 closeLang();
             });
