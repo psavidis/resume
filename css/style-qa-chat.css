@@ -1,0 +1,80 @@
+body {
+    background: linear-gradient(to right, #f8fafc, #e0f2fe);
+}
+#submit-btn, #microphone-btn {
+    position: relative;
+    font-size: 1.5rem;
+    background-color: #2c3e50;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    padding: 10px;
+    margin: 5px;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.2s ease;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+#submit-btn:hover, #microphone-btn:hover {
+    background-color: #1f2a38;
+}
+.typing-indicator {
+    width: 50px;
+    height: 30px;
+    background: #f3f4f6;
+    border-radius: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 3px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    margin-left: 0.5rem;
+}
+.typing-indicator span {
+    width: 6px;
+    height: 6px;
+    background: #9ca3af;
+    border-radius: 50%;
+    animation: blink 1.4s infinite both;
+}
+.typing-indicator span:nth-child(2) {
+    animation-delay: 0.2s;
+}
+.typing-indicator span:nth-child(3) {
+    animation-delay: 0.4s;
+}
+@keyframes blink {
+    0%, 80%, 100% { opacity: 0; }
+    40% { opacity: 1; }
+}
+/* New Styles for Profile Header */
+.profile-header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    margin-bottom: 2rem;
+}
+.profile-header img {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    border: 3px solid #2c3e50;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    margin-bottom: 1rem;
+}
+.profile-header h2 {
+    font-size: 2.5rem;
+    font-weight: 600;
+    color: #2c3e50;
+    margin-bottom: 0.5rem;
+}
+.profile-header p {
+    font-size: 1.25rem;
+    color: #34495e;
+    font-weight: 500;
+}
