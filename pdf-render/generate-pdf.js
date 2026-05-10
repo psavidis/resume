@@ -34,6 +34,7 @@ const puppeteer = require('puppeteer');
         hideSearchContainer();
         hideButtonContainer();
         hideTooltip();
+        hideProfilePictureBubble();
         showPdfSummary();
 
         const resume = document.querySelector('#page-top');
