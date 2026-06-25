@@ -87,7 +87,7 @@ try {
     runRoot(`git commit -m "chore(release): ${nextVersion}"`);
 
     // 4. Annotated tag
-    // runRoot(`git tag -a ${nextVersion} -m "Release version ${nextVersion}"`);
+    runRoot(`git tag -a ${nextVersion} -m "Release version ${nextVersion}"`);
 
     // 5. Push (optional but enabled here)
     // runRoot("git push origin main");
