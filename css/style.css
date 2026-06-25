@@ -1097,29 +1097,6 @@ body.search-active .toggle-button:focus {
     z-index: 2;
 }
 
-#voice-command-hint {
-    position: fixed;
-    bottom: 4rem; /* Positioned above the shortcut hint */
-    right: 0%; /* Center horizontally */
-    transform: translateX(-1%);
-    background: rgba(0, 0, 0, 0.6);
-    color: white;
-    padding: 1rem;
-    font-size: 14px;
-    border-radius: 1rem;
-    font-family: 'Courier New', monospace;
-    z-index: 1;
-    justify-content: center;
-}
-
-#voice-command-hint ul {
-    list-style-type: circle; /* Hollow circle for a subtle look */
-}
-
-#voice-command-hint span {
-    margin-right: 10px;
-}
-
 #contact-form-container {
     position: fixed;
     bottom: 20px;
@@ -1908,17 +1885,6 @@ body.dark-mode .btn:hover {
     color: #ffffff;
 }
 
-body.dark-mode #voice-command-hint {
-    background: linear-gradient(145deg, #3e2a47, #1f1f2a); /* Dark gradient */
-    color: #c9b6e4; /* Soft lavender or light color */
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5); /* Optional: subtle shadow */
-    border: 1px solid #444;
-}
-
-body.dark-mode #voice-command-hint span {
-    color: #e0e0e0;
-}
-
 body.dark-mode .profile-title {
     color: #ffffff !important;
     text-shadow: rgba(255, 174, 0, 0.8) 0 0 2px;
@@ -2060,12 +2026,6 @@ body.search-active {
     }
 
     #copyright {
-        filter: blur(4px);
-        pointer-events: none;
-        transition: filter 0.3s ease;
-    }
-
-    #voice-command-hint {
         filter: blur(4px);
         pointer-events: none;
         transition: filter 0.3s ease;
