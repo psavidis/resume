@@ -166,6 +166,10 @@ body.loaded #shortcut-hint {
     z-index: 9998;
 }
 
+@view-transition {
+    navigation: auto;
+}
+
 .lang-modal {
     position: fixed;
     top: 50%;
