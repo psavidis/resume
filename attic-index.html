@@ -2457,108 +2457,6 @@
         }
     }
 
-    function configureVoice() {
-
-        // Disable voice commands for mobiles
-        if (isMobile()) {
-            return;
-        }
-
-        const micButton = document.getElementById('microphone-btn');
-        micButton.addEventListener('click', () => {
-            micButton.classList.toggle('recording');
-        });
-
-        // Check if browser supports the Web Speech API
-        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-
-        if (!SpeechRecognition) {
-            console.log('Browser does not support speech recognition');
-            document.getElementById('microphone-btn').style.display = 'none';
-            document.getElementById('voice-command-hint').style.display = 'none';
-            return;
-        }
-
-        document.getElementById('microphone-btn').style.display = 'inline-block';
-
-        const recognition = new SpeechRecognition();
-        recognition.continuous = true;
-        recognition.lang = 'en-US';
-
-        // Show the voice command guide when listening
-        recognition.onstart = () => {
-            isListening = true;
-            document.getElementById('voice-command-hint').style.display = 'block';
-            startMicGlow();
-            <!--            console.log("Voice recognition started");-->
-        };
-
-        recognition.onend = () => {
-            isListening = false;
-            document.getElementById('voice-command-hint').style.display = 'none';
-            document.getElementById('microphone-btn').classList.remove('recording');
-            stopMicGlow();
-            <!--            console.log("Voice recognition stopped");-->
-        };
-
-        recognition.onresult = (event) => {
-            const lastResult = event.results[event.results.length - 1];
-            const command = lastResult[0].transcript.toLowerCase().trim();
-            handleVoiceCommand(command);
-        };
-
-        document.getElementById('microphone-btn').addEventListener('click', () => {
-            if (!isListening) {
-                if (isFormContainerVisible()) {
-                    hideFormContainer();
-                }
-                recognition.start();
-            } else {
-                recognition.stop();
-            }
-        });
-    }
-
-    let audioCtx;
-    let analyser;
-    let micStream;
-    let animationId;
-    const micBtn = document.getElementById('microphone-btn');
-
-    async function startMicGlow() {
-        micStream = await navigator.mediaDevices.getUserMedia({audio: true});
-        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-        const source = audioCtx.createMediaStreamSource(micStream);
-        analyser = audioCtx.createAnalyser();
-        source.connect(analyser);
-        analyser.fftSize = 256;
-        const dataArray = new Uint8Array(analyser.frequencyBinCount);
-
-        function animate() {
-            animationId = requestAnimationFrame(animate);
-            analyser.getByteFrequencyData(dataArray);
-            const average = dataArray.reduce((a, b) => a + b) / dataArray.length;
-            if (average > 10) {
-                micBtn.classList.add('glowing');
-            } else {
-                micBtn.classList.remove('glowing');
-            }
-        }
-
-        animate();
-    }
-
-    function stopMicGlow() {
-        if (animationId) cancelAnimationFrame(animationId);
-        if (micStream) {
-            micStream.getTracks().forEach(track => track.stop());
-        }
-        if (audioCtx) {
-            audioCtx.close();
-        }
-        micBtn.classList.remove('glowing');
-    }
-
     // functions: blog
 
     function configureBlogButton() {
@@ -2796,7 +2694,6 @@
 
         configureDarkModeButton();
         configurePushNotificationOnLoad();
-        configureVoice();
 
         showAnimationHint(6000, true);
     }).then(() => {
