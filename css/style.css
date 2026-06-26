@@ -1049,54 +1049,6 @@ body.search-active .toggle-button:focus {
     height: 18px;
 }
 
-#microphone-btn {
-    position: relative;
-    font-size: 1.5rem;
-    background-color: #2c3e50;
-    color: white; /* Icon color */
-    border: none;
-    border-radius: 50%; /* Make it fully round */
-    cursor: pointer;
-    padding: 10px;
-    margin: 5px;
-    width: 50px;
-    height: 50px;
-    display: none;
-    align-items: center;
-    justify-content: center;
-    transition: background-color 0.2s ease;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Optional: add shadow like other buttons */
-}
-
-#microphone-btn.glowing i {
-    color: #4fc3f7;
-    text-shadow:
-            0 0 6px #4fc3f7,
-            0 0 12px rgba(33, 150, 243, 0.7), /* deeper blue */
-            0 0 20px rgba(33, 150, 243, 0.5); /* outer glow */
-}
-
-/* Icon color */
-#microphone-btn i {
-    z-index: 1;
-}
-
-/* "REC" overlay badge when recording */
-#microphone-btn.recording::after {
-    content: "REC";
-    position: absolute;
-    top: -8px;
-    right: 4px;
-    background-color: red;
-    color: white;
-    padding: 2px 5px;
-    border-radius: 3px;
-    font-size: 0.6rem;
-    font-weight: bold;
-    font-family: sans-serif;
-    z-index: 2;
-}
-
 #contact-form-container {
     position: fixed;
     bottom: 20px;
@@ -1843,28 +1795,6 @@ body.dark-mode .btn {
 
 body.dark-mode #menu-toggle.active {
     background: linear-gradient(145deg, #9f479f, #1c1c24) !important; /* Dark gradient */
-}
-
-body.dark-mode #microphone-btn {
-    background: linear-gradient(145deg, #2e2a36, #1c1c24);
-    color: #c9b6e4;
-    border: 1px solid #444;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5);
-    transition: background 0.3s, transform 0.2s, color 0.3s;
-}
-
-body.dark-mode #microphone-btn.glowing i {
-    color: #b388ff;
-    text-shadow:
-            0 0 6px #b388ff,
-            0 0 10px rgba(179, 136, 255, 0.6),
-            0 0 18px rgba(179, 136, 255, 0.4);
-}
-
-body.dark-mode #microphone-btn:hover {
-    background: linear-gradient(145deg, #3e2a47, #1f1f2a);
-    color: #ffffff;
-    transform: translateY(-2px);
 }
 
 body.dark-mode .btn:hover {
