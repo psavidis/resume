@@ -1354,20 +1354,39 @@ button.dark-mode i {
     background-color: #e9e9e9;
 }
 
+.dark-mode .highlight-pulse {
+    background: linear-gradient(145deg, #4e3b5b, #3a2a45); !important;
+    background: linear-gradient(
+            145deg,
+            #4e3b5b,
+            #3a2a45
+    ) !important;
+}
+
 .project-li.highlight-pulse {
     background: linear-gradient(
-            135deg,
-            rgba(255, 215, 0, 0.22),
-            rgba(184, 134, 11, 0.10),
-            rgba(0, 0, 0, 0.02)
+            180deg,
+            #fff5c9 0%,
+            #f4d15f 45%,
+            #d4a21b 100%
     );
 
-    border: 1px solid rgba(255, 215, 0, 0.55);
+    color: #4a3400 !important;
+
+    border: 1px solid #b8860b !important;
+    border-radius: 6px;
+
+    text-shadow: 0 1px 0 rgba(255,255,255,.35);
 
     box-shadow:
-            0 0 18px rgba(255, 215, 0, 0.35),
-            0 0 40px rgba(255, 215, 0, 0.18),
-            0 12px 28px rgba(0, 0, 0, 0.25);
+            inset 0 1px 0 rgba(255,255,255,.45),
+            inset 0 -1px 0 rgba(120,70,0,.20);
+
+    transition: all .2s ease;
+}
+
+.project-li.highlight-pulse .project-button:hover {
+    filter: brightness(1.05);
 }
 
 .project-title {
@@ -1698,17 +1717,6 @@ body .project-name {
     color: #1e3c72;
     font-size: 18px;
     font-weight: bold;
-}
-
-.project-li.highlight-pulse .project-name {
-    color: #d4af37;
-
-    /* engraved / inset gold feel */
-    text-shadow:
-            0 1px 0 rgba(0, 0, 0, 0.45),
-            0 0 10px rgba(255, 215, 0, 0.25);
-
-    background: transparent !important;
 }
 
 body.dark-mode .project-name {
