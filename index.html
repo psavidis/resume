@@ -105,6 +105,7 @@
                 </li>
                 <li><b>Download</b> my resume in PDF format</li>
                 <li><b>Search</b> through my projects using simple keywords</li>
+                <li><b>Visit</b> my youtube channel where I make videos about Software Architecture & Design</li>
             </ul>
         </div>
         <p id="summary-free">Outside of work, I’m passionate about traveling, making music, reading philosophy, and
@@ -226,6 +227,7 @@
         <button id="linkedin-btn" class="btn"><i class="fab fa-linkedin-in"></i></button>
         <button id="github-btn" class="btn"><i class="fab fa-github"></i></button>
         <button id="blog-btn" class="btn"><i class="fas fa-blog"></i></button>
+        <button id="youtube-btn" class="btn youtube-button" onclick="window.open('https://www.youtube.com/@Philosoftware', '_blank')" id="youtube-btn"><i class="fab fa-youtube"></i></button>
         <button id="pdf-btn" class="btn"><i class="fas fa-file-pdf"></i></button>
         <button id="toggle-search" class="btn toggle-button"><i class="fas fa-search"></i></button>
         <button id="dark-mode-toggle" class="btn"><i id="mode-icon" class="fas fa-moon"></i></button>
@@ -1858,9 +1860,10 @@
         const listItems = document.querySelectorAll("#summary-instructions li");
 
         const buttonMap = [
-            ["linkedin-btn", "email-btn", "phoneButton"], // First list item
-            ["pdf-btn"],                   // Second list item
-            ["toggle-search"]             // Third list item
+            ["linkedin-btn", "email-btn", "phoneButton"],
+            ["pdf-btn"],
+            ["toggle-search"],
+            ["youtube-btn"]
         ];
 
         listItems.forEach((item, index) => {
