@@ -1,6 +1,25 @@
 const puppeteer = require('puppeteer');
+const http = require('http');
+const fs = require('fs');
+const path = require('path');
+
+const REPO_ROOT = path.resolve(__dirname, '..');
+const LIVE_URL = 'https://psavidis.github.io/resume?no-track=true';
+
+// Pass --local to render your local files instead of the hosted resume
+const isLocal = process.argv.includes('--local');
 
 (async () => {
+    // In local mode the repo is served over HTTP under a /resume/ path, because index.html
+    // uses absolute /resume/... asset URLs and fetches data.json: file:// breaks the fetch
+    // (CORS), and serving from the repo root 404s every asset.
+    const server = isLocal ? await startLocalServer() : null;
+    const url = isLocal
+        ? `http://localhost:${server.address().port}/resume/index.html?no-track=true`
+        : LIVE_URL;
+
+    console.log(isLocal ? 'Mode: local' : 'Mode: live');
+
     const browser = await puppeteer.launch({
         headless: 'new',
         defaultViewport: null
@@ -8,8 +27,14 @@ const puppeteer = require('puppeteer');
 
     const page = await browser.newPage();
 
-    // Replace with your local or hosted resume URL
-    await goToPage(page, 'https://psavidis.github.io/resume?no-track=true');
+    // Surface page-side failures instead of letting them hang the run silently
+    page.on('pageerror', err => console.error('Page error:', err.message));
+
+    page.on('console', msg => {
+        if (msg.type() === 'error') console.error('Page console error:', msg.text());
+    });
+
+    await goToPage(page, url);
 
     await new Promise(resolve => setTimeout(resolve, 1000));
 
@@ -23,6 +48,11 @@ const puppeteer = require('puppeteer');
 
     console.log('Waiting for live-resume-url...')
     await page.waitForSelector('.live-resume-url'); // Make sure this selector exists
+
+    // The above are static markup, so they resolve even when data.json failed to load.
+    // Wait on a data-driven element to prove the resume actually populated.
+    console.log('Waiting for work-experience (data-driven)...');
+    await page.waitForSelector('.work-experience');
 
     console.log("Printing screenshot before evaluate")
 
@@ -81,7 +111,41 @@ const puppeteer = require('puppeteer');
     });
 
     await browser.close();
+    if (server) server.close();
+    console.log('PDF created: resume-petros_savidis.pdf');
 })();
+
+// Serves the repo so that index.html is reachable at /resume/index.html
+function startLocalServer() {
+    const types = {
+        '.html': 'text/html', '.js': 'text/javascript', '.css': 'text/css',
+        '.json': 'application/json', '.png': 'image/png', '.jpg': 'image/jpeg',
+        '.jpeg': 'image/jpeg', '.svg': 'image/svg+xml', '.ico': 'image/x-icon'
+    };
+
+    const server = http.createServer((req, res) => {
+        const relative = decodeURIComponent(req.url.split('?')[0]).replace(/^\/resume\/?/, '');
+        const file = path.join(REPO_ROOT, relative || 'index.html');
+
+        // Keep the server confined to the repo
+        if (!file.startsWith(REPO_ROOT)) {
+            res.writeHead(403).end();
+            return;
+        }
+
+        fs.readFile(file, (err, content) => {
+            if (err) {
+                res.writeHead(404).end();
+                return;
+            }
+            res.writeHead(200, {'Content-Type': types[path.extname(file)] || 'application/octet-stream'});
+            res.end(content);
+        });
+    });
+
+    // Port 0 lets the OS pick a free port, so repeated runs never collide
+    return new Promise(resolve => server.listen(0, '127.0.0.1', () => resolve(server)));
+}
 
 async function debugScreenshotPage(page) {
     console.log("Printing screenshot before evaluate");
