@@ -11,6 +11,17 @@
   ],
   "workExperience": [
     {
+      "title": "Ἐπιστάτης ἀρχιτεκτόνων μηχανῶν",
+      "company": "Ἀνωρροή",
+      "companyLogo": "img/company-logo_upstream.jpeg",
+      "companyLink": "https://www.upstreamsystems.com/",
+      "startDate": "Ἐλαφηβολιών 2026",
+      "endDate": "Present",
+      "employmentType": "Πλήρης ἀπασχόλησις",
+      "location": "Ἀθῆναι, Ἑλλάς",
+      "workMode": "Μικτόν"
+    },
+    {
       "title": "Ἀρχιτέκτων μηχανῶν",
       "company": "Ἑρμοτάξις",
       "companyLogo": "img/company-logo_camunda.jpeg",
