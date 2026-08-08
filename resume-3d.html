@@ -611,6 +611,39 @@
             #stick { width: 100px; height: 100px; }
             #stick-knob { width: 42px; height: 42px; transform: translate(-21px, -21px); }
         }
+
+        /* Fallback for touch devices where orientation lock isn't available
+           (e.g. iOS Safari) — ask the player to rotate manually instead of
+           letting them fight the game in a cramped portrait viewport. */
+        #rotate-hint {
+            display: none;
+            position: fixed;
+            inset: 0;
+            z-index: 100;
+            background: #0b0f14;
+            color: #f4e9d8;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+        #rotate-hint .rotate-inner { padding: 24px; }
+        #rotate-hint .icon {
+            display: block;
+            font-size: 48px;
+            margin-bottom: 14px;
+            animation: rotate-hint-spin 1.8s ease-in-out infinite;
+        }
+        #rotate-hint p { font-size: 16px; opacity: 0.85; }
+        @keyframes rotate-hint-spin {
+            0%, 100% { transform: rotate(0deg); }
+            50% { transform: rotate(-90deg); }
+        }
+        @media (hover: none) and (pointer: coarse) and (orientation: portrait) {
+            #rotate-hint { display: flex; }
+            #loading, #hud, #controls, #stick, #touch-camera, #touch-buttons, #pinch-hint, #modal {
+                visibility: hidden;
+            }
+        }
     </style>
 </head>
 <body>
@@ -661,6 +694,13 @@
     <div id="modal-card">
         <button id="modal-close" aria-label="Close">×</button>
         <div id="modal-body"></div>
+    </div>
+</div>
+
+<div id="rotate-hint">
+    <div class="rotate-inner">
+        <span class="icon">🔄</span>
+        <p>Rotate your device to landscape to play</p>
     </div>
 </div>
 

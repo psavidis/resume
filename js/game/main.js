@@ -973,6 +973,33 @@ class Game {
     }
 }
 
+// ---- mobile fullscreen / orientation ---------------------------------------
+
+// Touch devices get the full immersive treatment on "Enter Island": go
+// fullscreen (hides the browser chrome/URL bar) and lock to landscape, since
+// the game's camera and touch controls are laid out for a wide viewport.
+// Both APIs require a direct user gesture, so this must run synchronously
+// inside the click handler — not after an await.
+function enterFullscreenOnMobile() {
+    const isTouch = window.matchMedia('(hover: none) and (pointer: coarse)').matches;
+    if (!isTouch) return;
+
+    const el = document.documentElement;
+    const request = el.requestFullscreen || el.webkitRequestFullscreen;
+    const result = request ? request.call(el) : Promise.resolve();
+
+    Promise.resolve(result)
+        .then(() => {
+            if (screen.orientation && screen.orientation.lock) {
+                return screen.orientation.lock('landscape').catch(() => {});
+            }
+        })
+        .catch(() => {
+            // Fullscreen can be denied (e.g. iOS Safari has no Fullscreen API);
+            // the #rotate-hint overlay covers that case via CSS instead.
+        });
+}
+
 // ---- boot ------------------------------------------------------------------
 
 async function boot() {
@@ -1015,6 +1042,7 @@ async function boot() {
     document.getElementById('sound-muted').addEventListener('click', () => chooseSound(false));
 
     document.getElementById('enter-btn').addEventListener('click', () => {
+        enterFullscreenOnMobile();
         game.releaseTitleScreen();
         loading.classList.add('hidden');
     });
