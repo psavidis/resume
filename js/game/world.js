@@ -647,11 +647,16 @@ export class World {
         // The company landmark anchors the far side of the island, so the
         // player walks toward it and past it on the way to the next zone.
         // Kept well north of the spawn so it never crowds the opening view.
+        // Camunda's ziggurat is pulled in closer to the centre than the rest:
+        // at the standard 9.5 its full 8.5-wide base tier sat right across
+        // the north corridor and visually walled off the bridge to the next
+        // island as the player approached.
         const LANDMARK_SCALE = 0.78;
+        const landmarkZ = exp.company === 'Camunda' ? 6 : 9.5;
         const landmark = this._buildLandmark(
-            exp, theme, new THREE.Vector3(center.x, 0, center.z + 9.5), LANDMARK_SCALE
+            exp, theme, new THREE.Vector3(center.x, 0, center.z + landmarkZ), LANDMARK_SCALE
         );
-        landmark.position.set(0, 0, 9.5);
+        landmark.position.set(0, 0, landmarkZ);
         landmark.scale.setScalar(LANDMARK_SCALE);
         group.add(landmark);
         // Deliberately NOT an occluder: the player walks through these, so
@@ -3242,11 +3247,13 @@ export class World {
             return stall;
         };
 
+        // The fourth stall (by the globe) was swapped out for the clockwork
+        // gear machine below — a workflow engine earns a machine that
+        // visibly runs before a fruit table.
         const stalls = [
             { pos: [-10, -6.5], rot: 0.6, a: 0xd0453c, b: 0xf5efe2, goods: [0xe0632d, 0xd8352f, 0xe8b73a] },
             { pos: [-11, 1.5], rot: 1.05, a: 0x2f7fa8, b: 0xf5efe2, goods: [0x6fae3c, 0x3f8f4a, 0xc7d84a] },
-            { pos: [-9, 8.5], rot: 1.5, a: 0x4f8a3c, b: 0xf5efe2, goods: [0x9a5ac0, 0xd8437a, 0x5a7fd0] },
-            { pos: [11, -1.5], rot: -1.2, a: 0xd8963c, b: 0xf5efe2, goods: [0xe8c14a, 0xb0762f, 0xe0a03c] }
+            { pos: [-9, 8.5], rot: 1.5, a: 0x4f8a3c, b: 0xf5efe2, goods: [0x9a5ac0, 0xd8437a, 0x5a7fd0] }
         ];
         stalls.forEach(({ pos, rot, a, b, goods }) => {
             const stall = buildStall(a, b, goods);
@@ -3407,6 +3414,96 @@ export class World {
             top: sandTop, bottom: sandBottom, stream,
             bulbH: BULB_H, baseY: 3.1, phase: 0
         });
+
+        // --- the gear machine: a workflow engine's clockwork, out in the open
+        // where the fourth market stall used to stand, beside the globe. Three
+        // meshed cogs turn continuously, driven from _updateProps — the big
+        // drive gear and two smaller ones meshed to its rim, geared so their
+        // teeth counts set the relative speeds and alternate spin direction.
+        const gearMachine = new THREE.Group();
+        const gearMat = new THREE.MeshLambertMaterial({ color: 0xb0762f });
+        const gearMatDark = new THREE.MeshLambertMaterial({ color: 0x8a5a24 });
+        const frameBrass = new THREE.MeshLambertMaterial({ color: 0xc9a227 });
+
+        // A toothed disc: a flat cylinder with small tooth blocks around the rim.
+        const makeGear = (radius, thickness, teeth, mat) => {
+            const gear = new THREE.Group();
+            const hub = new THREE.Mesh(
+                new THREE.CylinderGeometry(radius, radius, thickness, 24), mat
+            );
+            hub.rotation.x = Math.PI / 2;
+            hub.castShadow = true;
+            gear.add(hub);
+            const toothW = radius * 0.34;
+            for (let i = 0; i < teeth; i++) {
+                const a = (i / teeth) * Math.PI * 2;
+                const tooth = new THREE.Mesh(
+                    new THREE.BoxGeometry(toothW, toothW, thickness), mat
+                );
+                tooth.position.set(Math.cos(a) * radius, Math.sin(a) * radius, 0);
+                tooth.rotation.z = a;
+                gear.add(tooth);
+            }
+            // Axle nub through the centre.
+            const axle = new THREE.Mesh(
+                new THREE.CylinderGeometry(radius * 0.18, radius * 0.18, thickness + 0.14, 10),
+                frameBrass
+            );
+            axle.rotation.x = Math.PI / 2;
+            gear.add(axle);
+            return gear;
+        };
+
+        // Backboard the gears turn against, so they read as a machine rather
+        // than spinning discs floating in mid-air.
+        const board = new THREE.Mesh(
+            new THREE.BoxGeometry(3.6, 3.6, 0.3),
+            new THREE.MeshLambertMaterial({ color: 0x5a3f26 })
+        );
+        board.position.set(0, 2.1, -0.3);
+        board.castShadow = true;
+        board.receiveShadow = true;
+        gearMachine.add(board);
+
+        // Big drive gear, lower-left, and two smaller driven gears meshed to
+        // its rim — spaced so their teeth visually interlock with the driver.
+        const bigGear = makeGear(1.1, 0.32, 16, gearMat);
+        bigGear.position.set(-0.8, 1.5, 0);
+        gearMachine.add(bigGear);
+
+        const midGear = makeGear(0.72, 0.32, 11, gearMatDark);
+        midGear.position.set(0.75, 2.35, 0.05);
+        gearMachine.add(midGear);
+
+        const smallGear = makeGear(0.5, 0.32, 8, gearMat);
+        smallGear.position.set(0.55, 0.85, 0.05);
+        gearMachine.add(smallGear);
+
+        // A frame around the board, and four legs planting it on the ground.
+        const frame = new THREE.Mesh(new THREE.TorusGeometry(2.15, 0.12, 6, 4), frameBrass);
+        frame.rotation.z = Math.PI / 4;
+        frame.position.set(0, 2.1, -0.3);
+        frame.scale.set(1, 1, 0.5);
+        gearMachine.add(frame);
+        [[-1.5, -1.5], [1.5, -1.5], [-1.5, 1.5], [1.5, 1.5]].forEach(([lx, ly]) => {
+            const leg = new THREE.Mesh(new THREE.CylinderGeometry(0.1, 0.1, 2.1, 8), frameBrass);
+            leg.position.set(lx, 1.05, -0.3 + ly * 0.05);
+            leg.castShadow = true;
+            gearMachine.add(leg);
+        });
+
+        gearMachine.position.set(11, 0, -1.5);
+        gearMachine.rotation.y = -1.2;
+        group.add(gearMachine);
+        this.occluders.push(gearMachine);
+        this._prop(center, 11, -1.5, 2.0, 1.6, 4.2);
+
+        this.gearMachines = this.gearMachines || [];
+        this.gearMachines.push(
+            { mesh: bigGear, speed: 0.9 },
+            { mesh: midGear, speed: -0.9 * (16 / 11) },
+            { mesh: smallGear, speed: 0.9 * (16 / 8) }
+        );
 
         // --- the airplane: an airliner banking over the island on a loop ---
         const plane = new THREE.Group();
@@ -3905,6 +4002,14 @@ export class World {
 
         for (const globe of this.globes || []) {
             globe.rotation.y += dt * 0.12;
+        }
+
+        // Camunda's gear machine: each cog spins about the axle it was built
+        // on (local z, since the hub is rotated to face outward). Speeds are
+        // set in inverse proportion to tooth count so the meshing reads as
+        // real gearing, alternating direction gear-to-gear.
+        for (const gear of this.gearMachines || []) {
+            gear.mesh.rotation.z += dt * gear.speed;
         }
 
         // The hourglass runs on a 14-second cycle: the upper cone drains into
