@@ -2774,6 +2774,103 @@ export class World {
         group.add(stemG);
         this._prop(center, GLOBE_X, GLOBE_Z, 1.5, 1.5, 3.0);
 
+        // --- the hourglass: process, time and orchestration ---
+        // Camunda is a workflow engine, so an hourglass belongs here as much as
+        // the globe does. The sand actually runs: the upper cone empties and the
+        // lower pile grows, looping, driven from _updateProps.
+        const hourglass = new THREE.Group();
+        const frameMat = new THREE.MeshLambertMaterial({ color: 0x8a5a2b });
+        const glassMat = new THREE.MeshLambertMaterial({
+            color: 0xd8ecf5, transparent: true, opacity: 0.28
+        });
+        const sandMat = new THREE.MeshLambertMaterial({ color: 0xe0b552 });
+
+        const BULB_H = 1.5;      // height of each glass cone
+        const BULB_R = 1.05;     // radius at the wide end
+
+        // End plates, top and bottom.
+        [-1, 1].forEach((side) => {
+            const plate = new THREE.Mesh(
+                new THREE.CylinderGeometry(BULB_R + 0.22, BULB_R + 0.22, 0.18, 20), frameMat
+            );
+            plate.position.y = 3.1 + side * (BULB_H + 0.09);
+            plate.castShadow = true;
+            hourglass.add(plate);
+        });
+
+        // Three uprights joining the plates.
+        for (let i = 0; i < 3; i++) {
+            const a = (i / 3) * Math.PI * 2;
+            const post = new THREE.Mesh(
+                new THREE.CylinderGeometry(0.075, 0.075, (BULB_H + 0.09) * 2, 8), frameMat
+            );
+            post.position.set(
+                Math.cos(a) * (BULB_R + 0.14), 3.1, Math.sin(a) * (BULB_R + 0.14)
+            );
+            post.castShadow = true;
+            hourglass.add(post);
+        }
+
+        // The two glass bulbs, meeting at the waist.
+        [-1, 1].forEach((side) => {
+            const bulb = new THREE.Mesh(
+                new THREE.ConeGeometry(BULB_R, BULB_H, 24, 1, true), glassMat
+            );
+            bulb.material.side = THREE.DoubleSide;
+            bulb.position.y = 3.1 + side * BULB_H / 2;
+            // Point each cone's apex at the waist between them.
+            bulb.rotation.x = side > 0 ? Math.PI : 0;
+            hourglass.add(bulb);
+        });
+
+        // Sand: an inverted cone filling the top bulb (wide at the top,
+        // tapering to the waist, following the glass), and a cone-shaped pile
+        // heaping up in the bottom. Both are scaled in _updateProps.
+        //
+        // ConeGeometry points +y by default, so the top charge is flipped to
+        // match the upper bulb's downward taper; without that it renders as a
+        // spike poking out through the glass.
+        const sandTop = new THREE.Mesh(
+            new THREE.ConeGeometry(BULB_R * 0.9, BULB_H * 0.88, 24), sandMat
+        );
+        sandTop.rotation.x = Math.PI;
+        sandTop.position.y = 3.1 + BULB_H * 0.44;
+        hourglass.add(sandTop);
+
+        const sandBottom = new THREE.Mesh(
+            new THREE.ConeGeometry(BULB_R * 0.86, BULB_H * 0.55, 24), sandMat
+        );
+        sandBottom.position.y = 3.1 - BULB_H + 0.28;
+        hourglass.add(sandBottom);
+
+        // The falling stream at the waist.
+        const stream = new THREE.Mesh(
+            new THREE.CylinderGeometry(0.045, 0.045, BULB_H * 0.85, 8), sandMat
+        );
+        stream.position.y = 3.1 - BULB_H * 0.4;
+        hourglass.add(stream);
+
+        hourglass.position.set(-6.5, 0, -9.5);
+        hourglass.rotation.y = 0.4;
+        group.add(hourglass);
+        this.occluders.push(hourglass);
+        this._prop(center, -6.5, -9.5, 1.4, 1.4, 4.8);
+
+        // A plinth, so it reads as an exhibit rather than dropped on the grass.
+        const plinth = new THREE.Mesh(
+            new THREE.CylinderGeometry(1.35, 1.6, 1.5, 18), frameMat
+        );
+        plinth.position.set(-6.5, 0.75, -9.5);
+        plinth.castShadow = true;
+        plinth.receiveShadow = true;
+        group.add(plinth);
+
+        this.hourglasses = this.hourglasses || [];
+        this.hourglasses.push({
+            top: sandTop, bottom: sandBottom, stream,
+            bulbH: BULB_H, baseY: 3.1, phase: 0
+        });
+
         // --- the airplane: an airliner banking over the island on a loop ---
         const plane = new THREE.Group();
         const fuselageMat = new THREE.MeshLambertMaterial({ color: 0xf2f4f7 });
@@ -3190,6 +3287,29 @@ export class World {
 
         for (const globe of this.globes || []) {
             globe.rotation.y += dt * 0.12;
+        }
+
+        // The hourglass runs on a 14-second cycle: the upper cone drains into
+        // the lower pile, then it flips back to full and starts again.
+        for (const h of this.hourglasses || []) {
+            const CYCLE = 14;
+            h.phase = (h.phase + dt / CYCLE) % 1;
+            const remaining = 1 - h.phase;
+
+            // The upper charge shrinks toward the waist. Its cone is flipped
+            // (rotation.x = π), so scaling y shortens it from the apex at the
+            // waist upward — the sand level drops, which is what it should do.
+            const left = Math.max(0.001, remaining);
+            h.top.scale.set(Math.max(0.2, left), left, Math.max(0.2, left));
+            h.top.position.y = h.baseY + h.bulbH * 0.44 * left;
+
+            // Lower pile heaps up from the floor of the bottom bulb.
+            const filled = Math.max(0.001, h.phase);
+            h.bottom.scale.set(Math.max(0.25, filled), filled, Math.max(0.25, filled));
+            h.bottom.position.y = h.baseY - h.bulbH + 0.28 * filled;
+
+            // The stream only flows while there is sand left to fall.
+            h.stream.visible = remaining > 0.02 && h.phase > 0.02;
         }
 
         // The airliner flies a banked circle. Position comes from the angle, and

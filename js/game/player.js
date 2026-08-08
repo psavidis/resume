@@ -341,9 +341,10 @@ export class Player {
         deltoid.castShadow = true;
         arm.add(deltoid);
 
-        // Set behind the model's own arms and tucked slightly inboard, so the
-        // two pairs read as stacked rather than fighting for the same space.
-        arm.position.set(side * 0.185, shoulderY, -0.16);
+        // Set just outboard of the model's own arms and slightly forward, so
+        // the pair stays clear of the cape hanging down the back. Behind the
+        // cloth (the earlier z = -0.16) they were swallowed by it entirely.
+        arm.position.set(side * 0.235, shoulderY, 0.02);
         parent.add(arm);
         return arm;
     }
@@ -412,26 +413,35 @@ export class Player {
         return cap;
     }
 
-    // European Dynamics: chains — shackled wrists, a waist chain and a heavy
-    // trailing length. The bureaucratic years, worn literally.
+    // European Dynamics: chains — shackled wrists, a waist chain and a ball
+    // dragging behind. The bureaucratic years, worn literally.
+    //
+    // Sized from the rig's measured bones in costume-root space: hips at
+    // y ≈ 1.04, waist ≈ 1.3, wrists ≈ 1.2, shoulders ≈ 1.81. The previous
+    // version was authored for the old primitive body — cuffs at knee height
+    // and a waist ring twice the character's girth.
     _buildChains(body) {
         const chains = new THREE.Group();
         const iron = new THREE.MeshLambertMaterial({ color: 0x6e747c });
         const ironDark = new THREE.MeshLambertMaterial({ color: 0x4a4f56 });
 
-        // A run of interlocking links between two points, alternating the ring
-        // planes the way real chain does.
-        const linkRun = (from, to, count, radius = 0.075) => {
+        const WAIST_Y = 1.32;
+        const WRIST_Y = 1.20;
+        const WAIST_R = 0.2;
+
+        // A run of interlocking links between two points, sagging in the middle
+        // and alternating the ring planes the way real chain does.
+        const linkRun = (from, to, count, radius = 0.032, sag = 0.06) => {
             const run = new THREE.Group();
             for (let i = 0; i < count; i++) {
                 const t = i / (count - 1);
                 const link = new THREE.Mesh(
-                    new THREE.TorusGeometry(radius, radius * 0.32, 5, 10),
+                    new THREE.TorusGeometry(radius, radius * 0.34, 6, 12),
                     i % 2 ? iron : ironDark
                 );
                 link.position.set(
                     from[0] + (to[0] - from[0]) * t,
-                    from[1] + (to[1] - from[1]) * t - Math.sin(t * Math.PI) * 0.12,
+                    from[1] + (to[1] - from[1]) * t - Math.sin(t * Math.PI) * sag,
                     from[2] + (to[2] - from[2]) * t
                 );
                 link.rotation.y = i % 2 ? Math.PI / 2 : 0;
@@ -441,37 +451,54 @@ export class Player {
             return run;
         };
 
-        // Manacles at both wrists, joined by a slack chain across the front.
+        // Manacles at both wrists, joined by a short slack chain in front. The
+        // hands are held close together — the point is restraint, not decoration.
         [-1, 1].forEach((side) => {
-            const cuff = new THREE.Mesh(new THREE.TorusGeometry(0.19, 0.055, 6, 14), iron);
-            cuff.position.set(side * 0.52, 0.72, 0);
+            const cuff = new THREE.Mesh(new THREE.TorusGeometry(0.062, 0.019, 8, 16), iron);
+            cuff.position.set(side * 0.2, WRIST_Y, 0.04);
             cuff.rotation.x = Math.PI / 2;
+            cuff.castShadow = true;
             chains.add(cuff);
         });
-        chains.add(linkRun([-0.5, 0.7, 0.06], [0.5, 0.7, 0.06], 9));
+        chains.add(linkRun([-0.18, WRIST_Y, 0.05], [0.18, WRIST_Y, 0.05], 8, 0.03, 0.05));
 
-        // Waist chain, wrapped twice.
-        [1.0, 0.88].forEach((y, i) => {
-            const belt = new THREE.Mesh(new THREE.TorusGeometry(0.52 + i * 0.02, 0.05, 6, 20), iron);
-            belt.position.y = y;
-            belt.rotation.x = Math.PI / 2 + i * 0.12;
+        // Waist chain, wrapped twice and sitting on the hips.
+        [0, 1].forEach((i) => {
+            const belt = new THREE.Mesh(
+                new THREE.TorusGeometry(WAIST_R + i * 0.008, 0.022, 8, 24), iron
+            );
+            belt.position.y = WAIST_Y - i * 0.055;
+            belt.rotation.x = Math.PI / 2 + i * 0.1;
+            belt.scale.set(1, 1, 0.78);   // the torso is not circular
             chains.add(belt);
-        });
+            }
+        );
 
-        // A heavy length trailing behind, ending in a ball — the drag of it.
-        const trail = linkRun([0, 0.85, -0.5], [0, 0.22, -1.9], 11, 0.1);
-        chains.add(trail);
-        const ball = new THREE.Mesh(new THREE.SphereGeometry(0.3, 14, 12), ironDark);
-        ball.position.set(0, 0.3, -2.05);
+        // The cuff at the ankle that the weight is shackled to.
+        const anklet = new THREE.Mesh(new THREE.TorusGeometry(0.058, 0.017, 8, 16), iron);
+        anklet.position.set(0.08, 0.15, 0);
+        anklet.rotation.x = Math.PI / 2;
+        anklet.castShadow = true;
+        chains.add(anklet);
+
+        // The dragged weight lives in its own group, parented to the player's
+        // root rather than to the hips. The hip bone leans and rotates through
+        // the walk cycle, which would swing a ground-resting ball below the
+        // floor — `drag` stays level no matter what the animation does.
+        const drag = new THREE.Group();
+        this.chainDrag = drag;
+
+        const trail = linkRun([0.08, 0.14, -0.06], [0.02, 0.12, -0.86], 11, 0.038, 0.02);
+        drag.add(trail);
+
+        const ball = new THREE.Mesh(new THREE.SphereGeometry(0.19, 20, 16), ironDark);
+        ball.position.set(0, 0.19, -1.0);
         ball.castShadow = true;
-        chains.add(ball);
+        drag.add(ball);
         this.chainBall = ball;
 
-        // Shoulder yoke, so the chains look worn rather than draped.
-        const yoke = new THREE.Mesh(new THREE.TorusGeometry(0.34, 0.05, 6, 16), ironDark);
-        yoke.position.set(0, 1.45, 0);
-        yoke.rotation.x = Math.PI / 2 - 0.2;
-        chains.add(yoke);
+        drag.visible = false;
+        this.group.add(drag);
 
         chains.visible = false;
         body.add(chains);
@@ -486,40 +513,50 @@ export class Player {
         const bronze = new THREE.MeshLambertMaterial({ color: 0xb8863b });
         const grip = new THREE.MeshLambertMaterial({ color: 0x5c3a1e });
 
-        const blade = new THREE.Mesh(new THREE.BoxGeometry(0.14, 2.2, 0.045), steel);
-        blade.position.y = 1.35;
+        // Sized to the character: a 0.95 blade on a 2-unit body, not the 2.2 it
+        // was authored at for the old primitive rig, which read as a greatsword.
+        //
+        // The group's origin is the grip, so the whole weapon hangs off wherever
+        // the hand mount puts it. Everything below is measured from that origin.
+        const blade = new THREE.Mesh(new THREE.BoxGeometry(0.075, 0.95, 0.024), steel);
+        blade.position.y = 0.6;
         blade.castShadow = true;
         sword.add(blade);
 
         // Fuller down the centre of the blade.
-        const fuller = new THREE.Mesh(new THREE.BoxGeometry(0.05, 1.9, 0.06), bronze);
-        fuller.position.y = 1.3;
+        const fuller = new THREE.Mesh(new THREE.BoxGeometry(0.026, 0.82, 0.032), bronze);
+        fuller.position.y = 0.58;
         sword.add(fuller);
 
-        const point = new THREE.Mesh(new THREE.ConeGeometry(0.1, 0.34, 4), steel);
-        point.position.y = 2.6;
+        const point = new THREE.Mesh(new THREE.ConeGeometry(0.052, 0.16, 4), steel);
+        point.position.y = 1.15;
         sword.add(point);
 
-        const crossguard = new THREE.Mesh(new THREE.BoxGeometry(0.62, 0.11, 0.12), bronze);
-        crossguard.position.y = 0.24;
+        const crossguard = new THREE.Mesh(new THREE.BoxGeometry(0.3, 0.05, 0.055), bronze);
+        crossguard.position.y = 0.11;
         sword.add(crossguard);
 
-        const handle = new THREE.Mesh(new THREE.CylinderGeometry(0.055, 0.06, 0.36, 8), grip);
-        handle.position.y = 0.02;
+        const handle = new THREE.Mesh(new THREE.CylinderGeometry(0.026, 0.028, 0.17, 10), grip);
+        handle.position.y = 0.015;
         sword.add(handle);
 
-        const pommel = new THREE.Mesh(new THREE.SphereGeometry(0.09, 10, 8), bronze);
-        pommel.position.y = -0.19;
+        const pommel = new THREE.Mesh(new THREE.SphereGeometry(0.038, 12, 10), bronze);
+        pommel.position.y = -0.085;
         sword.add(pommel);
 
-        // Gripped in the fist and held out to the side, blade up. The arm hangs
-        // down from the shoulder, so tilting mostly about z swings the blade
-        // outward and vertical — clear of the body, and clear of the camera's
-        // line to the head. Rolling it slightly about x keeps the flat of the
-        // blade toward the viewer rather than edge-on.
-        sword.position.set(0.12, -0.62, 0.02);
-        sword.rotation.z = -1.05;
-        sword.rotation.x = -0.35;
+        // Seated in the fist. The mount is already on the PalmR bone, so the
+        // grip sits at the origin — the old -0.62 offset was a hangover from
+        // the primitive body and floated the sword a full arm's length away.
+        //
+        // PalmR's local axes run down the arm, so the sword needs most of a
+        // half-turn about x to bring the blade up — but rotating about x alone
+        // sweeps it inward across the chest, because the arm hangs at the side.
+        // Searched all three axes on this rig for a pose that points the blade
+        // up while keeping it clear of the torso: (-2.4, 1.2, -1.2) gives 0.81
+        // up with 0.74 clearance, against 0.44 for the best x-only angle. The
+        // result is a blade carried up and out from the shoulder.
+        sword.position.set(0, -0.02, 0.02);
+        sword.rotation.set(-2.4, 1.2, -1.2);
         sword.visible = false;
         return sword;
     }
@@ -536,7 +573,7 @@ export class Player {
         });
 
         // Collar/clasp across the shoulders.
-        const collar = new THREE.Mesh(new THREE.TorusGeometry(0.24, 0.05, 8, 20), outer);
+        const collar = new THREE.Mesh(new THREE.TorusGeometry(0.2, 0.042, 8, 20), outer);
         collar.position.set(0, 1.80, 0.06);
         collar.rotation.x = Math.PI / 2 - 0.25;
         cape.add(collar);
@@ -566,7 +603,7 @@ export class Player {
             back.position.set(0, -length / 2, -0.03);
             panel.add(back);
 
-            panel.position.set(spread * 0.22, 1.78, -0.08 - Math.abs(spread) * 0.04);
+            panel.position.set(spread * 0.17, 1.78, -0.14 - Math.abs(spread) * 0.03);
             panel.rotation.y = spread * 0.35;
             panel.userData.spread = spread;
             cape.add(panel);
@@ -712,6 +749,7 @@ export class Player {
 
         c.cap.visible = on.cap;
         c.chains.visible = on.chains;
+        if (this.chainDrag) this.chainDrag.visible = on.chains;
         c.sword.visible = on.sword;
         c.cape.visible = on.cape;
         c.team.visible = on.team;
@@ -870,12 +908,20 @@ export class Player {
             }
         }
 
+        // The drag group hangs off the player's root, which does not rotate
+        // with `facing`, so turn it here to keep the ball trailing behind
+        // whichever way the character is walking.
+        if (this.chainDrag && this.chainDrag.visible) {
+            this.chainDrag.rotation.y = this.facing;
+        }
+
         if (this.costumes.chains.visible && this.chainBall) {
             // The ball swings behind and bounces, as a dead weight would.
-            const swing = Math.sin(this._capeTime * 3.2) * 0.25 * (0.3 + speed / MOVE_SPEED);
+            const swing = Math.sin(this._capeTime * 3.2) * 0.09 * (0.3 + speed / MOVE_SPEED);
             this.chainBall.position.x = swing;
-            this.chainBall.position.y = 0.3 + Math.abs(Math.sin(this._capeTime * 6)) * 0.12 *
-                (speed / MOVE_SPEED);
+            // Scrapes along the ground, lifting only slightly as it is dragged.
+            this.chainBall.position.y = 0.19 +
+                Math.abs(Math.sin(this._capeTime * 6)) * 0.04 * (speed / MOVE_SPEED);
         }
 
         if (this.costumes.team.visible && this.teamMembers) {
