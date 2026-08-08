@@ -9,7 +9,7 @@
 import * as THREE from '../vendor/three.module.js';
 import { Crate, Fruit } from './crate.js';
 
-const ZONE_RADIUS = 15;
+export const ZONE_RADIUS = 15;
 const ZONE_SPACING = 42;
 
 // Per-company palette so zones are visually distinct and memorable.
@@ -81,8 +81,8 @@ function makeLabelSprite(text, {
 // Paints a two-line wooden sign face. Unlike a sprite this is a real texture on
 // real geometry, so it stays welded to the board at any angle and takes light.
 function makeSignTexture(titleText, subtitleText) {
-    const W = 768;
-    const H = 288;
+    const W = 1024;
+    const H = 384;
     const canvas = document.createElement('canvas');
     canvas.width = W;
     canvas.height = H;
@@ -92,41 +92,42 @@ function makeSignTexture(titleText, subtitleText) {
     ctx.fillStyle = '#a5713c';
     ctx.fillRect(0, 0, W, H);
     ctx.strokeStyle = 'rgba(90, 55, 20, 0.35)';
-    ctx.lineWidth = 3;
+    ctx.lineWidth = 4;
     for (let i = 0; i < 9; i++) {
         ctx.beginPath();
-        ctx.moveTo(0, 16 + i * 32);
-        ctx.bezierCurveTo(W * 0.3, 10 + i * 32, W * 0.7, 24 + i * 32, W, 16 + i * 32);
+        ctx.moveTo(0, 21 + i * 43);
+        ctx.bezierCurveTo(W * 0.3, 13 + i * 43, W * 0.7, 32 + i * 43, W, 21 + i * 43);
         ctx.stroke();
     }
 
-    // Carved inner border
+    // Carved inner border — kept thin relative to the plank so it frames the
+    // text rather than eating into the space available for it.
     ctx.strokeStyle = '#5e3a17';
-    ctx.lineWidth = 10;
-    ctx.strokeRect(14, 14, W - 28, H - 28);
+    ctx.lineWidth = 12;
+    ctx.strokeRect(18, 18, W - 36, H - 36);
 
     // Shrink the title until it fits the plank width.
-    let fontSize = 62;
+    let fontSize = 92;
     ctx.textAlign = 'center';
     do {
         ctx.font = `bold ${fontSize}px system-ui, -apple-system, sans-serif`;
         fontSize -= 2;
-    } while (ctx.measureText(titleText).width > W - 70 && fontSize > 20);
+    } while (ctx.measureText(titleText).width > W - 90 && fontSize > 26);
 
     ctx.textBaseline = 'middle';
     ctx.fillStyle = '#3a2008';
-    ctx.fillText(titleText, W / 2 + 2, H * 0.38 + 3); // carved shadow
+    ctx.fillText(titleText, W / 2 + 3, H * 0.38 + 4); // carved shadow
     ctx.fillStyle = '#fff6e0';
     ctx.fillText(titleText, W / 2, H * 0.38);
 
-    let subSize = 36;
+    let subSize = 50;
     do {
         ctx.font = `600 ${subSize}px system-ui, -apple-system, sans-serif`;
         subSize -= 2;
-    } while (ctx.measureText(subtitleText).width > W - 80 && subSize > 14);
+    } while (ctx.measureText(subtitleText).width > W - 100 && subSize > 18);
 
     ctx.fillStyle = '#3a2008';
-    ctx.fillText(subtitleText, W / 2 + 1, H * 0.68 + 2);
+    ctx.fillText(subtitleText, W / 2 + 2, H * 0.68 + 3);
     ctx.fillStyle = '#ffcf82';
     ctx.fillText(subtitleText, W / 2, H * 0.68);
 
@@ -182,6 +183,39 @@ const GROUND_PAINTER = {
         ctx.globalAlpha = 1;
     }
 };
+
+// The second Upstream visit (zone index 6, not keyed by company since
+// "Upstream" is also the first stint's jungle-free grass island): a frozen,
+// snow-and-ice ground to match the chilly atmosphere that island turns to —
+// see Game._updateAtmosphere and World._updateSnowfall.
+function paintIceGround(ctx, S) {
+    ctx.fillStyle = '#dce8f2';
+    ctx.fillRect(0, 0, S, S);
+    // Cracked-ice veins, and pale drifts of packed snow.
+    ctx.strokeStyle = 'rgba(150, 180, 210, 0.5)';
+    ctx.lineWidth = 2;
+    for (let i = 0; i < 40; i++) {
+        ctx.beginPath();
+        let x = Math.random() * S;
+        let y = Math.random() * S;
+        ctx.moveTo(x, y);
+        for (let s = 0; s < 4; s++) {
+            x += (Math.random() - 0.5) * 60;
+            y += (Math.random() - 0.5) * 60;
+            ctx.lineTo(x, y);
+        }
+        ctx.stroke();
+    }
+    ctx.globalAlpha = 0.5;
+    for (let i = 0; i < 700; i++) {
+        ctx.fillStyle = i % 3 ? '#f4f9ff' : '#c3d8ea';
+        const r = 3 + Math.random() * 14;
+        ctx.beginPath();
+        ctx.arc(Math.random() * S, Math.random() * S, r, 0, Math.PI * 2);
+        ctx.fill();
+    }
+    ctx.globalAlpha = 1;
+}
 
 // A stylised world map for the Camunda globe: ocean blue with hand-plotted
 // landmasses. The shapes are deliberately loose — at globe scale the point is
@@ -353,6 +387,7 @@ export class World {
         this.data = data;
         this.crates = [];
         this.fruits = [];
+        this.npcs = [];         // destructible set-dressing figures (soldiers excluded — decorative only)
         this.zones = [];
         this.colliders = [];   // static boxes the player cannot walk through
         this.platforms = [];   // walkable surfaces {x,z,radius,y} for ground height
@@ -360,6 +395,8 @@ export class World {
         this.logoPanels = [];  // company logo panels, spun in update()
         this.smokestacks = []; // factory chimneys that emit smoke puffs
         this.brokenDebris = [];
+        this.snowflakes = [];   // active flakes over the second Upstream island
+        this._snowIntensity = 0; // 0-1, set by Game._updateAtmosphere via setSnow()
 
         this._build();
     }
@@ -457,7 +494,10 @@ export class World {
 
         // Island disc, slightly domed by scaling a cylinder. A few companies
         // paint their own ground (see GROUND_PAINTER) instead of a flat colour.
-        const painter = GROUND_PAINTER[exp.company];
+        // The second Upstream visit (index 6) is checked first and by index
+        // rather than company, since "Upstream" also names the unthemed
+        // first stint at index 3.
+        const painter = index === 6 ? paintIceGround : GROUND_PAINTER[exp.company];
         const groundMat = painter
             ? new THREE.MeshLambertMaterial({ map: makeGroundTexture(painter) })
             : new THREE.MeshLambertMaterial({ color: theme.ground });
@@ -469,10 +509,11 @@ export class World {
         island.receiveShadow = true;
         group.add(island);
 
-        // Rocky rim so the edge does not look like a cut-out.
+        // Rocky rim so the edge does not look like a cut-out. Icy pale-blue
+        // on the second Upstream visit, to match its frozen ground.
         const rim = new THREE.Mesh(
             new THREE.TorusGeometry(ZONE_RADIUS - 0.4, 0.7, 6, 32),
-            new THREE.MeshLambertMaterial({ color: theme.rock })
+            new THREE.MeshLambertMaterial({ color: index === 6 ? 0xaecbe0 : theme.rock })
         );
         rim.rotation.x = Math.PI / 2;
         rim.position.y = -0.3;
@@ -502,37 +543,26 @@ export class World {
         // in the world (and in the career) the player is standing.
         this._decorateZone(exp, group, center);
 
-        // Role totem: set off to the side so it never sits between the chase
-        // camera and the player as they enter the island from the south.
+        // Role totem: one per island, set off to the side so it never sits
+        // between the chase camera and the player as they enter from the
+        // south, but close enough to the walking corridor to be easy to read
+        // on the way past.
         const totem = this._buildTotem(exp, theme);
         // The board's painted faces are its ±z sides, and the player always
-        // arrives from the south (−z) walking north. Facing the board's +z side
-        // south — rotation.y ≈ π — squares the text to the chase camera on
-        // approach; the slight kick turns it toward the walking corridor.
+        // arrives from the south (−z) walking north. Facing the board's +z
+        // side south — rotation.y ≈ π — squares the text to the chase camera
+        // on approach; the slight kick turns it toward the walking corridor.
         //
-        // Both boards sit out at the rim rather than mid-island: closer in they
-        // masked whatever stood behind them from most angles. Out here they
-        // frame the approach instead of blocking it.
-        totem.position.set(-11.5, 0, -6.5);
-        totem.rotation.y = Math.PI - 0.62;
-        totem.scale.setScalar(0.82);
+        // Sits out at the rim rather than mid-island: closer in it would mask
+        // whatever stood behind it from most angles. Scaled up (1 rather than
+        // the old 0.82) and closer to the corridor so the text reads clearly
+        // without needing to detour off the path.
+        totem.position.set(-9.5, 0, -6.5);
+        totem.rotation.y = Math.PI - 0.5;
         group.add(totem);
         this.occluders.push(totem);
         this.colliders.push({
-            x: center.x - 11.5, z: center.z - 6.5, halfX: 1.0, halfZ: 1.0, top: 4.5
-        });
-
-        // A second signpost on the far side of the walking corridor, angled the
-        // mirrored way, so the role is readable whichever side the player takes
-        // through the island.
-        const totemEast = this._buildTotem(exp, theme);
-        totemEast.position.set(11.5, 0, -6.5);
-        totemEast.rotation.y = Math.PI + 0.62;
-        totemEast.scale.setScalar(0.82);
-        group.add(totemEast);
-        this.occluders.push(totemEast);
-        this.colliders.push({
-            x: center.x + 11.5, z: center.z - 6.5, halfX: 1.0, halfZ: 1.0, top: 4.5
+            x: center.x - 9.5, z: center.z - 6.5, halfX: 1.1, halfZ: 1.1, top: 5.2
         });
 
         // The company landmark anchors the far side of the island, so the
@@ -1077,17 +1107,29 @@ export class World {
 
     _buildTotem(exp, theme) {
         const totem = new THREE.Group();
+        const postMat = new THREE.MeshLambertMaterial({ color: 0x6b4423 });
 
-        const post = new THREE.Mesh(
-            new THREE.CylinderGeometry(0.35, 0.45, 4.5, 8),
-            new THREE.MeshLambertMaterial({ color: 0x6b4423 })
-        );
-        post.position.y = 2.25;
-        post.castShadow = true;
-        totem.add(post);
+        // Two posts at the board's edges rather than one central post: a
+        // single centred post used to cut straight across the title text from
+        // the player's usual approach angle. Edge posts keep the whole face
+        // clear while still reading as a proper signboard.
+        const BOARD_W = 7.2;
+        const BOARD_H = 2.7;
+        const POST_TOP = 4.4 + BOARD_H / 2 - 0.3; // stops just short of the cap
+        [-1, 1].forEach((side) => {
+            const post = new THREE.Mesh(
+                new THREE.CylinderGeometry(0.22, 0.3, POST_TOP, 8),
+                postMat
+            );
+            post.position.set(side * (BOARD_W / 2 - 0.5), POST_TOP / 2, 0);
+            post.castShadow = true;
+            totem.add(post);
+        });
 
         // The sign face is painted onto the board's front and back so the text
         // is readable from either side as the player circles the island.
+        // Sized up from the original 5.4×2.0 plank — at the old size the title
+        // shrank to fit and read as a thin line from the walking corridor.
         const signTex = makeSignTexture(
             exp.title,
             `${exp.company} · ${exp.startDate}–${exp.endDate}`
@@ -1096,22 +1138,79 @@ export class World {
         const faced = new THREE.MeshLambertMaterial({ map: signTex });
         // BoxGeometry material order: +x, -x, +y, -y, +z, -z
         const board = new THREE.Mesh(
-            new THREE.BoxGeometry(5.4, 2.0, 0.3),
+            new THREE.BoxGeometry(BOARD_W, BOARD_H, 0.32),
             [plain, plain, plain, plain, faced, faced]
         );
-        board.position.y = 4.2;
+        board.position.y = 4.4;
         board.castShadow = true;
         totem.add(board);
 
-        // Tiki face carved on the post, purely decorative.
-        const eyeMat = new THREE.MeshLambertMaterial({ color: 0x241608 });
-        [-0.16, 0.16].forEach((x) => {
-            const eye = new THREE.Mesh(new THREE.SphereGeometry(0.09, 8, 6), eyeMat);
-            eye.position.set(x, 2.6, 0.34);
-            totem.add(eye);
+        return totem;
+    }
+
+    // A fellow graduate for the university temple: gown, mortarboard cap and
+    // tassel, in one of a few gown colours so a cluster of them doesn't read
+    // as clones. Destructible via _registerNPC, same as the cat and the giant.
+    _buildGraduate() {
+        const palette = [0x2a2f5c, 0x5c2a2a, 0x2a5c3a];
+        const gownColor = palette[Math.floor(Math.random() * palette.length)];
+
+        const grad = new THREE.Group();
+        const gown = new THREE.MeshLambertMaterial({ color: gownColor });
+        const skin = new THREE.MeshLambertMaterial({ color: 0xe0bb92 });
+        const trim = new THREE.MeshLambertMaterial({ color: 0xd4af37 });
+        const felt = new THREE.MeshLambertMaterial({ color: 0x1d2233 });
+
+        const torso = new THREE.Mesh(new THREE.CapsuleGeometry(0.32, 0.75, 4, 10), gown);
+        torso.position.y = 1.2;
+        torso.castShadow = true;
+        grad.add(torso);
+
+        // A sash of trim down the front, the way academic gowns are faced.
+        const sash = new THREE.Mesh(new THREE.BoxGeometry(0.1, 1.1, 0.04), trim);
+        sash.position.set(0, 1.2, 0.3);
+        grad.add(sash);
+
+        const head = new THREE.Mesh(new THREE.SphereGeometry(0.26, 12, 10), skin);
+        head.position.y = 1.92;
+        grad.add(head);
+
+        // Mortarboard, matching the university costume's cap but built fresh
+        // here rather than shared — these figures have no rig to mount onto.
+        const crown = new THREE.Mesh(
+            new THREE.SphereGeometry(0.24, 20, 14, 0, Math.PI * 2, 0, Math.PI * 0.5), felt
+        );
+        crown.position.set(0, 2.02, 0);
+        crown.scale.set(1, 0.6, 1);
+        grad.add(crown);
+        const board = new THREE.Mesh(new THREE.BoxGeometry(0.62, 0.03, 0.62), felt);
+        board.position.set(0, 2.14, 0);
+        board.rotation.y = Math.PI / 4;
+        board.castShadow = true;
+        grad.add(board);
+        const button = new THREE.Mesh(new THREE.SphereGeometry(0.03, 10, 8), trim);
+        button.position.set(0, 2.16, 0);
+        grad.add(button);
+        const tassel = new THREE.Mesh(new THREE.CylinderGeometry(0.035, 0.025, 0.14, 8), trim);
+        tassel.position.set(0.28, 2.08, 0);
+        grad.add(tassel);
+
+        const legs = new THREE.Mesh(new THREE.CylinderGeometry(0.2, 0.24, 0.8, 8), gown);
+        legs.position.y = 0.42;
+        grad.add(legs);
+
+        [-1, 1].forEach((side) => {
+            const arm = new THREE.Mesh(new THREE.CapsuleGeometry(0.11, 0.55, 4, 8), gown);
+            arm.position.set(side * 0.4, 1.28, 0.04);
+            arm.rotation.z = side * 0.24;
+            grad.add(arm);
+
+            const hand = new THREE.Mesh(new THREE.SphereGeometry(0.09, 8, 6), skin);
+            hand.position.set(side * 0.56, 0.96, 0.04);
+            grad.add(hand);
         });
 
-        return totem;
+        return grad;
     }
 
     _addPalm(group, x, z, center) {
@@ -1185,6 +1284,38 @@ export class World {
     // but colliders live in world coordinates.
     _prop(center, x, z, halfX, halfZ, top) {
         this.colliders.push({ x: center.x + x, z: center.z + z, halfX, halfZ, top });
+    }
+
+    // Registers a set-dressing figure (the cat, the giant, the graduates) as
+    // destructible: the player can attack it like a crate. `group` is the
+    // built mesh group, already positioned in world space. Unlike crates,
+    // breaking one doesn't open a resume page — it's just a fun aside — so
+    // this only needs a hit test and a collapse animation, not a payload.
+    _registerNPC(group, worldX, worldZ, radius, height) {
+        const npc = {
+            group, broken: false,
+            position: new THREE.Vector3(worldX, 0, worldZ),
+            radius, height,
+            collapseT: 0
+        };
+        this.npcs.push(npc);
+        return npc;
+    }
+
+    _updateNPCs(dt) {
+        for (const npc of this.npcs) {
+            if (!npc.broken) continue;
+            // Sinks into the ground and shrinks over half a second, then is
+            // removed — reads as a comical squash-and-drop rather than gore.
+            npc.collapseT += dt;
+            const t = Math.min(1, npc.collapseT / 0.5);
+            npc.group.position.y = -t * npc.height * 0.6;
+            const scale = Math.max(0.001, 1 - t);
+            npc.group.scale.set(scale, scale, scale);
+            if (t >= 1 && npc.group.parent) {
+                npc.group.parent.remove(npc.group);
+            }
+        }
     }
 
     // (b) Hellenic Army — a dense jungle: tall buttressed hardwoods, a bamboo
@@ -1449,12 +1580,19 @@ export class World {
         };
 
         // Positions kept out of the walking corridor (|x| < 4.6) and clear of
-        // the barracks apron to the north.
+        // the barracks apron to the north. Eight soldiers rather than four: two
+        // at the barracks porch, two resting further back, and four more
+        // posted along the southern approach and the eastern/western rim, so
+        // the jungle island reads as properly garrisoned from any direction.
         [
             [-6.2, 2.0, 0.55, 'guard'],
             [6.4, 2.4, -0.5, 'guard'],
             [-8.8, -6.0, 1.9, 'rest'],
-            [8.2, -7.2, -2.4, 'rest']
+            [8.2, -7.2, -2.4, 'rest'],
+            [-6.0, -9.5, 2.6, 'guard'],
+            [6.2, -9.8, -2.6, 'guard'],
+            [-11.2, 0.5, 1.4, 'rest'],
+            [11.0, 1.8, -1.4, 'rest']
         ].forEach(([sx, sz, rot, pose]) => {
             const soldier = buildSoldier(pose);
             soldier.position.set(sx, 0, sz);
@@ -2097,9 +2235,47 @@ export class World {
         });
     }
 
+    // A moon hung high above the island, out past the landmark so it never
+    // clips through it. Dark-by-day like the lanterns, faded in by
+    // Game._updateAtmosphere via this.moon — not part of the shared sky
+    // sphere, which is one global mesh seen from every island and would
+    // otherwise put the moon over the whole chain, not just this one.
+    _buildMoon(center) {
+        const moon = new THREE.Group();
+        // MeshBasicMaterial is unlit, so its own colour is what shows — pale
+        // and bright, like a moon, with only its opacity faded by day/night
+        // rather than the colour (fading colour toward pale would make it
+        // look like a dim grey ball by day instead of simply invisible).
+        const body = new THREE.Mesh(
+            new THREE.SphereGeometry(9, 20, 16),
+            new THREE.MeshBasicMaterial({ color: 0xf4f2ea, fog: false, transparent: true, opacity: 0 })
+        );
+        moon.add(body);
+        this.moonBody = body;
+
+        // A soft halo behind it reads better against the sky than a flat disc.
+        const halo = new THREE.Mesh(
+            new THREE.SphereGeometry(13, 16, 12),
+            new THREE.MeshBasicMaterial({
+                color: 0xdfe8ff, fog: false, transparent: true, opacity: 0,
+                side: THREE.BackSide
+            })
+        );
+        moon.add(halo);
+        this.moonHalo = halo;
+
+        // North of the island (away from the south approach) and high up,
+        // far enough out that walking across the island barely parallaxes it.
+        moon.position.set(center.x + 40, 95, center.z + 130);
+        this.scene.add(moon);
+        this.moon = moon;
+    }
+
     // (f) European Dynamics — pirates: a beached ship, a pirate at the helm, a
     // cutlass in the sand, a tomcat on a barrel, and the treasure they came for.
     _dressPirates(group, center) {
+        this._buildMoon(center);
+
         const hullMat = new THREE.MeshLambertMaterial({ color: 0x5b3a20 });
         const deckMat = new THREE.MeshLambertMaterial({ color: 0x9c6f42 });
         const sailMat = new THREE.MeshLambertMaterial({
@@ -2200,6 +2376,33 @@ export class World {
             cannon.position.set(-3 + i * 2, 1.9, -1.95);
             ship.add(cannon);
         }
+
+        // Ship's lanterns: dark by day, lit by main.js when the island turns
+        // to night (see Game._updateAtmosphere / this.nightLamps). Glass
+        // built from a small emissive-ish sphere since MeshLambertMaterial
+        // has no true emissive channel — the PointLight sells the glow.
+        // Range/intensity bumped up from the first pass, which only lit the
+        // ship's own deck and left the rest of the island dark once night
+        // fell — see the standalone lamp posts further below for the rest
+        // of the island.
+        const lanternGlass = new THREE.MeshBasicMaterial({ color: 0x2a2010 });
+        this.nightLamps = [];
+        [[-5.2, 3.35, 1.4], [-5.2, 3.35, -1.4], [4.8, 3.0, 0]].forEach(([lx, ly, lz]) => {
+            const post = new THREE.Mesh(new THREE.CylinderGeometry(0.03, 0.03, 0.5, 6),
+                new THREE.MeshLambertMaterial({ color: 0x2f2318 }));
+            post.position.set(lx, ly - 0.25, lz);
+            ship.add(post);
+
+            const lantern = new THREE.Mesh(new THREE.SphereGeometry(0.11, 10, 8), lanternGlass);
+            lantern.position.set(lx, ly, lz);
+            ship.add(lantern);
+
+            const light = new THREE.PointLight(0xffb347, 0, 14, 2);
+            light.position.set(lx, ly, lz);
+            ship.add(light);
+
+            this.nightLamps.push({ glass: lanternGlass, light });
+        });
 
         ship.position.set(-11, 0, -1);
         ship.rotation.y = 0.42;
@@ -2383,6 +2586,10 @@ export class World {
             cat.add(paw);
         });
 
+        // Scaled up from the original 1:1 build — at life size the cat read as
+        // an afterthought next to the pirate and the ship; big enough now to
+        // be a real landmark on the barrel, and a fun target to attack.
+        cat.scale.setScalar(2.2);
         cat.position.set(0, 1.5, 0);
         cat.rotation.y = -0.6;
         barrel.add(cat);
@@ -2391,6 +2598,81 @@ export class World {
         group.add(barrel);
         this.occluders.push(barrel);
         this._prop(center, 7.8, 5.2, 1.0, 1.0, 1.5);
+        this._registerNPC(cat, center.x + 7.8, center.z + 5.2, 1.3, 2.4);
+
+        // --- the giant: an old man, twice the height of anyone else on the
+        // island, leaning on a driftwood cane. No backstory beyond "the island
+        // has a giant" — he's a fun, oversized target, destructible like the
+        // cat rather than a lore piece.
+        const giant = new THREE.Group();
+        const giantSkin = new THREE.MeshLambertMaterial({ color: 0xd9b48f });
+        const giantRobe = new THREE.MeshLambertMaterial({ color: 0x5c6b52 });
+        const giantHair = new THREE.MeshLambertMaterial({ color: 0xe8e4da });
+
+        const gTorso = new THREE.Mesh(new THREE.CapsuleGeometry(0.55, 1.1, 4, 10), giantRobe);
+        gTorso.position.y = 1.7;
+        gTorso.castShadow = true;
+        giant.add(gTorso);
+
+        const gHead = new THREE.Mesh(new THREE.SphereGeometry(0.42, 14, 12), giantSkin);
+        gHead.position.y = 2.75;
+        gHead.castShadow = true;
+        giant.add(gHead);
+
+        // Bushy white hair and a long beard — the "old" half of "old giant".
+        const gHair = new THREE.Mesh(
+            new THREE.SphereGeometry(0.44, 14, 10, 0, Math.PI * 2, 0, Math.PI * 0.55), giantHair
+        );
+        gHair.position.y = 2.86;
+        giant.add(gHair);
+        const gBeard = new THREE.Mesh(new THREE.ConeGeometry(0.32, 0.65, 10), giantHair);
+        gBeard.position.set(0, 2.35, 0.18);
+        gBeard.rotation.x = 0.15;
+        giant.add(gBeard);
+
+        [-1, 1].forEach((side) => {
+            const eye = new THREE.Mesh(new THREE.SphereGeometry(0.06, 8, 6),
+                new THREE.MeshLambertMaterial({ color: 0xffffff }));
+            eye.position.set(side * 0.15, 2.8, 0.38);
+            giant.add(eye);
+
+            const arm = new THREE.Mesh(new THREE.CapsuleGeometry(0.16, 0.9, 4, 8), giantRobe);
+            arm.position.set(side * 0.66, 1.75, 0);
+            arm.rotation.z = side * 0.22;
+            arm.castShadow = true;
+            giant.add(arm);
+
+            const hand = new THREE.Mesh(new THREE.SphereGeometry(0.17, 10, 8), giantSkin);
+            hand.position.set(side * 0.82, 1.15, 0);
+            giant.add(hand);
+
+            const leg = new THREE.Mesh(new THREE.CapsuleGeometry(0.2, 0.9, 4, 8), giantRobe);
+            leg.position.set(side * 0.24, 0.5, 0);
+            giant.add(leg);
+
+            const foot = new THREE.Mesh(new THREE.BoxGeometry(0.28, 0.2, 0.5), giantSkin);
+            foot.position.set(side * 0.24, 0.1, 0.12);
+            giant.add(foot);
+        });
+
+        // Driftwood cane, planted by the right hand.
+        const cane = new THREE.Mesh(new THREE.CylinderGeometry(0.045, 0.06, 1.5, 8),
+            new THREE.MeshLambertMaterial({ color: 0x6b4a2a }));
+        cane.position.set(0.85, 0.75, 0.15);
+        cane.rotation.z = 0.06;
+        cane.castShadow = true;
+        giant.add(cane);
+
+        // x = -5.2 keeps clear of the |x| < 4 walking corridor and of the
+        // treasure chest at (-6.8, 8.6), while staying close enough to the
+        // path to be seen on the way past.
+        giant.scale.setScalar(1.6); // twice again over a normal figure's ~2m
+        giant.position.set(-5.2, 0, 3.0);
+        giant.rotation.y = 2.6;
+        group.add(giant);
+        this.occluders.push(giant);
+        this._prop(center, -5.2, 3.0, 0.9, 0.9, 5.2);
+        this._registerNPC(giant, center.x - 5.2, center.z + 3.0, 1.3, 5.2);
 
         // --- treasure: an open chest spilling coins, and a few empty casks ---
         const chest = new THREE.Group();
@@ -2427,6 +2709,39 @@ export class World {
             cask2.scale.setScalar(s);
             cask2.castShadow = true;
             group.add(cask2);
+        });
+
+        // Standalone tiki torches spread across the island, clear of the
+        // |x| < 4 walking corridor — the ship's own lanterns only reached
+        // its own deck, leaving the rest of the island dark once night fell.
+        // Same dark-by-day / lit-by-night wiring as the ship's lanterns, via
+        // this.nightLamps.
+        const torchWood = new THREE.MeshLambertMaterial({ color: 0x5a3f22 });
+        [[8, 5.2], [-6.8, 8.6], [6.4, -8.5], [-8, -3]].forEach(([tx, tz]) => {
+            const torch = new THREE.Group();
+            const pole = new THREE.Mesh(new THREE.CylinderGeometry(0.05, 0.07, 1.8, 7), torchWood);
+            pole.position.y = 0.9;
+            pole.castShadow = true;
+            torch.add(pole);
+
+            const bowl = new THREE.Mesh(new THREE.SphereGeometry(0.16, 10, 8, 0, Math.PI * 2, 0, Math.PI * 0.5),
+                new THREE.MeshLambertMaterial({ color: 0x3a2a18 }));
+            bowl.position.y = 1.82;
+            bowl.rotation.x = Math.PI;
+            torch.add(bowl);
+
+            const flameGlass = new THREE.MeshBasicMaterial({ color: 0x3a2010 });
+            const flame = new THREE.Mesh(new THREE.SphereGeometry(0.13, 8, 6), flameGlass);
+            flame.position.y = 1.9;
+            torch.add(flame);
+
+            const light = new THREE.PointLight(0xffa347, 0, 11, 2);
+            light.position.y = 1.95;
+            torch.add(light);
+
+            torch.position.set(tx, 0, tz);
+            group.add(torch);
+            this.nightLamps.push({ glass: flameGlass, light });
         });
     }
 
@@ -3292,6 +3607,24 @@ export class World {
         this.scene.add(contact.mesh);
         this.crates.push(contact);
 
+        // Fellow graduates milling around the colonnade — capped and gowned,
+        // destructible like the cat and the giant rather than lore-bearing.
+        // Kept clear of the columns, the crates and the |x| < 5 doorway
+        // corridor at each end.
+        [
+            [-8, -5, 0.6],
+            [8, -6, -0.7],
+            [0, 8.5, 3.4]
+        ].forEach(([gx, gz, rot]) => {
+            const grad = this._buildGraduate();
+            grad.position.set(center.x + gx, BASE_TOP, center.z + gz);
+            grad.rotation.y = rot;
+            group.add(grad);
+            this.occluders.push(grad);
+            this._prop(center, gx, gz, 0.5, 0.5, 1.9);
+            this._registerNPC(grad, center.x + gx, center.z + gz, 1.0, 1.9);
+        });
+
         // Where the player spawns and where the camera starts, both inside.
         this.eduCenter = center;
         this.spawnPoint = new THREE.Vector3(center.x, BASE_TOP, center.z + 1);
@@ -3372,6 +3705,7 @@ export class World {
             if (crate.debris.length) crate.updateDebris(dt, this.scene);
         }
         for (const fruit of this.fruits) fruit.update(dt, time);
+        this._updateNPCs(dt);
 
         // Logo panels turn slowly and bob, so they catch the eye from afar.
         // The rest height is captured once; bobbing always applies to that,
@@ -3384,10 +3718,72 @@ export class World {
         }
 
         this._updateSmoke(dt, time);
+        this._updateSnowfall(dt);
         this._updateProps(dt, time);
 
         if (this.ocean) {
             this.ocean.position.y = -6 + Math.sin(time * 0.7) * 0.12;
+        }
+    }
+
+    // Sets how heavily it's snowing over the second Upstream island, 0
+    // (none) to 1 (full) — called every frame from Game._updateAtmosphere
+    // with an eased value, so the snow ramps in/out with the rest of the
+    // "chilly" atmosphere rather than switching on abruptly.
+    setSnow(intensity) {
+        this._snowIntensity = intensity;
+    }
+
+    // Light, continuous snowfall scoped to the second Upstream island: flakes
+    // spawn in a disc above it, drift down with a little sideways sway, and
+    // are culled on reaching the ground or ageing out — same spawn-timer +
+    // per-particle age/move/cull shape as _updateSmoke, just falling instead
+    // of rising and spread continuously rather than puffing from one point.
+    _updateSnowfall(dt) {
+        if (this._snowIntensity < 0.02 && this.snowflakes.length === 0) return;
+
+        if (!this._snowCenter) {
+            // Index 6 is the second Upstream visit — see STAGE_BY_ZONE in
+            // main.js for the full zone-index-to-company mapping.
+            const upstream2nd = this.zones.find((z) => z.index === 6);
+            if (!upstream2nd) return;
+            this._snowCenter = upstream2nd.center;
+            this._snowGeo = new THREE.SphereGeometry(0.05, 5, 4);
+            this._snowMat = new THREE.MeshBasicMaterial({
+                color: 0xffffff, transparent: true, opacity: 0.85, fog: false
+            });
+            this._snowTimer = 0;
+        }
+
+        // Spawn rate scales with intensity — full chill keeps a light but
+        // steady flurry going; fading out just stops making new flakes and
+        // lets the existing ones finish falling.
+        this._snowTimer -= dt;
+        if (this._snowTimer <= 0 && this._snowIntensity > 0.05) {
+            this._snowTimer = THREE.MathUtils.lerp(0.35, 0.03, this._snowIntensity);
+            const angle = Math.random() * Math.PI * 2;
+            const radius = Math.random() * (ZONE_RADIUS - 1);
+            const flake = new THREE.Mesh(this._snowGeo, this._snowMat);
+            flake.position.set(
+                this._snowCenter.x + Math.cos(angle) * radius,
+                14 + Math.random() * 6,
+                this._snowCenter.z + Math.sin(angle) * radius
+            );
+            flake.userData.sway = Math.random() * Math.PI * 2;
+            flake.userData.fallSpeed = 1.6 + Math.random() * 1.0;
+            this.scene.add(flake);
+            this.snowflakes.push(flake);
+        }
+
+        for (let i = this.snowflakes.length - 1; i >= 0; i--) {
+            const flake = this.snowflakes[i];
+            flake.position.y -= flake.userData.fallSpeed * dt;
+            flake.userData.sway += dt * 1.3;
+            flake.position.x += Math.sin(flake.userData.sway) * dt * 0.3;
+            if (flake.position.y < -1) {
+                this.scene.remove(flake);
+                this.snowflakes.splice(i, 1);
+            }
         }
     }
 

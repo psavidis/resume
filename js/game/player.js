@@ -22,7 +22,27 @@ const JUMP_VELOCITY = 12.5;
 const MOVE_SPEED = 9;
 const ACCEL = 60;
 const FRICTION = 12;
-const SPIN_DURATION = 0.55;
+// Real attack clips run at their own length rather than being cut short —
+// the model ships Man_Punch (0.92s) and Man_SwordSlash (1.04s), and cutting
+// either off early (the previous 0.4s for every style) is what made both
+// read as a twitch instead of a swing. Styles with no dedicated clip (gun,
+// fourArms) keep a short synthetic duration.
+const ATTACK_DURATION = {
+    punch: 0.92,
+    sword: 1.04,
+    gun: 0.35,
+    fourArms: 0.5
+};
+
+// Hits only register in a short window around the moment the swing/punch
+// actually connects, not for the whole animation — matched by eye to where
+// the fist/blade is furthest through its arc in each clip.
+const HIT_WINDOW = {
+    punch: [0.32, 0.5],
+    sword: [0.38, 0.62],
+    gun: [0, 0.35],       // instantaneous — see startAttack's hitscan
+    fourArms: [0.2, 0.5]
+};
 
 const MODEL_URL = new URL('../../models/hero.glb', import.meta.url);
 
@@ -63,7 +83,22 @@ const CLIP = {
     walk: /Walk(?!ing)/i,
     run: /Run(?!ningJump)/i,
     jump: /Jump/i,
-    spin: /SwordSlash/i
+    sword: /SwordSlash/i,
+    punch: /Punch/i
+};
+
+// Which attack style each costume stage uses. Stages not listed (the
+// graduation toga, and `caped` at Cortical.io — the flying stage) fall back
+// to a bare-handed punch.
+const ATTACK_STYLE = {
+    plain: 'punch',
+    toga: 'punch',
+    chains: 'punch',
+    caped: 'punch',
+    army: 'gun',
+    hero: 'sword',
+    leader: 'sword',
+    fourArms: 'fourArms'
 };
 
 export class Player {
@@ -71,7 +106,9 @@ export class Player {
         this.group = new THREE.Group();
         this.velocity = new THREE.Vector3();
         this.onGround = true;
-        this.spinTimer = 0;
+        this.attackTimer = 0;
+        // Flight (Cortical.io / Vienna only — see main.js's launch gating).
+        this.isFlying = false;
         this.facing = 0;          // yaw the body is rendered at
         this.runCycle = 0;
         this.squash = 1;          // 1 = neutral; <1 squashed, >1 stretched
@@ -162,10 +199,12 @@ export class Player {
             army: this._buildArmy(this.mounts.head, this.costumeRoot),
             chains: this._buildChains(this.costumeRoot),
             sword: this._buildSword(),
+            rifle: this._buildRifle(),
             cape: this._buildCape(this.costumeRoot),
             team: this._buildTeam()
         };
         this.mounts.handR.add(this.costumes.sword);
+        this.mounts.handR.add(this.costumes.rifle);
         this.group.add(this.costumes.team);
 
         this._loadModel();
@@ -221,13 +260,20 @@ export class Player {
             model.traverse((o) => { if (o.isBone) bones[o.name] = o; });
             this.bones = bones;
 
-            // This rig names its bones Hips / Head / PalmR; the aliases cover
-            // the Mixamo naming other models use, so a swapped-in model with a
-            // different skeleton still finds its mounts.
+            // This rig names its bones Hips / Head / Palm.R (dotted — this is
+            // a Blender-exported skeleton, not Mixamo's concatenated naming,
+            // despite the comment below's original assumption). The aliases
+            // cover a swapped-in model with different conventions.
+            //
+            // The dotted names were the actual bug behind swords/rifles
+            // looking wrong mid-swing: 'PalmR' (no dot) never matched
+            // 'Palm.R', so handR silently failed to resolve and the mount
+            // never moved off its static rest offset — every weapon pose was
+            // tuned against a mount that wasn't following the arm at all.
             const pick = (...names) => names.map((n) => bones[n]).find(Boolean);
             const hips = pick('Hips', 'mixamorigHips', 'Root', 'Bone');
             const head = pick('Head', 'mixamorigHead');
-            const handR = pick('PalmR', 'MiddleHandR', 'HandRight', 'RightHand',
+            const handR = pick('Palm.R', 'PalmR', 'MiddleHand.R', 'MiddleHandR', 'HandRight', 'RightHand',
                 'mixamorigRightHand', 'Hand_R', 'hand_r');
 
             if (hips) this._remount(this.mounts.root, hips);
@@ -240,10 +286,14 @@ export class Player {
                 const clip = gltf.animations.find((a) => re.test(a.name));
                 if (clip) this.actions[key] = this.mixer.clipAction(clip);
             }
-            // The spin attack is a one-shot; everything else loops.
-            if (this.actions.spin) {
-                this.actions.spin.setLoop(THREE.LoopOnce, 1);
-                this.actions.spin.clampWhenFinished = true;
+            // The sword and punch attacks are one-shots; everything else loops.
+            if (this.actions.sword) {
+                this.actions.sword.setLoop(THREE.LoopOnce, 1);
+                this.actions.sword.clampWhenFinished = true;
+            }
+            if (this.actions.punch) {
+                this.actions.punch.setLoop(THREE.LoopOnce, 1);
+                this.actions.punch.clampWhenFinished = true;
             }
             if (this.actions.jump) {
                 this.actions.jump.setLoop(THREE.LoopOnce, 1);
@@ -671,6 +721,65 @@ export class Player {
         return sword;
     }
 
+    // Hellenic Army: a rifle held in the right fist, matching the squad's own
+    // weapons on the jungle island. Built the same way as the sword — pointing
+    // "down" the arm's local axis from a grip origin — so it uses the same
+    // fist rotation and just swaps the silhouette.
+    _buildRifle() {
+        const rifle = new THREE.Group();
+        const wood = new THREE.MeshLambertMaterial({ color: 0x5a3f22 });
+        const steel = new THREE.MeshLambertMaterial({ color: 0x3a3f45 });
+
+        const stock = new THREE.Mesh(new THREE.BoxGeometry(0.06, 0.32, 0.09), wood);
+        stock.position.y = -0.1;
+        stock.castShadow = true;
+        rifle.add(stock);
+
+        const body_ = new THREE.Mesh(new THREE.BoxGeometry(0.07, 0.6, 0.075), steel);
+        body_.position.y = 0.28;
+        body_.castShadow = true;
+        rifle.add(body_);
+
+        const barrel = new THREE.Mesh(new THREE.CylinderGeometry(0.018, 0.02, 0.55, 8), steel);
+        barrel.position.y = 0.78;
+        barrel.castShadow = true;
+        rifle.add(barrel);
+
+        const mag = new THREE.Mesh(new THREE.BoxGeometry(0.045, 0.22, 0.05), steel);
+        mag.position.set(0, 0.1, 0.055);
+        mag.rotation.x = -0.25;
+        rifle.add(mag);
+
+        // Muzzle flash: a small star burst at the barrel tip (y ≈ 0.78 +
+        // 0.55/2), hidden until a shot fires. Built from a few overlapping
+        // cones fanned around the barrel axis rather than a flat sprite, so
+        // it reads from any angle without needing to face the camera.
+        const flash = new THREE.Group();
+        const flashMat = new THREE.MeshBasicMaterial({
+            color: 0xffe680, transparent: true, opacity: 0.95, depthWrite: false
+        });
+        for (let i = 0; i < 4; i++) {
+            const spike = new THREE.Mesh(new THREE.ConeGeometry(0.05, 0.22, 5), flashMat);
+            spike.rotation.z = (i / 4) * Math.PI * 2;
+            spike.rotation.x = Math.PI / 2;
+            flash.add(spike);
+        }
+        const core = new THREE.Mesh(new THREE.SphereGeometry(0.055, 8, 6),
+            new THREE.MeshBasicMaterial({ color: 0xfff3c4, transparent: true, opacity: 0.95, depthWrite: false }));
+        flash.add(core);
+        flash.position.y = 1.06;
+        flash.visible = false;
+        rifle.add(flash);
+        this.muzzleFlash = flash;
+
+        // Same grip origin and fist rotation as the sword, so it sits
+        // naturally in the hand without needing its own pose search.
+        rifle.position.set(0, -0.02, 0.02);
+        rifle.rotation.set(-2.4, 1.2, -1.2);
+        rifle.visible = false;
+        return rifle;
+    }
+
     // Cortical.io onward: a cape. Built as a fan of tapering panels hung from
     // the shoulders so it can be made to billow in _animate.
     _buildCape(body) {
@@ -864,6 +973,7 @@ export class Player {
         c.cap.visible = on.cap;
         c.army.helmet.visible = on.army;
         c.army.gear.visible = on.army;
+        c.rifle.visible = on.army;
         c.chains.visible = on.chains;
         if (this.chainDrag) this.chainDrag.visible = on.chains;
         c.sword.visible = on.sword;
@@ -878,20 +988,47 @@ export class Player {
         return this.group.position;
     }
 
-    startSpin(audio) {
-        if (this.spinTimer > 0) return false;
-        this.spinTimer = SPIN_DURATION;
-        // Retrigger the one-shot slash clip from the top.
-        if (this.actions.spin) {
+    // Attack style follows the current costume: bare hands, a rifle, a sword,
+    // or all four arms. See ATTACK_STYLE.
+    get attackStyle() {
+        return ATTACK_STYLE[this.costume] ?? 'punch';
+    }
+
+    startAttack(audio) {
+        if (this.attackTimer > 0) return false;
+        this._attackStyle = this.attackStyle;
+        this._attackDuration = ATTACK_DURATION[this._attackStyle] ?? 0.4;
+        this.attackTimer = this._attackDuration;
+        // Punch and sword play the model's own clips; fourArms reuses the
+        // punch clip for the model's real arms while the extra Camunda arms
+        // swing separately (see _animate). Gun has no matching clip and
+        // stays procedural.
+        const clipName = this._attackStyle === 'sword' ? 'sword'
+            : (this._attackStyle === 'punch' || this._attackStyle === 'fourArms') ? 'punch' : null;
+        if (clipName && this.actions[clipName]) {
             this.currentAction = null;   // force _playAction to re-fade in
-            this._playAction('spin', 0.05);
+            this._playAction(clipName, 0.05);
         }
-        if (audio) audio.spin();
+        if (audio) {
+            if (this._attackStyle === 'gun') audio.gunshot();
+            else audio.spin();
+        }
         return true;
     }
 
-    get isSpinning() {
-        return this.spinTimer > 0;
+    get isAttacking() {
+        return this.attackTimer > 0;
+    }
+
+    // True only in the short window around the moment the swing/punch/shot
+    // actually connects — see HIT_WINDOW — rather than for the whole
+    // animation, so breaking a crate reads as "the hit landed" instead of
+    // "you were standing near it while attackTimer counted down".
+    get isHitting() {
+        if (this.attackTimer <= 0) return false;
+        const elapsed = this._attackDuration - this.attackTimer;
+        const [from, to] = HIT_WINDOW[this._attackStyle] ?? [0, this._attackDuration];
+        return elapsed >= from && elapsed <= to;
     }
 
     jump(audio) {
@@ -903,23 +1040,47 @@ export class Player {
         return true;
     }
 
-    // `input` is a normalised {x, z} direction already rotated into world space.
-    update(dt, input) {
+    // Enters flight — only ever called by main.js once it has confirmed the
+    // player is airborne and launching from (or already over) Vienna.
+    startFlying(audio) {
+        if (this.isFlying) return;
+        this.isFlying = true;
+        this.onGround = false;
+        if (audio) audio.jump();
+    }
+
+    stopFlying() {
+        this.isFlying = false;
+    }
+
+    // `input` is a normalised {x, z} direction already rotated into world
+    // space. `flight` is `{ holdingUp, holdingDown }`, read by main.js from
+    // the jump/attack keys while airborne — ignored unless `isFlying`.
+    update(dt, input, flight = null) {
         // Horizontal movement with acceleration and friction, so the character
-        // has a little weight instead of snapping to full speed.
+        // has a little weight instead of snapping to full speed. Flight keeps
+        // the same ground speed, so steering feels the same in the air.
         const target = new THREE.Vector3(input.x, 0, input.z).multiplyScalar(MOVE_SPEED);
         const accel = (input.x !== 0 || input.z !== 0) ? ACCEL : FRICTION;
 
         this.velocity.x = THREE.MathUtils.damp(this.velocity.x, target.x, accel * 0.35, dt);
         this.velocity.z = THREE.MathUtils.damp(this.velocity.z, target.z, accel * 0.35, dt);
 
-        this.velocity.y += GRAVITY * dt;
+        if (this.isFlying) {
+            const FLY_SPEED = 11;
+            const vTarget = flight?.holdingDown ? -FLY_SPEED
+                : flight?.holdingUp ? FLY_SPEED
+                : -FLY_SPEED * 0.15; // gentle sink when neither is held
+            this.velocity.y = THREE.MathUtils.damp(this.velocity.y, vTarget, 5, dt);
+        } else {
+            this.velocity.y += GRAVITY * dt;
+        }
 
         this.group.position.x += this.velocity.x * dt;
         this.group.position.y += this.velocity.y * dt;
         this.group.position.z += this.velocity.z * dt;
 
-        if (this.spinTimer > 0) this.spinTimer -= dt;
+        if (this.attackTimer > 0) this.attackTimer -= dt;
 
         this._animate(dt);
     }
@@ -957,13 +1118,48 @@ export class Player {
         // only has to choose which clip should be running and spin the body.
         this.runCycle += dt * speed * 1.7;
 
-        if (this.spinTimer > 0) {
-            // Spin attack: the sword-slash clip plays while the whole body
-            // whips around, which reads far better than the clip alone.
-            const t = 1 - this.spinTimer / SPIN_DURATION;
-            this.body.rotation.y = this.facing + t * Math.PI * 6;
+        const hasAttackClip = this._attackStyle === 'sword' || this._attackStyle === 'punch';
+
+        if (this.attackTimer > 0 && hasAttackClip) {
+            // Punch and sword play the model's own clip and are trusted to
+            // look right on their own — no body-yaw/lunge layered on top,
+            // which is what previously fought the clip and read as a twitch
+            // rather than a swing. A small forward weight-shift at the
+            // moment of impact is the only extra touch, so the hit still has
+            // a bit of "oomph" behind it.
+            const t = (this._attackDuration - this.attackTimer) / this._attackDuration;
+            const [from, to] = HIT_WINDOW[this._attackStyle];
+            const mid = (from + to) / 2 / this._attackDuration;
+            const punchLean = Math.max(0, 1 - Math.abs(t - mid) / 0.25);
+            this.body.rotation.y = this.facing;
+            this.body.position.z = punchLean * 0.08;
+        } else if (this.attackTimer > 0 && this._attackStyle === 'fourArms') {
+            // All four arms strike together: the model's own two play the
+            // punch clip (so they visibly throw a blow, not just idle) while
+            // the two extra Camunda arms get the wide procedural swipe
+            // below — a lunge on top reads as the whole body driving the
+            // strike forward, so all four hits land as one committed motion.
+            const t = (this._attackDuration - this.attackTimer) / this._attackDuration;
+            const swing = Math.sin(Math.min(1, t * 1.6) * Math.PI); // 0 → 1 → 0
+            const lunge = 0.6 * Math.sin(t * Math.PI);
+            this.body.rotation.y = this.facing + swing * 0.35;
+            this.body.position.z = lunge * 0.18;
+
+            if (this.actions.punch) this._playAction('punch', 0.04);
+            else if (!this.onGround) this._playAction('jump');
+            else this._playAction('idle');
+        } else if (this.attackTimer > 0 && this._attackStyle === 'gun') {
+            // Firing a rifle plants the shooter — no body twist or lunge,
+            // just squared-up facing. The recoil kick (below, on the hand
+            // mount) carries the whole "impact" of the shot instead.
+            this.body.rotation.y = this.facing;
+            this.body.position.z = 0;
+
+            if (!this.onGround) this._playAction('jump');
+            else this._playAction('idle');
         } else {
             this.body.rotation.y = this.facing;
+            this.body.position.z = 0;
 
             if (!this.onGround) this._playAction('jump');
             else if (speed > MOVE_SPEED * 0.55) this._playAction('run');
@@ -978,12 +1174,24 @@ export class Player {
         // next to them.
         if (this.extraArms[0].visible) {
             const swing = Math.sin(this.runCycle) * Math.min(1, speed / MOVE_SPEED);
+            const attacking = this.attackTimer > 0 && this._attackStyle === 'fourArms';
+            const attackT = attacking ? (this._attackDuration - this.attackTimer) / this._attackDuration : 0;
             this.extraArms.forEach((arm, i) => {
                 const dir = i === 0 ? 1 : -1;
-                if (this.spinTimer > 0) {
-                    // Flung out wide during the spin attack.
-                    arm.rotation.z = dir * 1.35;
-                    arm.rotation.x = 0;
+                if (attacking) {
+                    // A punchy strike rather than a smooth sine: snaps out
+                    // fast, holds briefly at full extension, then retracts —
+                    // reads as an actual hit rather than a wave. The two
+                    // extra arms are offset a beat from each other so all
+                    // four limbs (these plus the model's own punching arms)
+                    // don't move in lockstep, which is what made the swipe
+                    // hard to see before.
+                    const localT = THREE.MathUtils.clamp(attackT * 1.3 - i * 0.12, 0, 1);
+                    const strike = localT < 0.35 ? localT / 0.35
+                        : localT < 0.6 ? 1
+                            : Math.max(0, 1 - (localT - 0.6) / 0.4);
+                    arm.rotation.x = -strike * 2.1;
+                    arm.rotation.z = dir * (0.2 + strike * 0.7);
                 } else if (this.onGround) {
                     arm.rotation.x = swing * dir * 0.55;
                     arm.rotation.z = dir * 0.18;
@@ -992,6 +1200,26 @@ export class Player {
                     arm.rotation.z = dir * 0.3;
                 }
             });
+        }
+
+        // Firing kicks the rifle back toward the shoulder and lets it settle
+        // forward again — a recoil, not the old forward lunge (which read as
+        // throwing the gun rather than shooting it). This is a local offset
+        // on top of whatever bone the mount is attached to, so it layers
+        // cleanly over the mixer-driven arm rather than fighting it.
+        if (this.attackTimer > 0 && this._attackStyle === 'gun') {
+            const t = (this._attackDuration - this.attackTimer) / this._attackDuration;
+            // Snaps back fast (the shot), eases forward again (the recovery).
+            const recoil = t < 0.25 ? t / 0.25 : Math.max(0, 1 - (t - 0.25) / 0.75);
+            this.mounts.handR.position.z = -recoil * 0.16;
+            // Flash only for the instant of the shot itself, not the recovery.
+            if (this.muzzleFlash) {
+                this.muzzleFlash.visible = t < 0.12;
+                this.muzzleFlash.rotation.y = t * 30; // flickers between frames
+            }
+        } else {
+            if (this.muzzleFlash) this.muzzleFlash.visible = false;
+            this.mounts.handR.position.z = THREE.MathUtils.damp(this.mounts.handR.position.z, 0, 14, dt);
         }
 
         // Squash and stretch on jumps and landings, applied to the whole body.

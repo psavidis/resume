@@ -12,7 +12,8 @@ const TYPES = {
     '.html': 'text/html', '.js': 'text/javascript', '.css': 'text/css',
     '.json': 'application/json', '.png': 'image/png', '.jpg': 'image/jpeg',
     '.jpeg': 'image/jpeg', '.svg': 'image/svg+xml', '.ico': 'image/x-icon',
-    '.woff': 'font/woff', '.woff2': 'font/woff2'
+    '.woff': 'font/woff', '.woff2': 'font/woff2', '.mp3': 'audio/mpeg',
+    '.glb': 'model/gltf-binary'
 };
 
 http.createServer((req, res) => {
@@ -25,13 +26,38 @@ http.createServer((req, res) => {
         return;
     }
 
-    fs.readFile(file, (err, content) => {
-        if (err) {
+    fs.stat(file, (statErr, stats) => {
+        if (statErr) {
             res.writeHead(404).end('Not found');
             return;
         }
-        res.writeHead(200, {'Content-Type': TYPES[path.extname(file)] || 'application/octet-stream'});
-        res.end(content);
+
+        const type = TYPES[path.extname(file)] || 'application/octet-stream';
+
+        // <audio>/<video> stall waiting for range support before they'll play
+        // anything, so this always advertises it and honours a Range header
+        // when present — without this, mp3 playback silently never starts.
+        const range = req.headers.range;
+        if (range) {
+            const match = /bytes=(\d*)-(\d*)/.exec(range);
+            const start = match[1] ? Number(match[1]) : 0;
+            const end = match[2] ? Number(match[2]) : stats.size - 1;
+            res.writeHead(206, {
+                'Content-Type': type,
+                'Content-Length': end - start + 1,
+                'Content-Range': `bytes ${start}-${end}/${stats.size}`,
+                'Accept-Ranges': 'bytes'
+            });
+            fs.createReadStream(file, { start, end }).pipe(res);
+            return;
+        }
+
+        res.writeHead(200, {
+            'Content-Type': type,
+            'Content-Length': stats.size,
+            'Accept-Ranges': 'bytes'
+        });
+        fs.createReadStream(file).pipe(res);
     });
 }).listen(PORT, '127.0.0.1', () => {
     console.log(`Resume served at http://localhost:${PORT}/resume/index.html`);

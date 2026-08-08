@@ -1,26 +1,39 @@
-// Procedural audio: tribal/jungle-flavoured soundtrack + SFX, generated with the
-// Web Audio API so the page ships no copyrighted (or any) sound files.
-//
-// The music is a small generative engine: a looping bongo/tom pattern, a bass
-// ostinato and a pentatonic marimba melody, all scheduled a beat ahead of time
-// on the audio clock so timing does not drift with the render loop.
+// Audio: SFX generated with the Web Audio API (so those ship no sound files),
+// plus a per-island mp3 soundtrack that crossfades as the player crosses
+// zones — see `playTrack`.
 
 const PENTATONIC = [0, 3, 5, 7, 10]; // minor pentatonic, in semitones
 
 const noteToFreq = (semitonesFromA4) => 440 * Math.pow(2, semitonesFromA4 / 12);
 
+// Music fade timing, in seconds. Slow enough to read as a deliberate
+// transition rather than a cut, but not so slow that fast island-hopping
+// leaves two tracks audibly overlapping.
+const MUSIC_FADE = 1.8;
+const MUSIC_VOLUME = 0.55;
+
 export class GameAudio {
     constructor() {
         this.ctx = null;
         this.master = null;
-        this.musicGain = null;
         this.sfxGain = null;
         this.started = false;
         this.muted = false;
-        this._nextNoteTime = 0;
-        this._step = 0;
-        this._timer = null;
         this._noiseBuffer = null;
+
+        // Two <audio> elements so the outgoing track can fade out while the
+        // incoming one fades in, rather than the sound cutting out and back.
+        this._musicA = new Audio();
+        this._musicB = new Audio();
+        [this._musicA, this._musicB].forEach((el) => {
+            el.loop = true;
+            el.volume = 0;
+            el.preload = 'auto';
+        });
+        this._activeMusic = this._musicA;
+        this._currentTrackUrl = null;
+        this._pendingTrack = null;
+        this._replayingPending = false;
     }
 
     // Browsers require a user gesture before audio can start.
@@ -34,10 +47,6 @@ export class GameAudio {
         this.master.gain.value = 0.9;
         this.master.connect(this.ctx.destination);
 
-        this.musicGain = this.ctx.createGain();
-        this.musicGain.gain.value = 0.32;
-        this.musicGain.connect(this.master);
-
         this.sfxGain = this.ctx.createGain();
         this.sfxGain.gain.value = 0.55;
         this.sfxGain.connect(this.master);
@@ -45,8 +54,17 @@ export class GameAudio {
         this._noiseBuffer = this._makeNoiseBuffer();
         this.started = true;
 
-        this._nextNoteTime = this.ctx.currentTime + 0.1;
-        this._timer = setInterval(() => this._scheduler(), 25);
+        // A track may already have been requested (the player reached an
+        // island before clicking "play with music"); start it now. The dedup
+        // guard in playTrack would otherwise no-op this, since it already
+        // recorded the URL as "current" when the request was queued.
+        if (this._pendingTrack) {
+            const { url } = this._pendingTrack;
+            this._pendingTrack = null;
+            this._replayingPending = true;
+            this.playTrack(url);
+            this._replayingPending = false;
+        }
     }
 
     resume() {
@@ -58,7 +76,78 @@ export class GameAudio {
         if (this.master) {
             this.master.gain.setTargetAtTime(this.muted ? 0 : 0.9, this.ctx.currentTime, 0.05);
         }
+        // The music elements sit outside the WebAudio graph (playing an
+        // <audio> tag through it needs a MediaElementSource, which is more
+        // machinery than this needs), so muting them is a direct volume cut.
+        [this._musicA, this._musicB].forEach((el) => { el.muted = this.muted; });
         return this.muted;
+    }
+
+    // Crossfades to `url` — the currently playing island's mp3 — fading the
+    // previous track out and the new one in over MUSIC_FADE seconds. Passing
+    // `null` fades out to silence (an island with no theme of its own).
+    // Safe to call before `start()`: the request is queued and applied once
+    // the user gesture arrives.
+    playTrack(url) {
+        // Calling with the same URL already committed is a no-op — except
+        // right after start(), which replays a request queued before the
+        // context existed: _currentTrackUrl was set at queue time but the
+        // audio element was never actually touched, so that replay must go
+        // through even though the URL "already matches".
+        if (url === this._currentTrackUrl && !this._replayingPending) return;
+        this._currentTrackUrl = url;
+
+        if (!this.started) {
+            this._pendingTrack = { url };
+            return;
+        }
+
+        const outgoing = this._activeMusic;
+
+        if (!url) {
+            // Fade the current track to silence; nothing to fade in.
+            this._fade(outgoing, 0, () => outgoing.pause());
+            return;
+        }
+
+        const incoming = outgoing === this._musicA ? this._musicB : this._musicA;
+        this._activeMusic = incoming;
+
+        incoming.src = url;
+        incoming.currentTime = 0;
+        incoming.volume = 0;
+        incoming.muted = this.muted;
+        const playPromise = incoming.play();
+        // Autoplay can still reject if this fires outside a gesture; a track
+        // switch mid-game always follows the initial "play with music" click,
+        // so this is a defensive no-op rather than an expected path.
+        if (playPromise) playPromise.catch(() => {});
+
+        if (outgoing !== incoming && !outgoing.paused) {
+            this._fade(outgoing, 0, () => outgoing.pause());
+        }
+        this._fade(incoming, MUSIC_VOLUME);
+    }
+
+    // Ramps `el.volume` toward `target` over MUSIC_FADE seconds with a plain
+    // interval — <audio> volume isn't a Web Audio param, so there's no
+    // AudioParam ramp to lean on here. Cancels any fade already running on
+    // this element first, so rapid island-hopping can't leave two timers
+    // fighting over the same volume.
+    _fade(el, target, onDone) {
+        clearInterval(el._fadeTimer);
+        const start = el.volume;
+        const startTime = performance.now();
+        const step = () => {
+            const t = Math.min(1, (performance.now() - startTime) / (MUSIC_FADE * 1000));
+            el.volume = start + (target - start) * t;
+            if (t >= 1) {
+                clearInterval(el._fadeTimer);
+                if (onDone) onDone();
+            }
+        };
+        el._fadeTimer = setInterval(step, 40);
+        step();
     }
 
     _makeNoiseBuffer() {
@@ -67,110 +156,6 @@ export class GameAudio {
         const data = buffer.getChannelData(0);
         for (let i = 0; i < len; i++) data[i] = Math.random() * 2 - 1;
         return buffer;
-    }
-
-    // ---- music engine -----------------------------------------------------
-
-    _scheduler() {
-        if (!this.ctx) return;
-        const tempo = 104; // bpm
-        const stepDur = 60 / tempo / 2; // eighth notes
-
-        // Schedule every step that falls inside the next 100ms lookahead.
-        while (this._nextNoteTime < this.ctx.currentTime + 0.1) {
-            this._playStep(this._step, this._nextNoteTime, stepDur);
-            this._nextNoteTime += stepDur;
-            this._step = (this._step + 1) % 32;
-        }
-    }
-
-    _playStep(step, time, stepDur) {
-        const bar = Math.floor(step / 8);
-
-        // Bongos: a syncopated jungle pattern, accented on the off-beats.
-        const bongoPattern = [1, 0, 0.5, 0.7, 0, 0.6, 0.9, 0.3];
-        const hit = bongoPattern[step % 8];
-        if (hit > 0) this._bongo(time, hit, step % 16 === 0 ? 210 : 320);
-
-        // Low tom on the downbeat of every bar, doubled at the turnaround.
-        if (step % 8 === 0) this._bongo(time, 1.0, 110, 0.28);
-        if (step === 30) this._bongo(time + stepDur * 0.5, 0.8, 140, 0.24);
-
-        // Bass ostinato: root - root - fifth - flat-seventh, one note per bar.
-        const bassRoots = [-24, -24, -17, -14];
-        if (step % 8 === 0) this._bass(time, noteToFreq(bassRoots[bar]), stepDur * 7);
-
-        // Marimba melody on a minor pentatonic; the phrase shifts each bar so the
-        // loop does not feel like a two-second sample on repeat.
-        const melodyMask = [1, 0, 1, 1, 0, 1, 0, 1];
-        if (melodyMask[step % 8]) {
-            const degree = PENTATONIC[(step * 3 + bar * 2) % PENTATONIC.length];
-            const octave = (step % 16 < 8) ? 0 : 12;
-            this._marimba(time, noteToFreq(degree + octave - 5), stepDur * 1.6);
-        }
-
-        // Shaker on every step, quieter on the beat, for a constant groove bed.
-        this._shaker(time, step % 2 === 0 ? 0.05 : 0.11);
-    }
-
-    _bongo(time, velocity, freq, decay = 0.18) {
-        const osc = this.ctx.createOscillator();
-        const gain = this.ctx.createGain();
-        osc.type = 'sine';
-        osc.frequency.setValueAtTime(freq, time);
-        osc.frequency.exponentialRampToValueAtTime(freq * 0.55, time + decay);
-        gain.gain.setValueAtTime(0.0001, time);
-        gain.gain.exponentialRampToValueAtTime(0.5 * velocity, time + 0.005);
-        gain.gain.exponentialRampToValueAtTime(0.0001, time + decay);
-        osc.connect(gain).connect(this.musicGain);
-        osc.start(time);
-        osc.stop(time + decay + 0.05);
-    }
-
-    _bass(time, freq, dur) {
-        const osc = this.ctx.createOscillator();
-        const gain = this.ctx.createGain();
-        const filter = this.ctx.createBiquadFilter();
-        osc.type = 'triangle';
-        osc.frequency.setValueAtTime(freq, time);
-        filter.type = 'lowpass';
-        filter.frequency.value = 500;
-        gain.gain.setValueAtTime(0.0001, time);
-        gain.gain.exponentialRampToValueAtTime(0.42, time + 0.02);
-        gain.gain.exponentialRampToValueAtTime(0.0001, time + dur);
-        osc.connect(filter).connect(gain).connect(this.musicGain);
-        osc.start(time);
-        osc.stop(time + dur + 0.05);
-    }
-
-    _marimba(time, freq, dur) {
-        // Two detuned sines plus a hard attack transient reads as "wooden mallet".
-        [1, 2.01].forEach((mult, i) => {
-            const osc = this.ctx.createOscillator();
-            const gain = this.ctx.createGain();
-            osc.type = 'sine';
-            osc.frequency.value = freq * mult;
-            const peak = i === 0 ? 0.22 : 0.07;
-            gain.gain.setValueAtTime(0.0001, time);
-            gain.gain.exponentialRampToValueAtTime(peak, time + 0.004);
-            gain.gain.exponentialRampToValueAtTime(0.0001, time + dur);
-            osc.connect(gain).connect(this.musicGain);
-            osc.start(time);
-            osc.stop(time + dur + 0.05);
-        });
-    }
-
-    _shaker(time, velocity) {
-        const src = this.ctx.createBufferSource();
-        const gain = this.ctx.createGain();
-        const filter = this.ctx.createBiquadFilter();
-        src.buffer = this._noiseBuffer;
-        filter.type = 'highpass';
-        filter.frequency.value = 6000;
-        gain.gain.setValueAtTime(velocity, time);
-        gain.gain.exponentialRampToValueAtTime(0.0001, time + 0.05);
-        src.connect(filter).connect(gain).connect(this.musicGain);
-        src.start(time, Math.random() * 0.5, 0.06);
     }
 
     // ---- sound effects ----------------------------------------------------
@@ -212,6 +197,31 @@ export class GameAudio {
         src.connect(filter).connect(this._sfxEnvelope(t, 0.32, 0.9));
         src.start(t);
         src.stop(t + 0.35);
+    }
+
+    gunshot() {
+        if (!this.started) return;
+        const t = this.ctx.currentTime;
+        // A sharp crack: a very short, hot noise burst through a wide-open
+        // filter, plus a low thump under it for body — the opposite shape
+        // from spin()'s slow rising sweep, since a gunshot is instantaneous.
+        const src = this.ctx.createBufferSource();
+        const filter = this.ctx.createBiquadFilter();
+        src.buffer = this._noiseBuffer;
+        filter.type = 'bandpass';
+        filter.frequency.value = 2200;
+        filter.Q.value = 0.7;
+        src.connect(filter).connect(this._sfxEnvelope(t, 0.09, 1.0));
+        src.start(t);
+        src.stop(t + 0.1);
+
+        const thump = this.ctx.createOscillator();
+        thump.type = 'square';
+        thump.frequency.setValueAtTime(150, t);
+        thump.frequency.exponentialRampToValueAtTime(60, t + 0.07);
+        thump.connect(this._sfxEnvelope(t, 0.09, 0.5));
+        thump.start(t);
+        thump.stop(t + 0.1);
     }
 
     crateBreak() {

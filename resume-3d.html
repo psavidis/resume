@@ -85,6 +85,28 @@
         }
         .zone-pop { animation: zonePop 0.45s cubic-bezier(0.2, 1.4, 0.5, 1); }
 
+        /* Island theme song title — reads as floating in the sky rather than
+           a HUD chip, so no box or backdrop: just soft glowing text, centred
+           below the HUD row where it won't collide with the counters. */
+        #song-title {
+            position: fixed;
+            top: 62px;
+            left: 0; right: 0;
+            text-align: center;
+            font-size: 15px;
+            font-weight: 700;
+            font-style: italic;
+            letter-spacing: 0.4px;
+            color: rgba(255, 255, 255, 0.92);
+            text-shadow: 0 2px 10px rgba(20, 60, 110, 0.8), 0 0 18px rgba(255, 245, 220, 0.35);
+            pointer-events: none;
+            z-index: 9;
+            opacity: 0;
+            transform: translateY(-6px);
+            transition: opacity 0.9s ease, transform 0.9s ease;
+        }
+        #song-title.visible { opacity: 1; transform: none; }
+
         #mute-btn {
             pointer-events: auto;
             background: rgba(30, 18, 8, 0.72);
@@ -332,6 +354,7 @@
         #load-status { font-size: 13px; opacity: 0.75; margin: 18px 0 22px; font-weight: 600; }
 
         .start-actions { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+        .start-actions[hidden] { display: none; }
         .load-inner button {
             font-family: inherit;
             font-weight: 800;
@@ -347,16 +370,21 @@
         .load-inner.ready button { opacity: 1; pointer-events: auto; }
         .load-inner button:hover { transform: translateY(-2px) scale(1.03); }
 
-        #start-btn {
+        #enter-btn, #sound-music {
             background: linear-gradient(160deg, #ffc94a, #f08d1e);
             color: #3a1e00;
             box-shadow: 0 5px 0 #a85c07;
         }
-        #start-silent {
+        #sound-muted {
             background: rgba(255, 255, 255, 0.14);
             color: #fff;
             border: 2px solid rgba(255, 255, 255, 0.3) !important;
         }
+
+        /* The sound choice is answered once and then disappears — Enter
+           Island fading in over the same spot reads as the next step of one
+           flow, not a second, unrelated decision. */
+        #enter-actions { margin-top: 12px; }
 
         .controls-legend {
             margin-top: 26px;
@@ -372,6 +400,71 @@
             border-radius: 6px;
             padding: 5px 10px;
             font-weight: 600;
+        }
+
+        /* ---- victory screen ---- */
+        #victory {
+            position: fixed;
+            inset: 0;
+            background: radial-gradient(circle at 50% 35%, #2a6ba8, #0e2d52);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 31;
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+            transition: opacity 0.6s ease, visibility 0.6s;
+            padding: 20px;
+        }
+        #victory.open {
+            opacity: 1;
+            visibility: visible;
+            pointer-events: auto;
+        }
+        .victory-inner { text-align: center; max-width: 560px; }
+        .victory-inner h1 {
+            font-size: clamp(30px, 7vw, 52px);
+            font-weight: 900;
+            letter-spacing: -1px;
+            text-shadow: 0 4px 0 #8b3f0d, 0 8px 20px rgba(0, 0, 0, 0.4);
+            color: var(--amber);
+            margin-bottom: 6px;
+            animation: modalIn 0.5s cubic-bezier(0.2, 1.3, 0.4, 1);
+        }
+        .victory-inner .tagline { font-size: 16px; opacity: 0.92; margin: 4px 0 22px; font-weight: 600; }
+        .victory-inner .pct {
+            font-size: 15px;
+            font-weight: 800;
+            background: rgba(0, 0, 0, 0.28);
+            border-radius: 8px;
+            padding: 8px 16px;
+            display: inline-block;
+            margin-bottom: 22px;
+        }
+        .victory-actions { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+        .victory-inner button, .victory-inner a.btn {
+            font-family: inherit;
+            font-weight: 800;
+            font-size: 16px;
+            padding: 13px 30px;
+            border-radius: 12px;
+            border: none;
+            cursor: pointer;
+            transition: transform 0.15s;
+            text-decoration: none;
+            display: inline-block;
+        }
+        .victory-inner button:hover, .victory-inner a.btn:hover { transform: translateY(-2px) scale(1.03); }
+        #victory-island {
+            background: linear-gradient(160deg, #ffc94a, #f08d1e);
+            color: #3a1e00;
+            box-shadow: 0 5px 0 #a85c07;
+        }
+        #victory-resume {
+            background: rgba(255, 255, 255, 0.14);
+            color: #fff;
+            border: 2px solid rgba(255, 255, 255, 0.3) !important;
         }
 
         /* ---- touch controls ---- */
@@ -401,11 +494,16 @@
             transform: translate(-22px, -22px);
         }
 
+        /* Action buttons (jump/attack) sit bottom-left, opposite the joystick,
+           so both thumbs have a natural resting spot on a phone held in
+           landscape. Camera-rotate buttons stack above them, out of the way
+           of the thumb doing the jump/attack presses. */
         #touch-buttons {
             position: fixed;
-            right: 20px;
+            left: 20px;
             bottom: 28px;
             display: none;
+            align-items: flex-end;
             gap: 12px;
             z-index: 11;
         }
@@ -420,13 +518,60 @@
             font-family: inherit;
             cursor: pointer;
             backdrop-filter: blur(4px);
+            -webkit-tap-highlight-color: transparent;
+            touch-action: none;
         }
         #touch-buttons button:active { background: rgba(255, 180, 74, 0.7); }
 
+        #touch-camera {
+            position: fixed;
+            left: 20px;
+            bottom: 122px;
+            display: none;
+            gap: 10px;
+            z-index: 11;
+        }
+        #touch-camera button {
+            width: 50px; height: 50px;
+            border-radius: 50%;
+            border: 3px solid rgba(255, 230, 180, 0.5);
+            background: rgba(30, 18, 8, 0.55);
+            color: #fff;
+            font-size: 18px;
+            font-weight: 800;
+            font-family: inherit;
+            cursor: pointer;
+            backdrop-filter: blur(4px);
+            -webkit-tap-highlight-color: transparent;
+            touch-action: none;
+        }
+        #touch-camera button:active { background: rgba(255, 180, 74, 0.7); }
+
+        /* The joystick anchors to wherever the right thumb first touches, so it
+           is not pinned to a fixed spot — see #stick's JS-driven left/top. */
         @media (hover: none) and (pointer: coarse) {
-            #touch-buttons { display: flex; }
+            #touch-buttons, #touch-camera { display: flex; }
             #controls { display: none; }
             #zone-label { max-width: 34vw; font-size: 12px; }
+            #hud { padding: max(10px, env(safe-area-inset-top)) 12px 0; }
+            .counter { padding: 6px 10px; font-size: 13px; }
+            #song-title { top: calc(52px + env(safe-area-inset-top)); font-size: 13px; }
+            #touch-buttons {
+                left: max(16px, env(safe-area-inset-left));
+                bottom: max(20px, env(safe-area-inset-bottom));
+            }
+            #touch-camera {
+                left: max(16px, env(safe-area-inset-left));
+                bottom: calc(114px + env(safe-area-inset-bottom));
+            }
+        }
+
+        /* Small phones in portrait: shrink the action buttons a touch so the
+           whole cluster stays clear of the joystick's reach on the right. */
+        @media (hover: none) and (pointer: coarse) and (max-width: 480px) {
+            #touch-buttons button { width: 62px; height: 62px; font-size: 10.5px; }
+            #touch-camera button { width: 44px; height: 44px; font-size: 16px; }
+            #touch-camera { bottom: 98px; }
         }
     </style>
 </head>
@@ -445,11 +590,13 @@
     </div>
 </div>
 
+<div id="song-title"></div>
+
 <div id="controls">
     <div class="key-hint"><kbd>WASD</kbd>move</div>
     <div class="key-hint"><kbd>Space</kbd>jump</div>
-    <div class="key-hint"><kbd>Shift</kbd>spin attack</div>
-    <div class="key-hint"><kbd>Q</kbd><kbd>R</kbd>rotate camera</div>
+    <div class="key-hint"><kbd>Shift</kbd>attack</div>
+    <div class="key-hint"><kbd>←</kbd><kbd>→</kbd>rotate camera</div>
     <div class="key-hint"><kbd>M</kbd>mute</div>
 </div>
 
@@ -457,8 +604,13 @@
 
 <div id="stick"><div id="stick-knob"></div></div>
 
+<div id="touch-camera">
+    <button id="btn-cam-left" aria-label="Rotate camera left">◀</button>
+    <button id="btn-cam-right" aria-label="Rotate camera right">▶</button>
+</div>
+
 <div id="touch-buttons">
-    <button id="btn-spin">SPIN</button>
+    <button id="btn-spin">ATTACK</button>
     <button id="btn-jump">JUMP</button>
 </div>
 
@@ -475,23 +627,40 @@
         <p class="tagline">Petros Savidis — Software Engineer</p>
         <p id="load-status">Loading the island…</p>
 
-        <div class="start-actions">
-            <button id="start-btn">▶ Play with music</button>
-            <button id="start-silent">Play muted</button>
+        <div class="start-actions" id="sound-actions">
+            <button id="sound-music">🎵 Play with Music</button>
+            <button id="sound-muted">🔇 Play Muted</button>
+        </div>
+        <div class="start-actions" id="enter-actions" hidden>
+            <button id="enter-btn">🏝 Enter Island</button>
         </div>
 
         <div class="controls-legend">
-            <span>🏃 WASD / arrows to move</span>
+            <span>🏃 WASD to move</span>
             <span>⤴ Space to jump</span>
-            <span>🌀 Shift to spin</span>
+            <span>⚔ Shift to attack</span>
+            <span>↔ Arrows to rotate camera</span>
             <span>📦 Smash crates to read</span>
         </div>
 
         <p class="hint">
-            Every crate holds a piece of the resume. Spin or jump on them to open it,
+            Every crate holds a piece of the resume. Attack or jump on them to open it,
             and collect the ⚡ fruit for the tech behind each project.<br>
             Prefer plain text? <a href="index.html" style="color:#ffc94a">Read the classic resume</a>.
         </p>
+    </div>
+</div>
+
+<div id="victory">
+    <div class="victory-inner">
+        <h1>🏆 ISLAND COMPLETE</h1>
+        <p class="tagline">You've explored every job, smashed every crate, and collected every skill.</p>
+        <p class="pct">100% complete</p>
+
+        <div class="victory-actions">
+            <button id="victory-island">🏝 Back to Resume Island</button>
+            <a id="victory-resume" class="btn" href="index.html">📄 Read the written resume</a>
+        </div>
     </div>
 </div>
 

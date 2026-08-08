@@ -15,6 +15,7 @@ export class UI {
         this.crateCount = root.querySelector('#crate-count');
         this.fruitCount = root.querySelector('#fruit-count');
         this.zoneLabel = root.querySelector('#zone-label');
+        this.songTitle = root.querySelector('#song-title');
         this.isOpen = false;
         this.onClose = null;
 
@@ -22,11 +23,39 @@ export class UI {
         this.modal.addEventListener('click', (e) => {
             if (e.target === this.modal) this.closeModal();
         });
+
+        this.victory = root.querySelector('#victory');
+        root.querySelector('#victory-island').addEventListener('click', () => {
+            // Reloading is the simplest reliable way back to the start screen —
+            // the world's broken-crate state would otherwise need a full reset.
+            window.location.reload();
+        });
+    }
+
+    showVictory() {
+        if (this.isOpen) this.closeModal();
+        this.victory.classList.add('open');
     }
 
     setCounts(crates, totalCrates, fruits, totalFruits) {
         this.crateCount.textContent = `${crates}/${totalCrates}`;
         this.fruitCount.textContent = `${fruits}/${totalFruits}`;
+    }
+
+    // Shows the current island's theme song name floating in the sky, timed
+    // to roughly track the audio crossfade. `name` is the bare song title —
+    // the leading track number from the mp3 filename is stripped by the
+    // caller, never shown here. Pass null for an island with no theme song.
+    setSongTitle(name) {
+        if (this.songTitle.dataset.song === (name ?? '')) return;
+        this.songTitle.dataset.song = name ?? '';
+
+        if (!name) {
+            this.songTitle.classList.remove('visible');
+            return;
+        }
+        this.songTitle.textContent = `♪ ${name}`;
+        this.songTitle.classList.add('visible');
     }
 
     setZone(name) {
