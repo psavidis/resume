@@ -3768,27 +3768,23 @@ export class World {
             crestLight.position.set(-HALF_W + 5, 7.4, 0);
             group.add(crestLight);
 
-            // A second crest on the outside face, above the exit the player
-            // walks toward, so the building is identifiable from the bridge.
-            const outerCrest = makeLogoPanel(logoPath, 3.0);
-            outerCrest.position.set(0, entabY + 1.5, HALF_D + 1.6);
-            group.add(outerCrest);
-            this.logoPanels.push(outerCrest);
+            // One crest already hangs inside; a second one on the outer face
+            // duplicated it for no reason, so it's gone.
 
-            // Stacked above the outer crest, on the south face above the exit
-            // steps — the same spot the player already looks toward on the
-            // way out, rather than straight up over the roof where these used
-            // to float unseen.
+            // One card on each front corner of the temple, angled outward so
+            // they come into view in sequence as the player walks forward out
+            // of the colonnade — rather than both stacked dead-centre over the
+            // roof, where the chase camera never looked.
             const sign = makeLabelSprite(`${edu.degree} · ${edu.fieldOfStudy}`, {
                 fontSize: 34, worldWidth: 8
             });
-            sign.position.set(0, entabY + 4.9, HALF_D + 1.6);
+            sign.position.set(-HALF_W + 1, entabY - 1.5, HALF_D + 0.9);
             group.add(sign);
 
             const school = makeLabelSprite(`${edu.school} (${edu.startYear}–${edu.endYear})`, {
                 fontSize: 28, color: '#ffe0a0', bg: 'rgba(40,24,12,0.8)', worldWidth: 9
             });
-            school.position.set(0, entabY + 3.7, HALF_D + 1.6);
+            school.position.set(HALF_W - 1, entabY - 1.5, HALF_D + 0.9);
             group.add(school);
 
             // The education crate sits inside, right where the player starts.
