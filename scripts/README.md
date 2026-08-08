@@ -19,7 +19,8 @@ Then run `node --version`. You should be able to see the latest version of node 
 ### 1. PDF Creation Using Puppeteer
 
 - `cd scripts`
-- `node generate-pdf.js`
+- `node generate-pdf.js` renders the live hosted resume
+- `node generate-pdf.js --local` renders your local files instead
 
 A new pdf is created in the root of the directory called `resume-petros-savidis.pdf`.
 
@@ -50,7 +51,8 @@ node scripts/release.js
 
 #### Local Mode
 
-The node app fetches the content from the live hosted resume. If you want to make changes locally, you need to replace the fetching URL with the local one during changes (L12).
+Run with `--local` to render your local files instead of the hosted resume. The script starts its own web server,
+so there is nothing to set up. In IntelliJ, use the `Generate PDF (Local)` run configuration.
 
 #### Debugging
 

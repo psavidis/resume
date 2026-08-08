@@ -11,6 +11,17 @@
   ],
   "workExperience": [
     {
+      "title": "Software Development Manager",
+      "company": "Upstream",
+      "companyLogo": "img/company-logo_upstream.jpeg",
+      "companyLink": "https://www.upstreamsystems.com/",
+      "startDate": "September 2026",
+      "endDate": "Present",
+      "employmentType": "Full-time",
+      "location": "Athens, Greece",
+      "workMode": "Hybrid"
+    },
+    {
       "title": "Backend Engineer",
       "company": "Camunda",
       "companyLogo": "img/company-logo_camunda.jpeg",
