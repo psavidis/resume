@@ -316,7 +316,24 @@ class Game {
 
         const host = document.getElementById('canvas-host');
 
+        // Release the stick the moment a second finger touches down anywhere
+        // — that's the start of a pinch-zoom gesture, not a move command, and
+        // without this the pinch's first finger (if it landed left-of-center)
+        // stays latched as the joystick's activeId and drags the knob along
+        // with the zoom.
+        const releaseStick = () => {
+            activeId = null;
+            this.touchDir = { x: 0, z: 0 };
+            knob.classList.remove('dragging');
+            knob.style.transform = 'translate(-24px, -24px)';
+            stick.classList.remove('active');
+        };
+
         host.addEventListener('touchstart', (e) => {
+            if (e.touches.length > 1) {
+                releaseStick();
+                return;
+            }
             for (const t of e.changedTouches) {
                 if (t.clientX < window.innerWidth / 2 && activeId === null) {
                     activeId = t.identifier;
@@ -328,6 +345,7 @@ class Game {
         }, { passive: true });
 
         host.addEventListener('touchmove', (e) => {
+            if (e.touches.length > 1) return;
             for (const t of e.changedTouches) {
                 if (t.identifier !== activeId) continue;
                 const dx = t.clientX - origin.x;
@@ -345,11 +363,7 @@ class Game {
         const endTouch = (e) => {
             for (const t of e.changedTouches) {
                 if (t.identifier !== activeId) continue;
-                activeId = null;
-                this.touchDir = { x: 0, z: 0 };
-                knob.classList.remove('dragging');
-                knob.style.transform = 'translate(-24px, -24px)';
-                stick.classList.remove('active');
+                releaseStick();
             }
         };
         host.addEventListener('touchend', endTouch, { passive: true });
@@ -371,7 +385,15 @@ class Game {
         jumpBtn.addEventListener('touchend', releaseJump, { passive: true });
         jumpBtn.addEventListener('touchcancel', releaseJump, { passive: true });
 
-        document.getElementById('btn-spin').addEventListener('click', () => this._triggerAttack());
+        // touchstart rather than click: a synthetic click after touchend can
+        // be delayed or dropped while another finger is still down on the
+        // joystick, which made attack silently no-op during simultaneous
+        // move+attack. touchstart fires immediately and matches jump's
+        // handling above.
+        document.getElementById('btn-spin').addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            this._triggerAttack();
+        }, { passive: false });
 
         // Camera rotate buttons: a tap nudges by one step, a hold keeps
         // rotating smoothly for as long as the thumb stays down.

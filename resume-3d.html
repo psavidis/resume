@@ -612,6 +612,27 @@
             #stick-knob { width: 42px; height: 42px; transform: translate(-21px, -21px); }
         }
 
+        /* Phones in landscape: the crate modal's desktop sizing (28-30px
+           padding, 25px headings, vertically-stacked facts/badges/chips)
+           doesn't fit a ~360-430px-tall viewport without scrolling. Shrink
+           spacing/type and let facts run two-up so most cards fit in one
+           screen. */
+        @media (hover: none) and (pointer: coarse) and (max-height: 500px) {
+            #modal { padding: 10px; }
+            #modal-card {
+                max-height: 94vh;
+                max-height: 94dvh;
+                padding: 16px 18px 18px;
+            }
+            #modal-body h2 { font-size: 19px; margin-bottom: 4px; }
+            #modal-body h3 { margin: 10px 0 6px; }
+            .modal-meta { font-size: 12.5px; margin-bottom: 8px; }
+            .modal-desc { font-size: 13px; line-height: 1.4; margin-top: 4px; }
+            .facts { grid-template-columns: 1fr 1fr; gap: 4px 14px; }
+            #modal-body ul li { font-size: 12.5px; margin-bottom: 3px; }
+            .links { margin-top: 10px; }
+        }
+
         /* Fallback for touch devices where orientation lock isn't available
            (e.g. iOS Safari) — ask the player to rotate manually instead of
            letting them fight the game in a cramped portrait viewport. */
