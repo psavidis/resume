@@ -9,6 +9,34 @@ import { GameAudio } from './audio.js';
 
 const DATA_URL = new URL('../../data.json', import.meta.url);
 
+// Costume per island, keyed by the zone's chronological index. Company name is
+// not enough to key on — the career visits Upstream twice, and the two stints
+// look completely different (lone hero, then a leader with a team behind them).
+//
+//   0 Intracom Telecom   1 Hellenic Army      2 European Dynamics
+//   3 Upstream (eng)     4 Cortical.io        5 Camunda
+//   6 Upstream (manager)
+//
+// The education island is handled separately: it is always the graduation cap.
+const STAGE_BY_ZONE = {
+    0: 'plain',      // first job — the cap comes off
+    1: 'plain',      // army duties
+    2: 'chains',     // European Dynamics
+    3: 'hero',       // Upstream — sword in hand
+    4: 'caped',      // Cortical.io — grown, and a cape
+    5: 'fourArms',   // Camunda — same size, four arms
+    6: 'leader'      // Upstream again — the same, now with a team to shield
+};
+
+const STAGE_TOAST = {
+    plain: '👕 Cap off — first day on the job.',
+    chains: '⛓️ Chained to the process.',
+    hero: '🗡️ A sword, and the strength to swing it.',
+    caped: '🦸 Grown into the cape.',
+    fourArms: '🖐️ Four arms — twice the throughput.',
+    leader: '🛡️ Four to lead, and to shield.'
+};
+
 class Game {
     constructor(data) {
         this.data = data;
@@ -310,9 +338,20 @@ class Game {
         if (edu && Math.hypot(edu.x - p.x, edu.z - p.z) < bestDist) {
             const school = this.data.education[0];
             this.ui.setZone(school ? `🎓 ${school.school}` : '🎓 Education');
+            this._setStage('toga', '🎓 Cap on — student days.');
         } else if (nearest) {
             this.ui.setZone(`${nearest.exp.company} · ${nearest.exp.title}`);
+            this._setStage(STAGE_BY_ZONE[nearest.index] ?? 'plain',
+                STAGE_TOAST[STAGE_BY_ZONE[nearest.index]]);
         }
+    }
+
+    // The character's costume tracks the island they are standing on, so the
+    // career reads as a visible transformation. Announced once per change.
+    _setStage(stage, toast) {
+        if (this.player.costume === stage) return;
+        this.player.setCostume(stage);
+        if (toast) this.ui.toast(toast);
     }
 
     _updateCamera(dt) {

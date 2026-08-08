@@ -135,6 +135,172 @@ function makeSignTexture(titleText, subtitleText) {
     return tex;
 }
 
+// Some islands paint their ground rather than take a flat theme colour, so the
+// turf itself says where in the world the player is standing. The painter draws
+// into a square canvas that is then wrapped over the island cylinder — the top
+// face samples the middle of the texture, which is where the pattern lives.
+const GROUND_PAINTER = {
+    // Cortical.io is in Vienna: the Austrian flag's red-white-red bands run
+    // across the island so the ground reads as Austrian soil from the air.
+    'Cortical.io': (ctx, S) => {
+        const bands = [
+            ['#d8232a', 0.00, 0.30],
+            ['#f4f4f2', 0.30, 0.70],
+            ['#d8232a', 0.70, 1.00]
+        ];
+        for (const [color, from, to] of bands) {
+            ctx.fillStyle = color;
+            ctx.fillRect(0, S * from, S, S * (to - from));
+        }
+        // Faint grass speckle so the flag still reads as ground, not as vinyl.
+        ctx.globalAlpha = 0.10;
+        for (let i = 0; i < 900; i++) {
+            ctx.fillStyle = i % 2 ? '#4a7d3a' : '#2f5a24';
+            const r = 2 + Math.random() * 5;
+            ctx.beginPath();
+            ctx.arc(Math.random() * S, Math.random() * S, r, 0, Math.PI * 2);
+            ctx.fill();
+        }
+        ctx.globalAlpha = 1;
+    },
+
+    // The Hellenic Army stint is the jungle island: deep, mottled undergrowth
+    // under a dense canopy rather than open beach sand.
+    'Hellenic Army': (ctx, S) => {
+        ctx.fillStyle = '#255c22';
+        ctx.fillRect(0, 0, S, S);
+        // Layered blotches build a mulchy forest floor out of flat fills.
+        const shades = ['#1c4a1b', '#2f7029', '#3d8a33', '#173d18', '#4f9638'];
+        for (let i = 0; i < 1400; i++) {
+            ctx.fillStyle = shades[i % shades.length];
+            ctx.globalAlpha = 0.35 + Math.random() * 0.4;
+            const r = 4 + Math.random() * 22;
+            ctx.beginPath();
+            ctx.arc(Math.random() * S, Math.random() * S, r, 0, Math.PI * 2);
+            ctx.fill();
+        }
+        ctx.globalAlpha = 1;
+    }
+};
+
+// A stylised world map for the Camunda globe: ocean blue with hand-plotted
+// landmasses. The shapes are deliberately loose — at globe scale the point is
+// that it reads instantly as Earth, not that the coastlines are survey-grade.
+let earthTexture = null;
+function makeEarthTexture() {
+    if (earthTexture) return earthTexture;
+
+    const W = 1024;
+    const H = 512;
+    const canvas = document.createElement('canvas');
+    canvas.width = W;
+    canvas.height = H;
+    const ctx = canvas.getContext('2d');
+
+    // Ocean, with a lighter band at the equator so the sphere has depth.
+    const sea = ctx.createLinearGradient(0, 0, 0, H);
+    sea.addColorStop(0, '#1d4f7a');
+    sea.addColorStop(0.5, '#2a74a8');
+    sea.addColorStop(1, '#1d4f7a');
+    ctx.fillStyle = sea;
+    ctx.fillRect(0, 0, W, H);
+
+    // Landmasses as closed polygons in equirectangular (x = lon, y = lat) space.
+    // Coordinates are fractions of the canvas.
+    const land = [
+        // North America
+        [[0.13, 0.14], [0.30, 0.15], [0.31, 0.28], [0.25, 0.36], [0.22, 0.50],
+         [0.18, 0.42], [0.15, 0.30], [0.09, 0.24]],
+        // Greenland
+        [[0.30, 0.07], [0.38, 0.08], [0.36, 0.17], [0.30, 0.15]],
+        // South America
+        [[0.24, 0.55], [0.31, 0.54], [0.33, 0.66], [0.29, 0.84], [0.25, 0.78],
+         [0.23, 0.64]],
+        // Africa
+        [[0.46, 0.40], [0.57, 0.38], [0.58, 0.52], [0.53, 0.74], [0.48, 0.62],
+         [0.45, 0.50]],
+        // Europe
+        [[0.46, 0.20], [0.57, 0.19], [0.56, 0.33], [0.47, 0.36], [0.44, 0.28]],
+        // Asia
+        [[0.57, 0.16], [0.82, 0.14], [0.85, 0.30], [0.76, 0.44], [0.66, 0.42],
+         [0.58, 0.34]],
+        // India
+        [[0.66, 0.42], [0.72, 0.41], [0.70, 0.54], [0.66, 0.46]],
+        // Australia
+        [[0.78, 0.62], [0.90, 0.61], [0.91, 0.74], [0.80, 0.75]],
+        // Antarctica
+        [[0.00, 0.93], [1.00, 0.93], [1.00, 1.00], [0.00, 1.00]]
+    ];
+
+    ctx.fillStyle = '#3f8f43';
+    ctx.strokeStyle = '#2f6f34';
+    ctx.lineWidth = 3;
+    for (const poly of land) {
+        ctx.beginPath();
+        poly.forEach(([x, y], i) => {
+            const px = x * W;
+            const py = y * H;
+            if (i === 0) ctx.moveTo(px, py);
+            else ctx.lineTo(px, py);
+        });
+        ctx.closePath();
+        ctx.fill();
+        ctx.stroke();
+    }
+
+    // Desert and ice tints over the appropriate bands.
+    ctx.globalAlpha = 0.35;
+    ctx.fillStyle = '#d9c07a';
+    ctx.fillRect(0.44 * W, 0.40 * H, 0.14 * W, 0.09 * H);   // Sahara
+    ctx.fillRect(0.79 * W, 0.62 * H, 0.10 * W, 0.08 * H);   // Outback
+    ctx.fillStyle = '#eaf2f7';
+    ctx.fillRect(0, 0, W, 0.06 * H);                        // Arctic
+    ctx.globalAlpha = 1;
+
+    // A few swirls of cloud so it does not look like a flat map decal.
+    ctx.fillStyle = 'rgba(255,255,255,0.30)';
+    for (let i = 0; i < 34; i++) {
+        const cx = Math.random() * W;
+        const cy = 0.1 * H + Math.random() * 0.8 * H;
+        ctx.beginPath();
+        ctx.ellipse(cx, cy, 24 + Math.random() * 60, 8 + Math.random() * 14, 0, 0, Math.PI * 2);
+        ctx.fill();
+    }
+
+    earthTexture = new THREE.CanvasTexture(canvas);
+    earthTexture.colorSpace = THREE.SRGBColorSpace;
+    earthTexture.anisotropy = 8;
+    return earthTexture;
+}
+
+// Islands whose own set dressing fills the ground, so the generic palm-and-rock
+// scatter is skipped: it would only screen the props the island exists to show.
+const GENERIC_SCENERY_SKIP = new Set([
+    'Hellenic Army',      // jungle canopy
+    'Upstream',           // sanctuary of statues
+    'Cortical.io',        // Vienna
+    'Camunda',            // marketplace
+    'European Dynamics',  // pirate beach
+    'Intracom Telecom'    // town square
+]);
+
+const groundTextureCache = new Map();
+function makeGroundTexture(painter) {
+    if (!groundTextureCache.has(painter)) {
+        const S = 512;
+        const canvas = document.createElement('canvas');
+        canvas.width = S;
+        canvas.height = S;
+        const ctx = canvas.getContext('2d');
+        painter(ctx, S);
+        const tex = new THREE.CanvasTexture(canvas);
+        tex.colorSpace = THREE.SRGBColorSpace;
+        tex.anisotropy = 8;
+        groundTextureCache.set(painter, tex);
+    }
+    return groundTextureCache.get(painter);
+}
+
 // Each company gets its own landmark silhouette so islands are recognisable
 // from a distance. The logo is always mounted on a lit, slowly rotating panel
 // near the top, and the player can smash the plinth crate at its base.
@@ -289,10 +455,15 @@ export class World {
         group.position.copy(center);
         this.scene.add(group);
 
-        // Island disc, slightly domed by scaling a cylinder.
+        // Island disc, slightly domed by scaling a cylinder. A few companies
+        // paint their own ground (see GROUND_PAINTER) instead of a flat colour.
+        const painter = GROUND_PAINTER[exp.company];
+        const groundMat = painter
+            ? new THREE.MeshLambertMaterial({ map: makeGroundTexture(painter) })
+            : new THREE.MeshLambertMaterial({ color: theme.ground });
         const island = new THREE.Mesh(
             new THREE.CylinderGeometry(ZONE_RADIUS, ZONE_RADIUS - 2.5, 6, 32),
-            new THREE.MeshLambertMaterial({ color: theme.ground })
+            groundMat
         );
         island.position.y = -3;
         island.receiveShadow = true;
@@ -309,28 +480,60 @@ export class World {
 
         this.platforms.push({ x: center.x, z: center.z, radius: ZONE_RADIUS - 0.8, y: 0 });
 
-        // Palms and rocks for scenery, kept clear of the walking path.
-        for (let i = 0; i < 7; i++) {
-            const angle = (i / 7) * Math.PI * 2 + index;
-            const dist = ZONE_RADIUS - 3 - Math.random() * 2;
-            const px = Math.cos(angle) * dist;
-            const pz = Math.sin(angle) * dist;
-            // Keep the whole north-south corridor clear: this is the path the
-            // player walks between bridges, and a trunk in it is a roadblock.
-            if (Math.abs(px) < 7) continue;
-            if (i % 2 === 0) this._addPalm(group, px, pz, center);
-            else this._addRock(group, px, pz, theme, center);
+        // Palms and rocks for scenery, kept clear of the walking path. Islands
+        // that bring their own scenery (jungle, marketplace, sanctuary…) skip
+        // the generic palms — otherwise the trunks screen the props that are
+        // the whole reason to visit that island.
+        if (!GENERIC_SCENERY_SKIP.has(exp.company)) {
+            for (let i = 0; i < 7; i++) {
+                const angle = (i / 7) * Math.PI * 2 + index;
+                const dist = ZONE_RADIUS - 3 - Math.random() * 2;
+                const px = Math.cos(angle) * dist;
+                const pz = Math.sin(angle) * dist;
+                // Keep the whole north-south corridor clear: this is the path
+                // the player walks between bridges, and a trunk in it blocks it.
+                if (Math.abs(px) < 7) continue;
+                if (i % 2 === 0) this._addPalm(group, px, pz, center);
+                else this._addRock(group, px, pz, theme, center);
+            }
         }
+
+        // Company-specific set dressing: each island gets props that say where
+        // in the world (and in the career) the player is standing.
+        this._decorateZone(exp, group, center);
 
         // Role totem: set off to the side so it never sits between the chase
         // camera and the player as they enter the island from the south.
         const totem = this._buildTotem(exp, theme);
-        // Angled toward the walking path; the sign text is a texture on the
-        // board itself, so it rotates along with it.
-        totem.position.set(-8.5, 0, -2);
-        totem.rotation.y = 0.55;
+        // The board's painted faces are its ±z sides, and the player always
+        // arrives from the south (−z) walking north. Facing the board's +z side
+        // south — rotation.y ≈ π — squares the text to the chase camera on
+        // approach; the slight kick turns it toward the walking corridor.
+        //
+        // Both boards sit out at the rim rather than mid-island: closer in they
+        // masked whatever stood behind them from most angles. Out here they
+        // frame the approach instead of blocking it.
+        totem.position.set(-11.5, 0, -6.5);
+        totem.rotation.y = Math.PI - 0.62;
+        totem.scale.setScalar(0.82);
         group.add(totem);
         this.occluders.push(totem);
+        this.colliders.push({
+            x: center.x - 11.5, z: center.z - 6.5, halfX: 1.0, halfZ: 1.0, top: 4.5
+        });
+
+        // A second signpost on the far side of the walking corridor, angled the
+        // mirrored way, so the role is readable whichever side the player takes
+        // through the island.
+        const totemEast = this._buildTotem(exp, theme);
+        totemEast.position.set(11.5, 0, -6.5);
+        totemEast.rotation.y = Math.PI + 0.62;
+        totemEast.scale.setScalar(0.82);
+        group.add(totemEast);
+        this.occluders.push(totemEast);
+        this.colliders.push({
+            x: center.x + 11.5, z: center.z - 6.5, halfX: 1.0, halfZ: 1.0, top: 4.5
+        });
 
         // The company landmark anchors the far side of the island, so the
         // player walks toward it and past it on the way to the next zone.
@@ -344,10 +547,8 @@ export class World {
         group.add(landmark);
         // Deliberately NOT an occluder: the player walks through these, so
         // pulling the camera in on every wall would collapse the view to the
-        // player's back each time they pass under an arch.
-        this.colliders.push({
-            x: center.x - 8.5, z: center.z - 2, halfX: 1.2, halfZ: 1.2, top: 5.5
-        });
+        // player's back each time they pass under an arch. The landmark
+        // registers its own colliders inside _buildLandmark.
 
         // Crates for every project done at this company.
         const projects = this.data.project.filter((p) => p.company === exp.company &&
@@ -368,10 +569,11 @@ export class World {
             this.crates.push(crate);
         });
 
-        // A crate holding the role itself, always present. Offset from the
-        // island centre so it never spawns on top of an arriving player.
+        // A crate holding the role itself, always present. Parked clear of the
+        // island's central walking corridor so it never spawns on top of an
+        // arriving player or in the mouth of the landmark's doorway.
         const roleCrate = new Crate({
-            position: new THREE.Vector3(center.x + 3.5, 0.75, center.z + 1.5),
+            position: new THREE.Vector3(center.x + 5.2, 0.75, center.z + 1.5),
             kind: 'mystery',
             payload: { type: 'role', exp }
         });
@@ -393,7 +595,10 @@ export class World {
             this.fruits.push(fruit);
         });
 
-        return { center, exp, theme, group };
+        // `index` is the chronological slot, which is what the costume system
+        // keys off: company name alone cannot tell the two Upstream stints
+        // apart, and they wear different things.
+        return { center, exp, theme, group, index };
     }
 
     // A project belongs to a stint when its date range overlaps the stint's.
@@ -415,17 +620,37 @@ export class World {
         return pStart <= eEnd && pEnd >= eStart;
     }
 
-    // The landmark occupies the island's north end (local z ≈ +9.5). Any ring
-    // slot that lands inside its footprint is pulled back south, otherwise the
-    // crate ends up sealed inside a collider and can never be broken.
+    // Every landmark is a walk-through: the player enters from the south, passes
+    // under the arch/doorway and comes out onto the next bridge. Two things must
+    // therefore stay clear of pickups.
+    //
+    // 1. The landmark footprint itself (local z ≈ +9.5): a crate sealed inside a
+    //    collider can never be broken.
+    // 2. The doorway corridor — the strip at |x| < DOOR_HALF running the length
+    //    of the island. A crate parked in a doorway forces the player to smash
+    //    it before they can walk through, which reads as a locked door.
+    //
+    // Anything landing in either is slid sideways out of the corridor, and only
+    // pushed south as a fallback when there is no room either way.
     _clearOfLandmark(spot) {
         const LANDMARK_Z = 9.5;
         const KEEP_OUT = 4.6;
-        const dz = spot.z - LANDMARK_Z;
-        if (Math.abs(spot.x) < KEEP_OUT && Math.abs(dz) < KEEP_OUT) {
-            return { x: spot.x, z: LANDMARK_Z - KEEP_OUT - 1.2 };
+        const DOOR_HALF = 3.4;   // half-width of the protected walking corridor
+        const SIDE = 5.0;        // where corridor intruders get parked instead
+
+        let { x, z } = spot;
+
+        // Slide out of the doorway corridor, keeping whichever side it started.
+        if (Math.abs(x) < DOOR_HALF) {
+            x = Math.sign(x || 1) * SIDE;
         }
-        return spot;
+
+        // If it still overlaps the landmark's mass, pull it south of the façade.
+        if (Math.abs(x) < KEEP_OUT && Math.abs(z - LANDMARK_Z) < KEEP_OUT) {
+            z = LANDMARK_Z - KEEP_OUT - 1.2;
+        }
+
+        return { x, z };
     }
 
     // Slides a point out of any static collider it happens to sit inside,
@@ -596,23 +821,81 @@ export class World {
             blockRadius = 5.5;
 
         } else if (style === 'arch') {
-            // European Dynamics: a classical arch you can walk through.
-            [-2.6, 2.6].forEach((x) => {
-                const col = new THREE.Mesh(new THREE.CylinderGeometry(0.75, 0.85, 7, 12), stone);
-                col.position.set(x, 3.5, 0);
+            // European Dynamics: a triumphal arch the player walks through on
+            // the way north. The piers are set wide — the scaled gap has to
+            // clear the player's 0.75 collision radius with room to spare, or
+            // the "arch to pass through" becomes an arch to squeeze past.
+            const PIER_X = 4.2;
+            [-PIER_X, PIER_X].forEach((x) => {
+                const pier = new THREE.Mesh(new THREE.BoxGeometry(1.7, 7, 2.4), stone);
+                pier.position.set(x, 3.5, 0);
+                pier.castShadow = true;
+                landmark.add(pier);
+
+                // Engaged half-columns dressing the inner face of each pier.
+                const col = new THREE.Mesh(new THREE.CylinderGeometry(0.5, 0.58, 6.4, 12), stone);
+                col.position.set(x - Math.sign(x) * 0.85, 3.2, 1.2);
                 col.castShadow = true;
                 landmark.add(col);
+
+                // Cornice block capping the pier.
+                const cap = new THREE.Mesh(new THREE.BoxGeometry(2.1, 0.5, 2.8), stone);
+                cap.position.set(x, 7.2, 0);
+                landmark.add(cap);
+
                 this.colliders.push({
                     x: center.x + x * scale, z: center.z,
-                    halfX: 0.9 * scale, halfZ: 0.9 * scale, top: 7 * scale
+                    halfX: 0.95 * scale, halfZ: 1.3 * scale, top: 7 * scale
                 });
             });
-            const lintel = new THREE.Mesh(new THREE.BoxGeometry(7.6, 1.3, 2), stone);
-            lintel.position.y = 7.6;
-            lintel.castShadow = true;
-            landmark.add(lintel);
-            logoY = 5.2;     // hangs in the archway opening, at eye level
-            blockRadius = 0; // the gap between the columns stays walkable
+
+            // The vault: a ring of voussoir blocks spanning the opening, drawn
+            // as a half arc of boxes rotated about the springing line.
+            const SPAN = PIER_X - 0.85;
+            for (let i = 0; i <= 9; i++) {
+                const a = (i / 9) * Math.PI;
+                const voussoir = new THREE.Mesh(new THREE.BoxGeometry(1.05, 0.7, 2.4), stone);
+                voussoir.position.set(Math.cos(a) * SPAN, 5.6 + Math.sin(a) * SPAN, 0);
+                voussoir.rotation.z = a - Math.PI / 2;
+                voussoir.castShadow = true;
+                landmark.add(voussoir);
+            }
+
+            // Attic storey above the vault, the way a triumphal arch is topped.
+            const attic = new THREE.Mesh(new THREE.BoxGeometry(11, 2.2, 2.8), stone);
+            attic.position.y = 11.0;
+            attic.castShadow = true;
+            landmark.add(attic);
+            const cornice = new THREE.Mesh(new THREE.BoxGeometry(11.8, 0.5, 3.2), stone);
+            cornice.position.y = 12.4;
+            landmark.add(cornice);
+
+            // Quadriga-ish flourish: two horses on the attic, in silhouette.
+            [-1.8, 1.8].forEach((hx) => {
+                const horse = new THREE.Group();
+                const bodyH = new THREE.Mesh(new THREE.CapsuleGeometry(0.3, 0.8, 4, 8), accent);
+                bodyH.rotation.z = Math.PI / 2;
+                horse.add(bodyH);
+                const neckH = new THREE.Mesh(new THREE.CylinderGeometry(0.13, 0.18, 0.7, 7), accent);
+                neckH.position.set(0.6, 0.36, 0);
+                neckH.rotation.z = -0.6;
+                horse.add(neckH);
+                const headH = new THREE.Mesh(new THREE.CapsuleGeometry(0.12, 0.26, 4, 7), accent);
+                headH.position.set(0.88, 0.62, 0);
+                headH.rotation.z = -1.1;
+                horse.add(headH);
+                [[-0.42, 0.18], [-0.42, -0.18], [0.36, 0.18], [0.36, -0.18]].forEach(([lx, lz]) => {
+                    const leg = new THREE.Mesh(new THREE.CylinderGeometry(0.08, 0.07, 0.7, 6), accent);
+                    leg.position.set(lx, -0.5, lz);
+                    horse.add(leg);
+                });
+                horse.position.set(hx, 13.0, 0);
+                horse.castShadow = true;
+                landmark.add(horse);
+            });
+
+            logoY = 4.6;     // hangs in the archway opening, at eye level
+            blockRadius = 0; // the gap between the piers stays walkable
 
         } else if (style === 'tower') {
             // Intracom Telecom: a broad stone tower with a battlement crown and
@@ -687,15 +970,19 @@ export class World {
             });
 
             // Short returns at each end frame the doorways without closing them.
+            // Pushed out to x = ±3.9 with narrower returns: the doorway has to
+            // clear the player's 0.75 collision radius *after* the landmark's
+            // 0.78 scale, and the earlier ±3.3 left barely a body's width, so
+            // walking the hut caught a jamb corner and stopped dead.
             [-1, 1].forEach((zSide) => {
                 [-1, 1].forEach((xSide) => {
-                    const jamb = new THREE.Mesh(new THREE.BoxGeometry(2.4, WALL_H, 0.4), olive);
-                    jamb.position.set(xSide * 3.3, WALL_H / 2, zSide * 2.8);
+                    const jamb = new THREE.Mesh(new THREE.BoxGeometry(1.6, WALL_H, 0.4), olive);
+                    jamb.position.set(xSide * 3.9, WALL_H / 2, zSide * 2.8);
                     jamb.castShadow = true;
                     landmark.add(jamb);
                     this.colliders.push({
-                        x: center.x + xSide * 3.3 * scale, z: center.z + zSide * 2.8 * scale,
-                        halfX: 1.2 * scale, halfZ: 0.35 * scale, top: WALL_H * scale
+                        x: center.x + xSide * 3.9 * scale, z: center.z + zSide * 2.8 * scale,
+                        halfX: 0.8 * scale, halfZ: 0.35 * scale, top: WALL_H * scale
                     });
                 });
             });
@@ -872,6 +1159,1699 @@ export class World {
         rock.castShadow = true;
         rock.receiveShadow = true;
         group.add(rock);
+    }
+
+    // ---- per-company set dressing -----------------------------------------
+
+    // Props are placed in island-local space. Two rules apply everywhere:
+    //   * nothing in the corridor at |x| < 4, which is the walk-through route
+    //     from the south bridge, through the landmark's doorway, to the north;
+    //   * anything solid enough to stand next to gets a collider so the player
+    //     bumps it instead of walking through it.
+    _decorateZone(exp, group, center) {
+        const decorate = {
+            'Hellenic Army': () => this._dressJungle(group, center),
+            'Cortical.io': () => this._dressVienna(group, center),
+            'Upstream': () => this._dressMythology(group, center),
+            'European Dynamics': () => this._dressPirates(group, center),
+            'Intracom Telecom': () => this._dressTownLife(group, center),
+            'Camunda': () => this._dressGlobalMarket(group, center)
+        }[exp.company];
+        if (decorate) decorate();
+    }
+
+    // Registers a collider in world space for a prop placed at island-local
+    // (x, z). Props are added to zone groups, which are positioned at `center`,
+    // but colliders live in world coordinates.
+    _prop(center, x, z, halfX, halfZ, top) {
+        this.colliders.push({ x: center.x + x, z: center.z + z, halfX, halfZ, top });
+    }
+
+    // (b) Hellenic Army — a dense jungle: tall buttressed hardwoods, a bamboo
+    // thicket, ferns, hanging vines and undergrowth, packed to the island's rim.
+    _dressJungle(group, center) {
+        const barkMat = new THREE.MeshLambertMaterial({ color: 0x5b4126 });
+        const canopyMats = [0x1e5e21, 0x2a7a2c, 0x35913a, 0x184d1c].map(
+            (c) => new THREE.MeshLambertMaterial({ color: c, flatShading: true })
+        );
+
+        // Big canopy trees ringing the island. Trunks are tall and slim with a
+        // flared base; the canopy is a stack of shrinking spheres so it reads as
+        // a broadleaf crown rather than a palm.
+        const treeSpots = [];
+        for (let ring = 0; ring < 2; ring++) {
+            const count = ring === 0 ? 9 : 7;
+            const radius = ring === 0 ? ZONE_RADIUS - 2.2 : ZONE_RADIUS - 6.4;
+            for (let i = 0; i < count; i++) {
+                const a = (i / count) * Math.PI * 2 + ring * 0.4;
+                const x = Math.cos(a) * radius;
+                const z = Math.sin(a) * radius;
+                if (Math.abs(x) < 4.6) continue;                 // walking corridor
+                if (Math.abs(x) < 6 && z > 4) continue;          // landmark apron
+                treeSpots.push([x, z]);
+            }
+        }
+
+        treeSpots.forEach(([x, z], i) => {
+            const tree = new THREE.Group();
+            const h = 7 + (i % 3) * 1.6;
+            const trunk = new THREE.Mesh(new THREE.CylinderGeometry(0.3, 0.62, h, 8), barkMat);
+            trunk.position.y = h / 2;
+            trunk.castShadow = true;
+            tree.add(trunk);
+
+            // Buttress roots: three wedges splayed around the base.
+            for (let r = 0; r < 3; r++) {
+                const a = (r / 3) * Math.PI * 2 + i;
+                const root = new THREE.Mesh(new THREE.ConeGeometry(0.42, 1.6, 4), barkMat);
+                root.position.set(Math.cos(a) * 0.5, 0.8, Math.sin(a) * 0.5);
+                root.rotation.z = -Math.cos(a) * 0.35;
+                root.rotation.x = Math.sin(a) * 0.35;
+                tree.add(root);
+            }
+
+            // Crown: overlapping spheres, largest at the bottom.
+            for (let c = 0; c < 4; c++) {
+                const blob = new THREE.Mesh(
+                    new THREE.SphereGeometry(2.5 - c * 0.42, 9, 7),
+                    canopyMats[(i + c) % canopyMats.length]
+                );
+                blob.position.set(
+                    Math.sin(i + c) * 1.1,
+                    h + c * 0.9,
+                    Math.cos(i + c) * 1.1
+                );
+                blob.scale.y = 0.78;
+                blob.castShadow = true;
+                tree.add(blob);
+            }
+
+            // A vine or two dangling from the crown.
+            if (i % 2 === 0) {
+                const vine = new THREE.Mesh(
+                    new THREE.CylinderGeometry(0.06, 0.06, 3.4, 5),
+                    canopyMats[0]
+                );
+                vine.position.set(1.5, h - 0.6, 0.7);
+                tree.add(vine);
+            }
+
+            tree.position.set(x, 0, z);
+            group.add(tree);
+            this.occluders.push(tree);
+            this._prop(center, x, z, 0.75, 0.75, h);
+        });
+
+        // Bamboo thickets: clumps of thin poles with segment rings.
+        const bambooMat = new THREE.MeshLambertMaterial({ color: 0x8fae3f });
+        [[-9.5, -7], [10, -6.5], [-11, 4.5], [11, 5]].forEach(([bx, bz], k) => {
+            const clump = new THREE.Group();
+            for (let i = 0; i < 7; i++) {
+                const h = 4.5 + Math.random() * 3;
+                const pole = new THREE.Mesh(new THREE.CylinderGeometry(0.11, 0.13, h, 6), bambooMat);
+                pole.position.set(
+                    (Math.random() - 0.5) * 1.8,
+                    h / 2,
+                    (Math.random() - 0.5) * 1.8
+                );
+                pole.rotation.z = (Math.random() - 0.5) * 0.18;
+                pole.castShadow = true;
+                clump.add(pole);
+
+                // Leaf sprays near the top of each pole.
+                for (let l = 0; l < 3; l++) {
+                    const leaf = new THREE.Mesh(
+                        new THREE.ConeGeometry(0.16, 1.1, 4),
+                        canopyMats[2]
+                    );
+                    const a = (l / 3) * Math.PI * 2;
+                    leaf.position.set(
+                        pole.position.x + Math.cos(a) * 0.4,
+                        h * 0.86,
+                        pole.position.z + Math.sin(a) * 0.4
+                    );
+                    leaf.rotation.z = Math.cos(a) * 0.9;
+                    leaf.rotation.x = -Math.sin(a) * 0.9;
+                    clump.add(leaf);
+                }
+            }
+            clump.position.set(bx, 0, bz);
+            group.add(clump);
+            this.occluders.push(clump);
+            this._prop(center, bx, bz, 1.1, 1.1, 5);
+        });
+
+        // Ferns and undergrowth: low, walkable, no colliders — they dress the
+        // floor without turning the island into an obstacle course.
+        const fernMat = new THREE.MeshLambertMaterial({
+            color: 0x3f9c3a, side: THREE.DoubleSide, flatShading: true
+        });
+        for (let i = 0; i < 46; i++) {
+            const a = Math.random() * Math.PI * 2;
+            const d = 3 + Math.random() * (ZONE_RADIUS - 4);
+            const x = Math.cos(a) * d;
+            const z = Math.sin(a) * d;
+            if (Math.abs(x) < 4.2) continue;
+            const fern = new THREE.Group();
+            for (let f = 0; f < 5; f++) {
+                const frond = new THREE.Mesh(new THREE.ConeGeometry(0.3, 1.5, 4), fernMat);
+                const fa = (f / 5) * Math.PI * 2;
+                frond.position.set(Math.cos(fa) * 0.3, 0.7, Math.sin(fa) * 0.3);
+                frond.rotation.z = Math.cos(fa) * 0.8;
+                frond.rotation.x = -Math.sin(fa) * 0.8;
+                fern.add(frond);
+            }
+            fern.position.set(x, 0, z);
+            fern.scale.setScalar(0.7 + Math.random() * 0.6);
+            group.add(fern);
+        }
+
+        // A splash of jungle flowers so the green has some relief.
+        const petalMats = [0xe0503a, 0xe8a13c, 0xd94f8a].map(
+            (c) => new THREE.MeshLambertMaterial({ color: c })
+        );
+        for (let i = 0; i < 18; i++) {
+            const a = Math.random() * Math.PI * 2;
+            const d = 5 + Math.random() * (ZONE_RADIUS - 7);
+            const x = Math.cos(a) * d;
+            const z = Math.sin(a) * d;
+            if (Math.abs(x) < 4.2) continue;
+            const bloom = new THREE.Mesh(
+                new THREE.SphereGeometry(0.26, 8, 6),
+                petalMats[i % petalMats.length]
+            );
+            bloom.position.set(x, 0.5, z);
+            group.add(bloom);
+        }
+    }
+
+    // (d) Cortical.io — Vienna. Red-and-white ground (see GROUND_PAINTER) plus a
+    // second palace, a giant stein of beer, chocolate, a Sachertorte, a coffee
+    // house table, a waltzing violin and a Riesenrad-style ferris wheel.
+    _dressVienna(group, center) {
+        // --- a second, smaller palace (Belvedere-ish) on the west side ---
+        const wallMat = new THREE.MeshLambertMaterial({ color: 0xf3e6cd });
+        const goldMat = new THREE.MeshLambertMaterial({ color: 0xe2b23f });
+        const roofMat = new THREE.MeshLambertMaterial({ color: 0x5c6b78 });
+
+        const palace = new THREE.Group();
+        const block = new THREE.Mesh(new THREE.BoxGeometry(7, 4.2, 3.4), wallMat);
+        block.position.y = 2.1;
+        block.castShadow = true;
+        palace.add(block);
+
+        // Mansard roof and a central pavilion, the giveaway Baroque silhouette.
+        const roof = new THREE.Mesh(new THREE.BoxGeometry(7.4, 1.1, 3.8), roofMat);
+        roof.position.y = 4.7;
+        roof.castShadow = true;
+        palace.add(roof);
+
+        const pavilion = new THREE.Mesh(new THREE.BoxGeometry(2.6, 1.8, 3.6), wallMat);
+        pavilion.position.y = 5.5;
+        palace.add(pavilion);
+        const pavRoof = new THREE.Mesh(new THREE.ConeGeometry(2.3, 1.8, 4), roofMat);
+        pavRoof.position.y = 7.2;
+        pavRoof.rotation.y = Math.PI / 4;
+        pavRoof.castShadow = true;
+        palace.add(pavRoof);
+        const finial = new THREE.Mesh(new THREE.SphereGeometry(0.28, 10, 8), goldMat);
+        finial.position.y = 8.2;
+        palace.add(finial);
+
+        // Windows and pilasters across the façade.
+        const glass = new THREE.MeshLambertMaterial({ color: 0x3b5566 });
+        for (let i = 0; i < 5; i++) {
+            const wx = -2.6 + i * 1.3;
+            [1.4, 3.1].forEach((wy) => {
+                const win = new THREE.Mesh(new THREE.BoxGeometry(0.62, 1.05, 0.12), glass);
+                win.position.set(wx, wy, 1.74);
+                palace.add(win);
+            });
+            const pil = new THREE.Mesh(new THREE.BoxGeometry(0.16, 4.2, 0.16), goldMat);
+            pil.position.set(wx + 0.65, 2.1, 1.72);
+            palace.add(pil);
+        }
+
+        palace.position.set(-10, 0, 1.5);
+        palace.rotation.y = 0.5;
+        group.add(palace);
+        this.occluders.push(palace);
+        this._prop(center, -10, 1.5, 3.6, 2.2, 4.2);
+
+        // --- the beer: an oversized stein, the island's landmark prop ---
+        const stein = new THREE.Group();
+        const mugMat = new THREE.MeshLambertMaterial({ color: 0xf0ece2 });
+        const beerMat = new THREE.MeshLambertMaterial({ color: 0xdc9a1e });
+        const foamMat = new THREE.MeshLambertMaterial({ color: 0xfffaf0 });
+
+        const mug = new THREE.Mesh(new THREE.CylinderGeometry(1.15, 1.0, 2.6, 18, 1, true), mugMat);
+        mug.material.side = THREE.DoubleSide;
+        mug.position.y = 1.3;
+        mug.castShadow = true;
+        stein.add(mug);
+
+        const beer = new THREE.Mesh(new THREE.CylinderGeometry(1.06, 0.95, 2.1, 18), beerMat);
+        beer.position.y = 1.15;
+        stein.add(beer);
+
+        // Foam head: a cap plus a few overflowing blobs.
+        const head = new THREE.Mesh(new THREE.CylinderGeometry(1.12, 1.08, 0.5, 18), foamMat);
+        head.position.y = 2.45;
+        stein.add(head);
+        for (let i = 0; i < 6; i++) {
+            const a = (i / 6) * Math.PI * 2;
+            const blob = new THREE.Mesh(new THREE.SphereGeometry(0.42, 9, 7), foamMat);
+            blob.position.set(Math.cos(a) * 0.78, 2.72, Math.sin(a) * 0.78);
+            blob.castShadow = true;
+            stein.add(blob);
+        }
+
+        // Handle: a torus cut to a C and turned to face outward.
+        const handle = new THREE.Mesh(
+            new THREE.TorusGeometry(0.62, 0.15, 8, 14, Math.PI * 1.15), mugMat
+        );
+        handle.position.set(-1.25, 1.35, 0);
+        handle.rotation.y = Math.PI / 2;
+        handle.rotation.z = -Math.PI / 2.4;
+        stein.add(handle);
+
+        // Pewter lid, hinged open the way a real Maßkrug's is.
+        const lid = new THREE.Mesh(new THREE.CylinderGeometry(1.2, 1.2, 0.16, 18),
+            new THREE.MeshLambertMaterial({ color: 0xa8adb4 }));
+        lid.position.set(0.5, 3.35, -0.6);
+        lid.rotation.x = -0.9;
+        stein.add(lid);
+
+        stein.position.set(8.6, 0, -5.5);
+        group.add(stein);
+        this.occluders.push(stein);
+        this._prop(center, 8.6, -5.5, 1.3, 1.3, 3);
+
+        // --- chocolate: a stack of foil-wrapped bars and loose squares ---
+        const cocoa = new THREE.MeshLambertMaterial({ color: 0x4a2c17 });
+        const foil = new THREE.MeshLambertMaterial({ color: 0xc0182f });   // Mozartkugel red
+        const goldFoil = new THREE.MeshLambertMaterial({ color: 0xdcb43c });
+
+        const choc = new THREE.Group();
+        for (let i = 0; i < 3; i++) {
+            const bar = new THREE.Mesh(new THREE.BoxGeometry(2.2, 0.36, 1.1),
+                i === 1 ? goldFoil : foil);
+            bar.position.set((i % 2) * 0.25, 0.18 + i * 0.38, 0);
+            bar.rotation.y = i * 0.22;
+            bar.castShadow = true;
+            choc.add(bar);
+        }
+        // Unwrapped squares beside the stack, in a broken-off row.
+        for (let i = 0; i < 4; i++) {
+            const sq = new THREE.Mesh(new THREE.BoxGeometry(0.5, 0.2, 0.5), cocoa);
+            sq.position.set(1.7 + (i % 2) * 0.58, 0.1, -0.7 + Math.floor(i / 2) * 0.58);
+            sq.rotation.y = i * 0.3;
+            choc.add(sq);
+        }
+        // A couple of Mozartkugel spheres in their red-and-gold foil.
+        [[-1.6, 0.5], [-1.2, -0.8]].forEach(([cx, cz], i) => {
+            const ball = new THREE.Mesh(new THREE.SphereGeometry(0.34, 10, 8),
+                i === 0 ? foil : goldFoil);
+            ball.position.set(cx, 0.34, cz);
+            ball.castShadow = true;
+            choc.add(ball);
+        });
+        choc.position.set(-7.4, 0, -7);
+        group.add(choc);
+
+        // --- Sachertorte on a café table, with a coffee cup ---
+        const cafe = new THREE.Group();
+        const tableTop = new THREE.Mesh(new THREE.CylinderGeometry(1.5, 1.5, 0.16, 18),
+            new THREE.MeshLambertMaterial({ color: 0x7b4a2a }));
+        tableTop.position.y = 1.5;
+        tableTop.castShadow = true;
+        cafe.add(tableTop);
+        const stem = new THREE.Mesh(new THREE.CylinderGeometry(0.13, 0.2, 1.5, 8),
+            new THREE.MeshLambertMaterial({ color: 0x2f2a26 }));
+        stem.position.y = 0.75;
+        cafe.add(stem);
+        const foot = new THREE.Mesh(new THREE.CylinderGeometry(0.6, 0.7, 0.12, 14),
+            new THREE.MeshLambertMaterial({ color: 0x2f2a26 }));
+        foot.position.y = 0.06;
+        cafe.add(foot);
+
+        // The torte: dark glaze, a cream rosette, and a wedge cut out.
+        const torte = new THREE.Mesh(
+            new THREE.CylinderGeometry(0.72, 0.72, 0.42, 20, 1, false, 0, Math.PI * 1.75), cocoa
+        );
+        torte.position.set(-0.35, 1.79, 0);
+        torte.castShadow = true;
+        cafe.add(torte);
+        const cream = new THREE.Mesh(new THREE.SphereGeometry(0.17, 9, 7), foamMat);
+        cream.position.set(-0.35, 2.06, 0.42);
+        cafe.add(cream);
+
+        // Coffee: the Wiener Melange it would be served with.
+        const cup = new THREE.Mesh(new THREE.CylinderGeometry(0.26, 0.2, 0.32, 12), mugMat);
+        cup.position.set(0.78, 1.74, 0.25);
+        cafe.add(cup);
+        const brew = new THREE.Mesh(new THREE.CylinderGeometry(0.22, 0.22, 0.05, 12),
+            new THREE.MeshLambertMaterial({ color: 0x5b3620 }));
+        brew.position.set(0.78, 1.9, 0.25);
+        cafe.add(brew);
+        const saucer = new THREE.Mesh(new THREE.CylinderGeometry(0.4, 0.4, 0.05, 14), mugMat);
+        saucer.position.set(0.78, 1.6, 0.25);
+        cafe.add(saucer);
+
+        // Two bentwood chairs pulled up to the table.
+        [[-1, 0.3], [1, -0.4]].forEach(([sx, sz]) => {
+            const chair = new THREE.Group();
+            const seat = new THREE.Mesh(new THREE.CylinderGeometry(0.42, 0.42, 0.12, 12),
+                new THREE.MeshLambertMaterial({ color: 0x6b4326 }));
+            seat.position.y = 0.95;
+            chair.add(seat);
+            const back = new THREE.Mesh(new THREE.TorusGeometry(0.34, 0.06, 6, 12, Math.PI),
+                new THREE.MeshLambertMaterial({ color: 0x6b4326 }));
+            back.position.set(0, 1.35, -0.34);
+            back.rotation.x = -0.2;
+            chair.add(back);
+            for (let l = 0; l < 3; l++) {
+                const a = (l / 3) * Math.PI * 2;
+                const leg = new THREE.Mesh(new THREE.CylinderGeometry(0.06, 0.06, 0.95, 6),
+                    new THREE.MeshLambertMaterial({ color: 0x4a2f1c }));
+                leg.position.set(Math.cos(a) * 0.28, 0.48, Math.sin(a) * 0.28);
+                chair.add(leg);
+            }
+            chair.position.set(sx * 2.3, 0, sz * 2.3);
+            cafe.add(chair);
+        });
+
+        cafe.position.set(-8.8, 0, 7.5);
+        group.add(cafe);
+        this._prop(center, -8.8, 7.5, 1.6, 1.6, 1.9);
+
+        // --- the Riesenrad: Vienna's ferris wheel, turning slowly ---
+        const wheel = new THREE.Group();
+        const steel = new THREE.MeshLambertMaterial({ color: 0xb03a32 });
+        const strut = new THREE.MeshLambertMaterial({ color: 0x54595f });
+
+        const spinner = new THREE.Group();
+        const R = 3.4;
+        [0.28, -0.28].forEach((zOff) => {
+            const rim = new THREE.Mesh(new THREE.TorusGeometry(R, 0.12, 6, 26), steel);
+            rim.position.z = zOff;
+            spinner.add(rim);
+        });
+        // Spokes and the hanging gondolas.
+        const cabinMat = new THREE.MeshLambertMaterial({ color: 0xd8232a });
+        for (let i = 0; i < 10; i++) {
+            const a = (i / 10) * Math.PI * 2;
+            const spoke = new THREE.Mesh(new THREE.CylinderGeometry(0.05, 0.05, R * 2, 5), steel);
+            spoke.rotation.z = a;
+            spinner.add(spoke);
+
+            // Gondolas are parented to the rim but counter-rotated in update()
+            // so they hang level as the wheel turns.
+            const cabin = new THREE.Group();
+            const box = new THREE.Mesh(new THREE.BoxGeometry(0.62, 0.5, 0.5), cabinMat);
+            box.position.y = -0.3;
+            cabin.add(box);
+            const roofC = new THREE.Mesh(new THREE.BoxGeometry(0.72, 0.08, 0.6),
+                new THREE.MeshLambertMaterial({ color: 0xf0ece2 }));
+            roofC.position.y = -0.02;
+            cabin.add(roofC);
+            cabin.position.set(Math.cos(a) * R, Math.sin(a) * R, 0);
+            cabin.userData.spinAngle = a;
+            spinner.add(cabin);
+        }
+        spinner.position.y = R + 2.2;
+        wheel.add(spinner);
+        this.ferrisWheels = this.ferrisWheels || [];
+        this.ferrisWheels.push(spinner);
+
+        // A-frame legs carrying the hub.
+        [-1, 1].forEach((side) => {
+            [-1, 1].forEach((zs) => {
+                const leg = new THREE.Mesh(new THREE.CylinderGeometry(0.11, 0.15, 6.2, 7), strut);
+                leg.position.set(side * 1.5, 3.1, zs * 0.9);
+                leg.rotation.z = -side * 0.42;
+                leg.rotation.x = -zs * 0.2;
+                leg.castShadow = true;
+                wheel.add(leg);
+            });
+        });
+        const hub = new THREE.Mesh(new THREE.CylinderGeometry(0.34, 0.34, 1.1, 10), strut);
+        hub.rotation.x = Math.PI / 2;
+        hub.position.y = R + 2.2;
+        wheel.add(hub);
+
+        wheel.position.set(9.5, 0, 6.5);
+        group.add(wheel);
+        this.occluders.push(wheel);
+        this._prop(center, 9.5, 6.5, 1.9, 1.2, 2.5);
+
+        // --- a waltzing touch: violin resting against a music stand ---
+        const violin = new THREE.Group();
+        const woodMat = new THREE.MeshLambertMaterial({ color: 0x8a3f1e });
+        const bodyV = new THREE.Mesh(new THREE.SphereGeometry(0.42, 12, 10), woodMat);
+        bodyV.scale.set(0.62, 1, 0.28);
+        bodyV.position.y = 0.9;
+        violin.add(bodyV);
+        const waist = new THREE.Mesh(new THREE.SphereGeometry(0.3, 10, 8), woodMat);
+        waist.scale.set(0.62, 0.8, 0.28);
+        waist.position.y = 1.35;
+        violin.add(waist);
+        const neck = new THREE.Mesh(new THREE.BoxGeometry(0.1, 1.0, 0.1),
+            new THREE.MeshLambertMaterial({ color: 0x3a1d0d }));
+        neck.position.y = 1.9;
+        violin.add(neck);
+        violin.position.set(-6.4, 0, 9);
+        violin.rotation.z = 0.3;
+        group.add(violin);
+    }
+
+    // (e) Upstream — Greek mythology: Medusa, a dryad in her tree, Athena, plus
+    // a centaur and a Pegasus for good measure. Both Upstream stints get these,
+    // which suits a company the career returns to.
+    _dressMythology(group, center) {
+        const marble = new THREE.MeshLambertMaterial({ color: 0xe9e3d4 });
+        const bronze = new THREE.MeshLambertMaterial({ color: 0xa07e3c });
+        const plinthMat = new THREE.MeshLambertMaterial({ color: 0xd3ccb9 });
+
+        // Every figure stands on a plinth, so the island reads as a sanctuary of
+        // statues rather than a scattering of props.
+        const plinth = (x, z, w = 1.6, h = 1.1) => {
+            const base = new THREE.Mesh(new THREE.BoxGeometry(w, h, w), plinthMat);
+            base.position.set(x, h / 2, z);
+            base.castShadow = true;
+            base.receiveShadow = true;
+            group.add(base);
+            this._prop(center, x, z, w / 2 + 0.2, w / 2 + 0.2, h + 1.6);
+            return h;
+        };
+
+        // --- Medusa: snake-haired, coiled serpent tail instead of legs ---
+        const medusa = new THREE.Group();
+        const scaleMat = new THREE.MeshLambertMaterial({ color: 0x4c7a4a });
+        const skinMat = new THREE.MeshLambertMaterial({ color: 0xcfc6ad });
+
+        // Coiled tail: a stack of shrinking, offset rings.
+        for (let i = 0; i < 4; i++) {
+            const coil = new THREE.Mesh(
+                new THREE.TorusGeometry(0.95 - i * 0.16, 0.24, 7, 16), scaleMat
+            );
+            coil.rotation.x = Math.PI / 2;
+            coil.position.set(Math.sin(i) * 0.12, 0.24 + i * 0.34, Math.cos(i) * 0.12);
+            coil.castShadow = true;
+            medusa.add(coil);
+        }
+        const torsoM = new THREE.Mesh(new THREE.CapsuleGeometry(0.34, 0.7, 4, 10), skinMat);
+        torsoM.position.y = 2.15;
+        torsoM.castShadow = true;
+        medusa.add(torsoM);
+        const headM = new THREE.Mesh(new THREE.SphereGeometry(0.32, 12, 10), skinMat);
+        headM.position.y = 2.9;
+        medusa.add(headM);
+
+        // The snakes: each is a short curved chain of spheres with a head.
+        for (let s = 0; s < 11; s++) {
+            const a = (s / 11) * Math.PI * 2;
+            const snake = new THREE.Group();
+            for (let seg = 0; seg < 4; seg++) {
+                const bead = new THREE.Mesh(
+                    new THREE.SphereGeometry(0.11 - seg * 0.012, 7, 6), scaleMat
+                );
+                bead.position.set(seg * 0.16, seg * 0.19, Math.sin(seg * 1.4) * 0.13);
+                snake.add(bead);
+            }
+            const fang = new THREE.Mesh(new THREE.ConeGeometry(0.08, 0.2, 6), scaleMat);
+            fang.position.set(0.62, 0.72, 0.1);
+            fang.rotation.z = -0.7;
+            snake.add(fang);
+            snake.position.set(Math.cos(a) * 0.26, 3.05, Math.sin(a) * 0.26);
+            snake.rotation.y = -a;
+            snake.rotation.z = 0.25;
+            medusa.add(snake);
+        }
+
+        // Arms raised — the pose that turns you to stone.
+        [-1, 1].forEach((side) => {
+            const arm = new THREE.Mesh(new THREE.CapsuleGeometry(0.1, 0.62, 4, 8), skinMat);
+            arm.position.set(side * 0.5, 2.35, 0.16);
+            arm.rotation.z = side * 0.85;
+            medusa.add(arm);
+        });
+
+        // Two of her victims, already stone, kneeling at the foot of the plinth.
+        [[-1.5, 0.9], [1.6, -0.7]].forEach(([vx, vz]) => {
+            const victim = new THREE.Group();
+            const vt = new THREE.Mesh(new THREE.CapsuleGeometry(0.26, 0.5, 4, 8), marble);
+            vt.position.y = 0.75;
+            victim.add(vt);
+            const vh = new THREE.Mesh(new THREE.SphereGeometry(0.24, 10, 8), marble);
+            vh.position.y = 1.3;
+            victim.add(vh);
+            const va = new THREE.Mesh(new THREE.CapsuleGeometry(0.09, 0.4, 4, 6), marble);
+            va.position.set(0.3, 1.0, 0.2);
+            va.rotation.z = 1.1;
+            victim.add(va);
+            victim.position.set(vx, 0, vz);
+            victim.rotation.y = vx;
+            victim.castShadow = true;
+            medusa.add(victim);
+        });
+
+        // Placed just off the walking corridor rather than out at the rim: at
+        // the rim the palms screen them and the player walks past a statue they
+        // never see. x ≈ ±6.5 keeps the corridor clear but stays in frame.
+        medusa.position.set(-6.8, plinth(-6.8, -5.5, 2.0), -5.5);
+        medusa.rotation.y = 0.5;
+        group.add(medusa);
+        this.occluders.push(medusa);
+
+        // --- Athena: helmet, spear, aegis shield, and her owl ---
+        const athena = new THREE.Group();
+        const robe = new THREE.Mesh(new THREE.CylinderGeometry(0.42, 0.72, 1.9, 12), marble);
+        robe.position.y = 0.95;
+        robe.castShadow = true;
+        athena.add(robe);
+        // Vertical folds in the peplos.
+        for (let i = 0; i < 8; i++) {
+            const a = (i / 8) * Math.PI * 2;
+            const fold = new THREE.Mesh(new THREE.CylinderGeometry(0.05, 0.08, 1.85, 5), marble);
+            fold.position.set(Math.cos(a) * 0.52, 0.95, Math.sin(a) * 0.52);
+            athena.add(fold);
+        }
+        const chest = new THREE.Mesh(new THREE.CapsuleGeometry(0.34, 0.42, 4, 10), marble);
+        chest.position.y = 2.15;
+        athena.add(chest);
+        const headA = new THREE.Mesh(new THREE.SphereGeometry(0.3, 12, 10), marble);
+        headA.position.y = 2.75;
+        athena.add(headA);
+
+        // Corinthian helmet with a tall crest.
+        const helm = new THREE.Mesh(
+            new THREE.SphereGeometry(0.34, 12, 10, 0, Math.PI * 2, 0, Math.PI / 1.7), bronze
+        );
+        helm.position.y = 2.82;
+        helm.castShadow = true;
+        athena.add(helm);
+        const crest = new THREE.Mesh(new THREE.BoxGeometry(0.1, 0.34, 0.86),
+            new THREE.MeshLambertMaterial({ color: 0xc03a2b }));
+        crest.position.y = 3.14;
+        athena.add(crest);
+        const nasal = new THREE.Mesh(new THREE.BoxGeometry(0.07, 0.3, 0.07), bronze);
+        nasal.position.set(0, 2.68, 0.3);
+        athena.add(nasal);
+
+        // Spear in the right hand.
+        const spear = new THREE.Mesh(new THREE.CylinderGeometry(0.06, 0.06, 4.4, 7), bronze);
+        spear.position.set(0.62, 2.2, 0);
+        athena.add(spear);
+        const tip = new THREE.Mesh(new THREE.ConeGeometry(0.14, 0.5, 7), bronze);
+        tip.position.set(0.62, 4.6, 0);
+        athena.add(tip);
+
+        // Aegis: a round shield with a gorgoneion boss.
+        const shield = new THREE.Mesh(new THREE.CylinderGeometry(0.78, 0.78, 0.12, 20), bronze);
+        shield.rotation.z = Math.PI / 2;
+        shield.rotation.y = 0.25;
+        shield.position.set(-0.66, 2.05, 0.18);
+        shield.castShadow = true;
+        athena.add(shield);
+        const boss = new THREE.Mesh(new THREE.SphereGeometry(0.2, 10, 8),
+            new THREE.MeshLambertMaterial({ color: 0x6f8f4f }));
+        boss.position.set(-0.76, 2.05, 0.18);
+        athena.add(boss);
+
+        // The owl of Athena, perched on her shoulder.
+        const owl = new THREE.Group();
+        const owlBody = new THREE.Mesh(new THREE.SphereGeometry(0.2, 10, 8),
+            new THREE.MeshLambertMaterial({ color: 0x8d7d63 }));
+        owlBody.scale.y = 1.25;
+        owl.add(owlBody);
+        [-1, 1].forEach((side) => {
+            const eye = new THREE.Mesh(new THREE.SphereGeometry(0.07, 8, 6),
+                new THREE.MeshLambertMaterial({ color: 0xf5d64a }));
+            eye.position.set(side * 0.09, 0.09, 0.16);
+            owl.add(eye);
+        });
+        const beak = new THREE.Mesh(new THREE.ConeGeometry(0.04, 0.1, 6),
+            new THREE.MeshLambertMaterial({ color: 0xd8a13c }));
+        beak.position.set(0, 0.03, 0.2);
+        beak.rotation.x = Math.PI / 2;
+        owl.add(beak);
+        owl.position.set(-0.34, 2.62, -0.1);
+        athena.add(owl);
+
+        athena.position.set(-7.2, plinth(-7.2, 4.5, 2.2, 1.3), 4.5);
+        athena.rotation.y = 0.6;
+        group.add(athena);
+        this.occluders.push(athena);
+
+        // --- the dryad: a nymph emerging from her oak, half bark half woman ---
+        const dryadTree = new THREE.Group();
+        const barkMat = new THREE.MeshLambertMaterial({ color: 0x6a4b2c });
+        const leafMat = new THREE.MeshLambertMaterial({ color: 0x3f8b3a, flatShading: true });
+        const barkSkin = new THREE.MeshLambertMaterial({ color: 0xb0906a });
+
+        const trunkD = new THREE.Mesh(new THREE.CylinderGeometry(1.0, 1.5, 6.4, 10), barkMat);
+        trunkD.position.y = 3.2;
+        trunkD.castShadow = true;
+        dryadTree.add(trunkD);
+        for (let i = 0; i < 5; i++) {
+            const a = (i / 5) * Math.PI * 2;
+            const branch = new THREE.Mesh(new THREE.CylinderGeometry(0.14, 0.24, 2.4, 6), barkMat);
+            branch.position.set(Math.cos(a) * 0.9, 5.4, Math.sin(a) * 0.9);
+            branch.rotation.z = -Math.cos(a) * 0.9;
+            branch.rotation.x = Math.sin(a) * 0.9;
+            dryadTree.add(branch);
+        }
+        for (let i = 0; i < 5; i++) {
+            const a = (i / 5) * Math.PI * 2 + 0.4;
+            const crown = new THREE.Mesh(new THREE.SphereGeometry(1.8, 9, 7), leafMat);
+            crown.position.set(Math.cos(a) * 1.5, 6.8 + Math.sin(i) * 0.5, Math.sin(a) * 1.5);
+            crown.scale.y = 0.8;
+            crown.castShadow = true;
+            dryadTree.add(crown);
+        }
+
+        // The dryad herself, stepping out of the south face of the trunk.
+        const dryad = new THREE.Group();
+        const dTorso = new THREE.Mesh(new THREE.CapsuleGeometry(0.3, 0.66, 4, 10), barkSkin);
+        dTorso.position.y = 2.4;
+        dryad.add(dTorso);
+        const dHead = new THREE.Mesh(new THREE.SphereGeometry(0.27, 12, 10), barkSkin);
+        dHead.position.y = 3.05;
+        dryad.add(dHead);
+        // Hair of leaves.
+        for (let i = 0; i < 7; i++) {
+            const a = (i / 7) * Math.PI * 2;
+            const leaf = new THREE.Mesh(new THREE.ConeGeometry(0.13, 0.44, 5), leafMat);
+            leaf.position.set(Math.cos(a) * 0.24, 3.24, Math.sin(a) * 0.24 - 0.05);
+            leaf.rotation.z = Math.cos(a) * 0.7;
+            leaf.rotation.x = -Math.sin(a) * 0.7 - 0.3;
+            dryad.add(leaf);
+        }
+        // One arm reaching out of the bark, one still fused to the trunk.
+        const dArm = new THREE.Mesh(new THREE.CapsuleGeometry(0.09, 0.6, 4, 8), barkSkin);
+        dArm.position.set(0.42, 2.5, 0.3);
+        dArm.rotation.z = -0.9;
+        dArm.rotation.x = -0.5;
+        dryad.add(dArm);
+        const dArmBark = new THREE.Mesh(new THREE.CapsuleGeometry(0.11, 0.55, 4, 8), barkMat);
+        dArmBark.position.set(-0.36, 2.45, 0.1);
+        dArmBark.rotation.z = 0.5;
+        dryad.add(dArmBark);
+        // Her lower half is still trunk: a skirt of bark blending her in.
+        const dSkirt = new THREE.Mesh(new THREE.CylinderGeometry(0.34, 0.66, 1.5, 10), barkMat);
+        dSkirt.position.y = 1.4;
+        dryad.add(dSkirt);
+
+        dryad.position.set(0, 0, 1.25);
+        dryadTree.add(dryad);
+
+        dryadTree.position.set(7.2, 0, -5.5);
+        dryadTree.rotation.y = -0.5;   // she steps out toward the path
+        group.add(dryadTree);
+        this.occluders.push(dryadTree);
+        this._prop(center, 7.2, -5.5, 1.5, 1.5, 6.4);
+
+        // --- a centaur: horse body, human torso, drawn bow ---
+        const centaur = new THREE.Group();
+        const hideMat = new THREE.MeshLambertMaterial({ color: 0x7a4b28 });
+        const barrel = new THREE.Mesh(new THREE.CapsuleGeometry(0.52, 1.3, 4, 10), hideMat);
+        barrel.rotation.z = Math.PI / 2;
+        barrel.position.y = 1.35;
+        barrel.castShadow = true;
+        centaur.add(barrel);
+        // Four legs.
+        [[-0.75, 0.34], [-0.75, -0.34], [0.8, 0.34], [0.8, -0.34]].forEach(([lx, lz]) => {
+            const leg = new THREE.Mesh(new THREE.CylinderGeometry(0.14, 0.11, 1.35, 7), hideMat);
+            leg.position.set(lx, 0.68, lz);
+            centaur.add(leg);
+            const hoof = new THREE.Mesh(new THREE.CylinderGeometry(0.14, 0.15, 0.18, 7),
+                new THREE.MeshLambertMaterial({ color: 0x2b211a }));
+            hoof.position.set(lx, 0.09, lz);
+            centaur.add(hoof);
+        });
+        // Human half rising from the withers.
+        const cTorso = new THREE.Mesh(new THREE.CapsuleGeometry(0.3, 0.62, 4, 10), hideMat);
+        cTorso.position.set(-0.85, 2.25, 0);
+        centaur.add(cTorso);
+        const cHead = new THREE.Mesh(new THREE.SphereGeometry(0.26, 12, 10), hideMat);
+        cHead.position.set(-0.85, 2.85, 0);
+        centaur.add(cHead);
+        // Bow, drawn.
+        const bow = new THREE.Mesh(new THREE.TorusGeometry(0.6, 0.06, 6, 14, Math.PI * 1.1),
+            new THREE.MeshLambertMaterial({ color: 0x54341c }));
+        bow.position.set(-1.35, 2.3, 0);
+        bow.rotation.y = Math.PI / 2;
+        centaur.add(bow);
+        const tailC = new THREE.Mesh(new THREE.CapsuleGeometry(0.1, 0.7, 4, 6),
+            new THREE.MeshLambertMaterial({ color: 0x3d2515 }));
+        tailC.position.set(1.15, 1.5, 0);
+        tailC.rotation.z = -0.6;
+        centaur.add(tailC);
+
+        centaur.position.set(7.5, 0, 4.5);
+        centaur.rotation.y = -1.1;
+        group.add(centaur);
+        this.occluders.push(centaur);
+        this._prop(center, 7.5, 4.5, 1.3, 0.9, 2.9);
+
+        // --- Pegasus on a tall column, wings spread ---
+        // Set off the centre line: local x = 0 is the corridor the player walks
+        // in on from the south bridge, and a column there is a turnstile.
+        const PEG_X = -6.5;
+        const PEG_Z = -11.5;
+        const column = new THREE.Mesh(new THREE.CylinderGeometry(0.7, 0.85, 5.5, 14), marble);
+        column.position.set(PEG_X, 2.75, PEG_Z);
+        column.castShadow = true;
+        group.add(column);
+        this._prop(center, PEG_X, PEG_Z, 0.95, 0.95, 5.5);
+
+        const pegasus = new THREE.Group();
+        const pegMat = new THREE.MeshLambertMaterial({ color: 0xf2efe6 });
+        const pegBody = new THREE.Mesh(new THREE.CapsuleGeometry(0.36, 0.95, 4, 10), pegMat);
+        pegBody.rotation.z = Math.PI / 2;
+        pegBody.castShadow = true;
+        pegasus.add(pegBody);
+        const pegNeck = new THREE.Mesh(new THREE.CylinderGeometry(0.16, 0.22, 0.8, 8), pegMat);
+        pegNeck.position.set(0.72, 0.42, 0);
+        pegNeck.rotation.z = -0.6;
+        pegasus.add(pegNeck);
+        const pegHead = new THREE.Mesh(new THREE.CapsuleGeometry(0.15, 0.32, 4, 8), pegMat);
+        pegHead.position.set(1.06, 0.74, 0);
+        pegHead.rotation.z = -1.1;
+        pegasus.add(pegHead);
+        [[-0.5, 0.24], [-0.5, -0.24], [0.42, 0.24], [0.42, -0.24]].forEach(([lx, lz]) => {
+            const leg = new THREE.Mesh(new THREE.CylinderGeometry(0.1, 0.08, 0.85, 6), pegMat);
+            leg.position.set(lx, -0.5, lz);
+            leg.rotation.x = lz > 0 ? 0.3 : -0.3;
+            pegasus.add(leg);
+        });
+        // Wings: fans of flat feather planes on each flank.
+        [-1, 1].forEach((side) => {
+            const wing = new THREE.Group();
+            for (let f = 0; f < 6; f++) {
+                const feather = new THREE.Mesh(
+                    new THREE.BoxGeometry(1.5 - f * 0.14, 0.06, 0.26), pegMat
+                );
+                feather.position.set(-f * 0.13, f * 0.2, 0);
+                feather.rotation.z = 0.5 - f * 0.07;
+                wing.add(feather);
+            }
+            wing.position.set(0, 0.3, side * 0.34);
+            wing.rotation.x = side * 0.35;
+            wing.castShadow = true;
+            pegasus.add(wing);
+        });
+        pegasus.position.set(PEG_X, 6.4, PEG_Z);
+        pegasus.rotation.y = Math.PI * 0.85;   // turned to face the arriving player
+        group.add(pegasus);
+        this.occluders.push(pegasus);
+
+        // A scatter of laurel and broken column drums, finishing the sanctuary.
+        [[-6.5, -10.5], [7, -10], [-7.5, 10.5]].forEach(([dx, dz], i) => {
+            const drum = new THREE.Mesh(new THREE.CylinderGeometry(0.6, 0.62, 0.7, 14), marble);
+            drum.position.set(dx, 0.35, dz);
+            drum.rotation.z = i === 1 ? Math.PI / 2 : 0;
+            drum.castShadow = true;
+            group.add(drum);
+        });
+    }
+
+    // (f) European Dynamics — pirates: a beached ship, a pirate at the helm, a
+    // cutlass in the sand, a tomcat on a barrel, and the treasure they came for.
+    _dressPirates(group, center) {
+        const hullMat = new THREE.MeshLambertMaterial({ color: 0x5b3a20 });
+        const deckMat = new THREE.MeshLambertMaterial({ color: 0x9c6f42 });
+        const sailMat = new THREE.MeshLambertMaterial({
+            color: 0xf0e8d6, side: THREE.DoubleSide
+        });
+        const ropeMat = new THREE.MeshLambertMaterial({ color: 0xcbb68d });
+
+        // --- the ship, run aground on the island's west shore ---
+        const ship = new THREE.Group();
+
+        // Hull: a stretched, flattened sphere with a squared stern.
+        const hull = new THREE.Mesh(new THREE.SphereGeometry(2.4, 16, 12), hullMat);
+        hull.scale.set(2.5, 0.72, 0.95);
+        hull.position.y = 1.5;
+        hull.castShadow = true;
+        ship.add(hull);
+
+        const stern = new THREE.Mesh(new THREE.BoxGeometry(1.6, 2.6, 3.4), hullMat);
+        stern.position.set(-5.2, 2.2, 0);
+        stern.castShadow = true;
+        ship.add(stern);
+
+        // Bowsprit spearing forward off the prow.
+        const bowsprit = new THREE.Mesh(new THREE.CylinderGeometry(0.11, 0.16, 3, 7), deckMat);
+        bowsprit.position.set(7.2, 2.6, 0);
+        bowsprit.rotation.z = Math.PI / 2 - 0.25;
+        ship.add(bowsprit);
+
+        // Deck plus a low gunwale so the ship reads as open on top.
+        const deck = new THREE.Mesh(new THREE.BoxGeometry(11, 0.3, 4), deckMat);
+        deck.position.y = 2.55;
+        deck.receiveShadow = true;
+        ship.add(deck);
+        [-1, 1].forEach((side) => {
+            const rail = new THREE.Mesh(new THREE.BoxGeometry(11, 0.7, 0.24), hullMat);
+            rail.position.set(0, 2.95, side * 1.95);
+            ship.add(rail);
+        });
+
+        // Masts, yards and square sails.
+        [[-2.4, 6.5], [1.8, 8]].forEach(([mx, mh], i) => {
+            const mast = new THREE.Mesh(new THREE.CylinderGeometry(0.15, 0.2, mh, 8), deckMat);
+            mast.position.set(mx, 2.7 + mh / 2, 0);
+            mast.castShadow = true;
+            ship.add(mast);
+
+            const yard = new THREE.Mesh(new THREE.CylinderGeometry(0.08, 0.08, 4.6, 6), deckMat);
+            yard.rotation.x = Math.PI / 2;
+            yard.position.set(mx, 2.7 + mh * 0.78, 0);
+            ship.add(yard);
+
+            const sail = new THREE.Mesh(new THREE.PlaneGeometry(4.4, mh * 0.5), sailMat);
+            sail.position.set(mx, 2.7 + mh * 0.52, 0.05);
+            sail.rotation.y = Math.PI / 2;
+            sail.castShadow = true;
+            ship.add(sail);
+
+            // Jolly Roger at the taller masthead: black flag, skull and bones.
+            if (i === 1) {
+                const flag = new THREE.Group();
+                const cloth = new THREE.Mesh(new THREE.PlaneGeometry(1.6, 1.0),
+                    new THREE.MeshLambertMaterial({ color: 0x14100e, side: THREE.DoubleSide }));
+                flag.add(cloth);
+                const skull = new THREE.Mesh(new THREE.SphereGeometry(0.2, 10, 8),
+                    new THREE.MeshLambertMaterial({ color: 0xf2ece0 }));
+                skull.position.set(0, 0.12, 0.04);
+                skull.scale.set(1, 0.9, 0.4);
+                flag.add(skull);
+                [-1, 1].forEach((s) => {
+                    const bone = new THREE.Mesh(new THREE.CylinderGeometry(0.045, 0.045, 0.8, 5),
+                        new THREE.MeshLambertMaterial({ color: 0xf2ece0 }));
+                    bone.position.set(0, -0.22, 0.04);
+                    bone.rotation.z = s * 0.7;
+                    flag.add(bone);
+                });
+                flag.position.set(mx + 0.85, 2.7 + mh - 0.7, 0);
+                flag.rotation.y = Math.PI / 2;
+                ship.add(flag);
+            }
+        });
+
+        // Shrouds: rope ladders from the rail up to the masthead.
+        [-1, 1].forEach((side) => {
+            for (let i = 0; i < 4; i++) {
+                const shroud = new THREE.Mesh(new THREE.CylinderGeometry(0.035, 0.035, 6.2, 4), ropeMat);
+                shroud.position.set(1.8 - i * 0.25, 6.2, side * (1.1 - i * 0.22));
+                shroud.rotation.x = side * 0.16;
+                shroud.rotation.z = 0.1;
+                ship.add(shroud);
+            }
+        });
+
+        // Gunports with cannon muzzles poking out of the near side.
+        for (let i = 0; i < 4; i++) {
+            const cannon = new THREE.Mesh(new THREE.CylinderGeometry(0.16, 0.19, 0.9, 8),
+                new THREE.MeshLambertMaterial({ color: 0x2f3338 }));
+            cannon.rotation.x = Math.PI / 2;
+            cannon.position.set(-3 + i * 2, 1.9, -1.95);
+            ship.add(cannon);
+        }
+
+        ship.position.set(-11, 0, -1);
+        ship.rotation.y = 0.42;
+        ship.rotation.z = 0.07;   // listing, as a beached hull would
+        group.add(ship);
+        this.occluders.push(ship);
+        this._prop(center, -11, -1, 4.6, 3.0, 3.2);
+
+        // --- the pirate: tricorn, eyepatch, peg leg, hook, standing on deck ---
+        const pirate = new THREE.Group();
+        const coat = new THREE.MeshLambertMaterial({ color: 0x7a2320 });
+        const skin = new THREE.MeshLambertMaterial({ color: 0xdcae82 });
+        const leather = new THREE.MeshLambertMaterial({ color: 0x3a2a1c });
+        const dark = new THREE.MeshLambertMaterial({ color: 0x171310 });
+
+        const pTorso = new THREE.Mesh(new THREE.CapsuleGeometry(0.34, 0.6, 4, 10), coat);
+        pTorso.position.y = 1.25;
+        pTorso.castShadow = true;
+        pirate.add(pTorso);
+        const pHead = new THREE.Mesh(new THREE.SphereGeometry(0.3, 12, 10), skin);
+        pHead.position.y = 1.92;
+        pirate.add(pHead);
+        const beard = new THREE.Mesh(new THREE.SphereGeometry(0.24, 10, 8), dark);
+        beard.position.set(0, 1.76, 0.14);
+        beard.scale.set(1, 0.9, 0.75);
+        pirate.add(beard);
+
+        // Tricorn hat: a brim disc with a crown, and a skull badge.
+        const brim = new THREE.Mesh(new THREE.CylinderGeometry(0.56, 0.56, 0.08, 3), dark);
+        brim.position.y = 2.16;
+        brim.rotation.y = 0.3;
+        pirate.add(brim);
+        const crown = new THREE.Mesh(new THREE.CylinderGeometry(0.24, 0.3, 0.34, 10), dark);
+        crown.position.y = 2.32;
+        pirate.add(crown);
+
+        // Eyepatch and its strap.
+        const patch = new THREE.Mesh(new THREE.BoxGeometry(0.17, 0.13, 0.05), dark);
+        patch.position.set(-0.12, 1.98, 0.28);
+        pirate.add(patch);
+        const strap = new THREE.Mesh(new THREE.TorusGeometry(0.3, 0.025, 5, 14), dark);
+        strap.position.y = 1.98;
+        strap.rotation.y = Math.PI / 2;
+        strap.rotation.x = 0.25;
+        pirate.add(strap);
+        const goodEye = new THREE.Mesh(new THREE.SphereGeometry(0.07, 8, 6),
+            new THREE.MeshLambertMaterial({ color: 0xffffff }));
+        goodEye.position.set(0.13, 1.98, 0.27);
+        pirate.add(goodEye);
+
+        // Arms: one hand, one hook.
+        const armL = new THREE.Mesh(new THREE.CapsuleGeometry(0.11, 0.5, 4, 8), coat);
+        armL.position.set(-0.44, 1.3, 0.05);
+        armL.rotation.z = 0.4;
+        pirate.add(armL);
+        const hook = new THREE.Mesh(new THREE.TorusGeometry(0.12, 0.035, 5, 10, Math.PI * 1.3),
+            new THREE.MeshLambertMaterial({ color: 0xb8bcc2 }));
+        hook.position.set(-0.66, 0.94, 0.05);
+        hook.rotation.y = Math.PI / 2;
+        pirate.add(hook);
+
+        const armR = new THREE.Mesh(new THREE.CapsuleGeometry(0.11, 0.5, 4, 8), coat);
+        armR.position.set(0.44, 1.3, 0.05);
+        armR.rotation.z = -0.4;
+        pirate.add(armR);
+        const hand = new THREE.Mesh(new THREE.SphereGeometry(0.13, 9, 7), skin);
+        hand.position.set(0.64, 0.98, 0.05);
+        pirate.add(hand);
+
+        // Legs: one booted, one a peg.
+        const legL = new THREE.Mesh(new THREE.CylinderGeometry(0.15, 0.13, 0.8, 8), leather);
+        legL.position.set(-0.19, 0.4, 0);
+        pirate.add(legL);
+        const boot = new THREE.Mesh(new THREE.BoxGeometry(0.32, 0.2, 0.5), leather);
+        boot.position.set(-0.19, 0.1, 0.09);
+        pirate.add(boot);
+        const peg = new THREE.Mesh(new THREE.CylinderGeometry(0.07, 0.13, 0.85, 7),
+            new THREE.MeshLambertMaterial({ color: 0x7a5a34 }));
+        peg.position.set(0.19, 0.42, 0);
+        pirate.add(peg);
+
+        // Sash and belt buckle.
+        const sash = new THREE.Mesh(new THREE.CylinderGeometry(0.36, 0.36, 0.26, 12),
+            new THREE.MeshLambertMaterial({ color: 0xc9a227 }));
+        sash.position.y = 0.98;
+        pirate.add(sash);
+
+        pirate.position.set(-11.4, 2.7, 0.6);
+        pirate.rotation.y = 0.42 + 2.4;
+        pirate.scale.setScalar(1.05);
+        group.add(pirate);
+        this.occluders.push(pirate);
+
+        // --- the sword: a cutlass driven into the ground, blade up ---
+        const sword = new THREE.Group();
+        const steel = new THREE.MeshLambertMaterial({ color: 0xd2d7dd });
+        const blade = new THREE.Mesh(new THREE.BoxGeometry(0.13, 2.3, 0.035), steel);
+        blade.position.y = 1.5;
+        blade.castShadow = true;
+        sword.add(blade);
+        // Tapered point, made by scaling the tip block down.
+        const point = new THREE.Mesh(new THREE.ConeGeometry(0.09, 0.4, 4), steel);
+        point.position.y = 2.82;
+        sword.add(point);
+        const guard = new THREE.Mesh(new THREE.TorusGeometry(0.2, 0.045, 6, 12, Math.PI * 1.4),
+            new THREE.MeshLambertMaterial({ color: 0xc9a227 }));
+        guard.position.y = 0.38;
+        guard.rotation.x = Math.PI / 2;
+        guard.rotation.z = 0.4;
+        sword.add(guard);
+        const grip = new THREE.Mesh(new THREE.CylinderGeometry(0.07, 0.075, 0.55, 8), leather);
+        grip.position.y = 0.1;
+        sword.add(grip);
+        sword.position.set(6.4, 0, -8.5);
+        sword.rotation.z = 0.22;
+        group.add(sword);
+
+        // --- the tomcat: ginger tabby, curled on a barrel, tail flicking ---
+        const barrel = new THREE.Group();
+        const stave = new THREE.MeshLambertMaterial({ color: 0x8a5c31 });
+        const hoopMat = new THREE.MeshLambertMaterial({ color: 0x4a4237 });
+        const cask = new THREE.Mesh(new THREE.CylinderGeometry(0.85, 0.85, 1.5, 14), stave);
+        cask.position.y = 0.75;
+        cask.castShadow = true;
+        barrel.add(cask);
+        [0.35, 1.15].forEach((hy) => {
+            const hoop = new THREE.Mesh(new THREE.TorusGeometry(0.87, 0.06, 6, 16), hoopMat);
+            hoop.position.y = hy;
+            hoop.rotation.x = Math.PI / 2;
+            barrel.add(hoop);
+        });
+
+        const cat = new THREE.Group();
+        const ginger = new THREE.MeshLambertMaterial({ color: 0xd98a3f });
+        const cream = new THREE.MeshLambertMaterial({ color: 0xf5e2c4 });
+        const catBody = new THREE.Mesh(new THREE.CapsuleGeometry(0.24, 0.42, 4, 10), ginger);
+        catBody.rotation.z = Math.PI / 2;
+        catBody.position.y = 0.24;
+        catBody.castShadow = true;
+        cat.add(catBody);
+        const catChest = new THREE.Mesh(new THREE.SphereGeometry(0.16, 9, 7), cream);
+        catChest.position.set(0.3, 0.2, 0.1);
+        cat.add(catChest);
+        const catHead = new THREE.Mesh(new THREE.SphereGeometry(0.23, 12, 10), ginger);
+        catHead.position.set(0.46, 0.5, 0);
+        cat.add(catHead);
+        // Ears, eyes, muzzle.
+        [-1, 1].forEach((side) => {
+            const ear = new THREE.Mesh(new THREE.ConeGeometry(0.09, 0.19, 4), ginger);
+            ear.position.set(0.44, 0.69, side * 0.13);
+            cat.add(ear);
+            const eye = new THREE.Mesh(new THREE.SphereGeometry(0.045, 8, 6),
+                new THREE.MeshLambertMaterial({ color: 0x76b83f }));
+            eye.position.set(0.64, 0.53, side * 0.1);
+            cat.add(eye);
+        });
+        const muzzle = new THREE.Mesh(new THREE.SphereGeometry(0.11, 9, 7), cream);
+        muzzle.position.set(0.66, 0.44, 0);
+        cat.add(muzzle);
+        const catNose = new THREE.Mesh(new THREE.SphereGeometry(0.04, 7, 6),
+            new THREE.MeshLambertMaterial({ color: 0xd06a72 }));
+        catNose.position.set(0.74, 0.46, 0);
+        cat.add(catNose);
+        // Tabby stripes.
+        for (let i = 0; i < 4; i++) {
+            const stripe = new THREE.Mesh(new THREE.TorusGeometry(0.245, 0.028, 5, 12),
+                new THREE.MeshLambertMaterial({ color: 0xa85c22 }));
+            stripe.position.set(0.06 - i * 0.17, 0.24, 0);
+            stripe.rotation.y = Math.PI / 2;
+            cat.add(stripe);
+        }
+        // Curled tail, wrapped around the body.
+        const catTail = new THREE.Mesh(new THREE.TorusGeometry(0.3, 0.06, 6, 14, Math.PI * 1.5), ginger);
+        catTail.position.set(-0.42, 0.24, 0.16);
+        catTail.rotation.x = Math.PI / 2;
+        cat.add(catTail);
+        // Tucked front paws.
+        [-1, 1].forEach((side) => {
+            const paw = new THREE.Mesh(new THREE.SphereGeometry(0.1, 8, 6), cream);
+            paw.position.set(0.42, 0.1, side * 0.14);
+            cat.add(paw);
+        });
+
+        cat.position.set(0, 1.5, 0);
+        cat.rotation.y = -0.6;
+        barrel.add(cat);
+
+        barrel.position.set(7.8, 0, 5.2);
+        group.add(barrel);
+        this.occluders.push(barrel);
+        this._prop(center, 7.8, 5.2, 1.0, 1.0, 1.5);
+
+        // --- treasure: an open chest spilling coins, and a few empty casks ---
+        const chest = new THREE.Group();
+        const box = new THREE.Mesh(new THREE.BoxGeometry(1.5, 0.85, 1.0), stave);
+        box.position.y = 0.42;
+        box.castShadow = true;
+        chest.add(box);
+        const lid = new THREE.Mesh(new THREE.CylinderGeometry(0.5, 0.5, 1.5, 12, 1, false, 0, Math.PI), stave);
+        lid.rotation.z = Math.PI / 2;
+        lid.position.set(0, 0.85, -0.5);
+        lid.rotation.x = -1.1;
+        chest.add(lid);
+        const gold = new THREE.MeshLambertMaterial({ color: 0xf0c33c });
+        for (let i = 0; i < 14; i++) {
+            const coin = new THREE.Mesh(new THREE.CylinderGeometry(0.12, 0.12, 0.04, 10), gold);
+            coin.position.set(
+                (Math.random() - 0.5) * 1.9,
+                0.86 + Math.random() * 0.12,
+                (Math.random() - 0.5) * 1.3
+            );
+            coin.rotation.set(Math.random(), Math.random(), Math.random() * 0.4);
+            chest.add(coin);
+        }
+        chest.position.set(-6.8, 0, 8.6);
+        chest.rotation.y = -0.5;
+        group.add(chest);
+        this._prop(center, -6.8, 8.6, 0.9, 0.7, 1.0);
+
+        // Casks and a rum bottle scattered on the sand.
+        [[6.2, -3.2, 0.7], [-7.6, -8.5, 0.85]].forEach(([bx, bz, s]) => {
+            const cask2 = new THREE.Mesh(new THREE.CylinderGeometry(0.6, 0.6, 1.1, 12), stave);
+            cask2.position.set(bx, 0.6 * s, bz);
+            cask2.rotation.z = Math.PI / 2;
+            cask2.scale.setScalar(s);
+            cask2.castShadow = true;
+            group.add(cask2);
+        });
+    }
+
+    // (g) Intracom Telecom — the working town: a taverna, the bus that gets you
+    // there, the elders holding court outside it, and a framed certificate.
+    _dressTownLife(group, center) {
+        // --- the restaurant: a taverna with an awning and terrace tables ---
+        const taverna = new THREE.Group();
+        const wallMat = new THREE.MeshLambertMaterial({ color: 0xf2ede0 });
+        const trimMat = new THREE.MeshLambertMaterial({ color: 0x2f6fa8 });
+        const roofMat = new THREE.MeshLambertMaterial({ color: 0xb5523c });
+
+        const shell = new THREE.Mesh(new THREE.BoxGeometry(6.4, 3.6, 4.4), wallMat);
+        shell.position.y = 1.8;
+        shell.castShadow = true;
+        taverna.add(shell);
+
+        // Pitched tile roof.
+        const roof = new THREE.Mesh(new THREE.CylinderGeometry(0.01, 2.6, 7, 3), roofMat);
+        roof.rotation.z = Math.PI / 2;
+        roof.position.y = 4.4;
+        roof.scale.set(1, 1, 0.62);
+        roof.castShadow = true;
+        taverna.add(roof);
+
+        // Door and windows on the south face, with blue shutters.
+        const doorMat = new THREE.MeshLambertMaterial({ color: 0x3a2a1a });
+        const door = new THREE.Mesh(new THREE.BoxGeometry(1.1, 2.1, 0.12), doorMat);
+        door.position.set(0, 1.05, 2.22);
+        taverna.add(door);
+        [-2.1, 2.1].forEach((wx) => {
+            const win = new THREE.Mesh(new THREE.BoxGeometry(1.1, 1.1, 0.1),
+                new THREE.MeshLambertMaterial({ color: 0x9fc4dd }));
+            win.position.set(wx, 2.1, 2.22);
+            taverna.add(win);
+            [-0.7, 0.7].forEach((off) => {
+                const shutter = new THREE.Mesh(new THREE.BoxGeometry(0.5, 1.2, 0.08), trimMat);
+                shutter.position.set(wx + off, 2.1, 2.28);
+                taverna.add(shutter);
+            });
+        });
+
+        // Striped awning over the terrace, carried on two posts.
+        const awning = new THREE.Group();
+        for (let i = 0; i < 8; i++) {
+            const strip = new THREE.Mesh(new THREE.BoxGeometry(0.8, 0.08, 2.6),
+                new THREE.MeshLambertMaterial({ color: i % 2 ? 0xf5f0e4 : 0xb5523c }));
+            strip.position.set(-2.8 + i * 0.8, 0, 0);
+            awning.add(strip);
+        }
+        awning.position.set(0, 3.0, 3.6);
+        awning.rotation.x = -0.18;
+        awning.castShadow = true;
+        taverna.add(awning);
+        [-2.9, 2.9].forEach((px) => {
+            const post = new THREE.Mesh(new THREE.CylinderGeometry(0.09, 0.09, 2.9, 7), trimMat);
+            post.position.set(px, 1.45, 4.7);
+            taverna.add(post);
+        });
+
+        // A hand-painted sign board over the door.
+        const board = new THREE.Mesh(new THREE.BoxGeometry(3.2, 0.7, 0.14), trimMat);
+        board.position.set(0, 3.1, 2.3);
+        taverna.add(board);
+
+        taverna.position.set(-9.5, 0, 0.5);
+        taverna.rotation.y = 0.32;
+        group.add(taverna);
+        this.occluders.push(taverna);
+        this._prop(center, -9.5, 0.5, 3.4, 2.4, 3.6);
+
+        // Terrace tables under the awning, laid for lunch.
+        const clothMat = new THREE.MeshLambertMaterial({ color: 0xd8ebf2 });
+        [[-11.5, 5.5], [-7.2, 6.4]].forEach(([tx, tz]) => {
+            const table = new THREE.Group();
+            const top = new THREE.Mesh(new THREE.CylinderGeometry(0.85, 0.85, 0.12, 16), clothMat);
+            top.position.y = 1.0;
+            top.castShadow = true;
+            table.add(top);
+            const leg = new THREE.Mesh(new THREE.CylinderGeometry(0.1, 0.16, 1.0, 8),
+                new THREE.MeshLambertMaterial({ color: 0x6b5a48 }));
+            leg.position.y = 0.5;
+            table.add(leg);
+            // A carafe and two glasses.
+            const carafe = new THREE.Mesh(new THREE.CylinderGeometry(0.13, 0.18, 0.42, 10),
+                new THREE.MeshLambertMaterial({ color: 0xe8c46a }));
+            carafe.position.y = 1.27;
+            table.add(carafe);
+            [-0.4, 0.4].forEach((gx) => {
+                const glass = new THREE.Mesh(new THREE.CylinderGeometry(0.08, 0.06, 0.2, 8),
+                    new THREE.MeshLambertMaterial({ color: 0xd6ecf5 }));
+                glass.position.set(gx, 1.16, 0.2);
+                table.add(glass);
+                const chair = new THREE.Mesh(new THREE.BoxGeometry(0.5, 0.1, 0.5),
+                    new THREE.MeshLambertMaterial({ color: 0x8a6a4a }));
+                chair.position.set(gx * 3, 0.75, 0);
+                table.add(chair);
+            });
+            table.position.set(tx, 0, tz);
+            group.add(table);
+            this._prop(center, tx, tz, 0.9, 0.9, 1.1);
+        });
+
+        // --- the bus, parked at the island's kerb ---
+        const bus = new THREE.Group();
+        const busBody = new THREE.MeshLambertMaterial({ color: 0x2f7fc4 });
+        const glassMat = new THREE.MeshLambertMaterial({ color: 0x1e2f3d });
+
+        const chassis = new THREE.Mesh(new THREE.BoxGeometry(8.4, 2.4, 2.8), busBody);
+        chassis.position.y = 1.9;
+        chassis.castShadow = true;
+        bus.add(chassis);
+        // Rounded roof cap.
+        const busRoof = new THREE.Mesh(new THREE.CylinderGeometry(1.42, 1.42, 8.4, 12, 1, false, 0, Math.PI), busBody);
+        busRoof.rotation.z = Math.PI / 2;
+        busRoof.position.y = 3.1;
+        bus.add(busRoof);
+        // A white livery band down the flanks.
+        const band = new THREE.Mesh(new THREE.BoxGeometry(8.5, 0.45, 2.85),
+            new THREE.MeshLambertMaterial({ color: 0xf2f2ee }));
+        band.position.y = 1.2;
+        bus.add(band);
+
+        // Side windows and a windscreen.
+        for (let i = 0; i < 5; i++) {
+            [-1, 1].forEach((side) => {
+                const win = new THREE.Mesh(new THREE.BoxGeometry(1.25, 1.0, 0.1), glassMat);
+                win.position.set(-3.1 + i * 1.55, 2.5, side * 1.42);
+                bus.add(win);
+            });
+        }
+        const screen = new THREE.Mesh(new THREE.BoxGeometry(0.1, 1.2, 2.3), glassMat);
+        screen.position.set(4.22, 2.5, 0);
+        bus.add(screen);
+
+        // Destination blind above the windscreen.
+        const blind = new THREE.Mesh(new THREE.BoxGeometry(0.08, 0.4, 1.8),
+            new THREE.MeshLambertMaterial({ color: 0x1a1a18 }));
+        blind.position.set(4.24, 3.2, 0);
+        bus.add(blind);
+
+        // Doors, wheels, mirrors.
+        const doorB = new THREE.Mesh(new THREE.BoxGeometry(1.3, 1.9, 0.1),
+            new THREE.MeshLambertMaterial({ color: 0x24506e }));
+        doorB.position.set(2.3, 1.65, 1.42);
+        bus.add(doorB);
+        const tyre = new THREE.MeshLambertMaterial({ color: 0x1c1b19 });
+        [[-2.8, 1], [-2.8, -1], [2.9, 1], [2.9, -1]].forEach(([wx, ws]) => {
+            const wheel = new THREE.Mesh(new THREE.CylinderGeometry(0.66, 0.66, 0.42, 14), tyre);
+            wheel.rotation.x = Math.PI / 2;
+            wheel.position.set(wx, 0.66, ws * 1.32);
+            bus.add(wheel);
+        });
+
+        bus.position.set(9.5, 0, -4.5);
+        bus.rotation.y = -0.35;
+        group.add(bus);
+        this.occluders.push(bus);
+        this._prop(center, 9.5, -4.5, 4.0, 2.0, 3.4);
+
+        // A bus stop pole and sign next to it.
+        const stopPole = new THREE.Mesh(new THREE.CylinderGeometry(0.08, 0.08, 3, 7),
+            new THREE.MeshLambertMaterial({ color: 0x8f959c }));
+        stopPole.position.set(6.2, 1.5, -2.2);
+        group.add(stopPole);
+        const stopSign = new THREE.Mesh(new THREE.BoxGeometry(0.9, 0.6, 0.08),
+            new THREE.MeshLambertMaterial({ color: 0x2f7fc4 }));
+        stopSign.position.set(6.2, 3.0, -2.2);
+        group.add(stopSign);
+
+        // --- the elders: three old-timers with canes and worry beads ---
+        const buildElder = (coatColor, hasCane, stoop) => {
+            const elder = new THREE.Group();
+            const coat = new THREE.MeshLambertMaterial({ color: coatColor });
+            const skin = new THREE.MeshLambertMaterial({ color: 0xe0bb92 });
+            const whiteHair = new THREE.MeshLambertMaterial({ color: 0xe8e6e0 });
+
+            const torso = new THREE.Mesh(new THREE.CapsuleGeometry(0.32, 0.62, 4, 10), coat);
+            torso.position.y = 1.15;
+            torso.rotation.x = stoop;   // the years bend them forward
+            torso.castShadow = true;
+            elder.add(torso);
+
+            const head = new THREE.Mesh(new THREE.SphereGeometry(0.27, 12, 10), skin);
+            head.position.set(0, 1.78, stoop * 0.4);
+            elder.add(head);
+
+            // Bald crown ringed with white hair, plus a full white beard.
+            const hairRing = new THREE.Mesh(new THREE.TorusGeometry(0.24, 0.06, 6, 14), whiteHair);
+            hairRing.position.set(0, 1.8, stoop * 0.4);
+            hairRing.rotation.x = Math.PI / 2 - 0.2;
+            elder.add(hairRing);
+            const beard = new THREE.Mesh(new THREE.SphereGeometry(0.22, 10, 8), whiteHair);
+            beard.position.set(0, 1.62, stoop * 0.4 + 0.16);
+            beard.scale.set(0.9, 1.1, 0.7);
+            elder.add(beard);
+            const mous = new THREE.Mesh(new THREE.BoxGeometry(0.26, 0.07, 0.08), whiteHair);
+            mous.position.set(0, 1.76, stoop * 0.4 + 0.24);
+            elder.add(mous);
+
+            // A flat cap, the way they actually dress.
+            const cap = new THREE.Mesh(
+                new THREE.SphereGeometry(0.29, 10, 8, 0, Math.PI * 2, 0, Math.PI / 2),
+                new THREE.MeshLambertMaterial({ color: 0x4a4a42 })
+            );
+            cap.position.set(0, 1.86, stoop * 0.4);
+            cap.scale.y = 0.7;
+            elder.add(cap);
+            const peak = new THREE.Mesh(new THREE.BoxGeometry(0.34, 0.05, 0.22),
+                new THREE.MeshLambertMaterial({ color: 0x4a4a42 }));
+            peak.position.set(0, 1.87, stoop * 0.4 + 0.26);
+            elder.add(peak);
+
+            const legs = new THREE.Mesh(new THREE.CylinderGeometry(0.16, 0.19, 0.9, 8),
+                new THREE.MeshLambertMaterial({ color: 0x3d4048 }));
+            legs.position.y = 0.45;
+            elder.add(legs);
+
+            [-1, 1].forEach((side) => {
+                const arm = new THREE.Mesh(new THREE.CapsuleGeometry(0.1, 0.48, 4, 8), coat);
+                arm.position.set(side * 0.4, 1.2, 0.06);
+                arm.rotation.z = side * 0.3;
+                elder.add(arm);
+            });
+
+            if (hasCane) {
+                const cane = new THREE.Mesh(new THREE.CylinderGeometry(0.05, 0.05, 1.5, 6),
+                    new THREE.MeshLambertMaterial({ color: 0x6b4a2a }));
+                cane.position.set(0.55, 0.75, 0.25);
+                elder.add(cane);
+                const crook = new THREE.Mesh(new THREE.TorusGeometry(0.12, 0.045, 5, 10, Math.PI),
+                    new THREE.MeshLambertMaterial({ color: 0x6b4a2a }));
+                crook.position.set(0.55, 1.5, 0.25);
+                crook.rotation.y = Math.PI / 2;
+                elder.add(crook);
+            } else {
+                // Worry beads (komboloi) dangling from one hand.
+                for (let i = 0; i < 6; i++) {
+                    const bead = new THREE.Mesh(new THREE.SphereGeometry(0.05, 7, 6),
+                        new THREE.MeshLambertMaterial({ color: 0x8a3f2a }));
+                    bead.position.set(-0.56, 0.92 - i * 0.09, 0.14);
+                    elder.add(bead);
+                }
+            }
+            return elder;
+        };
+
+        // Seated around a bench outside the taverna, mid-argument.
+        const bench = new THREE.Mesh(new THREE.BoxGeometry(3.4, 0.2, 0.7),
+            new THREE.MeshLambertMaterial({ color: 0x7a5a3a }));
+        bench.position.set(9.2, 0.85, 6.5);
+        bench.rotation.y = -0.4;
+        bench.castShadow = true;
+        group.add(bench);
+        [-1.2, 1.2].forEach((bx) => {
+            const legB = new THREE.Mesh(new THREE.BoxGeometry(0.2, 0.85, 0.6),
+                new THREE.MeshLambertMaterial({ color: 0x5c4229 }));
+            legB.position.set(9.2 + bx * Math.cos(-0.4), 0.42, 6.5 + bx * Math.sin(-0.4));
+            group.add(legB);
+        });
+
+        [
+            [8.2, 5.6, 0x6b6f7a, true, 0.16],
+            [10.4, 7.2, 0x7a5c4a, false, 0.22],
+            [6.6, 8.4, 0x4f6b5c, true, 0.12]
+        ].forEach(([ex, ez, color, cane, stoop], i) => {
+            const elder = buildElder(color, cane, stoop);
+            elder.position.set(ex, 0, ez);
+            // Turned toward one another, the way a conversation actually stands.
+            elder.rotation.y = Math.atan2(8.4 - ex, 7.0 - ez) + (i - 1) * 0.3;
+            group.add(elder);
+            this.occluders.push(elder);
+            this._prop(center, ex, ez, 0.5, 0.5, 2.0);
+        });
+
+        // --- the certificate: framed, on an easel, lit like an exhibit ---
+        const easel = new THREE.Group();
+        const woodMat = new THREE.MeshLambertMaterial({ color: 0x8a6a42 });
+        [-1, 1].forEach((side) => {
+            const leg = new THREE.Mesh(new THREE.CylinderGeometry(0.07, 0.07, 3.0, 6), woodMat);
+            leg.position.set(side * 0.7, 1.5, 0);
+            leg.rotation.z = -side * 0.2;
+            easel.add(leg);
+        });
+        const backLeg = new THREE.Mesh(new THREE.CylinderGeometry(0.07, 0.07, 3.0, 6), woodMat);
+        backLeg.position.set(0, 1.5, -0.6);
+        backLeg.rotation.x = 0.28;
+        easel.add(backLeg);
+        const ledge = new THREE.Mesh(new THREE.BoxGeometry(1.9, 0.1, 0.2), woodMat);
+        ledge.position.y = 1.2;
+        easel.add(ledge);
+
+        // Gilt frame with a parchment face, a wax seal and ribbon.
+        const frame = new THREE.Mesh(new THREE.BoxGeometry(2.0, 1.5, 0.12),
+            new THREE.MeshLambertMaterial({ color: 0xd4af37 }));
+        frame.position.set(0, 2.0, 0.05);
+        frame.rotation.x = -0.12;
+        frame.castShadow = true;
+        easel.add(frame);
+        const parchment = new THREE.Mesh(new THREE.BoxGeometry(1.7, 1.2, 0.04),
+            new THREE.MeshLambertMaterial({ color: 0xf7f1dd }));
+        parchment.position.set(0, 2.0, 0.13);
+        parchment.rotation.x = -0.12;
+        easel.add(parchment);
+        // Ruled lines of "text" and a signature stroke.
+        for (let i = 0; i < 4; i++) {
+            const line = new THREE.Mesh(new THREE.BoxGeometry(1.15 - i * 0.12, 0.055, 0.02),
+                new THREE.MeshLambertMaterial({ color: 0x8a7f66 }));
+            line.position.set(0, 2.25 - i * 0.22, 0.16);
+            line.rotation.x = -0.12;
+            easel.add(line);
+        }
+        const seal = new THREE.Mesh(new THREE.CylinderGeometry(0.16, 0.16, 0.05, 12),
+            new THREE.MeshLambertMaterial({ color: 0xb02b2b }));
+        seal.position.set(0.55, 1.62, 0.18);
+        seal.rotation.x = Math.PI / 2 - 0.12;
+        easel.add(seal);
+        [-0.3, 0.3].forEach((rx) => {
+            const ribbon = new THREE.Mesh(new THREE.BoxGeometry(0.09, 0.36, 0.02),
+                new THREE.MeshLambertMaterial({ color: 0xb02b2b }));
+            ribbon.position.set(0.55 + rx * 0.2, 1.38, 0.17);
+            ribbon.rotation.z = rx;
+            easel.add(ribbon);
+        });
+
+        easel.position.set(-8.5, 0, -7.5);
+        easel.rotation.y = 0.55;
+        group.add(easel);
+        this.occluders.push(easel);
+        this._prop(center, -8.5, -7.5, 1.0, 0.7, 2.8);
+
+        const exhibitLight = new THREE.PointLight(0xfff0cc, 1.0, 10, 2);
+        exhibitLight.position.set(-8.5, 3.6, -6.2);
+        group.add(exhibitLight);
+    }
+
+    // (h) Camunda — the global market: a covered marketplace of stalls, a
+    // slowly turning globe, and an airliner banking overhead.
+    _dressGlobalMarket(group, center) {
+        // --- the marketplace: a row of striped stalls with goods on the trestle ---
+        const timber = new THREE.MeshLambertMaterial({ color: 0x8a6440 });
+        const crateWood = new THREE.MeshLambertMaterial({ color: 0xb08a58 });
+
+        const buildStall = (canopyA, canopyB, goodsColors) => {
+            const stall = new THREE.Group();
+
+            // Four corner posts and a trestle counter.
+            [[-1.5, -1], [1.5, -1], [-1.5, 1], [1.5, 1]].forEach(([px, pz]) => {
+                const post = new THREE.Mesh(new THREE.CylinderGeometry(0.09, 0.09, 2.6, 6), timber);
+                post.position.set(px, 1.3, pz);
+                stall.add(post);
+            });
+            const counter = new THREE.Mesh(new THREE.BoxGeometry(3.3, 0.14, 1.3), timber);
+            counter.position.set(0, 1.05, 0.5);
+            counter.castShadow = true;
+            stall.add(counter);
+
+            // Striped canopy, pitched forward over the counter.
+            for (let i = 0; i < 7; i++) {
+                const strip = new THREE.Mesh(new THREE.BoxGeometry(0.52, 0.07, 2.8),
+                    new THREE.MeshLambertMaterial({ color: i % 2 ? canopyA : canopyB }));
+                strip.position.set(-1.56 + i * 0.52, 2.62, 0.15);
+                stall.add(strip);
+            }
+            const valance = new THREE.Mesh(new THREE.BoxGeometry(3.6, 0.34, 0.08),
+                new THREE.MeshLambertMaterial({ color: canopyA }));
+            valance.position.set(0, 2.44, 1.5);
+            stall.add(valance);
+
+            // Produce: heaped spheres in open crates on the counter.
+            goodsColors.forEach((color, gi) => {
+                const tray = new THREE.Mesh(new THREE.BoxGeometry(0.85, 0.22, 0.8), crateWood);
+                tray.position.set(-1.05 + gi * 1.05, 1.23, 0.5);
+                stall.add(tray);
+                const goodMat = new THREE.MeshLambertMaterial({ color });
+                for (let g = 0; g < 7; g++) {
+                    const item = new THREE.Mesh(new THREE.SphereGeometry(0.13, 8, 6), goodMat);
+                    item.position.set(
+                        -1.05 + gi * 1.05 + (Math.random() - 0.5) * 0.55,
+                        1.4 + Math.random() * 0.12,
+                        0.5 + (Math.random() - 0.5) * 0.5
+                    );
+                    stall.add(item);
+                }
+            });
+
+            // A sack and a stacked crate at the stall's foot.
+            const sack = new THREE.Mesh(new THREE.CapsuleGeometry(0.28, 0.3, 4, 8),
+                new THREE.MeshLambertMaterial({ color: 0xc7b189 }));
+            sack.position.set(-1.7, 0.42, 1.3);
+            stall.add(sack);
+            const box = new THREE.Mesh(new THREE.BoxGeometry(0.6, 0.6, 0.6), crateWood);
+            box.position.set(1.7, 0.3, 1.3);
+            stall.add(box);
+
+            return stall;
+        };
+
+        const stalls = [
+            { pos: [-10, -6.5], rot: 0.6, a: 0xd0453c, b: 0xf5efe2, goods: [0xe0632d, 0xd8352f, 0xe8b73a] },
+            { pos: [-11, 1.5], rot: 1.05, a: 0x2f7fa8, b: 0xf5efe2, goods: [0x6fae3c, 0x3f8f4a, 0xc7d84a] },
+            { pos: [-9, 8.5], rot: 1.5, a: 0x4f8a3c, b: 0xf5efe2, goods: [0x9a5ac0, 0xd8437a, 0x5a7fd0] },
+            { pos: [11, -1.5], rot: -1.2, a: 0xd8963c, b: 0xf5efe2, goods: [0xe8c14a, 0xb0762f, 0xe0a03c] }
+        ];
+        stalls.forEach(({ pos, rot, a, b, goods }) => {
+            const stall = buildStall(a, b, goods);
+            stall.position.set(pos[0], 0, pos[1]);
+            stall.rotation.y = rot;
+            group.add(stall);
+            this.occluders.push(stall);
+            this._prop(center, pos[0], pos[1], 1.8, 1.4, 2.6);
+        });
+
+        // Bunting strung between the stalls, so the row reads as one market.
+        const buntingColors = [0xd0453c, 0xe8b73a, 0x2f7fa8, 0x4f8a3c, 0xd8437a];
+        for (let i = 0; i < 22; i++) {
+            const t = i / 21;
+            const flag = new THREE.Mesh(new THREE.ConeGeometry(0.16, 0.4, 3),
+                new THREE.MeshLambertMaterial({
+                    color: buntingColors[i % buntingColors.length], side: THREE.DoubleSide
+                }));
+            // Slack catenary between the two end stalls on the west side.
+            flag.position.set(
+                -10 + t * 1.5,
+                3.4 - Math.sin(t * Math.PI) * 0.9,
+                -6.5 + t * 15
+            );
+            flag.rotation.x = Math.PI;
+            group.add(flag);
+        }
+
+        // --- the earth: a globe on a tilted axis, turning in place ---
+        const globeGroup = new THREE.Group();
+
+        const globe = new THREE.Mesh(
+            new THREE.SphereGeometry(2.6, 32, 24),
+            new THREE.MeshLambertMaterial({ map: makeEarthTexture() })
+        );
+        globe.castShadow = true;
+        globeGroup.add(globe);
+        this.globes = this.globes || [];
+        this.globes.push(globe);
+
+        // Meridian ring and the stand it hangs in, like a library globe.
+        const brass = new THREE.MeshLambertMaterial({ color: 0xc9a227 });
+        const meridian = new THREE.Mesh(new THREE.TorusGeometry(2.95, 0.1, 8, 30), brass);
+        meridian.rotation.y = Math.PI / 2;
+        globeGroup.add(meridian);
+
+        // Set off the centre line: local x = 0 is the corridor the player walks
+        // in on from the south bridge, and the globe is wide enough to block it.
+        const GLOBE_X = 7.5;
+        const GLOBE_Z = -9.5;
+        globeGroup.position.set(GLOBE_X, 4.6, GLOBE_Z);
+        globeGroup.rotation.z = 0.41;   // Earth's axial tilt, near enough
+        group.add(globeGroup);
+        this.occluders.push(globeGroup);
+
+        const pedestal = new THREE.Mesh(new THREE.CylinderGeometry(0.6, 1.3, 2.0, 14), brass);
+        pedestal.position.set(GLOBE_X, 1.0, GLOBE_Z);
+        pedestal.castShadow = true;
+        group.add(pedestal);
+        const stemG = new THREE.Mesh(new THREE.CylinderGeometry(0.16, 0.16, 1.2, 10), brass);
+        stemG.position.set(GLOBE_X, 2.4, GLOBE_Z);
+        group.add(stemG);
+        this._prop(center, GLOBE_X, GLOBE_Z, 1.5, 1.5, 3.0);
+
+        // --- the airplane: an airliner banking over the island on a loop ---
+        const plane = new THREE.Group();
+        const fuselageMat = new THREE.MeshLambertMaterial({ color: 0xf2f4f7 });
+        const liveryMat = new THREE.MeshLambertMaterial({ color: 0xe25b32 });
+        const engineMat = new THREE.MeshLambertMaterial({ color: 0x5a6067 });
+
+        const fuselage = new THREE.Mesh(new THREE.CapsuleGeometry(0.5, 4.4, 6, 12), fuselageMat);
+        fuselage.rotation.z = Math.PI / 2;
+        fuselage.castShadow = true;
+        plane.add(fuselage);
+
+        // Nose cone and a tail that tapers up.
+        const nose = new THREE.Mesh(new THREE.SphereGeometry(0.5, 12, 10), fuselageMat);
+        nose.position.x = 2.75;
+        nose.scale.x = 1.4;
+        plane.add(nose);
+
+        // Cabin windows as a stripe down each side.
+        for (let i = 0; i < 12; i++) {
+            [-1, 1].forEach((side) => {
+                const win = new THREE.Mesh(new THREE.BoxGeometry(0.12, 0.1, 0.04),
+                    new THREE.MeshLambertMaterial({ color: 0x2b3a48 }));
+                win.position.set(-2 + i * 0.38, 0.12, side * 0.48);
+                plane.add(win);
+            });
+        }
+        const stripe = new THREE.Mesh(new THREE.BoxGeometry(5.2, 0.16, 1.02), liveryMat);
+        stripe.position.y = -0.12;
+        plane.add(stripe);
+
+        // Swept wings.
+        [-1, 1].forEach((side) => {
+            const wing = new THREE.Mesh(new THREE.BoxGeometry(1.5, 0.12, 3.6), fuselageMat);
+            wing.position.set(-0.2, -0.1, side * 2.0);
+            wing.rotation.y = side * 0.32;
+            wing.rotation.x = -side * 0.06;
+            wing.castShadow = true;
+            plane.add(wing);
+
+            const winglet = new THREE.Mesh(new THREE.BoxGeometry(0.5, 0.6, 0.1), liveryMat);
+            winglet.position.set(-0.75, 0.2, side * 3.6);
+            plane.add(winglet);
+
+            const engine = new THREE.Mesh(new THREE.CylinderGeometry(0.32, 0.28, 1.0, 12), engineMat);
+            engine.rotation.z = Math.PI / 2;
+            engine.position.set(0.2, -0.42, side * 1.9);
+            plane.add(engine);
+        });
+
+        // Tailplane and fin.
+        const fin = new THREE.Mesh(new THREE.BoxGeometry(1.2, 1.6, 0.12), liveryMat);
+        fin.position.set(-2.3, 0.9, 0);
+        fin.rotation.z = -0.3;
+        plane.add(fin);
+        [-1, 1].forEach((side) => {
+            const tailplane = new THREE.Mesh(new THREE.BoxGeometry(0.9, 0.09, 1.3), fuselageMat);
+            tailplane.position.set(-2.4, 0.25, side * 0.75);
+            tailplane.rotation.y = side * 0.3;
+            plane.add(tailplane);
+        });
+
+        // Contrails streaming off both engines.
+        const trailMat = new THREE.MeshLambertMaterial({
+            color: 0xffffff, transparent: true, opacity: 0.32
+        });
+        [-1, 1].forEach((side) => {
+            const trail = new THREE.Mesh(new THREE.CylinderGeometry(0.1, 0.3, 6, 8), trailMat);
+            trail.rotation.z = Math.PI / 2;
+            trail.position.set(-3.4, -0.42, side * 1.9);
+            plane.add(trail);
+        });
+
+        plane.scale.setScalar(1.15);
+        group.add(plane);
+        // Flown in update(): a wide banked circle above the island, so it is
+        // always somewhere in the sky rather than parked on the ground.
+        this.flyingPlanes = this.flyingPlanes || [];
+        this.flyingPlanes.push({ mesh: plane, radius: 26, height: 22, speed: 0.22, phase: 0 });
     }
 
     // `fromRadius` is the radius of the island the bridge leaves, which differs
@@ -1187,9 +3167,41 @@ export class World {
         }
 
         this._updateSmoke(dt, time);
+        this._updateProps(dt, time);
 
         if (this.ocean) {
             this.ocean.position.y = -6 + Math.sin(time * 0.7) * 0.12;
+        }
+    }
+
+    // Animated set dressing: the Vienna ferris wheel, the Camunda globe and the
+    // airliner circling above it. All three are optional — an island that was
+    // never decorated simply has nothing in these lists.
+    _updateProps(dt, time) {
+        // Riesenrad: the rim turns, and each gondola counter-rotates so it
+        // hangs level instead of tumbling with the wheel.
+        for (const wheel of this.ferrisWheels || []) {
+            wheel.rotation.z += dt * 0.22;
+            for (const child of wheel.children) {
+                if (child.userData.spinAngle === undefined) continue;
+                child.rotation.z = -wheel.rotation.z;
+            }
+        }
+
+        for (const globe of this.globes || []) {
+            globe.rotation.y += dt * 0.12;
+        }
+
+        // The airliner flies a banked circle. Position comes from the angle, and
+        // the heading is the tangent to that circle, so the nose always leads.
+        for (const p of this.flyingPlanes || []) {
+            p.phase += dt * p.speed;
+            const x = Math.cos(p.phase) * p.radius;
+            const z = Math.sin(p.phase) * p.radius;
+            p.mesh.position.set(x, p.height + Math.sin(p.phase * 2) * 1.4, z);
+            // Local +x is the nose, so face the tangent direction.
+            p.mesh.rotation.y = -p.phase - Math.PI / 2;
+            p.mesh.rotation.z = -0.28;   // banked into the turn
         }
     }
 
