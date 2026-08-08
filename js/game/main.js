@@ -15,6 +15,14 @@ import { Crate } from './crate.js';
 const FLIGHT_ISLAND_COMPANY = 'Cortical.io';
 const FLIGHT_LANDING_RADIUS = ZONE_RADIUS + 4;
 
+// Chase camera zoom, toggled by the up/down arrow keys — see cameraZoom in
+// _initInput and its use in _updateCamera. Clamped so zooming in never
+// tucks the camera inside the player, and zooming out never pushes it so
+// far that occlusion/shadow quality falls apart.
+const ZOOM_STEP = 0.18;
+const ZOOM_MIN = 0.5;
+const ZOOM_MAX = 2.0;
+
 // Atmosphere targets for _updateAtmosphere — see there for how these blend
 // with the scene's base daytime values.
 //
@@ -231,6 +239,12 @@ class Game {
         this.keys = new Set();
         this.cameraYaw = 0;
         this.cameraYawTarget = 0;
+        // Eased zoom multiplier on the chase camera's base distance/height —
+        // 1 is the resting framing, <1 is zoomed in, >1 is zoomed out. See
+        // _updateCamera for how this scales the offset, and ZOOM_MIN/MAX
+        // below for the clamped range.
+        this.cameraZoom = 1;
+        this.cameraZoomTarget = 1;
 
         window.addEventListener('keydown', (e) => {
             // Let the browser keep its own shortcuts (reload, devtools, ...).
@@ -260,11 +274,20 @@ class Game {
         window.addEventListener('keyup', (e) => this.keys.delete(e.code));
         window.addEventListener('blur', () => this.keys.clear());
 
-        // Camera orbit with the left/right arrow keys.
+        // Camera orbit with the left/right arrow keys, zoom with up/down.
         window.addEventListener('keydown', (e) => {
             if (this.ui.isOpen) return;
             if (e.code === 'ArrowLeft') this.cameraYawTarget += Math.PI / 8;
             if (e.code === 'ArrowRight') this.cameraYawTarget -= Math.PI / 8;
+            // Up = further away (zoom out), down = closer in (zoom in) —
+            // matches "up" pushing the camera back like pulling away, not
+            // literally moving the view upward.
+            if (e.code === 'ArrowUp') {
+                this.cameraZoomTarget = Math.min(ZOOM_MAX, this.cameraZoomTarget + ZOOM_STEP);
+            }
+            if (e.code === 'ArrowDown') {
+                this.cameraZoomTarget = Math.max(ZOOM_MIN, this.cameraZoomTarget - ZOOM_STEP);
+            }
         });
 
         document.getElementById('mute-btn').addEventListener('click', () => {
@@ -736,6 +759,7 @@ class Game {
 
     _updateCamera(dt) {
         this.cameraYaw += (this.cameraYawTarget - this.cameraYaw) * Math.min(1, dt * 6);
+        this.cameraZoom += (this.cameraZoomTarget - this.cameraZoom) * Math.min(1, dt * 6);
 
         // Chase camera trailing behind and above the player. Inside the opening
         // temple the camera tucks in close and steep, so it stays within the
@@ -744,8 +768,10 @@ class Game {
         const p = this.player.position;
         const indoor = !!b &&
             p.x > b.minX && p.x < b.maxX && p.z > b.minZ && p.z < b.maxZ;
-        const distance = indoor ? 7 : 13;
-        const height = indoor ? 5.5 : 7.5;
+        // Zoom scales both — distance alone would leave a zoomed-out camera
+        // oddly low, and height alone would leave it hovering in place.
+        const distance = (indoor ? 7 : 13) * this.cameraZoom;
+        const height = (indoor ? 5.5 : 7.5) * this.cameraZoom;
         const offset = new THREE.Vector3(
             Math.sin(this.cameraYaw + Math.PI) * distance,
             height,
