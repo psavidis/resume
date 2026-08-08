@@ -144,11 +144,14 @@ export class Player {
         this.costumeRoot.position.y = -HIP_HEIGHT;
         this.mounts.root.add(this.costumeRoot);
 
-        // Extra arms for the Camunda costume. The model has its own two, so
-        // these are the *additional* pair, mounted at the hips and swung in
-        // _animate. Built here because the model provides no spares.
+        // Extra arms for the Camunda costume: the *additional* pair, since the
+        // model brings its own two. Mounted a little under the rig's shoulder
+        // sockets (y ≈ 1.91 in costume-root space) so the second pair hangs
+        // below the first, and swung by hand in _animate. The earlier value of
+        // 0.95 came from the primitive body this costume was first authored
+        // against, which left them dangling at the legs.
         this.extraArms = [-1, 1].map((side) => {
-            const arm = this._makeArm(side, 0.95, this.costumeRoot);
+            const arm = this._makeArm(side, 1.74, this.costumeRoot);
             arm.visible = false;
             return arm;
         });
@@ -288,28 +291,59 @@ export class Player {
         this.currentAction = next;
     }
 
-    // One arm: a group pivoting at the shoulder, holding upper arm and hand.
+    // One arm of the Camunda second pair, pivoting at its shoulder.
+    //
+    // Dimensions are taken from the loaded rig's own arm, measured in
+    // costume-root space: shoulder socket at (±0.23, 1.91), elbow at 0.35 below
+    // it, palm a further 0.39 — a total reach of 0.74. Matching those makes the
+    // extra pair read as the same character's arms rather than as spare parts.
     _makeArm(side, shoulderY, parent) {
         const { skin, tee } = this.materials;
         const arm = new THREE.Group();
 
-        // Sized against the loaded model's own arms, which are slimmer than the
-        // primitive body these were first authored for.
-        const sleeve = new THREE.Mesh(new THREE.CapsuleGeometry(0.075, 0.16, 4, 10), tee);
-        sleeve.position.y = -0.1;
+        const UPPER_LEN = 0.35;
+        const FOREARM_LEN = 0.39;
+
+        // Short sleeve, matching the model's own T-shirt.
+        const sleeve = new THREE.Mesh(new THREE.CapsuleGeometry(0.062, 0.14, 6, 12), tee);
+        sleeve.position.y = -0.09;
+        sleeve.castShadow = true;
         arm.add(sleeve);
 
-        const upper = new THREE.Mesh(new THREE.CapsuleGeometry(0.055, 0.3, 4, 10), skin);
-        upper.position.y = -0.32;
+        // Upper arm, from the shoulder down to the elbow.
+        const upper = new THREE.Mesh(
+            new THREE.CapsuleGeometry(0.045, UPPER_LEN - 0.09, 6, 12), skin
+        );
+        upper.position.y = -UPPER_LEN / 2;
         upper.castShadow = true;
         arm.add(upper);
 
-        const hand = new THREE.Mesh(new THREE.SphereGeometry(0.075, 12, 10), skin);
-        hand.position.y = -0.52;
-        hand.scale.set(1, 0.95, 1.05);
+        // Forearm, tapering slightly toward the wrist.
+        const fore = new THREE.Mesh(
+            new THREE.CapsuleGeometry(0.038, FOREARM_LEN - 0.1, 6, 12), skin
+        );
+        fore.position.y = -UPPER_LEN - FOREARM_LEN / 2 + 0.03;
+        fore.castShadow = true;
+        arm.add(fore);
+
+        // Hand, sized to the rig's own rather than a cartoon glove.
+        const hand = new THREE.Mesh(new THREE.SphereGeometry(0.055, 14, 12), skin);
+        hand.position.y = -(UPPER_LEN + FOREARM_LEN) + 0.02;
+        hand.scale.set(0.9, 1.15, 0.7);
+        hand.castShadow = true;
         arm.add(hand);
 
-        arm.position.set(side * 0.26, shoulderY, 0);
+        // A rounded deltoid closing the gap at the socket, so the limb reads as
+        // attached rather than as a floating stick.
+        const deltoid = new THREE.Mesh(new THREE.SphereGeometry(0.068, 14, 12), tee);
+        deltoid.position.y = 0.005;
+        deltoid.scale.set(1, 0.9, 1);
+        deltoid.castShadow = true;
+        arm.add(deltoid);
+
+        // Set behind the model's own arms and tucked slightly inboard, so the
+        // two pairs read as stacked rather than fighting for the same space.
+        arm.position.set(side * 0.185, shoulderY, -0.16);
         parent.add(arm);
         return arm;
     }
@@ -784,20 +818,24 @@ export class Player {
         }
 
         // The extra Camunda arms are not part of the rig, so they are still
-        // swung by hand, on the opposite beat to the model's own arms.
+        // swung by hand, on the opposite beat to the model's own arms. The rest
+        // pose is kept close to vertical (a slight outward splay only) to match
+        // how the model's own arms hang — a wider splay reads as a scarecrow
+        // next to them.
         if (this.extraArms[0].visible) {
             const swing = Math.sin(this.runCycle) * Math.min(1, speed / MOVE_SPEED);
             this.extraArms.forEach((arm, i) => {
                 const dir = i === 0 ? 1 : -1;
                 if (this.spinTimer > 0) {
-                    arm.rotation.z = dir * 1.5;
+                    // Flung out wide during the spin attack.
+                    arm.rotation.z = dir * 1.35;
                     arm.rotation.x = 0;
                 } else if (this.onGround) {
-                    arm.rotation.x = swing * dir * 0.6;
-                    arm.rotation.z = dir * 0.55;
+                    arm.rotation.x = swing * dir * 0.55;
+                    arm.rotation.z = dir * 0.18;
                 } else {
-                    arm.rotation.x = THREE.MathUtils.damp(arm.rotation.x, -0.9, 8, dt);
-                    arm.rotation.z = dir * 0.7;
+                    arm.rotation.x = THREE.MathUtils.damp(arm.rotation.x, -0.75, 8, dt);
+                    arm.rotation.z = dir * 0.3;
                 }
             });
         }
