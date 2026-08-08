@@ -644,6 +644,17 @@ export class World {
             x: center.x - 9.5, z: center.z - 6.5, halfX: 1.1, halfZ: 1.1, top: 5.9
         });
 
+        // The year, floating in the sky off the island's west side (the
+        // player's left as they walk the north-south corridor). Low enough
+        // to catch on a normal zoomed-out view rather than needing the
+        // camera tilted steeply upward to find it.
+        const startYear = (exp.startDate.match(/\d{4}/) || [])[0] || exp.startDate;
+        const yearSign = makeLabelSprite(startYear, {
+            fontSize: 60, color: '#ffe0a0', bg: 'rgba(20,12,8,0.7)', worldWidth: 6
+        });
+        yearSign.position.set(-ZONE_RADIUS - 6, 9, 0);
+        group.add(yearSign);
+
         // The company landmark anchors the far side of the island, so the
         // player walks toward it and past it on the way to the next zone.
         // Kept well north of the spawn so it never crowds the opening view.
