@@ -20,7 +20,7 @@ const DATA_URL = new URL('../../data.json', import.meta.url);
 // The education island is handled separately: it is always the graduation cap.
 const STAGE_BY_ZONE = {
     0: 'plain',      // first job — the cap comes off
-    1: 'plain',      // army duties
+    1: 'army',       // Hellenic Army — conscription
     2: 'chains',     // European Dynamics
     3: 'hero',       // Upstream — sword in hand
     4: 'caped',      // Cortical.io — grown, and a cape
@@ -30,6 +30,7 @@ const STAGE_BY_ZONE = {
 
 const STAGE_TOAST = {
     plain: '👕 Cap off — first day on the job.',
+    army: '🪖 Kitted out — national service.',
     chains: '⛓️ Chained to the process.',
     hero: '🗡️ A sword, and the strength to swing it.',
     caped: '🦸 Grown into the cape.',

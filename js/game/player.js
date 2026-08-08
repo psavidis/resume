@@ -159,6 +159,7 @@ export class Player {
         // Costume attachments, built once and toggled by setCostume.
         this.costumes = {
             cap: this._buildCap(this.mounts.head),
+            army: this._buildArmy(this.mounts.head, this.costumeRoot),
             chains: this._buildChains(this.costumeRoot),
             sword: this._buildSword(),
             cape: this._buildCape(this.costumeRoot),
@@ -413,6 +414,115 @@ export class Player {
         return cap;
     }
 
+    // Hellenic Army: the conscription year. A steel helmet on the head and
+    // webbing over the torso — enough to read as "in uniform" without hiding
+    // the character, since the model's own shirt stays visible beneath it.
+    //
+    // Two parts, mounted on different bones: the helmet follows the head, the
+    // webbing follows the hips. `_buildArmy` returns both so setCostume can
+    // toggle them together.
+    _buildArmy(headMount, bodyMount) {
+        const olive = new THREE.MeshLambertMaterial({ color: 0x4a5535 });
+        const oliveDark = new THREE.MeshLambertMaterial({ color: 0x39422a });
+        const webbing = new THREE.MeshLambertMaterial({ color: 0x6b6244 });
+        const brass = new THREE.MeshLambertMaterial({ color: 0xb8923c });
+
+        // --- helmet, on the head bone ---------------------------------------
+        const helmet = new THREE.Group();
+        // Lower than the graduation cap's 0.16: a mortarboard perches on top of
+        // the head, whereas a helmet comes down over the skull to the brow.
+        const HEAD_Y = 0.045;
+
+        const shell = new THREE.Mesh(
+            new THREE.SphereGeometry(0.166, 28, 20, 0, Math.PI * 2, 0, Math.PI * 0.56),
+            olive
+        );
+        shell.position.set(0, HEAD_Y - 0.03, 0.02);
+        shell.scale.set(1.06, 1.0, 1.12);
+        shell.castShadow = true;
+        helmet.add(shell);
+
+        // Brim running round the rim, wider at the back like a real helmet.
+        const brim = new THREE.Mesh(new THREE.TorusGeometry(0.168, 0.026, 8, 24), olive);
+        brim.position.set(0, HEAD_Y - 0.035, 0.02);
+        brim.rotation.x = Math.PI / 2;
+        brim.scale.set(1.06, 1.12, 1);
+        helmet.add(brim);
+
+        // Chin strap.
+        const strap = new THREE.Mesh(new THREE.TorusGeometry(0.15, 0.011, 6, 20, Math.PI), oliveDark);
+        strap.position.set(0, HEAD_Y - 0.12, 0.02);
+        strap.rotation.y = Math.PI / 2;
+        strap.rotation.z = -Math.PI / 2;
+        helmet.add(strap);
+
+        // A small badge on the front.
+        const badge = new THREE.Mesh(new THREE.CircleGeometry(0.026, 12), brass);
+        badge.position.set(0, HEAD_Y + 0.03, 0.2);
+        helmet.add(badge);
+
+        helmet.visible = false;
+        headMount.add(helmet);
+
+        // --- webbing, on the hips -------------------------------------------
+        // Authored in the same feet-origin space as the other body costumes:
+        // hips ≈ 1.04, waist ≈ 1.32, shoulders ≈ 1.81.
+        const gear = new THREE.Group();
+        const WAIST_Y = 1.3;
+
+        // Belt.
+        const belt = new THREE.Mesh(new THREE.TorusGeometry(0.2, 0.028, 8, 24), webbing);
+        belt.position.y = WAIST_Y;
+        belt.rotation.x = Math.PI / 2;
+        belt.scale.set(1.05, 1, 0.82);
+        belt.castShadow = true;
+        gear.add(belt);
+
+        const buckle = new THREE.Mesh(new THREE.BoxGeometry(0.06, 0.05, 0.03), brass);
+        buckle.position.set(0, WAIST_Y, 0.19);
+        gear.add(buckle);
+
+        // Cross straps over both shoulders, meeting at the belt.
+        [-1, 1].forEach((side) => {
+            const strapF = new THREE.Mesh(new THREE.BoxGeometry(0.055, 0.62, 0.025), webbing);
+            strapF.position.set(side * 0.075, WAIST_Y + 0.3, 0.155);
+            strapF.rotation.z = side * 0.16;
+            strapF.rotation.x = -0.12;
+            gear.add(strapF);
+
+            const strapB = new THREE.Mesh(new THREE.BoxGeometry(0.055, 0.62, 0.025), webbing);
+            strapB.position.set(side * 0.075, WAIST_Y + 0.3, -0.145);
+            strapB.rotation.z = side * 0.16;
+            strapB.rotation.x = 0.1;
+            gear.add(strapB);
+        });
+
+        // Ammo pouches on the belt.
+        [-1, 1].forEach((side) => {
+            const pouch = new THREE.Mesh(new THREE.BoxGeometry(0.1, 0.11, 0.06), oliveDark);
+            pouch.position.set(side * 0.14, WAIST_Y - 0.04, 0.15);
+            pouch.castShadow = true;
+            gear.add(pouch);
+        });
+
+        // Canteen on one hip, bedroll across the back.
+        const canteen = new THREE.Mesh(new THREE.CylinderGeometry(0.05, 0.05, 0.1, 12), oliveDark);
+        canteen.position.set(-0.2, WAIST_Y - 0.06, -0.04);
+        canteen.rotation.z = 0.2;
+        gear.add(canteen);
+
+        const bedroll = new THREE.Mesh(new THREE.CylinderGeometry(0.05, 0.05, 0.34, 12), olive);
+        bedroll.position.set(0, WAIST_Y + 0.42, -0.16);
+        bedroll.rotation.z = Math.PI / 2;
+        bedroll.castShadow = true;
+        gear.add(bedroll);
+
+        gear.visible = false;
+        bodyMount.add(gear);
+
+        return { helmet, gear };
+    }
+
     // European Dynamics: chains — shackled wrists, a waist chain and a ball
     // dragging behind. The bureaucratic years, worn literally.
     //
@@ -469,7 +579,7 @@ export class Player {
             );
             belt.position.y = WAIST_Y - i * 0.055;
             belt.rotation.x = Math.PI / 2 + i * 0.1;
-            belt.scale.set(1, 1, 0.78);   // the torso is not circular
+            belt.scale.set(1.05, 1, 0.82);   // the torso is not circular
             chains.add(belt);
             }
         );
@@ -710,7 +820,8 @@ export class Player {
         const c = this.costumes;
         // Default: street clothes, nothing equipped, normal size.
         const on = {
-            cap: false, chains: false, sword: false, cape: false, team: false,
+            cap: false, army: false, chains: false, sword: false, cape: false,
+            team: false,
             extraArms: false, scale: 1
         };
 
@@ -719,6 +830,9 @@ export class Player {
                 on.cap = true;
                 break;
             case 'plain':                      // Intracom — the cap comes off
+                break;
+            case 'army':                       // Hellenic Army — conscription
+                on.army = true;
                 break;
             case 'chains':                     // European Dynamics
                 on.chains = true;
@@ -748,6 +862,8 @@ export class Player {
         }
 
         c.cap.visible = on.cap;
+        c.army.helmet.visible = on.army;
+        c.army.gear.visible = on.army;
         c.chains.visible = on.chains;
         if (this.chainDrag) this.chainDrag.visible = on.chains;
         c.sword.visible = on.sword;

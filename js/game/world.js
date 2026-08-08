@@ -1343,6 +1343,126 @@ export class World {
             bloom.position.set(x, 0.5, z);
             group.add(bloom);
         }
+
+        // --- the squad -------------------------------------------------------
+        // Soldiers posted around the island: two standing guard either side of
+        // the barracks approach, one at ease by the bamboo, and one crouched
+        // behind the sandbags. Built from primitives, in the same flat-shaded
+        // style as the island's other figures.
+        const buildSoldier = (pose) => {
+            const soldier = new THREE.Group();
+            const olive = new THREE.MeshLambertMaterial({ color: 0x4a5535 });
+            const oliveDark = new THREE.MeshLambertMaterial({ color: 0x39422a });
+            const skinS = new THREE.MeshLambertMaterial({ color: 0xd9a878 });
+            const bootMat = new THREE.MeshLambertMaterial({ color: 0x2a2119 });
+            const steel = new THREE.MeshLambertMaterial({ color: 0x4b5058 });
+
+            const torso = new THREE.Mesh(new THREE.CapsuleGeometry(0.26, 0.44, 6, 12), olive);
+            torso.position.y = 1.06;
+            torso.castShadow = true;
+            soldier.add(torso);
+
+            // Webbing across the chest.
+            const belt = new THREE.Mesh(new THREE.TorusGeometry(0.25, 0.028, 6, 16),
+                new THREE.MeshLambertMaterial({ color: 0x6b6244 }));
+            belt.position.y = 0.86;
+            belt.rotation.x = Math.PI / 2;
+            belt.scale.set(1, 1, 0.8);
+            soldier.add(belt);
+
+            const head = new THREE.Mesh(new THREE.SphereGeometry(0.2, 16, 14), skinS);
+            head.position.y = 1.5;
+            head.castShadow = true;
+            soldier.add(head);
+
+            // Steel helmet.
+            const helm = new THREE.Mesh(
+                new THREE.SphereGeometry(0.215, 18, 14, 0, Math.PI * 2, 0, Math.PI * 0.56),
+                olive
+            );
+            helm.position.y = 1.52;
+            helm.scale.set(1.05, 1, 1.1);
+            helm.castShadow = true;
+            soldier.add(helm);
+            const helmBrim = new THREE.Mesh(new THREE.TorusGeometry(0.216, 0.03, 6, 18), olive);
+            helmBrim.position.y = 1.5;
+            helmBrim.rotation.x = Math.PI / 2;
+            helmBrim.scale.set(1.05, 1.1, 1);
+            soldier.add(helmBrim);
+
+            [-1, 1].forEach((side) => {
+                const eye = new THREE.Mesh(new THREE.SphereGeometry(0.028, 8, 6),
+                    new THREE.MeshLambertMaterial({ color: 0x1c1410 }));
+                eye.position.set(side * 0.07, 1.46, 0.185);
+                soldier.add(eye);
+
+                const leg = new THREE.Mesh(new THREE.CapsuleGeometry(0.095, 0.42, 6, 10), oliveDark);
+                leg.position.set(side * 0.11, 0.44, 0);
+                leg.castShadow = true;
+                soldier.add(leg);
+
+                const boot = new THREE.Mesh(new THREE.BoxGeometry(0.15, 0.12, 0.24), bootMat);
+                boot.position.set(side * 0.11, 0.09, 0.04);
+                soldier.add(boot);
+            });
+
+            // Arms, and a rifle held across the body or shouldered.
+            const armAngles = pose === 'guard' ? [0.22, -0.22] : [0.4, -0.32];
+            armAngles.forEach((rz, i) => {
+                const side = i === 0 ? -1 : 1;
+                const arm = new THREE.Mesh(new THREE.CapsuleGeometry(0.08, 0.4, 6, 10), olive);
+                arm.position.set(side * 0.3, 1.02, pose === 'guard' ? 0.05 : 0.02);
+                arm.rotation.z = rz;
+                arm.castShadow = true;
+                soldier.add(arm);
+
+                const hand = new THREE.Mesh(new THREE.SphereGeometry(0.062, 10, 8), skinS);
+                hand.position.set(side * 0.34, 0.76, pose === 'guard' ? 0.09 : 0.03);
+                soldier.add(hand);
+            });
+
+            const rifle = new THREE.Group();
+            const stock = new THREE.Mesh(new THREE.BoxGeometry(0.07, 0.78, 0.05),
+                new THREE.MeshLambertMaterial({ color: 0x5a3f22 }));
+            rifle.add(stock);
+            const barrel = new THREE.Mesh(new THREE.CylinderGeometry(0.018, 0.018, 0.5, 8), steel);
+            barrel.position.y = 0.6;
+            rifle.add(barrel);
+            const mag = new THREE.Mesh(new THREE.BoxGeometry(0.05, 0.16, 0.04), steel);
+            mag.position.set(0, -0.12, 0.06);
+            rifle.add(mag);
+
+            if (pose === 'guard') {
+                // Held diagonally across the chest, at port arms.
+                rifle.position.set(0.16, 1.06, 0.16);
+                rifle.rotation.z = -0.5;
+                rifle.rotation.x = -0.15;
+            } else {
+                // Shouldered, butt down beside the boot.
+                rifle.position.set(0.3, 1.0, -0.04);
+                rifle.rotation.z = 0.12;
+            }
+            rifle.castShadow = true;
+            soldier.add(rifle);
+
+            return soldier;
+        };
+
+        // Positions kept out of the walking corridor (|x| < 4.6) and clear of
+        // the barracks apron to the north.
+        [
+            [-6.2, 2.0, 0.55, 'guard'],
+            [6.4, 2.4, -0.5, 'guard'],
+            [-8.8, -6.0, 1.9, 'rest'],
+            [8.2, -7.2, -2.4, 'rest']
+        ].forEach(([sx, sz, rot, pose]) => {
+            const soldier = buildSoldier(pose);
+            soldier.position.set(sx, 0, sz);
+            soldier.rotation.y = rot;
+            group.add(soldier);
+            this.occluders.push(soldier);
+            this._prop(center, sx, sz, 0.45, 0.45, 1.7);
+        });
     }
 
     // (d) Cortical.io — Vienna. Red-and-white ground (see GROUND_PAINTER) plus a
