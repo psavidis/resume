@@ -978,26 +978,40 @@ class Game {
 // Touch devices get the full immersive treatment on "Enter Island": go
 // fullscreen (hides the browser chrome/URL bar) and lock to landscape, since
 // the game's camera and touch controls are laid out for a wide viewport.
-// Both APIs require a direct user gesture, so this must run synchronously
-// inside the click handler — not after an await.
-function enterFullscreenOnMobile() {
-    const isTouch = window.matchMedia('(hover: none) and (pointer: coarse)').matches;
-    if (!isTouch) return;
+const isTouchDevice = () => window.matchMedia('(hover: none) and (pointer: coarse)').matches;
+const isLandscape = () => window.matchMedia('(orientation: landscape)').matches;
+const isFullscreen = () => !!(document.fullscreenElement || document.webkitFullscreenElement);
 
+function requestFullscreen() {
     const el = document.documentElement;
     const request = el.requestFullscreen || el.webkitRequestFullscreen;
-    const result = request ? request.call(el) : Promise.resolve();
+    if (!request) return Promise.resolve();
+    return Promise.resolve(request.call(el)).catch(() => {});
+}
 
-    Promise.resolve(result)
-        .then(() => {
-            if (screen.orientation && screen.orientation.lock) {
-                return screen.orientation.lock('landscape').catch(() => {});
-            }
-        })
-        .catch(() => {
-            // Fullscreen can be denied (e.g. iOS Safari has no Fullscreen API);
-            // the #rotate-hint overlay covers that case via CSS instead.
-        });
+// The fullscreen request below fires inside the "Enter Island" click, which
+// is the required user gesture — but most phones are still portrait at that
+// moment, and screen.orientation.lock() can't rotate the physical display by
+// itself on Android. Players actually rotate the phone by hand afterward, so
+// we also watch for that: once the device reports landscape, re-request
+// fullscreen if it didn't stick (or got dropped by the OS during rotation).
+function enterFullscreenOnMobile() {
+    if (!isTouchDevice()) return;
+
+    requestFullscreen().then(() => {
+        if (screen.orientation && screen.orientation.lock) {
+            screen.orientation.lock('landscape').catch(() => {});
+        }
+    });
+
+    // Chrome grants a spec-sanctioned exception here: requestFullscreen() may
+    // be called from a user-generated orientationchange handler without a
+    // fresh click/tap gesture.
+    window.addEventListener('orientationchange', () => {
+        if (isTouchDevice() && isLandscape() && !isFullscreen()) {
+            requestFullscreen();
+        }
+    });
 }
 
 // ---- boot ------------------------------------------------------------------
