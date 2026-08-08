@@ -202,6 +202,62 @@ const GROUND_PAINTER = {
     }
 };
 
+// The first Upstream visit (zone index 3): a marble plaza inlaid with a
+// bold orange chevron mosaic, echoing the company's orange upward-arrow
+// mark against white — it doubles as the sanctuary's temple floor for the
+// mythology set dressing that island also carries (see _dressMythology).
+function paintUpstreamGround(ctx, S) {
+    ctx.fillStyle = '#f4f1e8';
+    ctx.fillRect(0, 0, S, S);
+
+    // Marble veining: faint grey-warm streaks under the mosaic.
+    ctx.strokeStyle = 'rgba(150, 140, 120, 0.18)';
+    ctx.lineWidth = 2;
+    for (let i = 0; i < 22; i++) {
+        ctx.beginPath();
+        let x = Math.random() * S;
+        let y = Math.random() * S;
+        ctx.moveTo(x, y);
+        for (let s = 0; s < 5; s++) {
+            x += (Math.random() - 0.5) * 90;
+            y += (Math.random() - 0.5) * 90;
+            ctx.lineTo(x, y);
+        }
+        ctx.stroke();
+    }
+
+    // Stacked chevrons ("^") pointing toward canvas top — the island's north,
+    // the direction the player walks toward the temple — echoing an upward
+    // arrow: wide at the rim, narrowing as they converge toward the centre.
+    const cx = S / 2, cy = S / 2;
+    ctx.strokeStyle = '#e8720c';
+    ctx.lineCap = 'round';
+    ctx.lineJoin = 'round';
+    const rings = 6;
+    for (let r = 0; r < rings; r++) {
+        const t = r / (rings - 1);
+        const width = S * (0.62 - t * 0.42);
+        const depth = S * (0.16 - t * 0.09);
+        const y = cy + S * 0.34 - t * S * 0.48;
+        ctx.lineWidth = 10 - t * 5;
+        ctx.globalAlpha = 0.9 - t * 0.25;
+        ctx.beginPath();
+        ctx.moveTo(cx - width / 2, y);
+        ctx.lineTo(cx, y - depth);
+        ctx.lineTo(cx + width / 2, y);
+        ctx.stroke();
+    }
+    ctx.globalAlpha = 1;
+
+    // Thin orange rim ring near the island edge, tying the mosaic to the
+    // rocky border.
+    ctx.strokeStyle = 'rgba(232, 114, 12, 0.55)';
+    ctx.lineWidth = 6;
+    ctx.beginPath();
+    ctx.arc(cx, cy, S * 0.47, 0, Math.PI * 2);
+    ctx.stroke();
+}
+
 // The second Upstream visit (zone index 6, not keyed by company since
 // "Upstream" is also the first stint's jungle-free grass island): a frozen,
 // snow-and-ice ground to match the chilly atmosphere that island turns to —
@@ -512,10 +568,12 @@ export class World {
 
         // Island disc, slightly domed by scaling a cylinder. A few companies
         // paint their own ground (see GROUND_PAINTER) instead of a flat colour.
-        // The second Upstream visit (index 6) is checked first and by index
-        // rather than company, since "Upstream" also names the unthemed
-        // first stint at index 3.
-        const painter = index === 6 ? paintIceGround : GROUND_PAINTER[exp.company];
+        // Both Upstream visits are checked by index rather than company, since
+        // "Upstream" names both the orange-and-white first stint (index 3)
+        // and the frozen second stint (index 6).
+        const painter = index === 3 ? paintUpstreamGround
+            : index === 6 ? paintIceGround
+            : GROUND_PAINTER[exp.company];
         const groundMat = painter
             ? new THREE.MeshLambertMaterial({ map: makeGroundTexture(painter) })
             : new THREE.MeshLambertMaterial({ color: theme.ground });
@@ -527,11 +585,14 @@ export class World {
         island.receiveShadow = true;
         group.add(island);
 
-        // Rocky rim so the edge does not look like a cut-out. Icy pale-blue
-        // on the second Upstream visit, to match its frozen ground.
+        // Rocky rim so the edge does not look like a cut-out. Burnt-orange
+        // on the first Upstream visit and icy pale-blue on the second, to
+        // match each island's ground.
         const rim = new THREE.Mesh(
             new THREE.TorusGeometry(ZONE_RADIUS - 0.4, 0.7, 6, 32),
-            new THREE.MeshLambertMaterial({ color: index === 6 ? 0xaecbe0 : theme.rock })
+            new THREE.MeshLambertMaterial({
+                color: index === 3 ? 0xe8720c : index === 6 ? 0xaecbe0 : theme.rock
+            })
         );
         rim.rotation.x = Math.PI / 2;
         rim.position.y = -0.3;
@@ -1995,9 +2056,10 @@ export class World {
 
         // Placed just off the walking corridor rather than out at the rim: at
         // the rim the palms screen them and the player walks past a statue they
-        // never see. x ≈ ±6.5 keeps the corridor clear but stays in frame.
-        medusa.position.set(-6.8, plinth(-6.8, -5.5, 2.0), -5.5);
-        medusa.rotation.y = 0.5;
+        // never see. Sits south-east at (9, -9), clear of the totem at
+        // (-9.5, -6.5), the dryad's tree at (7.2, -5.5), and the corridor.
+        medusa.position.set(9, plinth(9, -9, 2.0), -9);
+        medusa.rotation.y = -0.5;
         group.add(medusa);
         this.occluders.push(medusa);
 
