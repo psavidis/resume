@@ -3775,16 +3775,20 @@ export class World {
             group.add(outerCrest);
             this.logoPanels.push(outerCrest);
 
+            // Stacked above the outer crest, on the south face above the exit
+            // steps — the same spot the player already looks toward on the
+            // way out, rather than straight up over the roof where these used
+            // to float unseen.
             const sign = makeLabelSprite(`${edu.degree} · ${edu.fieldOfStudy}`, {
                 fontSize: 34, worldWidth: 8
             });
-            sign.position.set(0, entabY + 4.4, 0);
+            sign.position.set(0, entabY + 4.9, HALF_D + 1.6);
             group.add(sign);
 
             const school = makeLabelSprite(`${edu.school} (${edu.startYear}–${edu.endYear})`, {
                 fontSize: 28, color: '#ffe0a0', bg: 'rgba(40,24,12,0.8)', worldWidth: 9
             });
-            school.position.set(0, entabY + 3.3, 0);
+            school.position.set(0, entabY + 3.7, HALF_D + 1.6);
             group.add(school);
 
             // The education crate sits inside, right where the player starts.
@@ -3805,6 +3809,99 @@ export class World {
         });
         this.scene.add(contact.mesh);
         this.crates.push(contact);
+
+        // A small library along the interior's east side, mirroring the crest
+        // on the west: tall shelves stacked with books, and a reading table
+        // with a couple of open volumes. Purely decorative set dressing, kept
+        // clear of the crates, graduates and the |x| < 5 doorway corridor.
+        const shelfMat = new THREE.MeshLambertMaterial({ color: 0x6b4423 });
+        const bookColors = [0xb0342f, 0x2f5f8a, 0x3f8a4a, 0xc9a227, 0x7a3f8a, 0xd8752f];
+        const buildBookshelf = () => {
+            const shelf = new THREE.Group();
+            const W = 2.6, H = 4.2, D = 0.6;
+
+            // Frame: back panel plus top/bottom/side boards.
+            const back = new THREE.Mesh(new THREE.BoxGeometry(W, H, 0.1), shelfMat);
+            back.position.set(0, H / 2, -D / 2 + 0.05);
+            shelf.add(back);
+            [0, H].forEach((y) => {
+                const board = new THREE.Mesh(new THREE.BoxGeometry(W, 0.1, D), shelfMat);
+                board.position.set(0, y, 0);
+                shelf.add(board);
+            });
+            [-1, 1].forEach((side) => {
+                const side_ = new THREE.Mesh(new THREE.BoxGeometry(0.1, H, D), shelfMat);
+                side_.position.set(side * W / 2, H / 2, 0);
+                shelf.add(side_);
+            });
+
+            // Four shelf boards, each packed with a row of upright books.
+            const shelfCount = 4;
+            for (let s = 1; s < shelfCount; s++) {
+                const y = (H / shelfCount) * s;
+                const board = new THREE.Mesh(new THREE.BoxGeometry(W, 0.08, D), shelfMat);
+                board.position.set(0, y, 0);
+                shelf.add(board);
+            }
+            for (let s = 0; s < shelfCount; s++) {
+                const rowY = (H / shelfCount) * s + 0.08;
+                const rowH = H / shelfCount - 0.14;
+                let bx = -W / 2 + 0.15;
+                let i = 0;
+                while (bx < W / 2 - 0.15) {
+                    const bw = 0.14 + Math.random() * 0.1;
+                    const bh = rowH * (0.75 + Math.random() * 0.22);
+                    const book = new THREE.Mesh(
+                        new THREE.BoxGeometry(bw, bh, D - 0.14),
+                        new THREE.MeshLambertMaterial({ color: bookColors[i % bookColors.length] })
+                    );
+                    book.position.set(bx + bw / 2, rowY + bh / 2, 0);
+                    book.rotation.z = (Math.random() - 0.5) * 0.05;
+                    book.castShadow = true;
+                    shelf.add(book);
+                    bx += bw + 0.03;
+                    i++;
+                }
+            }
+            return shelf;
+        };
+
+        [[HALF_W - 1.2, -3.2, -Math.PI / 2], [HALF_W - 1.2, 3.2, -Math.PI / 2]].forEach(
+            ([sx, sz, rotY]) => {
+                const shelf = buildBookshelf();
+                shelf.position.set(sx, BASE_TOP, sz);
+                shelf.rotation.y = rotY;
+                group.add(shelf);
+                this.occluders.push(shelf);
+                this._prop(center, sx, sz, 1.5, 0.5, 4.2);
+                this.colliders.push({
+                    x: center.x + sx, z: center.z + sz, halfX: 1.4, halfZ: 0.4, top: BASE_TOP + 4.2
+                });
+            }
+        );
+
+        // A reading table between the two shelves, with a couple of books
+        // left open on top.
+        const tableMat = new THREE.MeshLambertMaterial({ color: 0x8a6440 });
+        const table = new THREE.Mesh(new THREE.BoxGeometry(2.0, 0.12, 1.1), tableMat);
+        table.position.set(HALF_W - 3.2, BASE_TOP + 0.75, 0);
+        table.castShadow = true;
+        group.add(table);
+        [[-0.7, 0], [0.7, 0]].forEach(([lx, lz]) => {
+            const leg = new THREE.Mesh(new THREE.CylinderGeometry(0.06, 0.06, 0.75, 6), tableMat);
+            leg.position.set(HALF_W - 3.2 + lx, BASE_TOP + 0.375, lz);
+            group.add(leg);
+        });
+        bookColors.slice(0, 2).forEach((color, i) => {
+            const openBook = new THREE.Mesh(
+                new THREE.BoxGeometry(0.5, 0.05, 0.36),
+                new THREE.MeshLambertMaterial({ color })
+            );
+            openBook.position.set(HALF_W - 3.2 + (i - 0.5) * 0.6, BASE_TOP + 0.84, 0.1);
+            openBook.rotation.y = (Math.random() - 0.5) * 0.6;
+            group.add(openBook);
+        });
+        this._prop(center, HALF_W - 3.2, 0, 1.2, 0.8, 1.3);
 
         // Fellow graduates milling around the colonnade — capped and gowned,
         // destructible like the cat and the giant rather than lore-bearing.
