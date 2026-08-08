@@ -299,11 +299,17 @@ class Game {
     }
 
     _initTouch() {
-        // Virtual stick for touch devices: drag anywhere on the right half.
-        // Movement lives on the right so the thumb steering the character
-        // doesn't collide with the jump/attack/camera cluster on the left.
+        // Virtual stick for touch devices: a fixed circle anchored
+        // bottom-left (see #stick's CSS) for the left thumb, matching a
+        // console-style on-screen joystick rather than the old drag-anywhere
+        // version. Any touch starting in the left half controls it — the
+        // thumb doesn't have to land exactly inside the drawn circle, but
+        // the knob itself always stays visually within it, clamped to its
+        // radius, so the stick never looks like it's drifted off to wherever
+        // the finger happened to land.
         const stick = document.getElementById('stick');
         const knob = document.getElementById('stick-knob');
+        const KNOB_RADIUS = 36; // stick radius (60) minus half the knob (24)
         this.touchDir = { x: 0, z: 0 };
         let activeId = null;
         let origin = { x: 0, y: 0 };
@@ -312,12 +318,11 @@ class Game {
 
         host.addEventListener('touchstart', (e) => {
             for (const t of e.changedTouches) {
-                if (t.clientX >= window.innerWidth / 2 && activeId === null) {
+                if (t.clientX < window.innerWidth / 2 && activeId === null) {
                     activeId = t.identifier;
                     origin = { x: t.clientX, y: t.clientY };
-                    stick.style.left = `${t.clientX}px`;
-                    stick.style.top = `${t.clientY}px`;
-                    stick.classList.add('visible');
+                    knob.classList.add('dragging');
+                    stick.classList.add('active');
                 }
             }
         }, { passive: true });
@@ -329,8 +334,9 @@ class Game {
                 const dy = t.clientY - origin.y;
                 const dist = Math.min(Math.hypot(dx, dy), 50);
                 const angle = Math.atan2(dy, dx);
+                const knobDist = Math.min(dist, KNOB_RADIUS);
                 knob.style.transform =
-                    `translate(${Math.cos(angle) * dist - 22}px, ${Math.sin(angle) * dist - 22}px)`;
+                    `translate(${Math.cos(angle) * knobDist - 24}px, ${Math.sin(angle) * knobDist - 24}px)`;
                 this.touchDir.x = Math.cos(angle) * (dist / 50);
                 this.touchDir.z = Math.sin(angle) * (dist / 50);
             }
@@ -341,12 +347,15 @@ class Game {
                 if (t.identifier !== activeId) continue;
                 activeId = null;
                 this.touchDir = { x: 0, z: 0 };
-                knob.style.transform = 'translate(-22px, -22px)';
-                stick.classList.remove('visible');
+                knob.classList.remove('dragging');
+                knob.style.transform = 'translate(-24px, -24px)';
+                stick.classList.remove('active');
             }
         };
         host.addEventListener('touchend', endTouch, { passive: true });
         host.addEventListener('touchcancel', endTouch, { passive: true });
+
+        this._initPinchZoom(host);
 
         // The jump button is also the flight throttle: tapping it jumps as
         // normal, but main.js reads `touchJumpHeld` every frame to climb
@@ -382,6 +391,52 @@ class Game {
         };
         holdRotate(document.getElementById('btn-cam-left'), 1);
         holdRotate(document.getElementById('btn-cam-right'), -1);
+    }
+
+    // Pinch-to-zoom: the standard mobile gesture for "get closer / pull
+    // back", so it needs no dedicated on-screen button the way jump/attack
+    // do — two fingers anywhere on the canvas, spread apart to zoom in,
+    // pinch together to zoom out. Shown once via #pinch-hint the first time
+    // a second finger joins a touch already in progress, then never again
+    // (a flag in localStorage, since it's a one-time "here's how" cue rather
+    // than state the game itself needs to remember).
+    _initPinchZoom(host) {
+        let pinchStartDist = null;
+        let pinchStartZoom = 1;
+        const hint = document.getElementById('pinch-hint');
+        const HINT_KEY = 'resumeIslandPinchHintShown';
+
+        const touchDist = (touches) => {
+            const [a, b] = touches;
+            return Math.hypot(a.clientX - b.clientX, a.clientY - b.clientY);
+        };
+
+        host.addEventListener('touchstart', (e) => {
+            if (e.touches.length !== 2) return;
+            pinchStartDist = touchDist(e.touches);
+            pinchStartZoom = this.cameraZoomTarget;
+
+            if (!localStorage.getItem(HINT_KEY)) {
+                hint.classList.add('visible');
+                localStorage.setItem(HINT_KEY, '1');
+                setTimeout(() => hint.classList.remove('visible'), 2200);
+            }
+        }, { passive: true });
+
+        host.addEventListener('touchmove', (e) => {
+            if (e.touches.length !== 2 || pinchStartDist === null) return;
+            // Fingers spreading apart (ratio > 1) zooms in — smaller camera
+            // distance — matching the "pull the view closer" gesture used
+            // everywhere else (maps, photos); pinching together zooms out.
+            const ratio = touchDist(e.touches) / pinchStartDist;
+            this.cameraZoomTarget = THREE.MathUtils.clamp(pinchStartZoom / ratio, ZOOM_MIN, ZOOM_MAX);
+        }, { passive: true });
+
+        const endPinch = (e) => {
+            if (e.touches.length < 2) pinchStartDist = null;
+        };
+        host.addEventListener('touchend', endPinch, { passive: true });
+        host.addEventListener('touchcancel', endPinch, { passive: true });
     }
 
     _onResize() {

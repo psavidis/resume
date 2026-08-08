@@ -469,39 +469,48 @@
         }
 
         /* ---- touch controls ---- */
+        /* Joystick: a fixed circle anchored bottom-left, for the left thumb —
+           always visible and always in the same spot (unlike the old
+           drag-anywhere version), the way a console-style virtual stick
+           works. The knob re-centres with a spring-back transition on
+           release; while dragging that transition is switched off in JS so
+           it tracks the finger with no lag. */
         #stick {
             position: fixed;
-            width: 0; height: 0;
+            left: max(28px, env(safe-area-inset-left));
+            bottom: max(28px, env(safe-area-inset-bottom));
+            width: 120px; height: 120px;
             z-index: 11;
+            display: none;
             pointer-events: none;
-            opacity: 0;
-            transition: opacity 0.15s;
+            touch-action: none;
         }
-        #stick.visible { opacity: 1; }
         #stick::before {
             content: "";
             position: absolute;
-            width: 110px; height: 110px;
-            transform: translate(-55px, -55px);
+            inset: 0;
             border-radius: 50%;
             border: 3px solid rgba(255, 255, 255, 0.4);
-            background: rgba(0, 0, 0, 0.2);
+            background: rgba(0, 0, 0, 0.22);
         }
+        #stick.active::before { border-color: rgba(255, 200, 120, 0.75); }
         #stick-knob {
             position: absolute;
-            width: 44px; height: 44px;
+            width: 48px; height: 48px;
+            left: 50%; top: 50%;
             border-radius: 50%;
             background: rgba(255, 200, 120, 0.85);
-            transform: translate(-22px, -22px);
+            transform: translate(-24px, -24px);
+            transition: transform 0.15s ease-out;
         }
+        #stick-knob.dragging { transition: none; }
 
-        /* Action buttons (jump/attack) sit bottom-left, opposite the joystick,
-           so both thumbs have a natural resting spot on a phone held in
-           landscape. Camera-rotate buttons stack above them, out of the way
-           of the thumb doing the jump/attack presses. */
+        /* Action buttons (jump/attack) sit bottom-right for the right thumb.
+           Camera-rotate buttons stack just above them, out of the way of the
+           thumb doing the jump/attack presses. */
         #touch-buttons {
             position: fixed;
-            left: 20px;
+            right: 20px;
             bottom: 28px;
             display: none;
             align-items: flex-end;
@@ -526,7 +535,7 @@
 
         #touch-camera {
             position: fixed;
-            left: 20px;
+            right: 20px;
             bottom: 122px;
             display: none;
             gap: 10px;
@@ -548,31 +557,59 @@
         }
         #touch-camera button:active { background: rgba(255, 180, 74, 0.7); }
 
-        /* The joystick anchors to wherever the right thumb first touches, so it
-           is not pinned to a fixed spot — see #stick's JS-driven left/top. */
+        /* A brief on-screen cue for the pinch-to-zoom gesture, shown once on
+           first touch and then never again (see main.js's localStorage flag).
+           Not a control itself — just points at the gesture, since a pinch
+           has no permanent on-screen affordance the way a button does. */
+        #pinch-hint {
+            position: fixed;
+            left: 50%; top: 50%;
+            transform: translate(-50%, -50%);
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+            padding: 14px 20px;
+            border-radius: 14px;
+            background: rgba(20, 12, 8, 0.72);
+            border: 2px solid rgba(255, 200, 120, 0.5);
+            color: #fff;
+            font-size: 13px;
+            font-weight: 700;
+            text-align: center;
+            z-index: 15;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+        #pinch-hint.visible { opacity: 1; }
+        #pinch-hint .icon { font-size: 28px; }
+
         @media (hover: none) and (pointer: coarse) {
-            #touch-buttons, #touch-camera { display: flex; }
+            #stick, #touch-buttons, #touch-camera { display: flex; }
             #controls { display: none; }
             #zone-label { max-width: 34vw; font-size: 12px; }
             #hud { padding: max(10px, env(safe-area-inset-top)) 12px 0; }
             .counter { padding: 6px 10px; font-size: 13px; }
             #song-title { max-width: 30vw; font-size: 11px; }
             #touch-buttons {
-                left: max(16px, env(safe-area-inset-left));
+                right: max(16px, env(safe-area-inset-right));
                 bottom: max(20px, env(safe-area-inset-bottom));
             }
             #touch-camera {
-                left: max(16px, env(safe-area-inset-left));
+                right: max(16px, env(safe-area-inset-right));
                 bottom: calc(114px + env(safe-area-inset-bottom));
             }
         }
 
-        /* Small phones in portrait: shrink the action buttons a touch so the
-           whole cluster stays clear of the joystick's reach on the right. */
+        /* Small phones in portrait: shrink the action buttons and joystick a
+           touch so the whole layout stays comfortably reachable. */
         @media (hover: none) and (pointer: coarse) and (max-width: 480px) {
             #touch-buttons button { width: 62px; height: 62px; font-size: 10.5px; }
             #touch-camera button { width: 44px; height: 44px; font-size: 16px; }
             #touch-camera { bottom: 98px; }
+            #stick { width: 100px; height: 100px; }
+            #stick-knob { width: 42px; height: 42px; transform: translate(-21px, -21px); }
         }
     </style>
 </head>
@@ -613,6 +650,11 @@
 <div id="touch-buttons">
     <button id="btn-spin">ATTACK</button>
     <button id="btn-jump">JUMP</button>
+</div>
+
+<div id="pinch-hint">
+    <span class="icon">🤏</span>
+    <span>Pinch to zoom</span>
 </div>
 
 <div id="modal">
