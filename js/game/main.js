@@ -250,11 +250,14 @@ class Game {
             // Let the browser keep its own shortcuts (reload, devtools, ...).
             if (e.metaKey || e.ctrlKey || e.altKey) return;
 
-            if (e.code === 'Escape' && this.ui.isOpen) {
-                this.ui.closeModal();
+            if (this.ui.isOpen) {
+                // Jump/attack double as "close" so a keyboard-only player never
+                // needs the mouse to dismiss a crate's page.
+                if (['Escape', 'Space', 'ShiftLeft', 'ShiftRight', 'KeyE'].includes(e.code)) {
+                    this.ui.closeModal();
+                }
                 return;
             }
-            if (this.ui.isOpen) return;
 
             if (['Space', 'ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(e.code)) {
                 e.preventDefault();
