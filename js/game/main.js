@@ -65,7 +65,7 @@ const STAGE_BY_ZONE = {
 const STAGE_TOAST = {
     plain: '👕 Cap off — first day on the job.',
     army: '🪖 Kitted out — national service.',
-    chains: '⛓️ Chained to the process.',
+    chains: '⛓️ The moon is my witness.',
     hero: '🗡️ A sword, and the strength to swing it.',
     caped: '🦸 Grown into the cape.',
     fourArms: '🖐️ Four arms — twice the throughput.',
@@ -86,14 +86,14 @@ function trackUrl(filename) {
 const ZONE_TRACK = {
     0: { url: trackUrl("2. Morning Quest.mp3"), name: 'Morning Quest' },
     1: { url: trackUrl("3. Steel March.mp3"), name: 'Steel March' },
-    2: { url: trackUrl("4. Dark Eclipse.mp3"), name: 'Dark Eclipse' },
+    2: { url: trackUrl("4. Dark Eclipse.mp3"), name: 'Eclipsis' },
     3: { url: trackUrl("5. An Ancient Adventure.mp3"), name: 'An Ancient Adventure' },
     4: { url: trackUrl("6. Red-White Scherzo.mp3"), name: 'Red-White Scherzo' },
-    5: { url: trackUrl("7. German Staccato.mp3"), name: 'German Staccato' },
+    5: { url: trackUrl("7. German Staccato.mp3"), name: 'The Staccato of Prussia' },
     6: { url: trackUrl("8. The Aegean Run.mp3"), name: 'The Aegean Run' }
 };
 const EDU_TRACK = { url: trackUrl("1. Apollo's Temple.mp3"), name: "Apollo's Temple" };
-const MAIN_THEME = { url: trackUrl('Skybridge of Names (Main Theme).mp3'), name: 'Skybridge of Names' };
+const MAIN_THEME = { url: trackUrl('Skybridge of Names (Main Theme).mp3'), name: 'Skybridge' };
 const OUTRO_TRACK = { url: trackUrl('Lanterns at Dusk (Outro).mp3'), name: 'Lanterns at Dusk' };
 
 class Game {
@@ -147,6 +147,7 @@ class Game {
         this.ui = new UI(document.body);
         this.audio = new GameAudio();
         this.pendingPayloads = [];
+        this.bullets = []; // live rifle rounds, see _fireBullet / _updateBullets
         this.ui.onClose = () => {
             this.audio.resume();
             // Show the next queued page, if an attack broke more than one crate.
@@ -395,43 +396,85 @@ class Game {
         };
     }
 
-    // Wraps player.startAttack so a shot fired with the army costume gets
-    // exactly one hitscan check at the moment it's fired, rather than the
-    // proximity check every other style gets every frame in
-    // _updateInteractions — a gunshot hits (or doesn't) instantly down a
-    // line, it doesn't linger like a sword's swing.
+    // Wraps player.startAttack so a shot fired with the army costume spawns
+    // a real bullet at the moment it's fired, rather than the proximity
+    // check every other style gets every frame in _updateInteractions — the
+    // rifle throws a round downrange, not itself.
     _triggerAttack() {
         if (!this.player.startAttack(this.audio)) return;
-        if (this.player._attackStyle === 'gun') this._fireHitscan();
+        if (this.player._attackStyle === 'gun') this._fireBullet();
     }
 
-    // Instant hit check in a forward cone from the player, out to a fixed
-    // range — the "hitscan" for the rifle. Breaks the single nearest crate
-    // or NPC in that cone, same breakage/scoring path a melee hit uses.
-    _fireHitscan() {
-        const RANGE = 9;
-        const HALF_ANGLE = Math.PI / 7; // ~25.7°, a forgiving but directional cone
-        const pos = this.player.position;
-        const fx = Math.sin(this.player.facing);
-        const fz = Math.cos(this.player.facing);
+    // Spawns a small travelling round at the rifle's muzzle, aimed along the
+    // player's facing. _updateBullets moves it forward every frame and culls
+    // it on the first hit or once it's travelled BULLET_RANGE.
+    _fireBullet() {
+        if (!this._bulletGeo) {
+            this._bulletGeo = new THREE.CapsuleGeometry(0.035, 0.14, 4, 6);
+            this._bulletMat = new THREE.MeshBasicMaterial({ color: 0xfff3c4 });
+        }
+        const mesh = new THREE.Mesh(this._bulletGeo, this._bulletMat);
 
+        // Spawn centred on the player's own facing line, not the rifle's
+        // true (visually offset-to-the-side) muzzle transform — a bullet
+        // that starts from the actual muzzle travels parallel to, but never
+        // converging on, the centreline the player is aiming down, so it
+        // quietly missed anything directly ahead at any range. Chest-height
+        // and a step ahead of the player reads the same as "coming from the
+        // gun" without inheriting that offset.
+        const dir = new THREE.Vector3(Math.sin(this.player.facing), 0, Math.cos(this.player.facing));
+        const origin = this.player.position.clone()
+            .addScaledVector(dir, 0.6)
+            .setY(this.player.position.y + 1.3);
+        mesh.position.copy(origin);
+        // Capsules are authored along Y; rotate so the bullet's length lies
+        // along its direction of travel instead of standing straight up.
+        mesh.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), dir);
+        this.scene.add(mesh);
+
+        this.bullets.push({ mesh, dir, travelled: 0 });
+    }
+
+    // Advances every live bullet, checking crates/NPCs along the way — same
+    // breakage/scoring path a melee hit uses, just triggered by the bullet's
+    // current position each frame instead of the player's.
+    _updateBullets(dt) {
+        const SPEED = 34;
+        const RANGE = 26;
+        const HIT_RADIUS = 0.55;
+
+        for (let i = this.bullets.length - 1; i >= 0; i--) {
+            const b = this.bullets[i];
+            b.mesh.position.addScaledVector(b.dir, SPEED * dt);
+            b.travelled += SPEED * dt;
+
+            const hit = this._bulletHitTest(b.mesh.position, HIT_RADIUS);
+            if (hit) {
+                this._breakTarget(hit);
+                this.scene.remove(b.mesh);
+                this.bullets.splice(i, 1);
+                continue;
+            }
+            if (b.travelled > RANGE) {
+                this.scene.remove(b.mesh);
+                this.bullets.splice(i, 1);
+            }
+        }
+    }
+
+    // Nearest unbroken crate or NPC within HIT_RADIUS of a bullet's current
+    // position, or null. 2D distance (matches every other hit test in this
+    // file), so a shot can't dodge by height alone.
+    _bulletHitTest(pos, radius) {
         let best = null;
         let bestDist = Infinity;
         const consider = (target, x, z) => {
-            const dx = x - pos.x;
-            const dz = z - pos.z;
-            const dist = Math.hypot(dx, dz);
-            if (dist < 0.01 || dist > RANGE) return;
-            // Angle between the forward vector and the direction to the target.
-            const angle = Math.acos(THREE.MathUtils.clamp((dx * fx + dz * fz) / dist, -1, 1));
-            if (angle > HALF_ANGLE) return;
-            if (dist < bestDist) { bestDist = dist; best = target; }
+            const dist = Math.hypot(x - pos.x, z - pos.z);
+            if (dist > radius || dist >= bestDist) return;
+            bestDist = dist;
+            best = target;
         };
-
         for (const crate of this.world.crates) {
-            // Metal (spinOnly) crates shrug off a walk-into but do break
-            // under an actual attack, same as a melee hit — see
-            // _updateInteractions's identical exception.
             if (crate.broken) continue;
             consider(crate, crate.position.x, crate.position.z);
         }
@@ -439,22 +482,27 @@ class Game {
             if (npc.broken) continue;
             consider(npc, npc.position.x, npc.position.z);
         }
-        if (!best) return;
+        return best;
+    }
 
-        if (best instanceof Crate) {
-            best.break(this.scene);
+    // Shared "break whatever the shot hit" path — a Crate goes through its
+    // normal break/score/payload flow, an NPC just gets flagged broken (its
+    // own collapse animation picks up from there, see World._updateNPCs).
+    _breakTarget(target) {
+        if (target instanceof Crate) {
+            target.break(this.scene);
             this.cratesBroken++;
             this.audio.crateBreak();
             this.ui.setCounts(
                 this.cratesBroken, this.world.totalCrates,
                 this.fruitsCollected, this.world.totalFruits
             );
-            if (best.payload) {
-                if (this.ui.isOpen) this.pendingPayloads.push(best.payload);
-                else this.ui.openModal(this.ui.render(best.payload));
+            if (target.payload) {
+                if (this.ui.isOpen) this.pendingPayloads.push(target.payload);
+                else this.ui.openModal(this.ui.render(target.payload));
             }
         } else {
-            best.broken = true;
+            target.broken = true;
             this.audio.crateBreak();
         }
     }
@@ -467,9 +515,9 @@ class Game {
             if (!crate.intersectsPlayer(pos, this.player.radius)) continue;
 
             // Melee styles only land during isHitting's short window around
-            // the swing/punch's peak (gun is handled separately as a
-            // hitscan — see _fireHitscan, fired once per shot from
-            // startAttack rather than checked every frame here).
+            // the swing/punch's peak (gun is handled separately — a real
+            // bullet travels out from _fireBullet and is checked against
+            // targets every frame in _updateBullets, not here).
             const attacking = this.player.isHitting && this.player._attackStyle !== 'gun';
             // Falling onto a crate breaks it too — the classic bonk.
             const stomping = this.player.velocity.y < -1 &&
@@ -833,6 +881,7 @@ class Game {
 
             this._respawnIfDrowned();
             this._updateInteractions();
+            this._updateBullets(dt);
             this._updateZoneLabel();
             this._updateAtmosphere(dt);
             this.world.update(dt, this.elapsed);

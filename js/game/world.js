@@ -387,7 +387,7 @@ export class World {
         this.data = data;
         this.crates = [];
         this.fruits = [];
-        this.npcs = [];         // destructible set-dressing figures (soldiers excluded — decorative only)
+        this.npcs = [];         // destructible set-dressing figures (the cat, the giant, graduates, soldiers)
         this.zones = [];
         this.colliders = [];   // static boxes the player cannot walk through
         this.platforms = [];   // walkable surfaces {x,z,radius,y} for ground height
@@ -1600,6 +1600,7 @@ export class World {
             group.add(soldier);
             this.occluders.push(soldier);
             this._prop(center, sx, sz, 0.45, 0.45, 1.7);
+            this._registerNPC(soldier, center.x + sx, center.z + sz, 0.6, 1.7);
         });
     }
 
@@ -2235,11 +2236,25 @@ export class World {
         });
     }
 
-    // A moon hung high above the island, out past the landmark so it never
-    // clips through it. Dark-by-day like the lanterns, faded in by
-    // Game._updateAtmosphere via this.moon — not part of the shared sky
-    // sphere, which is one global mesh seen from every island and would
-    // otherwise put the moon over the whole chain, not just this one.
+    // A moon hung in the sky ahead of the island. Dark-by-day like the
+    // lanterns, faded in by Game._updateAtmosphere via this.moon — not part
+    // of the shared sky sphere, which is one global mesh seen from every
+    // island and would otherwise put the moon over the whole chain, not just
+    // this one.
+    //
+    // Placement went through two wrong guesses before this one, both caught
+    // by actually projecting the moon's world position through the chase
+    // camera's real matrix instead of eyeballing a screenshot:
+    //   1. Well north and low — outside the camera's view almost entirely,
+    //      since that direction wasn't where the camera happened to look.
+    //   2. Almost directly overhead — the chase camera sits only ~7.5 units
+    //      above the player at a fairly shallow downward pitch (13 units
+    //      back, looking near player-eye-height), so "straight up" needs a
+    //      deliberate look-up the default framing never does; projecting
+    //      that position landed far outside the ±1 NDC viewport.
+    // The camera's resting yaw looks toward +z (see _updateCamera's offset),
+    // so due north and at a moderate height — ahead of the player, not
+    // overhead — is what actually lands inside the default view.
     _buildMoon(center) {
         const moon = new THREE.Group();
         // MeshBasicMaterial is unlit, so its own colour is what shows — pale
@@ -2247,26 +2262,33 @@ export class World {
         // rather than the colour (fading colour toward pale would make it
         // look like a dim grey ball by day instead of simply invisible).
         const body = new THREE.Mesh(
-            new THREE.SphereGeometry(9, 20, 16),
-            new THREE.MeshBasicMaterial({ color: 0xf4f2ea, fog: false, transparent: true, opacity: 0 })
+            new THREE.SphereGeometry(6, 20, 16),
+            new THREE.MeshBasicMaterial({ color: 0xf4f2ea, fog: false, transparent: true, opacity: 0, depthTest: false })
         );
+        body.renderOrder = 999; // always drawn over terrain/props at this distance
         moon.add(body);
         this.moonBody = body;
 
         // A soft halo behind it reads better against the sky than a flat disc.
         const halo = new THREE.Mesh(
-            new THREE.SphereGeometry(13, 16, 12),
+            new THREE.SphereGeometry(9, 16, 12),
             new THREE.MeshBasicMaterial({
                 color: 0xdfe8ff, fog: false, transparent: true, opacity: 0,
-                side: THREE.BackSide
+                side: THREE.BackSide, depthTest: false
             })
         );
+        halo.renderOrder = 998;
         moon.add(halo);
         this.moonHalo = halo;
 
-        // North of the island (away from the south approach) and high up,
-        // far enough out that walking across the island barely parallaxes it.
-        moon.position.set(center.x + 40, 95, center.z + 130);
+        // Deliberately right at the top edge of the default view (verified
+        // by projecting through the camera's actual matrix at the default
+        // resting yaw — lands at NDC y ≈ 0.94-1.0, the very top of the ±1
+        // viewport): barely visible without the player doing anything, and
+        // clearly in frame the moment they rotate the camera or the chase
+        // angle shifts, rather than either hidden entirely or sitting
+        // obviously centred no matter where they look.
+        moon.position.set(center.x, 10, center.z + 45);
         this.scene.add(moon);
         this.moon = moon;
     }

@@ -705,18 +705,20 @@ export class Player {
         sword.add(pommel);
 
         // Seated in the fist. The mount is already on the PalmR bone, so the
-        // grip sits at the origin — the old -0.62 offset was a hangover from
-        // the primitive body and floated the sword a full arm's length away.
+        // grip sits at the origin.
         //
-        // PalmR's local axes run down the arm, so the sword needs most of a
-        // half-turn about x to bring the blade up — but rotating about x alone
-        // sweeps it inward across the chest, because the arm hangs at the side.
-        // Searched all three axes on this rig for a pose that points the blade
-        // up while keeping it clear of the torso: (-2.4, 1.2, -1.2) gives 0.81
-        // up with 0.74 clearance, against 0.44 for the best x-only angle. The
-        // result is a blade carried up and out from the shoulder.
+        // This rotation was re-derived by sampling the bone's actual world
+        // orientation through the SwordSlash clip (not just its rest pose):
+        // the previous fixed angle was tuned only against the idle frame, so
+        // it looked fine standing still but the blade swung to point back
+        // over the shoulder — hitting handle-first — partway through the
+        // swing, since the hand rotates a lot more than the idle pose alone
+        // suggested. (0, 0, π/2) keeps the blade tip pointing forward
+        // (world +Z, ahead of the player) at the swing's start, middle and
+        // end alike, measured by transforming the blade tip through the
+        // sword's matrixWorld at each point in the clip.
         sword.position.set(0, -0.02, 0.02);
-        sword.rotation.set(-2.4, 1.2, -1.2);
+        sword.rotation.set(0, 0, Math.PI / 2);
         sword.visible = false;
         return sword;
     }
@@ -1202,25 +1204,22 @@ export class Player {
             });
         }
 
-        // Firing kicks the rifle back toward the shoulder and lets it settle
-        // forward again — a recoil, not the old forward lunge (which read as
-        // throwing the gun rather than shooting it). This is a local offset
-        // on top of whatever bone the mount is attached to, so it layers
-        // cleanly over the mixer-driven arm rather than fighting it.
+        // Firing no longer moves the rifle itself — a position-offset
+        // "recoil" on the hand mount read as the whole gun being thrown
+        // forward and yanked back, not fired. The rifle now stays put in the
+        // hand; the muzzle flash is the only thing that animates, and the
+        // bullet (spawned once in main.js's _fireBullet) carries the actual
+        // sense of a shot going out.
         if (this.attackTimer > 0 && this._attackStyle === 'gun') {
             const t = (this._attackDuration - this.attackTimer) / this._attackDuration;
-            // Snaps back fast (the shot), eases forward again (the recovery).
-            const recoil = t < 0.25 ? t / 0.25 : Math.max(0, 1 - (t - 0.25) / 0.75);
-            this.mounts.handR.position.z = -recoil * 0.16;
-            // Flash only for the instant of the shot itself, not the recovery.
             if (this.muzzleFlash) {
                 this.muzzleFlash.visible = t < 0.12;
                 this.muzzleFlash.rotation.y = t * 30; // flickers between frames
             }
-        } else {
-            if (this.muzzleFlash) this.muzzleFlash.visible = false;
-            this.mounts.handR.position.z = THREE.MathUtils.damp(this.mounts.handR.position.z, 0, 14, dt);
+        } else if (this.muzzleFlash) {
+            this.muzzleFlash.visible = false;
         }
+        this.mounts.handR.position.z = THREE.MathUtils.damp(this.mounts.handR.position.z, 0, 14, dt);
 
         // Squash and stretch on jumps and landings, applied to the whole body.
         this.squash = THREE.MathUtils.damp(this.squash, 1, 9, dt);
