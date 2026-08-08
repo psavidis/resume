@@ -1067,6 +1067,12 @@ async function boot() {
     const soundActions = document.getElementById('sound-actions');
     const enterActions = document.getElementById('enter-actions');
     const chooseSound = (wantsMusic) => {
+        // Fired here, on the first tap of the title screen, rather than on
+        // "Enter Island": that gives fullscreen/orientation-lock a full
+        // screen's worth of time to settle before gameplay starts, instead
+        // of colliding with the loading screen's fade-out and producing a
+        // jarring flash right as the game becomes visible.
+        enterFullscreenOnMobile();
         if (wantsMusic) {
             game.playMainTheme();
             game.audio.start();
@@ -1078,7 +1084,6 @@ async function boot() {
     document.getElementById('sound-muted').addEventListener('click', () => chooseSound(false));
 
     document.getElementById('enter-btn').addEventListener('click', () => {
-        enterFullscreenOnMobile();
         game.releaseTitleScreen();
         loading.classList.add('hidden');
     });

@@ -327,15 +327,24 @@
             inset: 0;
             background: radial-gradient(circle at 50% 35%, #2a6ba8, #0e2d52);
             display: flex;
-            align-items: center;
             justify-content: center;
             z-index: 30;
             transition: opacity 0.6s ease, visibility 0.6s;
             padding: 20px;
+            /* On short viewports (landscape phones, especially with the
+               browser's URL bar still eating vertical space) the centered
+               content can be taller than the screen. `align-items: safe
+               center` would be the tidy fix but only Safari 18+ supports
+               `safe`; older engines treat it as invalid and silently fall
+               back to plain `center`, which clips the title off the top
+               once content overflows. `margin: auto` on the child (below)
+               gets the same "center when it fits, pin to the top and
+               scroll when it doesn't" behavior on every engine. */
+            overflow-y: auto;
         }
         #loading.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
 
-        .load-inner { text-align: center; max-width: 560px; }
+        .load-inner { text-align: center; max-width: 560px; margin: auto; }
         .load-inner h1 {
             font-size: clamp(30px, 7vw, 52px);
             font-weight: 900;
