@@ -923,14 +923,13 @@ class Game {
             return;
         }
 
-        // Already flying: landing is only allowed back over Vienna. Elsewhere
-        // the player can descend freely but simply won't touch down — the
-        // island passes underneath like scenery, exactly as requested.
-        if (this._overFlightIsland()) {
-            const ground = this.world.groundHeightAt(this.player.position.x, this.player.position.z);
-            if (ground !== null && this.player.position.y <= ground + 0.5) {
-                this.player.stopFlying();
-            }
+        // Already flying: the player can land on any island (or the ground
+        // beneath them generally), not just the one flight launched from —
+        // groundHeightAt covers all islands, the same lookup normal
+        // non-flying ground contact uses.
+        const ground = this.world.groundHeightAt(this.player.position.x, this.player.position.z);
+        if (ground !== null && this.player.position.y <= ground + 0.5) {
+            this.player.stopFlying();
         }
     }
 

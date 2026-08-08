@@ -106,30 +106,48 @@ function makeSignTexture(titleText, subtitleText) {
     ctx.lineWidth = 12;
     ctx.strokeRect(18, 18, W - 36, H - 36);
 
-    // Shrink the title until it fits the plank width.
-    let fontSize = 92;
+    // Recessed plaque behind the text: a flat, near-black panel so the wood
+    // grain lines (drawn above) never cross a letter — without this, a grain
+    // curve running through the middle of the board reads as a stroke
+    // through the text and makes names hard to pick out at a glance.
+    const plaqueX = 60, plaqueY = 34, plaqueW = W - 120, plaqueH = H - 68;
+    ctx.fillStyle = 'rgba(25, 15, 6, 0.78)';
+    ctx.beginPath();
+    ctx.roundRect(plaqueX, plaqueY, plaqueW, plaqueH, 14);
+    ctx.fill();
+    ctx.strokeStyle = 'rgba(255, 220, 160, 0.35)';
+    ctx.lineWidth = 3;
+    ctx.stroke();
+
+    // Shrink the title until it fits the plaque width, with margin so
+    // letters never reach the plaque's own edge.
+    const textMax = plaqueW - 80;
+    let fontSize = 88;
     ctx.textAlign = 'center';
     do {
         ctx.font = `bold ${fontSize}px system-ui, -apple-system, sans-serif`;
         fontSize -= 2;
-    } while (ctx.measureText(titleText).width > W - 90 && fontSize > 26);
+    } while (ctx.measureText(titleText).width > textMax && fontSize > 26);
 
     ctx.textBaseline = 'middle';
-    ctx.fillStyle = '#3a2008';
-    ctx.fillText(titleText, W / 2 + 3, H * 0.38 + 4); // carved shadow
+    ctx.lineJoin = 'round';
+    ctx.lineWidth = 6;
+    ctx.strokeStyle = 'rgba(0, 0, 0, 0.6)';
+    ctx.strokeText(titleText, W / 2, H * 0.36);
     ctx.fillStyle = '#fff6e0';
-    ctx.fillText(titleText, W / 2, H * 0.38);
+    ctx.fillText(titleText, W / 2, H * 0.36);
 
-    let subSize = 50;
+    let subSize = 46;
     do {
         ctx.font = `600 ${subSize}px system-ui, -apple-system, sans-serif`;
         subSize -= 2;
-    } while (ctx.measureText(subtitleText).width > W - 100 && subSize > 18);
+    } while (ctx.measureText(subtitleText).width > textMax && subSize > 18);
 
-    ctx.fillStyle = '#3a2008';
-    ctx.fillText(subtitleText, W / 2 + 2, H * 0.68 + 3);
+    ctx.lineWidth = 5;
+    ctx.strokeStyle = 'rgba(0, 0, 0, 0.6)';
+    ctx.strokeText(subtitleText, W / 2, H * 0.72);
     ctx.fillStyle = '#ffcf82';
-    ctx.fillText(subtitleText, W / 2, H * 0.68);
+    ctx.fillText(subtitleText, W / 2, H * 0.72);
 
     const tex = new THREE.CanvasTexture(canvas);
     tex.anisotropy = 8;
@@ -562,7 +580,7 @@ export class World {
         group.add(totem);
         this.occluders.push(totem);
         this.colliders.push({
-            x: center.x - 9.5, z: center.z - 6.5, halfX: 1.1, halfZ: 1.1, top: 5.2
+            x: center.x - 9.5, z: center.z - 6.5, halfX: 1.1, halfZ: 1.1, top: 5.9
         });
 
         // The company landmark anchors the far side of the island, so the
@@ -1113,8 +1131,8 @@ export class World {
         // single centred post used to cut straight across the title text from
         // the player's usual approach angle. Edge posts keep the whole face
         // clear while still reading as a proper signboard.
-        const BOARD_W = 7.2;
-        const BOARD_H = 2.7;
+        const BOARD_W = 7.9;
+        const BOARD_H = 2.95;
         const POST_TOP = 4.4 + BOARD_H / 2 - 0.3; // stops just short of the cap
         [-1, 1].forEach((side) => {
             const post = new THREE.Mesh(
