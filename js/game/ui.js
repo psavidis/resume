@@ -30,11 +30,40 @@ export class UI {
             // the world's broken-crate state would otherwise need a full reset.
             window.location.reload();
         });
+
+        this.discovery = root.querySelector('#discovery');
+        this.discoveryText = root.querySelector('#discovery-text');
     }
 
     showVictory() {
         if (this.isOpen) this.closeModal();
         this.victory.classList.add('open');
+    }
+
+    // Fullscreen "found a hidden area" reveal — the moon-landing easter egg.
+    // Unlike showVictory this is self-dismissing: it is a flavour reward
+    // mid-exploration, not an end state, so the game should not wait on the
+    // player to click through it. `text` is split into words, each wrapped
+    // in its own span so CSS can pop them in left-to-right on a stagger —
+    // reads as the line being written across the screen rather than the
+    // whole sentence fading up as one block.
+    showDiscovery(text, { holdMs = 2500, fadeMs = 600 } = {}) {
+        const words = text.split(' ');
+        this.discoveryText.innerHTML = words
+            .map((w, i) => `<span class="word" style="animation-delay:${0.25 + i * 0.12}s">${esc(w)}</span>`)
+            .join(' ');
+
+        this.discovery.classList.remove('closing');
+        this.discovery.classList.add('open');
+
+        const lastWordDelay = 0.25 + (words.length - 1) * 0.12 + 0.55; // last word's animation end
+        const holdUntil = Math.max(holdMs, lastWordDelay * 1000 + 400);
+
+        clearTimeout(this._discoveryTimer);
+        this._discoveryTimer = setTimeout(() => {
+            this.discovery.classList.add('closing');
+            setTimeout(() => this.discovery.classList.remove('open', 'closing'), fadeMs);
+        }, holdUntil);
     }
 
     setCounts(crates, totalCrates, fruits, totalFruits) {

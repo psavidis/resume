@@ -22,6 +22,11 @@ const JUMP_VELOCITY = 12.5;
 const MOVE_SPEED = 9;
 const ACCEL = 60;
 const FRICTION = 12;
+// Attacking in mid-air (and not flying) punches the player straight down —
+// a ground-pound. Gives ArrowDown's old "nudge the fall a bit" idea an
+// actual mechanism with a clear trigger, instead of a barely-felt camera key
+// silently also poking at physics.
+const SLAM_VELOCITY = -26;
 // Real attack clips run at their own length rather than being cut short —
 // the model ships Man_Punch (0.92s) and Man_SwordSlash (1.04s), and cutting
 // either off early (the previous 0.4s for every style) is what made both
@@ -998,6 +1003,12 @@ export class Player {
 
     startAttack(audio) {
         if (this.attackTimer > 0) return false;
+        // Airborne and not flying: attacking doubles as a ground-pound, so
+        // there is finally a real way to drop fast on purpose instead of
+        // ArrowDown's old barely-there camera-zoom nudge.
+        if (!this.onGround && !this.isFlying) {
+            this.velocity.y = SLAM_VELOCITY;
+        }
         this._attackStyle = this.attackStyle;
         this._attackDuration = ATTACK_DURATION[this._attackStyle] ?? 0.4;
         this.attackTimer = this._attackDuration;
@@ -1056,8 +1067,13 @@ export class Player {
     }
 
     // `input` is a normalised {x, z} direction already rotated into world
-    // space. `flight` is `{ holdingUp, holdingDown }`, read by main.js from
-    // the jump/attack keys while airborne — ignored unless `isFlying`.
+    // space — WASD/arrows/touch-stick, always purely horizontal, on the
+    // ground or in the air. `flight` is `{ holdingUp, holdingDown }`, read
+    // by main.js from the jump key (climb) and attack key (dive) while
+    // flying — ignored unless `isFlying`. Altitude is owned entirely by
+    // those two: holding neither holds altitude steady, rather than the
+    // slow automatic sink this used to have, so a player who lets go to
+    // admire the view does not quietly lose height.
     update(dt, input, flight = null) {
         // Horizontal movement with acceleration and friction, so the character
         // has a little weight instead of snapping to full speed. Flight keeps
@@ -1070,9 +1086,12 @@ export class Player {
 
         if (this.isFlying) {
             const FLY_SPEED = 11;
-            const vTarget = flight?.holdingDown ? -FLY_SPEED
+            // Diving is noticeably faster than climbing — attack reads as
+            // "drop like a stone", not just a mirror of the climb rate.
+            const DIVE_SPEED = 22;
+            const vTarget = flight?.holdingDown ? -DIVE_SPEED
                 : flight?.holdingUp ? FLY_SPEED
-                : -FLY_SPEED * 0.15; // gentle sink when neither is held
+                : 0; // neither held: hold altitude
             this.velocity.y = THREE.MathUtils.damp(this.velocity.y, vTarget, 5, dt);
         } else {
             this.velocity.y += GRAVITY * dt;

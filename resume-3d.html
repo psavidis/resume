@@ -477,6 +477,74 @@
             border: 2px solid rgba(255, 255, 255, 0.3) !important;
         }
 
+        /* ---- hidden-area discovery screen (moon landing easter egg) ----
+           Same fullscreen-overlay shape as #victory, but self-dismissing
+           (see UI.showDiscovery) rather than staying up for a click — this
+           is a flavour reward mid-exploration, not an end state, so the
+           player should be able to keep playing moments after it appears
+           rather than the game waiting on them. */
+        #discovery {
+            position: fixed;
+            inset: 0;
+            background: radial-gradient(circle at 50% 45%, rgba(20, 12, 36, 0.82), rgba(4, 4, 10, 0.94));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 32;
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+            transition: opacity 0.6s ease, visibility 0.6s;
+            padding: 20px;
+            text-align: center;
+        }
+        #discovery.open {
+            opacity: 1;
+            visibility: visible;
+        }
+        #discovery.closing {
+            opacity: 0;
+        }
+        .discovery-inner { max-width: 640px; }
+        .discovery-inner .kicker {
+            display: block;
+            font-size: 14px;
+            font-weight: 800;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: #ffe9a8;
+            opacity: 0;
+            margin-bottom: 10px;
+            animation: discoveryKickerIn 0.5s ease 0.15s forwards;
+        }
+        .discovery-inner h1 {
+            font-size: clamp(28px, 6.4vw, 56px);
+            font-weight: 900;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            line-height: 1.15;
+            color: #fff8e6;
+            text-shadow: 0 0 26px rgba(255, 233, 168, 0.55), 0 6px 24px rgba(0, 0, 0, 0.6);
+        }
+        /* Each word pops in on its own beat, left to right, like the
+           letters are being written across the screen rather than the
+           whole line just fading up at once. */
+        .discovery-inner h1 .word {
+            display: inline-block;
+            opacity: 0;
+            transform: translateY(0.4em) scale(0.7);
+            animation: discoveryWordIn 0.55s cubic-bezier(0.2, 1.4, 0.4, 1) forwards;
+        }
+        @keyframes discoveryKickerIn {
+            from { opacity: 0; transform: translateY(-6px); }
+            to { opacity: 1; transform: none; }
+        }
+        @keyframes discoveryWordIn {
+            0% { opacity: 0; transform: translateY(0.4em) scale(0.7); }
+            60% { opacity: 1; transform: translateY(-0.05em) scale(1.05); }
+            100% { opacity: 1; transform: none; }
+        }
+
         /* ---- touch controls ---- */
         /* Joystick: a fixed circle anchored bottom-left, for the left thumb —
            always visible and always in the same spot (unlike the old
@@ -776,6 +844,13 @@
             <button id="victory-island">🏝 Back to Resume Island</button>
             <a id="victory-resume" class="btn" href="index.html">📄 Read the written resume</a>
         </div>
+    </div>
+</div>
+
+<div id="discovery">
+    <div class="discovery-inner">
+        <span class="kicker">🌕 Moon landing</span>
+        <h1 id="discovery-text"></h1>
     </div>
 </div>
 

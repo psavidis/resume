@@ -2,7 +2,7 @@
 // the game loop (input → physics → interactions → camera → render).
 
 import * as THREE from '../vendor/three.module.js';
-import { World, ZONE_RADIUS } from './world.js';
+import { World, ZONE_RADIUS, SPACE_START, SPACE_FULL, MOON_CENTER } from './world.js';
 import { Player } from './player.js';
 import { UI } from './ui.js';
 import { GameAudio } from './audio.js';
@@ -14,6 +14,11 @@ import { Crate } from './crate.js';
 // near the shoreline without allowing a touchdown on a neighbouring island.
 const FLIGHT_ISLAND_COMPANY = 'Cortical.io';
 const FLIGHT_LANDING_RADIUS = ZONE_RADIUS + 4;
+// Generous like FLIGHT_LANDING_RADIUS — the moon's actual landing pad
+// (MOON_RADIUS-scale, see world.js) is much smaller, but launch range only
+// needs to cover "the player is standing on the moon", not "precisely on the
+// pad", so a wide margin here costs nothing and avoids a fiddly edge launch.
+const MOON_LAUNCH_RADIUS = 24;
 
 // Chase camera zoom, toggled by the up/down arrow keys — see cameraZoom in
 // _initInput and its use in _updateCamera. Clamped so zooming in never
@@ -30,6 +35,18 @@ const ZOOM_MAX = 2.0;
 // as too dark to play in — moonlight should still let the player see the
 // island clearly, with the lanterns and moon doing the atmosphere work
 // rather than genuine darkness.
+// Space: fog pulls back to nothing (there is no air up there) and everything
+// goes to black/cold, so only the starfield, earth, sun and moon (all lit or
+// unlit meshes, not reliant on the sun light) read once the transition is
+// complete. Blended the same additive way as night/chill in _updateAtmosphere.
+const SPACE_FOG = new THREE.Color(0x000005);
+const SPACE_FOG_NEAR = 400;
+const SPACE_FOG_FAR = 900;
+const SPACE_AMBIENT = new THREE.Color(0x1a1a2e);
+const SPACE_AMBIENT_I = 0.6;
+const SPACE_SUN = new THREE.Color(0xfff6e0);
+const SPACE_SUN_I = 1.3;
+
 const NIGHT_FOG = new THREE.Color(0x24406e);
 const NIGHT_FOG_NEAR = 30;
 const NIGHT_FOG_FAR = 180;
@@ -103,6 +120,10 @@ const ZONE_TRACK = {
 const EDU_TRACK = { url: trackUrl("1. Apollo's Temple.mp3"), name: "Apollo's Temple" };
 const MAIN_THEME = { url: trackUrl('Skybridge of Names (Main Theme).mp3'), name: 'Skybridge' };
 const OUTRO_TRACK = { url: trackUrl('Lanterns at Dusk (Outro).mp3'), name: 'Lanterns at Dusk' };
+// Space easter egg's own theme — belongs to the altitude, not any island, so
+// it plays the moment the player climbs high enough and hands back to
+// whichever island track is underneath the instant they descend again.
+const SPACE_TRACK = { url: trackUrl('Pros Olympon.mp3'), name: 'Pros Olympon' };
 
 class Game {
     constructor(data) {
@@ -128,6 +149,11 @@ class Game {
         this._nightAmount = 0;
         this._chillTarget = 0;
         this._chillAmount = 0;
+        // Space easter egg: eased 0→1 by altitude while flying, see
+        // _updateSpaceAltitude. Blends the daytime sky/fog toward the
+        // starfield/earth/sun built by World._buildSpace.
+        this._spaceAmount = 0;
+        this._moonVisited = false; // one-time toast on first moon landing, see _updateFlight
         // Scratch colors reused every frame by _updateAtmosphere.
         this._tmpFog = new THREE.Color();
         this._tmpAmbient = new THREE.Color();
@@ -393,10 +419,20 @@ class Game {
         // joystick, which made attack silently no-op during simultaneous
         // move+attack. touchstart fires immediately and matches jump's
         // handling above.
-        document.getElementById('btn-spin').addEventListener('touchstart', (e) => {
+        //
+        // Also tracked as a held flag, same idea as touchJumpHeld — while
+        // flying, holding this button is the touch equivalent of holding
+        // Shift/E to dive.
+        this.touchAttackHeld = false;
+        const attackBtn = document.getElementById('btn-spin');
+        attackBtn.addEventListener('touchstart', (e) => {
             e.preventDefault();
+            this.touchAttackHeld = true;
             this._triggerAttack();
         }, { passive: false });
+        const releaseAttack = () => { this.touchAttackHeld = false; };
+        attackBtn.addEventListener('touchend', releaseAttack, { passive: true });
+        attackBtn.addEventListener('touchcancel', releaseAttack, { passive: true });
 
         // Camera rotate buttons: a tap nudges by one step, a hold keeps
         // rotating smoothly for as long as the thumb stays down.
@@ -709,6 +745,28 @@ class Game {
         // doesn't cut the theme off before the crossfade even begins.
         if (this.titleScreenActive || this.elapsed < this._themeHoldUntil) return;
 
+        // Space owns the soundtrack the moment the player climbs above
+        // SPACE_START, independently of whichever island happens to be
+        // below — same altitude gate _updateSpaceAltitude uses for the
+        // visual transition, so the music switches right as the sky does.
+        // The moon (which sits well past this altitude) gets its own label
+        // but the same track, checked first so "The Moon" wins over the
+        // generic "Deep Space" label while still over its landing pad.
+        if (this._overMoon()) {
+            this.ui.setZone('🌕 The Moon');
+            this._setTrack(SPACE_TRACK);
+            this._nightTarget = 0;
+            this._chillTarget = 0;
+            return;
+        }
+        if (this.player.position.y >= SPACE_START) {
+            this.ui.setZone('🌌 Deep Space');
+            this._setTrack(SPACE_TRACK);
+            this._nightTarget = 0;
+            this._chillTarget = 0;
+            return;
+        }
+
         // Full 2D distance: the island chain curves, so comparing z alone
         // mislabels the zone whenever the player is off the centre line.
         const p = this.player.position;
@@ -777,16 +835,31 @@ class Game {
         if (toast) this.ui.toast(toast);
     }
 
+    // Altitude → space transition. Keyed on raw altitude rather than
+    // "currently flying" so the sky stays swapped to space while the player
+    // is standing still on the moon (flight stops on touchdown, same as any
+    // other landing — see _updateFlight) rather than snapping back to a blue
+    // daytime sky under their feet the moment they land.
+    _updateSpaceAltitude(dt) {
+        const target = THREE.MathUtils.clamp(
+            (this.player.position.y - SPACE_START) / (SPACE_FULL - SPACE_START), 0, 1
+        );
+        this._spaceAmount = THREE.MathUtils.damp(this._spaceAmount, target, 1.5, dt);
+        this.world.setSpaceAmount(this._spaceAmount);
+    }
+
     // Eases the scene's lighting/fog toward whichever atmosphere the current
     // island calls for (night at European Dynamics, chilly/snowing at the
     // second Upstream) and back to the base daytime values otherwise. Reused
     // temp colors avoid allocating three THREE.Color objects every frame.
+
     _updateAtmosphere(dt) {
         const base = this._atmosphereBase;
         this._nightAmount = THREE.MathUtils.damp(this._nightAmount, this._nightTarget, 2.2, dt);
         this._chillAmount = THREE.MathUtils.damp(this._chillAmount, this._chillTarget, 2.2, dt);
         const night = this._nightAmount;
         const chill = this._chillAmount;
+        const space = this._spaceAmount;
 
         // Night: fog goes low and dark blue, the sun cools and dims hard (a
         // moon-like remnant rather than full dark, so the player can still
@@ -798,25 +871,34 @@ class Game {
         // has to special-case "which one wins".
         this._tmpFog.copy(base.fogColor)
             .lerp(NIGHT_FOG, night)
-            .lerp(CHILL_FOG, chill);
+            .lerp(CHILL_FOG, chill)
+            .lerp(SPACE_FOG, space);
         this.scene.fog.color.copy(this._tmpFog);
         this.scene.fog.near = THREE.MathUtils.lerp(
-            THREE.MathUtils.lerp(base.fogNear, NIGHT_FOG_NEAR, night), CHILL_FOG_NEAR, chill
+            THREE.MathUtils.lerp(
+                THREE.MathUtils.lerp(base.fogNear, NIGHT_FOG_NEAR, night), CHILL_FOG_NEAR, chill
+            ), SPACE_FOG_NEAR, space
         );
         this.scene.fog.far = THREE.MathUtils.lerp(
-            THREE.MathUtils.lerp(base.fogFar, NIGHT_FOG_FAR, night), CHILL_FOG_FAR, chill
+            THREE.MathUtils.lerp(
+                THREE.MathUtils.lerp(base.fogFar, NIGHT_FOG_FAR, night), CHILL_FOG_FAR, chill
+            ), SPACE_FOG_FAR, space
         );
 
-        this._tmpAmbient.copy(base.ambientColor).lerp(NIGHT_AMBIENT, night).lerp(CHILL_AMBIENT, chill);
+        this._tmpAmbient.copy(base.ambientColor).lerp(NIGHT_AMBIENT, night).lerp(CHILL_AMBIENT, chill).lerp(SPACE_AMBIENT, space);
         this.ambient.color.copy(this._tmpAmbient);
         this.ambient.intensity = THREE.MathUtils.lerp(
-            THREE.MathUtils.lerp(base.ambientIntensity, NIGHT_AMBIENT_I, night), CHILL_AMBIENT_I, chill
+            THREE.MathUtils.lerp(
+                THREE.MathUtils.lerp(base.ambientIntensity, NIGHT_AMBIENT_I, night), CHILL_AMBIENT_I, chill
+            ), SPACE_AMBIENT_I, space
         );
 
-        this._tmpSun.copy(base.sunColor).lerp(NIGHT_SUN, night).lerp(CHILL_SUN, chill);
+        this._tmpSun.copy(base.sunColor).lerp(NIGHT_SUN, night).lerp(CHILL_SUN, chill).lerp(SPACE_SUN, space);
         this.sun.color.copy(this._tmpSun);
         this.sun.intensity = THREE.MathUtils.lerp(
-            THREE.MathUtils.lerp(base.sunIntensity, NIGHT_SUN_I, night), CHILL_SUN_I, chill
+            THREE.MathUtils.lerp(
+                THREE.MathUtils.lerp(base.sunIntensity, NIGHT_SUN_I, night), CHILL_SUN_I, chill
+            ), SPACE_SUN_I, space
         );
 
         this._tmpBounceSky.copy(base.bounceSky).lerp(NIGHT_BOUNCE_SKY, night).lerp(CHILL_BOUNCE_SKY, chill);
@@ -919,20 +1001,39 @@ class Game {
         this.ui.toast('💦 Splash! Back on dry land.');
     }
 
-    // True while the player is horizontally within landing range of the
-    // Cortical.io island — the only place flight may launch from or return to.
+    // True while the player is horizontally within launch range of the
+    // Cortical.io island or the moon — the only two places flight may launch
+    // from. Without the moon here, landing on it after the space easter egg
+    // would stop flight (see _updateFlight) with no way to take back off,
+    // stranding the player — the whole point of "fly to the moon" falls apart
+    // if there is no flying back.
     _overFlightIsland() {
-        if (!this.flightIslandCenter) return false;
         const p = this.player.position;
-        const dx = p.x - this.flightIslandCenter.x;
-        const dz = p.z - this.flightIslandCenter.z;
-        return (dx * dx + dz * dz) < FLIGHT_LANDING_RADIUS * FLIGHT_LANDING_RADIUS;
+        if (this.flightIslandCenter) {
+            const dx = p.x - this.flightIslandCenter.x;
+            const dz = p.z - this.flightIslandCenter.z;
+            if (dx * dx + dz * dz < FLIGHT_LANDING_RADIUS * FLIGHT_LANDING_RADIUS) return true;
+        }
+        const mx = p.x - MOON_CENTER.x;
+        const mz = p.z - MOON_CENTER.z;
+        return (mx * mx + mz * mz) < MOON_LAUNCH_RADIUS * MOON_LAUNCH_RADIUS;
     }
 
     // Jump/climb held this frame, from keyboard or the touch jump button —
     // the shared "hold to fly" input read by _updateFlight.
     _jumpHeld() {
         return this.keys.has('Space') || this.touchJumpHeld;
+    }
+
+    // Attack held this frame, from keyboard or the touch attack button —
+    // while flying this is the dive control (see the flightInput built in
+    // start()'s loop). KeyS/ArrowDown intentionally play no part here: both
+    // are plain horizontal movement/camera keys everywhere else in the game,
+    // and altitude while flying is owned entirely by jump (climb) and attack
+    // (dive) so there is exactly one way to move up and one way to move down.
+    _attackHeld() {
+        return this.keys.has('ShiftLeft') || this.keys.has('ShiftRight') ||
+            this.keys.has('KeyE') || this.touchAttackHeld;
     }
 
     _updateFlight() {
@@ -954,8 +1055,30 @@ class Game {
         // non-flying ground contact uses.
         const ground = this.world.groundHeightAt(this.player.position.x, this.player.position.z);
         if (ground !== null && this.player.position.y <= ground + 0.5) {
+            if (!this._moonVisited && this._overMoon()) {
+                this._moonVisited = true;
+                this.ui.toast('🌕 One small step for the resume.');
+                // The moon is the flight easter egg's actual milestone — a
+                // bigger beat than a toast, so it gets the same kind of
+                // fullscreen reveal a real "you found a secret" moment
+                // deserves, self-dismissing so the player can keep
+                // exploring the moon right after rather than being blocked.
+                this.audio.fanfare();
+                this.ui.showDiscovery('You found the hidden area');
+            }
             this.player.stopFlying();
         }
+    }
+
+    // Horizontal check only (mirrors _overFlightIsland). Shares
+    // MOON_LAUNCH_RADIUS's generosity — used both for the one-time landing
+    // toast and to hold the zone label/costume on "The Moon" for the whole
+    // approach, not just once standing exactly on the pad.
+    _overMoon() {
+        const p = this.player.position;
+        const dx = p.x - MOON_CENTER.x;
+        const dz = p.z - MOON_CENTER.z;
+        return (dx * dx + dz * dz) < MOON_LAUNCH_RADIUS * MOON_LAUNCH_RADIUS;
     }
 
     start() {
@@ -967,7 +1090,7 @@ class Game {
 
             this._updateFlight();
             const flightInput = this.player.isFlying
-                ? { holdingUp: this._jumpHeld(), holdingDown: this.keys.has('KeyS') }
+                ? { holdingUp: this._jumpHeld(), holdingDown: this._attackHeld() }
                 : null;
             this.player.update(dt, this._readInput(), flightInput);
             this.world.resolveCollisions(this.player.position, this.player.radius);
@@ -988,6 +1111,7 @@ class Game {
             this._updateInteractions();
             this._updateBullets(dt);
             this._updateZoneLabel();
+            this._updateSpaceAltitude(dt);
             this._updateAtmosphere(dt);
             this.world.update(dt, this.elapsed);
             this._updateCamera(dt);

@@ -12,6 +12,23 @@ import { Crate, Fruit } from './crate.js';
 export const ZONE_RADIUS = 15;
 const ZONE_SPACING = 42;
 
+// The flight easter egg: fly high enough above Cortical.io and the sky gives
+// way to space. Altitudes are keyed to the same scale as the cloud layer
+// (y ~45-85, see _buildSky) — SPACE_START sits comfortably above the tallest
+// clouds so the transition reads as "climbed past the sky", not "clipped
+// through a cloud into a different game".
+export const SPACE_START = 140;   // fog/color begin fading toward black
+export const SPACE_FULL = 260;    // fully space: black sky, stars, earth, sun
+// The moon sits far to the side of the island chain (never over any island's
+// x/z footprint, so groundHeightAt's flat circle test can't be picked up by
+// accident while flying low) and high enough that reaching it means
+// committing to the climb through SPACE_FULL first. Distance from the origin
+// (~421) is kept well inside the star sky sphere's radius (580, see
+// _buildSpace) — the same margin, proportionally, the island chain itself
+// keeps from the ordinary day sky sphere (radius 600).
+export const MOON_CENTER = new THREE.Vector3(260, 300, 140);
+const MOON_RADIUS = 18;
+
 // Per-company palette so zones are visually distinct and memorable.
 const ZONE_THEMES = [
     { ground: 0x4a9d4f, accent: 0x2d6b32, rock: 0x8b7355 }, // jungle
@@ -477,6 +494,7 @@ export class World {
 
     _build() {
         this._buildSky();
+        this._buildSpace();
         this._buildOcean();
 
         // Education comes first: the career starts at university, so the player
@@ -524,12 +542,20 @@ export class World {
         const tex = new THREE.CanvasTexture(canvas);
         const sky = new THREE.Mesh(
             new THREE.SphereGeometry(600, 24, 16),
-            new THREE.MeshBasicMaterial({ map: tex, side: THREE.BackSide, fog: false })
+            // transparent + depthWrite:false so it can fade out under the
+            // star sky (_buildSpace) without a hard depth-sorted seam — the
+            // two spheres cross-fade rather than one clipping the other.
+            new THREE.MeshBasicMaterial({ map: tex, side: THREE.BackSide, fog: false, transparent: true, depthWrite: false })
         );
         this.scene.add(sky);
+        this.daySky = sky;
 
-        // A few slab clouds; cheap, and they sell the cartoon look.
-        const cloudMat = new THREE.MeshBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0.85, fog: false });
+        // A few slab clouds; cheap, and they sell the cartoon look. One
+        // shared material, so fading them out once in space (setSpaceAmount)
+        // is a single opacity write rather than touching all 26 groups.
+        const cloudMat = new THREE.MeshBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0.85, fog: false, depthWrite: false });
+        this.cloudMat = cloudMat;
+        this._cloudBaseOpacity = 0.85;
         for (let i = 0; i < 26; i++) {
             const cloud = new THREE.Group();
             const blobs = 3 + Math.floor(Math.random() * 3);
@@ -546,6 +572,171 @@ export class World {
             );
             this.scene.add(cloud);
         }
+    }
+
+    // The flight easter egg's destination: a starfield, a distant sun, the
+    // whole island chain's planet seen as a curved Earth below, and a real
+    // landable moon. Everything here starts fully transparent/hidden — Game's
+    // _updateSpaceAltitude fades it in by altitude once the player flies high
+    // enough over Cortical.io, via setSpaceAmount() below.
+    _buildSpace() {
+        this.spaceAmount = 0;
+
+        // A star sphere just inside the sky sphere (which is radius 600),
+        // fog-exempt like the sky so distance haze never dims it, faded in by
+        // opacity rather than swapped for the daytime sky so the transition
+        // can cross-fade.
+        const starCanvas = document.createElement('canvas');
+        starCanvas.width = 512;
+        starCanvas.height = 512;
+        const sctx = starCanvas.getContext('2d');
+        sctx.fillStyle = '#04040c';
+        sctx.fillRect(0, 0, 512, 512);
+        for (let i = 0; i < 900; i++) {
+            const r = Math.random() < 0.15 ? 1.6 : 0.8;
+            sctx.fillStyle = Math.random() < 0.2 ? '#bcd4ff' : '#ffffff';
+            sctx.globalAlpha = 0.4 + Math.random() * 0.6;
+            sctx.beginPath();
+            sctx.arc(Math.random() * 512, Math.random() * 512, r, 0, Math.PI * 2);
+            sctx.fill();
+        }
+        sctx.globalAlpha = 1;
+        const starTex = new THREE.CanvasTexture(starCanvas);
+        starTex.wrapS = starTex.wrapT = THREE.RepeatWrapping;
+        starTex.repeat.set(6, 6);
+        this.starSky = new THREE.Mesh(
+            new THREE.SphereGeometry(580, 24, 16),
+            new THREE.MeshBasicMaterial({
+                map: starTex, side: THREE.BackSide, fog: false,
+                transparent: true, opacity: 0, depthWrite: false
+            })
+        );
+        this.scene.add(this.starSky);
+
+        // The sun: a small bright disc, unlit and far off so it never moves
+        // relative to the player — space's version of the sky sphere's own
+        // gradient standing in for daylight.
+        this.spaceSun = new THREE.Mesh(
+            new THREE.SphereGeometry(26, 20, 16),
+            new THREE.MeshBasicMaterial({ color: 0xfff6d8, fog: false, transparent: true, opacity: 0, depthWrite: false })
+        );
+        this.spaceSun.position.set(-380, 420, ZONE_SPACING * 3);
+        this.scene.add(this.spaceSun);
+        const sunGlow = new THREE.Mesh(
+            new THREE.SphereGeometry(46, 16, 12),
+            new THREE.MeshBasicMaterial({
+                color: 0xfff0b0, fog: false, transparent: true, opacity: 0,
+                side: THREE.BackSide, depthWrite: false
+            })
+        );
+        sunGlow.position.copy(this.spaceSun.position);
+        this.scene.add(sunGlow);
+        this.spaceSunGlow = sunGlow;
+
+        // Earth: the same painted texture used for the Camunda desk globe,
+        // seen for real this time — a big curved horizon under the player,
+        // centred on the island chain so "look down" reads as "there's the
+        // world I've been walking on".
+        const chainLength = (this.data.workExperience.length + 4) * ZONE_SPACING;
+        this.spaceEarth = new THREE.Mesh(
+            new THREE.SphereGeometry(520, 40, 30),
+            new THREE.MeshBasicMaterial({ map: makeEarthTexture(), fog: false, transparent: true, opacity: 0, depthWrite: false })
+        );
+        this.spaceEarth.position.set(0, -500, chainLength / 2);
+        this.scene.add(this.spaceEarth);
+
+        this._buildMoonDestination();
+    }
+
+    // A real, landable moon — far to the side of the island chain and high
+    // enough that reaching it means committing to a proper climb through the
+    // space threshold first. Registered as an ordinary platform, so the
+    // existing groundHeightAt/land flow (the same one every island uses)
+    // handles touchdown for free.
+    _buildMoonDestination() {
+        const moon = new THREE.Group();
+        moon.position.copy(MOON_CENTER);
+
+        const craterCanvas = document.createElement('canvas');
+        craterCanvas.width = 512;
+        craterCanvas.height = 512;
+        const mctx = craterCanvas.getContext('2d');
+        mctx.fillStyle = '#c7c2ba';
+        mctx.fillRect(0, 0, 512, 512);
+        for (let i = 0; i < 60; i++) {
+            const r = 8 + Math.random() * 30;
+            const x = Math.random() * 512;
+            const y = Math.random() * 512;
+            mctx.fillStyle = 'rgba(130,124,112,0.5)';
+            mctx.beginPath(); mctx.arc(x, y, r, 0, Math.PI * 2); mctx.fill();
+            mctx.fillStyle = 'rgba(230,226,216,0.5)';
+            mctx.beginPath(); mctx.arc(x - r * 0.25, y - r * 0.25, r * 0.6, 0, Math.PI * 2); mctx.fill();
+        }
+        const moonTex = new THREE.CanvasTexture(craterCanvas);
+        moonTex.colorSpace = THREE.SRGBColorSpace;
+
+        const body = new THREE.Mesh(
+            new THREE.SphereGeometry(MOON_RADIUS, 28, 20),
+            new THREE.MeshLambertMaterial({ map: moonTex })
+        );
+        moon.add(body);
+        this.occluders.push(body);
+
+        // A flat landing platform set into the top of the sphere, textured to
+        // match, rather than trying to walk on the sphere's curve.
+        const padY = MOON_RADIUS - 0.6;
+        const pad = new THREE.Mesh(
+            new THREE.CylinderGeometry(7, 7.4, 1.4, 24),
+            new THREE.MeshLambertMaterial({ map: moonTex })
+        );
+        pad.position.y = padY;
+        moon.add(pad);
+
+        // A little flag, planted — the "one small step" beat.
+        const flagGroup = new THREE.Group();
+        const pole = new THREE.Mesh(
+            new THREE.CylinderGeometry(0.05, 0.05, 2.4, 6),
+            new THREE.MeshLambertMaterial({ color: 0xd8d8d8 })
+        );
+        pole.position.y = 1.2;
+        flagGroup.add(pole);
+        const cloth = new THREE.Mesh(
+            new THREE.PlaneGeometry(1.1, 0.7),
+            new THREE.MeshLambertMaterial({ color: 0xe4483c, side: THREE.DoubleSide })
+        );
+        cloth.position.set(0.55, 2.05, 0);
+        flagGroup.add(cloth);
+        flagGroup.position.set(3, padY + 0.7, -2);
+        moon.add(flagGroup);
+
+        this.scene.add(moon);
+        this.moonGroup = moon;
+
+        this.platforms.push({
+            x: MOON_CENTER.x, z: MOON_CENTER.z,
+            radius: 7, y: MOON_CENTER.y + padY + 0.7
+        });
+    }
+
+    // Blends the sky between daytime (0) and space (1) — see SPACE_START/
+    // SPACE_FULL in Game's altitude read. Reused every frame while flying, so
+    // this only touches opacities rather than rebuilding anything.
+    setSpaceAmount(t) {
+        this.spaceAmount = t;
+        this.daySky.material.opacity = 1 - t;
+        this.starSky.material.opacity = t;
+        this.spaceSun.material.opacity = t;
+        this.spaceSunGlow.material.opacity = t * 0.6;
+        this.spaceEarth.material.opacity = t;
+        // The literal ocean plane is part of the island-chain scale, not the
+        // planet — without fading it out too, its far edge stays visible as a
+        // flat teal wall poking into an otherwise black sky once high enough
+        // to be looking down past it.
+        this.ocean.material.opacity = 0.92 * (1 - t);
+        // Clouds belong to the daytime sky layer (y ~45-85) — floating white
+        // puffs against a starfield read as debris, not weather, so they fade
+        // out on the same curve as the day sky itself.
+        this.cloudMat.opacity = this._cloudBaseOpacity * (1 - t);
     }
 
     _buildOcean() {
