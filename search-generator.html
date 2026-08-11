@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Resume Search Link Generator</title>
+    <!-- Link your existing resume CSS -->
+    <link rel="stylesheet" href="/css/search-generator.css"/>
+</head>
+
+<body class="resume-body">
+
+<div class="container">
+
+    <section class="section">
+
+        <h1 class="section__title">Generate Resume Search Link</h1>
+
+        <div class="search-generator">
+            <label for="keywords">Enter keywords (comma or space separated):</label>
+            <textarea id="keywords" class="search-generator__input" rows="4" placeholder="e.g. Java, Microservices, Camunda"></textarea>
+            <button id="gen-btn" class="btn">Generate Link</button>
+            <div id="output" class="search-generator__output"></div>
+        </div>
+
+    </section>
+</div>
+
+
+<script>
+    const textarea = document.getElementById('keywords');
+    const outputDiv = document.getElementById('output');
+    const generateButton = document.getElementById('gen-btn');
+
+    // Highlight the keywords when space is pressed
+    textarea.addEventListener('input', function(e) {
+        // Split the input text into words (keywords) by spaces
+        const keywords = e.target.value.trim().split(/\s+/);
+
+        // Create HTML elements for each keyword, applying a class to highlight them
+        const highlightedKeywords = keywords.map(keyword => {
+            return `<span class="keyword">${keyword}</span>`;
+        }).join(' ');
+
+        // Update the output area with the highlighted keywords
+        outputDiv.innerHTML = highlightedKeywords;
+    });
+
+    // Prevent newline (Enter key), but allow space
+    textarea.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter') {
+            e.preventDefault(); // Prevent newline when pressing Enter
+        }
+    });
+
+    generateButton.addEventListener('click', function() {
+        const text = textarea.value;
+        const baseUrl = "https://psavidis.github.io/resume";
+        // const baseUrl = "http://localhost:63342/resume/index.html";
+        console.log(text);
+        if (text.trim() === '') {
+            return;
+        }
+
+        const keywords = text
+            .trim()
+            .split(/\s+/)
+            .filter(Boolean);
+
+        const params = new URLSearchParams();
+        keywords.forEach(keyword => {
+            params.append("keywords", keyword);
+        });
+
+        const finalUrl = `${baseUrl}?${params.toString()}`;
+        console.log(finalUrl);
+
+        outputDiv.innerHTML = `
+    <div class="search-generator__result">
+        <span class="url-highlight">${finalUrl}</span>
+        <div class="action-buttons">
+            <button id="copy-btn" class="copy-btn" title="Copy to clipboard">📋</button>
+            <button id="visit-btn" class="visit-btn" title="Open link in new tab">➡️</button>
+        </div>
+    </div>
+`;
+
+        const copyBtn = document.getElementById('copy-btn');
+        const visitBtn = document.getElementById('visit-btn');
+
+        copyBtn.addEventListener('click', function () {
+            const urlText = document.querySelector('.url-highlight').textContent;
+            navigator.clipboard.writeText(urlText).then(() => {
+                copyBtn.textContent = '✅';
+                setTimeout(() => {
+                    copyBtn.textContent = '📋';
+                }, 1500);
+            });
+        });
+
+        visitBtn.addEventListener('click', function () {
+            const urlText = document.querySelector('.url-highlight').textContent;
+            window.open(urlText, '_blank');
+        });
+    });
+
+</script>
+
+</body>
+</html>
